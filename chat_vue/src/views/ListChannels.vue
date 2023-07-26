@@ -51,10 +51,10 @@ export default {
     },
     methods: {
       async fetchChannels() {
-        // a faire : faire en sorte que ca fetch que les channels qu'il a 
+        // TODO : faire en sorte que ca fetch que les channels qu'il a 
         try 
         {
-          const response = await axios.get('http://localhost:3000/channels');
+          const response = await axios.get('http://192.168.1.159:3000/channels');
           this.channels = response.data;
         } 
         catch (error) 

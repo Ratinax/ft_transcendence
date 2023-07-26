@@ -26,8 +26,8 @@ __decorate([
     __metadata("design:type", String)
 ], Users.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'profil_pic', type: 'bytea', nullable: true }),
-    __metadata("design:type", Buffer)
+    (0, typeorm_1.Column)({ name: 'profil_pic', type: 'varchar', nullable: true }),
+    __metadata("design:type", String)
 ], Users.prototype, "profilPic", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'is_connected', default: false }),

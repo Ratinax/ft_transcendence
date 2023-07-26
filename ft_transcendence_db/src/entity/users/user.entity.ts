@@ -11,8 +11,8 @@ export class Users {
     @Column({ type: 'varchar', length: 100})
     password: string;
 
-    @Column({ name: 'profil_pic', type: 'bytea', nullable: true })
-    profilPic: Buffer;
+    @Column({ name: 'profil_pic', type: 'varchar', nullable: true })
+    profilPic: string;
     
     @Column({ name: 'is_connected', default: false })
     isConnected: boolean;

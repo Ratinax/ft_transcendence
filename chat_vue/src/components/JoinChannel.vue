@@ -34,7 +34,7 @@
     },
     methods: 
     {
-      // a faire : join un channel doit faire rejoindre ce channel
+      // TODO : join un channel doit faire rejoindre ce channel
       joinAChannel()
       {
         if (this.channelName === '')

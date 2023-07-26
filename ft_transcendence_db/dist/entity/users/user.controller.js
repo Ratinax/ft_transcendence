@@ -22,11 +22,24 @@ let UserController = exports.UserController = class UserController {
     async findAll() {
         return (await this.userService.findAll());
     }
-    callFunction(fct, body) {
-        return (this.userService.callFunction(fct.bind(this.userService), body));
+    async callFunction(fct, body) {
+        try {
+            const res = await this.userService.callFunction(fct.bind(this.userService), body);
+            return (res);
+        }
+        catch (e) {
+            throw new common_1.InternalServerErrorException(e);
+        }
     }
     async signUp(body) {
-        return (await this.callFunction(this.userService.signUp, body));
+        try {
+            const res = await this.callFunction(this.userService.signUp, body);
+            console.log(res);
+            return (res);
+        }
+        catch (e) {
+            throw new common_1.InternalServerErrorException(e);
+        }
     }
     async signIn(body) {
         return (await this.callFunction(this.userService.signIn, body));

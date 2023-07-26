@@ -26,7 +26,7 @@ export default {
     },
     methods: 
     {
-      // a faire : faire en sorte qu'il ne fetch que les messages qu'il peut voir (pas par user bloque)
+      // TODO : faire en sorte qu'il ne fetch que les messages qu'il peut voir (pas par user bloque)
       async fetchMessages(channel)
       {
         if (!channel)
@@ -35,7 +35,7 @@ export default {
         }
         try 
         {
-          const response = await axios.get(`http://localhost:3000/messages/${channel.name}`);
+          const response = await axios.get(`http://192.168.1.159:3000/messages/${channel.name}`);
           this.messages = response.data;
         } 
         catch (error) 

@@ -27,7 +27,6 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
             this.server.emit('listUsers', res);
         }
         catch (e) {
-            console.log(e);
         }
     }
 };

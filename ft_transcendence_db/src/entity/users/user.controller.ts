@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, InternalServerErrorException, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -10,15 +10,32 @@ export class UserController {
         return (await this.userService.findAll());
     }
     
-    callFunction(fct, body)
+    async callFunction(fct, body)
     {
-        return (this.userService.callFunction(fct.bind(this.userService), body));
+        try 
+        {
+            const res = await this.userService.callFunction(fct.bind(this.userService), body);
+            return (res); 
+        }
+        catch (e)
+        {
+            throw new InternalServerErrorException(e);
+        }
     }
 
     @Post('signup')
     async signUp(@Body() body)
     {
-        return (await this.callFunction(this.userService.signUp, body));
+        try
+        {
+            const res = await this.callFunction(this.userService.signUp, body);
+            console.log(res);
+            return (res);
+        }
+        catch (e)
+        {
+            throw new InternalServerErrorException(e);
+        }
     }
 
     @Post('signin')

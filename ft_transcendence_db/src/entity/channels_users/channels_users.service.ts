@@ -29,7 +29,7 @@ export class ChannelsUsersService {
             isOwner: channelsUsers.isOwner,
             isAdmin: channelsUsers.isAdmin, 
             isInvited: channelsUsers.isInvited}));
-        console.log(users)
+        // console.log(users)
         return (users);
     }
     createNew(channels_users: Partial<ChannelsUsers>)

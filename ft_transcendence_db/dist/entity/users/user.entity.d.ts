@@ -1,8 +1,7 @@
-/// <reference types="node" />
 export declare class Users {
     id: number;
     pseudo: string;
     password: string;
-    profilPic: Buffer;
+    profilPic: string;
     isConnected: boolean;
 }

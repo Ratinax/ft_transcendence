@@ -56,6 +56,7 @@
           || (this.selectedCategory === 3 && this.password === ''))
         {
           this.isEmpty = true;
+          this.isWellFormated = true;
           return ;
         }
         if ((this.selectedCategory === 3 && (this.password.length > 20
@@ -63,6 +64,7 @@
           || this.channelName.length > 20 
           || this.channelName.length < 3)
         {
+          this.isEmpty = false;
           this.isWellFormated = false;
           return ;
         }

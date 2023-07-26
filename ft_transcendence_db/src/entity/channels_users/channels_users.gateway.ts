@@ -24,7 +24,7 @@ export class ChannelsUsersGateway {
     }
     catch (e)
     {
-        console.log(e);
+        // console.log(e);
     }
   }
 

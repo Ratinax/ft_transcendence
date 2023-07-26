@@ -39,7 +39,6 @@ let ChannelsUsersService = exports.ChannelsUsersService = class ChannelsUsersSer
             isAdmin: channelsUsers.isAdmin,
             isInvited: channelsUsers.isInvited
         }));
-        console.log(users);
         return (users);
     }
     createNew(channels_users) {

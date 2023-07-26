@@ -35,7 +35,7 @@ export default {
   },
   mounted()
   {
-    this.socket = io('http://localhost:3000/');
+    this.socket = io('http://192.168.1.159:3000/');
     this.socket.on('updateMessage', (response) => {
       this.updateMessages(null);
       console.log(response);
@@ -52,7 +52,7 @@ export default {
     updateChannel(channel)
     {
 
-      // a faire : faire que ca fasse ca uniquement si la personne est dedans
+      // TODO : faire que ca fasse ca uniquement si la personne est dedans
       this.$refs.listeChannels.addChannel(channel);
       this.setSelectedChannel(channel);
       this.updateMessages();

@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { Repository } from 'typeorm';
 import { ChannelsUsers } from './channels_users.entity';
 export declare class ChannelsUsersService {
@@ -9,7 +8,7 @@ export declare class ChannelsUsersService {
         id: number;
         pseudo: string;
         password: string;
-        profilPic: Buffer;
+        profilPic: string;
         isConnected: boolean;
         isOwner: boolean;
         isAdmin: boolean;

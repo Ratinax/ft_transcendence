@@ -5,7 +5,11 @@ export declare class UserService {
     constructor(userRepository: Repository<Users>);
     callFunction(fct: any, body: any): Promise<any>;
     findAll(): Promise<Users[]>;
-    signUp(user: Partial<Users>): Promise<Users | "allready exists">;
+    signUp(body: any): Promise<{
+        statusCode: number;
+    }>;
     signIn(user: Partial<Users>): Promise<false | Users | "Wrong password">;
     logOut(user: Partial<Users>): Promise<false | Users>;
+    generateRandomString(length: number): string;
+    uploadImage(image: string): Promise<string>;
 }
