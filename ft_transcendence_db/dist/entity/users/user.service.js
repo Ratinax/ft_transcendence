@@ -90,8 +90,14 @@ let UserService = exports.UserService = class UserService {
         return result;
     }
     async uploadImage(image) {
+        console.log('image :', image, ': over');
+        let extension = image.substring(11, 15);
+        if (extension === 'jpg;' || extension === 'jpeg')
+            extension = '.jpg';
+        else if (extension === 'png;')
+            extension = '.png';
         try {
-            const uniqueFileName = Date.now() + '_' + this.generateRandomString(12) + '.jpg';
+            const uniqueFileName = Date.now() + '_' + this.generateRandomString(12) + extension;
             console.log(uniqueFileName);
             const uploadDirectory = path.join(__dirname, '../../../', 'uploads');
             await fs.promises.mkdir(uploadDirectory, { recursive: true });

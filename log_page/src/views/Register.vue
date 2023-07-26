@@ -39,7 +39,8 @@ export default {
                 'Login should be between 3 and 8 caracteres',
                 'You must not have an empty field',
                 'User already exists',
-                'Bad File Format (required .png .jpg)'
+                'Bad File Format (required .png .jpg)',
+                'File too large, must be 50mb max',
             ],
             matrixIndex: 0,
             imageDataURL: null,
@@ -81,7 +82,10 @@ export default {
             {
                 console.error('Error registering user:', e);
                 console.log(e);
-                this.matrixIndex = 5;
+                if (e.response.status === 413)
+                    this.matrixIndex = 7;
+                else
+                    this.matrixIndex = 5;
                 return ;
             }
             this.resetData();
