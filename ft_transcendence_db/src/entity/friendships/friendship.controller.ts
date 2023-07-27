@@ -10,8 +10,13 @@ export class FriendshipController {
         return (await this.friendshipService.findAll());
     }
     @Get('friendsof/:id')
-    async findFriendOfId(@Param() id: number)
+    async findFriendOfId(@Param('id') id: number)
     {
         return (await this.friendshipService.findFriendOfId(id));
+    }
+    @Get('pending/:id')
+    async findPending(@Param('id') id: number)
+    {
+        return (await this.friendshipService.findPending(id));
     }
 }

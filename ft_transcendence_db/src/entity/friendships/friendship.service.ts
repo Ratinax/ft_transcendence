@@ -15,16 +15,16 @@ export class FriendshipService {
     async findFriendOfId(id: number)
     {
         const friendshipsFromFriend = await this.friendshipRepository
-            .createQueryBuilder('blockships')
-            .innerJoinAndSelect('user.user', 'user')
-            .innerJoinAndSelect('friend.user', 'user')
-            .where(`user.id = ${id} AND statu = 'accepted'`)
+            .createQueryBuilder('friendships')
+            .innerJoinAndSelect('friendships.user', 'user')
+            .innerJoinAndSelect('friendships.friend', 'friend')
+            .where(`user.id = :id AND statu = 'accepted'`, { id: id })
             .getMany();
         const friendshipsFromUser = await this.friendshipRepository
-            .createQueryBuilder('blockships')
-            .innerJoinAndSelect('user.user', 'user')
-            .innerJoinAndSelect('friend.user', 'user')
-            .where(`friend.id = ${id} AND statu = 'accepted'`)
+            .createQueryBuilder('friendships')
+            .innerJoinAndSelect('friendships.user', 'user')
+            .innerJoinAndSelect('friendships.friend', 'friend')
+            .where(`friend.id = :id AND statu = 'accepted'`, { id: id })
             .getMany();
         
         const usersFromFriend = friendshipsFromFriend.map((friendship) => ({
@@ -32,11 +32,27 @@ export class FriendshipService {
             pseudo: friendship.friend.pseudo, 
             profilPic: friendship.friend.profilPic, 
             isConnected: friendship.friend.isConnected}));
-        const usersFromUser = friendshipsFromFriend.map((friendship) => ({
+        const usersFromUser = friendshipsFromUser.map((friendship) => ({
             id: friendship.user.id, 
             pseudo: friendship.user.pseudo, 
             profilPic: friendship.user.profilPic, 
             isConnected: friendship.user.isConnected}));
-        return ([...usersFromFriend, ...usersFromFriend]);
+        return ([...usersFromFriend, ...usersFromUser]);
+    }
+    async findPending(id: number)
+    {
+        const friensdAsking = await this.friendshipRepository
+            .createQueryBuilder('friendships')
+            .innerJoinAndSelect('friendships.user', 'user')
+            .innerJoinAndSelect('friendships.friend', 'friend')
+            .where(`friend.id = :id AND statu = 'pending'`, { id: id })
+            .getMany();
+        
+        const usersAsking = friensdAsking.map((friendship) => ({
+            id: friendship.user.id, 
+            pseudo: friendship.user.pseudo, 
+            profilPic: friendship.user.profilPic, 
+            isConnected: friendship.user.isConnected}));
+        return (usersAsking);
     }
 }

@@ -25,6 +25,9 @@ let FriendshipController = exports.FriendshipController = class FriendshipContro
     async findFriendOfId(id) {
         return (await this.friendshipService.findFriendOfId(id));
     }
+    async findPending(id) {
+        return (await this.friendshipService.findPending(id));
+    }
 };
 __decorate([
     (0, common_1.Get)(''),
@@ -34,11 +37,18 @@ __decorate([
 ], FriendshipController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('friendsof/:id'),
-    __param(0, (0, common_1.Param)()),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], FriendshipController.prototype, "findFriendOfId", null);
+__decorate([
+    (0, common_1.Get)('pending/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], FriendshipController.prototype, "findPending", null);
 exports.FriendshipController = FriendshipController = __decorate([
     (0, common_1.Controller)('friendships'),
     __metadata("design:paramtypes", [friendship_service_1.FriendshipService])

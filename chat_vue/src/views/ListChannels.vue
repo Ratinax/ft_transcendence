@@ -104,7 +104,6 @@ export default {
   overflow: auto;
   height: 97vh;
   position: relative; /* to make intern components able to move*/
-  /* display: inline-block; */
   flex: 0 0 auto; 
    /* La div 'left' prend autant d'espace que possible */
   min-width: 20%;

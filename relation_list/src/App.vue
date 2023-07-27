@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <ListUsers :is-block-list="true" :user="client"/>
+  <div class="relations-lists">
+    <ListUsers :is-friend-list="true" :user="client" :headerText="'Friend list'"/>
+    <ListUsers :is-friend-request-list="true" :user="client" :headerText="'Friend request'"/>
+    <ListUsers :is-block-list="true" :user="client" :headerText="'Block list'"/>
   </div>
 </template>
 
@@ -27,5 +29,8 @@ export default {
 </script>
 
 <style>
-
+.relations-lists
+{
+  display: flex;
+}
 </style>

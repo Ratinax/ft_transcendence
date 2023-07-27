@@ -9,4 +9,10 @@ export declare class FriendshipController {
         profilPic: string;
         isConnected: boolean;
     }[]>;
+    findPending(id: number): Promise<{
+        id: number;
+        pseudo: string;
+        profilPic: string;
+        isConnected: boolean;
+    }[]>;
 }
