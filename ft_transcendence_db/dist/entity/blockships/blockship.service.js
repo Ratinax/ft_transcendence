@@ -22,6 +22,21 @@ let BlockshipService = exports.BlockshipService = class BlockshipService {
     async findAll() {
         return this.blockshipRepository.find();
     }
+    async findUserblockedFromId(id) {
+        const blockships = await this.blockshipRepository
+            .createQueryBuilder('blockships')
+            .innerJoinAndSelect('blockships.userblocking', 'userblocking')
+            .innerJoinAndSelect('blockships.userblocked', 'userblocked')
+            .where('userblocking.id = :id', { id: id })
+            .getMany();
+        const users = blockships.map((blockship) => ({
+            id: blockship.userblocked.id,
+            pseudo: blockship.userblocked.pseudo,
+            profilPic: blockship.userblocked.profilPic,
+            isConnected: blockship.userblocked.isConnected
+        }));
+        return (users);
+    }
 };
 exports.BlockshipService = BlockshipService = __decorate([
     (0, common_1.Injectable)(),

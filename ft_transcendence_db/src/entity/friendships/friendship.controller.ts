@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { FriendshipService } from './friendship.service';
 
 @Controller('friendships')
@@ -8,5 +8,10 @@ export class FriendshipController {
     async findAll()
     {
         return (await this.friendshipService.findAll());
+    }
+    @Get('friendsof/:id')
+    async findFriendOfId(@Param() id: number)
+    {
+        return (await this.friendshipService.findFriendOfId(id));
     }
 }

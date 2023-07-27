@@ -1,4 +1,5 @@
 import { UserService } from './user.service';
+import { Response } from 'express';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
@@ -7,4 +8,5 @@ export declare class UserController {
     signUp(body: any): Promise<any>;
     signIn(body: any): Promise<any>;
     logOut(body: any): Promise<any>;
+    getImage(imageName: string, res: Response): Promise<void>;
 }

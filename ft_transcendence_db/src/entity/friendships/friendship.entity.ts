@@ -14,6 +14,6 @@ export class Friendships {
     @JoinColumn({ name: 'friend_id' })
     friend: Users;
 
-    @Column({ type: 'varchar', length: 10, nullable: true })
+    @Column({ type: 'varchar', length: 10, nullable: true }) // pending or accepted
     statu: string;
 }
