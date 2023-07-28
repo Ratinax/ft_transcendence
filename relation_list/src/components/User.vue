@@ -1,14 +1,14 @@
 <template>
     <div class="user">
         <div class="round-image">
-            <img :src="getImageUrl(user.profilPic)" alt="Image" />
+            <img :src="getImageUrl(user.profilPic)" alt="Image"/>
         </div>
         <span class="pseudo"> {{ user.pseudo }}</span>
-        <div class="green-circle" v-if="user.isConnected"></div>
-        <div class="red-circle" v-else></div>
+        <div class="green circle" v-if="user.isConnected"></div>
+        <div class="red circle" v-else></div>
         <div v-if="isARequest">
-            <div class="box arrow"></div>
-            <div class="box cross"></div>
+            <div class="box arrow" @click="accept"></div>
+            <div class="box cross" @click="refuse"></div>
         </div>
     </div>
 </template>
@@ -23,8 +23,17 @@ export default {
     },
     methods: 
     {
-        getImageUrl(imageName) {
-        return `http://localhost:3000/users/images/${imageName}`;
+        getImageUrl(imageName) 
+        {
+            return `http://localhost:3000/users/images/${imageName}`;
+        },
+        accept()
+        {
+            this.$emit('accept-friendship', this.user.id);
+        },
+        refuse()
+        {
+            this.$emit('refuse-friendship', this.user.id);
         },
     }
 }
@@ -65,22 +74,23 @@ export default {
   height: auto; 
 }
 
-.green-circle 
+.circle 
 {
   width: 1em;
   height: 1em;
   border-radius: 50%; 
-  background-color: green;
   margin-left: 1em;
+  flex-shrink: 0
+  
 }
-
-.red-circle 
+.green
 {
-  width: 1em;
-  height: 1em;
-  border-radius: 50%; 
-  background-color: red;
-  margin-left: 1em;
+    background-color: green;
+}
+.red
+{
+    
+    background-color: red;
 }
 
 .box {

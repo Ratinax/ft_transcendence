@@ -4,7 +4,7 @@
             <h1>{{ headerText }}</h1>
         </div>
         <div class="users">
-            <User v-for="user in users" :key="user.id" :user="user" :isARequest="isFriendRequestList" />
+            <User v-for="user in users" :key="user.id" :user="user" :isARequest="isFriendRequestList" @accept-friendship="onAcceptFriendship" @refuse-friendship="onRefuseFriendship"/>
         </div>
     </div>
   
@@ -45,20 +45,32 @@ export default {
             if (this.isFriendList) 
                 getText = 'friendships/friendsof';
             else if (this.isFriendRequestList)
-                getText = 'friendships/pending'
+                getText = 'friendships/pending';
             if (this.user.length <= 0)
                 return ;
             try
             {
                 const res = await axios.get(`http://localhost:3000/${getText}/${this.user.id}`);
                 this.users = res.data;
-                console.log(this.users);
+                console.log('this.users :',this.users);
             }
             catch (e)
             {
                 console.error('Error un fetchUsers:', e);
             }
         },
+        onAcceptFriendship(user_id)
+        {
+            this.$emit('accept-friendship', {user_id : user_id, firend_id : this.user.id})
+        },
+        updateFriendList(users)
+        {
+            this.users = users;
+        },
+        onRefuseFriendship(user_id)
+        {
+            this.$emit('refuse-friendship', {user_id : user_id, firend_id : this.user.id})
+        }
     },
 }
 </script>

@@ -55,4 +55,26 @@ export class FriendshipService {
             isConnected: friendship.user.isConnected}));
         return (usersAsking);
     }
+    async acceptFriendship(friend_id: number, user_id: number): Promise<Friendships> 
+    {
+        const friendship = await this.friendshipRepository.findOne({
+          where: { user: { id: user_id }, friend: { id: friend_id } },
+        });
+    
+        if (!friendship) {
+          throw new Error('Friendship not found.');
+        }
+    
+        friendship.statu = 'accepted';
+        return this.friendshipRepository.save(friendship);
+    }
+    async deleteFriendship(friend_id: number, user_id: number)
+    {
+        const friendship = await this.friendshipRepository.findOne({
+            where: { user: { id: user_id }, friend: { id: friend_id } },
+          });
+
+        const res = await this.friendshipRepository.delete(friendship.id);
+        return (res);
+    }
 }

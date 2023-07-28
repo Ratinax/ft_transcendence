@@ -64,6 +64,23 @@ let FriendshipService = exports.FriendshipService = class FriendshipService {
         }));
         return (usersAsking);
     }
+    async acceptFriendship(friend_id, user_id) {
+        const friendship = await this.friendshipRepository.findOne({
+            where: { user: { id: user_id }, friend: { id: friend_id } },
+        });
+        if (!friendship) {
+            throw new Error('Friendship not found.');
+        }
+        friendship.statu = 'accepted';
+        return this.friendshipRepository.save(friendship);
+    }
+    async deleteFriendship(friend_id, user_id) {
+        const friendship = await this.friendshipRepository.findOne({
+            where: { user: { id: user_id }, friend: { id: friend_id } },
+        });
+        const res = await this.friendshipRepository.delete(friendship.id);
+        return (res);
+    }
 };
 exports.FriendshipService = FriendshipService = __decorate([
     (0, common_1.Injectable)(),

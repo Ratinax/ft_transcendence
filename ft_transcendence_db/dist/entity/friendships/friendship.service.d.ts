@@ -16,4 +16,6 @@ export declare class FriendshipService {
         profilPic: string;
         isConnected: boolean;
     }[]>;
+    acceptFriendship(friend_id: number, user_id: number): Promise<Friendships>;
+    deleteFriendship(friend_id: number, user_id: number): Promise<import("typeorm").DeleteResult>;
 }
