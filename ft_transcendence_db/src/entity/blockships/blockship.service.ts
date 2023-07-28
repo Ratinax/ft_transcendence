@@ -27,4 +27,13 @@ export class BlockshipService {
             isConnected: blockship.userblocked.isConnected}));
         return (users);
     }
+    async deleteBlockship(friend_id: number, user_id: number)
+    {
+        const blockship = await this.blockshipRepository.findOne({
+            where: { userblocking: { id: user_id }, userblocked: { id: friend_id } },
+          });
+
+        const res = await this.blockshipRepository.delete(blockship.id);
+        return (res);
+    }
 }

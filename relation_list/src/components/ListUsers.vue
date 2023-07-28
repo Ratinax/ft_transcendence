@@ -4,7 +4,7 @@
             <h1>{{ headerText }}</h1>
         </div>
         <div class="users">
-            <User v-for="user in users" :key="user.id" :user="user" :isARequest="isFriendRequestList" @accept-friendship="onAcceptFriendship" @refuse-friendship="onRefuseFriendship"/>
+            <User v-for="user in users" :key="user.id" :user="user" :isARequest="isFriendRequestList" @accept-friendship="onAcceptFriendship" @refuse-friendship="onRefuseFriendship" @remove-relation="onRemoveRelation"/>
         </div>
     </div>
   
@@ -61,7 +61,7 @@ export default {
         },
         onAcceptFriendship(user_id)
         {
-            this.$emit('accept-friendship', {user_id : user_id, firend_id : this.user.id})
+            this.$emit('accept-friendship', {user_id : user_id, friend_id : this.user.id})
         },
         updateFriendList(users)
         {
@@ -69,8 +69,16 @@ export default {
         },
         onRefuseFriendship(user_id)
         {
-            this.$emit('refuse-friendship', {user_id : user_id, firend_id : this.user.id})
-        }
+            this.$emit('refuse-friendship', {user_id : user_id, friend_id : this.user.id})
+        },
+        onRemoveRelation(user_id)
+        {
+            if (this.isFriendList || this.isFriendRequestList)
+                this.$emit('remove-relation', {relationType: 'friend', user_id : user_id, friend_id : this.user.id})
+            else
+                this.$emit('remove-relation', {relationType: 'block', userblocking_id : user_id, userblocked_id : this.user.id})
+
+        },
     },
 }
 </script>

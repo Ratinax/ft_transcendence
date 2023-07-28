@@ -12,48 +12,37 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FriendshipGateway = void 0;
+exports.BlockshipGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
-const friendship_service_1 = require("./friendship.service");
+const blockship_service_1 = require("./blockship.service");
 const socket_io_1 = require("socket.io");
-let FriendshipGateway = exports.FriendshipGateway = class FriendshipGateway {
-    constructor(friendshipService) {
-        this.friendshipService = friendshipService;
+let BlockshipGateway = exports.BlockshipGateway = class BlockshipGateway {
+    constructor(blockshipService) {
+        this.blockshipService = blockshipService;
     }
-    async acceptFriendship(body) {
-        const res = await this.friendshipService.acceptFriendship(body.friend_id, body.user_id);
-        this.server.emit('acceptFriendship', res);
-    }
-    async removeFriendship(body) {
-        console.log('rm friendship');
-        const res = await this.friendshipService.deleteFriendship(body.friend_id, body.user_id);
-        this.server.emit('deleteFriendship', res);
+    async refuseBlockship(body) {
+        console.log(body);
+        const res = await this.blockshipService.deleteBlockship(body.userblocking_id, body.userblocked_id);
+        this.server.emit('deleteBlockship', res);
     }
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
-], FriendshipGateway.prototype, "server", void 0);
+], BlockshipGateway.prototype, "server", void 0);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('acceptFriendship'),
+    (0, websockets_1.SubscribeMessage)('removeBlockship'),
     __param(0, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], FriendshipGateway.prototype, "acceptFriendship", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)('removeFriendship'),
-    __param(0, (0, websockets_1.MessageBody)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], FriendshipGateway.prototype, "removeFriendship", null);
-exports.FriendshipGateway = FriendshipGateway = __decorate([
+], BlockshipGateway.prototype, "refuseBlockship", null);
+exports.BlockshipGateway = BlockshipGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
             origin: '*',
         },
     }),
-    __metadata("design:paramtypes", [friendship_service_1.FriendshipService])
-], FriendshipGateway);
-//# sourceMappingURL=friendship.gateway.js.map
+    __metadata("design:paramtypes", [blockship_service_1.BlockshipService])
+], BlockshipGateway);
+//# sourceMappingURL=blockship.gateway.js.map

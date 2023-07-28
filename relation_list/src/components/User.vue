@@ -8,8 +8,8 @@
         <div class="red circle" v-else></div>
         <div v-if="isARequest">
             <div class="box arrow" @click="accept"></div>
-            <div class="box cross" @click="refuse"></div>
         </div>
+        <div class="box cross" @click="remove"></div>
     </div>
 </template>
 
@@ -31,9 +31,9 @@ export default {
         {
             this.$emit('accept-friendship', this.user.id);
         },
-        refuse()
+        remove()
         {
-            this.$emit('refuse-friendship', this.user.id);
+            this.$emit('remove-relation', this.user.id);
         },
     }
 }

@@ -37,6 +37,13 @@ let BlockshipService = exports.BlockshipService = class BlockshipService {
         }));
         return (users);
     }
+    async deleteBlockship(friend_id, user_id) {
+        const blockship = await this.blockshipRepository.findOne({
+            where: { userblocking: { id: user_id }, userblocked: { id: friend_id } },
+        });
+        const res = await this.blockshipRepository.delete(blockship.id);
+        return (res);
+    }
 };
 exports.BlockshipService = BlockshipService = __decorate([
     (0, common_1.Injectable)(),

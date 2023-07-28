@@ -10,4 +10,5 @@ export declare class BlockshipService {
         profilPic: string;
         isConnected: boolean;
     }[]>;
+    deleteBlockship(friend_id: number, user_id: number): Promise<import("typeorm").DeleteResult>;
 }

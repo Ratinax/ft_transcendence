@@ -5,5 +5,5 @@ export declare class FriendshipGateway {
     server: Server;
     constructor(friendshipService: FriendshipService);
     acceptFriendship(body: any): Promise<void>;
-    refuseFriendship(body: any): Promise<void>;
+    removeFriendship(body: any): Promise<void>;
 }
