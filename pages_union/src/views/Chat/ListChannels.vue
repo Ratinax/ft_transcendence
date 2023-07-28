@@ -21,9 +21,9 @@
 
 <script>
 
-import Channel from '../components/Channel.vue';
-import CreateChannel from '../components/CreateChannel.vue';
-import JoinChannel from '../components/JoinChannel.vue';
+import Channel from '../../components/Chat/Channel.vue';
+import CreateChannel from '../../components/Chat/CreateChannel.vue';
+import JoinChannel from '../../components/Chat/JoinChannel.vue';
 import axios from 'axios';
 
 export default {

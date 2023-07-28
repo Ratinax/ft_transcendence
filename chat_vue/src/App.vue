@@ -35,7 +35,7 @@ export default {
   },
   mounted()
   {
-    this.socket = io('http://192.168.1.159:3000/');
+    this.socket = io('http://localhost:3000/');
     this.socket.on('updateMessage', (response) => {
       this.updateMessages(null);
       console.log(response);

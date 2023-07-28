@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Message from '../components/Message.vue';
+import Message from '../../components/Chat/Message.vue';
 import axios from 'axios';
 
 export default {
