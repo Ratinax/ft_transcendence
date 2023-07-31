@@ -7,7 +7,7 @@
   </template>
   
   <script>
-  import ListUsers from './components/Relations/ListUsers.vue'
+  import ListUsers from '../components/Relations/ListUsers.vue'
   import { io } from 'socket.io-client';
   
   export default {

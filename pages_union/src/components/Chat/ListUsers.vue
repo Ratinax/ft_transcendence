@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import User from '../../components/Chat/User.vue';
+import User from './User.vue';
 export default {
     name: 'ListUsers',
     components:

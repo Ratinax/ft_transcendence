@@ -18,46 +18,46 @@
     </div>
   </template>
   
-  <script>
-  export default {
-    name: 'JoinChannel',
-    props: {
-      show: Boolean,
-    },
-    data()
+<script>
+export default {
+  name: 'JoinChannel',
+  props: {
+    show: Boolean,
+  },
+  data()
+  {
+    return {
+      channelName: '',
+      password: '',
+      isEmpty: false,
+    }
+  },
+  methods: 
+  {
+    // TODO : join un channel doit faire rejoindre ce channel
+    joinAChannel()
     {
-      return {
-        channelName: '',
-        password: '',
-        isEmpty: false,
+      if (this.channelName === '')
+      {
+        this.isEmpty = true;
+        return ;
       }
+      this.resetData();
     },
-    methods: 
+    close()
     {
-      // TODO : join un channel doit faire rejoindre ce channel
-      joinAChannel()
-      {
-        if (this.channelName === '')
-        {
-          this.isEmpty = true;
-          return ;
-        }
-        this.resetData();
-      },
-      close()
-      {
-        this.resetData();
-        this.$emit('close');
-      },
-      resetData()
-      {
-        this.channelName = '';
-        this.password = '';
-        this.isEmpty = false;
-      }
+      this.resetData();
+      this.$emit('close');
     },
-  };
-  </script>
+    resetData()
+    {
+      this.channelName = '';
+      this.password = '';
+      this.isEmpty = false;
+    }
+  },
+};
+</script>
   
 <style>
 

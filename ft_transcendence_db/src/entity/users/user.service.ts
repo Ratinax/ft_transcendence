@@ -98,7 +98,11 @@ export class UserService {
     async uploadImage(image: string)
     {
         console.log('image :', image, ': over');
-        let extension = image.substring(11, 15);
+        let extension;
+        if (!image)
+            extension = '.jpg'
+        else
+            extension = image.substring(11, 15);
         if (extension === 'jpg;' || extension === 'jpeg')
             extension = '.jpg';
         else if (extension === 'png;')
@@ -111,7 +115,7 @@ export class UserService {
             await fs.promises.mkdir(uploadDirectory, {recursive: true}); // create directory, if already exists do nothing 
             const filePath = path.join(__dirname, '../../../', 'uploads', uniqueFileName);
             // Save image with replacing useles chars and convert it to buffer using base 64 codage
-            if (!image)
+            if (!image) // TODO : mettre image par defaut
                 return (uniqueFileName);
             const imageBuffer = Buffer.from(image.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''), 'base64');
             fs.writeFileSync(filePath, imageBuffer); //create image

@@ -23,7 +23,7 @@
 <script>
 
 import axios from 'axios';
-import router from '../../router/router'; 
+import router from '../router/router'; 
 export default {
     name: 'Register-Page',
     data()
@@ -82,6 +82,8 @@ export default {
             {
                 console.error('Error registering user:', e);
                 console.log(e);
+                if (!e.response)
+                    return ;
                 if (e.response.status === 413)
                     this.matrixIndex = 7;
                 else
@@ -129,8 +131,8 @@ export default {
 .register-container
 {
     display: flex;
-        flex-direction: column; /* Pour aligner verticalement les éléments */
-        align-items: center;
+    flex-direction: column; /* Pour aligner verticalement les éléments */
+    align-items: center;
 }
 
 .form-container 

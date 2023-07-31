@@ -91,7 +91,11 @@ let UserService = exports.UserService = class UserService {
     }
     async uploadImage(image) {
         console.log('image :', image, ': over');
-        let extension = image.substring(11, 15);
+        let extension;
+        if (!image)
+            extension = '.jpg';
+        else
+            extension = image.substring(11, 15);
         if (extension === 'jpg;' || extension === 'jpeg')
             extension = '.jpg';
         else if (extension === 'png;')

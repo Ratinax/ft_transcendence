@@ -11,10 +11,10 @@
   
   
   <script>
-  import ListChannels from "./views/Chat/ListChannels.vue";
-  import ListUsers from "./views/Chat/ListUsers.vue";
-  import Messages from "./views/Chat/Messages.vue";
-  import SendMessage from "./views/Chat/SendMessage.vue";
+  import ListChannels from "../components/Chat/ListChannels.vue"; ///Chat/ListChannels.vue
+  import ListUsers from "../components/Chat/ListUsers.vue";
+  import Messages from "../components/Chat/Messages.vue";
+  import SendMessage from "../components/Chat/SendMessage.vue";
   import { io } from 'socket.io-client';
   
   
