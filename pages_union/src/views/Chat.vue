@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <ListChannels ref="listChannels" :channelSelected="selectedChannel" :user="user" @channel-selected="onChannelSelected" @create-channel="createChannel" @join-channel="joinChannel"/>
+        <ListChannels ref="listChannels" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @create-channel="createChannel" v-if="socket"/>
         <div class="messageszone">
           <Messages ref="messages"/>
           <SendMessage :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
@@ -44,9 +44,9 @@
       this.user = JSON.parse(decodeURIComponent(userJson));
 
     },
-    mounted()
+    async mounted()
     {
-      this.socket = io('http://localhost:3000/');
+      this.socket =  io('http://localhost:3000/');
       this.socket.on('updateMessage', (response) => {
         this.updateMessages(null);
         console.log(response);
@@ -60,16 +60,8 @@
         if (response.channel.channel_id === this.selectedChannel.channel_id)
           this.updateListUsers(response.users);
       });
-      //
-      this.socket.on('joinNoSuchChannel', (response) => {
-        if (response.user.id === this.user.id)
-          this.joinNoSuchChannel();
-      });
-      this.socket.on('joinAlreadyIn', (response) => {
-        console.log('les id :', response.user.id, this.user.id);
-        if (response.user.id === this.user.id)
-          this.joinAlreadyIn();
-      });
+      // joinWrongPassword
+      
     },
     methods:
     {
@@ -99,6 +91,7 @@
       createChannel(content)
       {
         this.socket.emit('createChannel', { channel: content, user: this.user}); // TODO metter a content.channel
+        console.log(this.socket);
       },
       createMessage(content)
       {
@@ -111,19 +104,6 @@
       updateListUsers(listUsers)
       {
         this.$refs.listUsersChat.updateListUsers(listUsers);
-      },
-      joinChannel(content)
-      {
-        this.socket.emit('joinChannel', {...content, user: this.user})
-      },
-      joinNoSuchChannel()
-      {
-        this.$refs.listChannels.joinNoSuchChannel();
-      },
-      joinAlreadyIn()
-      {
-        console.log('iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
-        this.$refs.listChannels.joinAlreadyIn();
       },
     }
   }

@@ -59,15 +59,20 @@ export class ChannelGateway {
     {
       this.server.emit('joinNoSuchChannel', {user: user});
     }
-    console.log(channel);
+
     const relation = await this.channelsUsersService.findRelation(user.id, channel.channel_id);
-    console.log('relation :', relation)
+
     if (relation && relation[0])
     {
       this.server.emit('joinAlreadyIn', {user: user})
       return ;
     }
-    const res = await this.channelsUsersService.createNew({
+    if (password != channel.password) // TODO comparer avec les mdp hash
+    {
+      this.server.emit('joinWrongPassword', {user: user})
+      return ;
+    }
+    await this.channelsUsersService.createNew({
       user: user,
       channel: channel,
       isAdmin: false,
@@ -75,6 +80,7 @@ export class ChannelGateway {
       isInvited: false,
     });
     this.server.emit('updateListChannels', {channel: channel, user: user});
+    this.server.emit('joinGoodRequest', {channel: channel, user: user});
 
   }
 

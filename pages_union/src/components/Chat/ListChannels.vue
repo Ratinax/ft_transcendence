@@ -11,7 +11,7 @@
         </div>
         <div class="join-channel">
           <button @click="showJoinChannel = true">Join Channel</button>
-          <JoinChannel :show="showJoinChannel" ref='joinChannel' @close="showJoinChannel = false" @join-channel="joinChannel">
+          <JoinChannel :show="showJoinChannel" :socket="socket" :user="user" ref='joinChannel' @close="showJoinChannel = false" >
           </JoinChannel>
         </div>
       </div>
@@ -21,6 +21,7 @@
 
 <script>
 
+// import { Socket } from 'socket.io-client';
 import Channel from './Channel.vue';
 import CreateChannel from './CreateChannel.vue';
 import JoinChannel from './JoinChannel.vue';
@@ -37,6 +38,7 @@ export default {
     {
       user: Object,
       channelSelected: Object,
+      socket: null,
     },
     data() {
       return {
@@ -87,19 +89,6 @@ export default {
         const container = this.$refs.channelsButtons;
   
         container.scrollTop = container.scrollHeight;
-      },
-      joinChannel(content)
-      {
-        this.$emit('join-channel', content);
-      },
-      joinNoSuchChannel()
-      {
-        this.$refs.joinChannel.noSuchChannel();
-      },
-      joinAlreadyIn()
-      {
-        console.log('et laaaaaaaaaaaa');
-        this.$refs.joinChannel.alreadyIn();
       },
     },
 }

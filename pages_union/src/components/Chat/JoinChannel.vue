@@ -20,10 +20,13 @@
   </template>
   
 <script>
+import { Socket } from 'socket.io-client';
 export default {
   name: 'JoinChannel',
   props: {
     show: Boolean,
+    socket: Socket,
+    user: Object,
   },
   data()
   {
@@ -41,22 +44,37 @@ export default {
       matrixIndex: 0,
     }
   },
+  mounted()
+  {
+    this.socket.on('joinNoSuchChannel', (response) => {
+        if (response.user.id === this.user.id)
+          this.noSuchChannel();
+      });
+      this.socket.on('joinAlreadyIn', (response) => {
+        console.log('teeest')
+        if (response.user.id === this.user.id)
+          this.alreadyIn();
+      });
+      this.socket.on('joinWrongPassword', (response) => {
+        if (response.user.id === this.user.id)
+          this.wrongPassword();
+      });
+      this.socket.on('joinGoodRequest', (response) => {
+        if (response.user.id === this.user.id)
+          this.goodRequest();
+      });
+  },
   methods: 
   {
-    // TODO : join un channel doit faire rejoindre ce channel
     joinAChannel()
     {
+      this.matrixIndex = 0;
       if (this.channelName === '')
       {
         this.matrixIndex = 1;
         return ;
       }
-      this.$emit('join-channel', {channelName: this.channelName, password: this.password});
-      if (this.matrixIndex === 0)
-      {
-        console.log('matrix index :', this.matrixIndex);
-        this.resetData();
-      }
+      this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, user: this.user})
     },
     close()
     {
@@ -78,6 +96,14 @@ export default {
     {
       this.matrixIndex = 3;
     },
+    wrongPassword()
+    {
+      this.matrixIndex = 4;
+    },
+    goodRequest()
+    {
+      this.close();
+    }
   },
 };
 </script>
