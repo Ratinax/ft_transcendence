@@ -25,7 +25,6 @@ let FriendshipGateway = exports.FriendshipGateway = class FriendshipGateway {
         this.server.emit('acceptFriendship', res);
     }
     async removeFriendship(body) {
-        console.log('rm friendship');
         const res = await this.friendshipService.deleteFriendship(body.friend_id, body.user_id);
         this.server.emit('deleteFriendship', res);
     }

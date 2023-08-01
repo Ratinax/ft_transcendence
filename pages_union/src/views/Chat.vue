@@ -1,18 +1,18 @@
 <template>
     <div class="container">
-        <ListChannels ref="listeChannels" :channelSelected="selectedChannel" @channel-selected="onChannelSelected" @create-channel="createChannel"/>
+        <ListChannels ref="listChannels" :channelSelected="selectedChannel" :user="user" @channel-selected="onChannelSelected" @create-channel="createChannel" @join-channel="joinChannel"/>
         <div class="messageszone">
           <Messages ref="messages"/>
-          <SendMessage :channelId="selectedChannel.channel_id" :socket="socket" @create-message="createMessage"/>
+          <SendMessage :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
         </div>
-        <ListUsers ref="listUsers" @find-users-of-channel="findUsersOfChannel"/>
+        <ListUsersChat ref="listUsersChat" @find-users-of-channel="findUsersOfChannel"/>
     </div>
   </template>
   
   
   <script>
-  import ListChannels from "../components/Chat/ListChannels.vue"; ///Chat/ListChannels.vue
-  import ListUsers from "../components/Chat/ListUsers.vue";
+  import ListChannels from "../components/Chat/ListChannels.vue";
+  import ListUsersChat from "../components/Chat/ListUsersChat.vue";
   import Messages from "../components/Chat/Messages.vue";
   import SendMessage from "../components/Chat/SendMessage.vue";
   import { io } from 'socket.io-client';
@@ -25,14 +25,24 @@
       ListChannels,
       Messages,
       SendMessage,
-      ListUsers,
+      ListUsersChat,
     },
     data()
     {
       return {
         selectedChannel: {},
         socket: null,
+        user: {
+          id: 1
+        },
       }
+    },
+    created()
+    {
+      const userJson = this.$route.query.user;
+
+      this.user = JSON.parse(decodeURIComponent(userJson));
+
     },
     mounted()
     {
@@ -41,20 +51,33 @@
         this.updateMessages(null);
         console.log(response);
       });
-      this.socket.on('updateChannel', (response) => {
-        this.updateChannel(response);
+      this.socket.on('updateListChannels', (response) => {
+        console.log('response id :', response.user.id, '\nmy id :', this.user.id);
+        if (response.user.id === this.user.id)
+          this.updateListChannels(response.channel);
       });
-      this.socket.on('listUsers', (response) => {
-        this.updateListUsers(response);
+      this.socket.on('updateListUsers', (response) => {
+        if (response.channel.channel_id === this.selectedChannel.channel_id)
+          this.updateListUsers(response.users);
+      });
+      //
+      this.socket.on('joinNoSuchChannel', (response) => {
+        if (response.user.id === this.user.id)
+          this.joinNoSuchChannel();
+      });
+      this.socket.on('joinAlreadyIn', (response) => {
+        console.log('les id :', response.user.id, this.user.id);
+        if (response.user.id === this.user.id)
+          this.joinAlreadyIn();
       });
     },
     methods:
     {
-      updateChannel(channel)
+      updateListChannels(channel)
       {
-  
         // TODO : faire que ca fasse ca uniquement si la personne est dedans
-        this.$refs.listeChannels.addChannel(channel);
+        this.$refs.listChannels.fetchChannels();
+        // console.log('eriner channel :', channel[0])
         this.setSelectedChannel(channel);
         this.updateMessages();
       },
@@ -69,12 +92,13 @@
       },
       setSelectedChannel(channel)
       {
+        console.log('le channel suppose selecte :', channel)
         this.selectedChannel = channel;
         this.findUsersOfChannel()
       },
       createChannel(content)
       {
-        this.socket.emit('createChannel', content);
+        this.socket.emit('createChannel', { channel: content, user: this.user}); // TODO metter a content.channel
       },
       createMessage(content)
       {
@@ -82,12 +106,25 @@
       },
       findUsersOfChannel()
       {
-        this.socket.emit('findUsersOfChannel', this.selectedChannel);
+        this.socket.emit('findUsersOfChannel', {channel: this.selectedChannel, user: this.user});
       },
       updateListUsers(listUsers)
       {
-        this.$refs.listUsers.updateListUsers(listUsers);
-      }
+        this.$refs.listUsersChat.updateListUsers(listUsers);
+      },
+      joinChannel(content)
+      {
+        this.socket.emit('joinChannel', {...content, user: this.user})
+      },
+      joinNoSuchChannel()
+      {
+        this.$refs.listChannels.joinNoSuchChannel();
+      },
+      joinAlreadyIn()
+      {
+        console.log('iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
+        this.$refs.listChannels.joinAlreadyIn();
+      },
     }
   }
   

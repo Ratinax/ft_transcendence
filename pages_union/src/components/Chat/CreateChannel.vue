@@ -68,12 +68,14 @@ export default {
         this.isWellFormated = false;
         return ;
       }
-      /* faire trucs qui cree le channel */
+
       this.$emit('create-channel', {
-        name: this.channelName,
-        password: this.password,
-        category: this.categories[this.selectedCategory - 1].name,
-        isADm: false,
+        channel: {
+          name: this.channelName,
+          password: this.password,
+          category: this.categories[this.selectedCategory - 1].name,
+          isADm: false,
+        }
       });
       this.resetData();
     },

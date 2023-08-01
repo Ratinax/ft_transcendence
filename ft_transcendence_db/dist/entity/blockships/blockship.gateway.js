@@ -21,7 +21,6 @@ let BlockshipGateway = exports.BlockshipGateway = class BlockshipGateway {
         this.blockshipService = blockshipService;
     }
     async refuseBlockship(body) {
-        console.log(body);
         const res = await this.blockshipService.deleteBlockship(body.userblocking_id, body.userblocked_id);
         this.server.emit('deleteBlockship', res);
     }

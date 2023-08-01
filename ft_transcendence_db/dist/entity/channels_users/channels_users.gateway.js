@@ -16,15 +16,14 @@ exports.ChannelsUsersGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const channels_users_service_1 = require("./channels_users.service");
 const socket_io_1 = require("socket.io");
-const channel_entity_1 = require("../channels/channel.entity");
 let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGateway {
     constructor(channelsUsersService) {
         this.channelsUsersService = channelsUsersService;
     }
-    async findUsersOfChannel(channel) {
+    async findUsersOfChannel(body) {
         try {
-            const res = await this.channelsUsersService.findUsersOfChannel(channel.name);
-            this.server.emit('listUsers', res);
+            const res = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+            this.server.emit('updateListUsers', { users: res, channel: body.channel });
         }
         catch (e) {
         }
@@ -38,7 +37,7 @@ __decorate([
     (0, websockets_1.SubscribeMessage)('findUsersOfChannel'),
     __param(0, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [channel_entity_1.Channels]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsUsersGateway.prototype, "findUsersOfChannel", null);
 exports.ChannelsUsersGateway = ChannelsUsersGateway = __decorate([

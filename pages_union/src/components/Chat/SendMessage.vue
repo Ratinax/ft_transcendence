@@ -19,7 +19,6 @@ export default {
         socket: Socket,
         userId: Number,
         channelId: Number,
-
     },
     data()
     {
@@ -47,7 +46,7 @@ export default {
         {
             this.$emit('create-message', {
                 channel: this.channelId,
-                user: 1,
+                user: this.userId,
                 content: this.messageText,
                 dateSent: this.getCurrentDate(),
             })

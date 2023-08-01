@@ -38,14 +38,12 @@ let UserService = exports.UserService = class UserService {
         let imageName;
         let userFound = await this.userRepository.findOne({ where: { pseudo: body.pseudo } });
         if (userFound) {
-            console.log('pseudo: ', body.pseudo, 'le user :', userFound);
             throw new common_1.InternalServerErrorException('already exists');
         }
         try {
             imageName = await this.uploadImage(body.image);
         }
         catch (e) {
-            console.log('till here :', e);
             throw new common_1.InternalServerErrorException(e);
         }
         const user = {
@@ -55,8 +53,8 @@ let UserService = exports.UserService = class UserService {
             isConnected: body.isConnected,
         };
         const newUser = this.userRepository.create(user);
-        this.userRepository.save(newUser);
-        return ({ statusCode: 200 });
+        const res = this.userRepository.save(newUser);
+        return (res);
     }
     async signIn(user) {
         let userFound = await this.userRepository.findOne({ where: { pseudo: user.pseudo } });
@@ -90,7 +88,6 @@ let UserService = exports.UserService = class UserService {
         return result;
     }
     async uploadImage(image) {
-        console.log('image :', image, ': over');
         let extension;
         if (!image)
             extension = '.jpg';
@@ -102,7 +99,6 @@ let UserService = exports.UserService = class UserService {
             extension = '.png';
         try {
             const uniqueFileName = Date.now() + '_' + this.generateRandomString(12) + extension;
-            console.log(uniqueFileName);
             const uploadDirectory = path.join(__dirname, '../../../', 'uploads');
             await fs.promises.mkdir(uploadDirectory, { recursive: true });
             const filePath = path.join(__dirname, '../../../', 'uploads', uniqueFileName);

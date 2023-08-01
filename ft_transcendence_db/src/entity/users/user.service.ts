@@ -36,7 +36,6 @@ export class UserService {
         let userFound = await this.userRepository.findOne({where: {pseudo : body.pseudo}});
         if (userFound)
         {
-            console.log('pseudo: ', body.pseudo, 'le user :' , userFound)
             throw new InternalServerErrorException('already exists');
         }
         try 
@@ -45,7 +44,7 @@ export class UserService {
         }
         catch (e)
         {
-            console.log('till here :', e);
+
             throw new InternalServerErrorException(e);
         }
         const user = {
@@ -55,8 +54,8 @@ export class UserService {
             isConnected: body.isConnected,
         };
         const newUser = this.userRepository.create(user);
-        this.userRepository.save(newUser);
-        return ({ statusCode: 200 });
+        const res = this.userRepository.save(newUser);
+        return (res);
     }
     async signIn(user: Partial<Users>)
     {
@@ -97,7 +96,6 @@ export class UserService {
     }
     async uploadImage(image: string)
     {
-        console.log('image :', image, ': over');
         let extension;
         if (!image)
             extension = '.jpg'
@@ -110,7 +108,6 @@ export class UserService {
         try 
         {
             const uniqueFileName = Date.now() + '_' + this.generateRandomString(12) + extension;
-            console.log(uniqueFileName);
             const uploadDirectory = path.join(__dirname, '../../../', 'uploads');
             await fs.promises.mkdir(uploadDirectory, {recursive: true}); // create directory, if already exists do nothing 
             const filePath = path.join(__dirname, '../../../', 'uploads', uniqueFileName);

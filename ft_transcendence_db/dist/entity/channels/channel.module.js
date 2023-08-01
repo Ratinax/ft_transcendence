@@ -13,6 +13,8 @@ const channel_service_1 = require("./channel.service");
 const channel_providers_1 = require("./channel.providers");
 const database_module_1 = require("../../database/database.module");
 const channel_gateway_1 = require("./channel.gateway");
+const channels_users_service_1 = require("../channels_users/channels_users.service");
+const channels_users_providers_1 = require("../channels_users/channels_users.providers");
 let ChannelModule = exports.ChannelModule = class ChannelModule {
 };
 exports.ChannelModule = ChannelModule = __decorate([
@@ -20,8 +22,10 @@ exports.ChannelModule = ChannelModule = __decorate([
         imports: [database_module_1.DatabaseModule],
         providers: [
             ...channel_providers_1.channelProviders,
+            ...channels_users_providers_1.channelsUsersProviders,
             channel_service_1.ChannelService,
-            channel_gateway_1.ChannelGateway
+            channel_gateway_1.ChannelGateway,
+            channels_users_service_1.ChannelsUsersService,
         ],
         controllers: [channel_controller_1.ChannelController],
     })

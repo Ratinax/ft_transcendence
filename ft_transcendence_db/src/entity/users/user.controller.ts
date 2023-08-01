@@ -32,7 +32,6 @@ export class UserController {
         try
         {
             const res = await this.callFunction(this.userService.signUp, body);
-            console.log(res);
             return (res);
         }
         catch (e)

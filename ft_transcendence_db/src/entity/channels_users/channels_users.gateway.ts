@@ -16,11 +16,11 @@ export class ChannelsUsersGateway {
   constructor(private readonly channelsUsersService: ChannelsUsersService) {}
 
   @SubscribeMessage('findUsersOfChannel')
-  async findUsersOfChannel(@MessageBody() channel: Channels) {
+  async findUsersOfChannel(@MessageBody() body) {
     try 
     {
-        const res = await this.channelsUsersService.findUsersOfChannel(channel.name);
-        this.server.emit('listUsers', res);
+        const res = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+        this.server.emit('updateListUsers', {users: res, channel: body.channel});
     }
     catch (e)
     {

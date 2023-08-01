@@ -20,6 +20,7 @@ const routes = [
     },
     {
         path: '/chat',
+        name: 'Chat',
         component: Chat,
     },
     {

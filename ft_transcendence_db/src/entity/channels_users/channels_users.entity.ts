@@ -21,6 +21,6 @@ export class ChannelsUsers {
     @Column({ name: 'is_owner', default: false })
     isOwner: boolean;
 
-    @Column({ name: 'is_invited' })
+    @Column({ name: 'is_invited', default: false })
     isInvited: boolean;
 }

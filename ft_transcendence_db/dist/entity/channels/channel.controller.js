@@ -15,15 +15,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChannelController = void 0;
 const common_1 = require("@nestjs/common");
 const channel_service_1 = require("./channel.service");
+const channels_users_service_1 = require("../channels_users/channels_users.service");
 let ChannelController = exports.ChannelController = class ChannelController {
-    constructor(channelService) {
+    constructor(channelService, channelsUsersService) {
         this.channelService = channelService;
+        this.channelsUsersService = channelsUsersService;
     }
     callFunction(fct, body) {
         return (this.channelService.callFunction(fct.bind(this.channelService), body));
     }
     async findAll() {
         const channels = await this.channelService.findAll();
+        return (channels);
+    }
+    async find(user_id) {
+        const channels = await this.channelsUsersService.findChannelsOfUsers(user_id);
         return (channels);
     }
     async createChannel(body) {
@@ -37,6 +43,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelController.prototype, "findAll", null);
 __decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ChannelController.prototype, "find", null);
+__decorate([
     (0, common_1.Post)('create'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -45,6 +58,6 @@ __decorate([
 ], ChannelController.prototype, "createChannel", null);
 exports.ChannelController = ChannelController = __decorate([
     (0, common_1.Controller)('channels'),
-    __metadata("design:paramtypes", [channel_service_1.ChannelService])
+    __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService])
 ], ChannelController);
 //# sourceMappingURL=channel.controller.js.map

@@ -23,7 +23,6 @@ export class FriendshipGateway {
     @SubscribeMessage('removeFriendship')
     async removeFriendship(@MessageBody() body) 
     {
-        console.log('rm friendship')
         const res = await this.friendshipService.deleteFriendship(body.friend_id, body.user_id);
         this.server.emit('deleteFriendship', res);
     }

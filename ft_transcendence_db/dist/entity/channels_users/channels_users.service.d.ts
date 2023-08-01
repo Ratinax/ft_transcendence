@@ -15,4 +15,6 @@ export declare class ChannelsUsersService {
         isInvited: boolean;
     }[]>;
     createNew(channels_users: Partial<ChannelsUsers>): Promise<ChannelsUsers>;
+    findRelation(user_id: number, channel_id: number): Promise<ChannelsUsers[]>;
+    findChannelsOfUsers(user_id: number): Promise<import("../channels/channel.entity").Channels[]>;
 }

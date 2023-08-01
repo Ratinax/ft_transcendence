@@ -16,20 +16,62 @@ exports.ChannelGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const channel_service_1 = require("./channel.service");
 const socket_io_1 = require("socket.io");
-const channel_entity_1 = require("./channel.entity");
+const channels_users_service_1 = require("../channels_users/channels_users.service");
+const common_1 = require("@nestjs/common");
 let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
-    constructor(channelService) {
+    constructor(channelService, channelsUsersService) {
         this.channelService = channelService;
+        this.channelsUsersService = channelsUsersService;
     }
-    async create(channel) {
+    async create(data) {
+        const channel = data.channel.channel;
+        const user = data.user;
         try {
             const response = await this.channelService.createChannel(channel);
-            this.server.emit('updateChannel', response);
-            return (response);
+            this.server.emit('updateListChannels', { channel: response, user: user });
+            const response2 = await this.channelsUsersService.createNew({
+                user: user,
+                channel: response,
+                isAdmin: true,
+                isOwner: true,
+                isInvited: false,
+            });
+            return ({ response, response2 });
         }
         catch (e) {
+            console.error('une erreur :', e);
             return ('Error');
         }
+    }
+    async join(body) {
+        const password = body.password;
+        const channelName = body.channelName;
+        const user = body.user;
+        let channel;
+        try {
+            const channels = await this.channelService.findByName(channelName);
+            if (!channels || !channels[0])
+                throw new common_1.InternalServerErrorException('no such channel');
+            channel = channels[0];
+        }
+        catch (e) {
+            this.server.emit('joinNoSuchChannel', { user: user });
+        }
+        console.log(channel);
+        const relation = await this.channelsUsersService.findRelation(user.id, channel.channel_id);
+        console.log('relation :', relation);
+        if (relation && relation[0]) {
+            this.server.emit('joinAlreadyIn', { user: user });
+            return;
+        }
+        const res = await this.channelsUsersService.createNew({
+            user: user,
+            channel: channel,
+            isAdmin: false,
+            isOwner: false,
+            isInvited: false,
+        });
+        this.server.emit('updateListChannels', { channel: channel, user: user });
     }
     findAll() {
         return this.channelService.findAll();
@@ -43,9 +85,16 @@ __decorate([
     (0, websockets_1.SubscribeMessage)('createChannel'),
     __param(0, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [channel_entity_1.Channels]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChannelGateway.prototype, "create", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('joinChannel'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChannelGateway.prototype, "join", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('findAllChannels'),
     __metadata("design:type", Function),
@@ -58,6 +107,6 @@ exports.ChannelGateway = ChannelGateway = __decorate([
             origin: '*',
         },
     }),
-    __metadata("design:paramtypes", [channel_service_1.ChannelService])
+    __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService])
 ], ChannelGateway);
 //# sourceMappingURL=channel.gateway.js.map

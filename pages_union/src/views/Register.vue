@@ -23,7 +23,7 @@
 <script>
 
 import axios from 'axios';
-import router from '../router/router'; 
+// import router from '../router/router'; 
 export default {
     name: 'Register-Page',
     data()
@@ -66,6 +66,7 @@ export default {
         },
         async register()
         {
+            let user;
             this.handleInputErrors()
             if (this.matrixIndex > 0)
                 return ;
@@ -76,12 +77,13 @@ export default {
                     password: this.password,
                     isConnected: true,
                     image: this.imageDataURL });
-                console.log('res :', res);
+                // console.log('res :', res.data);
+                user = res.data;
             }
             catch(e)
             {
                 console.error('Error registering user:', e);
-                console.log(e);
+                // console.log(e);
                 if (!e.response)
                     return ;
                 if (e.response.status === 413)
@@ -91,8 +93,8 @@ export default {
                 return ;
             }
             this.resetData();
-            console.log(router)
-            router.push('/chat')
+            // console.log('ca c est un vrai user :', user)
+            this.$router.push({path: '/chat', query: { user: encodeURIComponent(JSON.stringify(user)) }}); // TODO : faire autrement pour passer le user
         },
         resetData()
         {

@@ -11,7 +11,7 @@
         </div>
         <div class="join-channel">
           <button @click="showJoinChannel = true">Join Channel</button>
-          <JoinChannel :show="showJoinChannel" @close="showJoinChannel = false">
+          <JoinChannel :show="showJoinChannel" ref='joinChannel' @close="showJoinChannel = false" @join-channel="joinChannel">
           </JoinChannel>
         </div>
       </div>
@@ -35,6 +35,7 @@ export default {
     },
     props: 
     {
+      user: Object,
       channelSelected: Object,
     },
     data() {
@@ -42,6 +43,7 @@ export default {
           channels: [],
           showCreateChannel: false,
           showJoinChannel: false,
+          
       }
     },
     created() 
@@ -50,10 +52,9 @@ export default {
     },
     methods: {
       async fetchChannels() {
-        // TODO : faire en sorte que ca fetch que les channels qu'il a 
         try 
         {
-          const response = await axios.get('http://localhost:3000/channels');
+          const response = await axios.get(`http://localhost:3000/channels/${this.user.id}`);
           this.channels = response.data;
         } 
         catch (error) 
@@ -67,7 +68,7 @@ export default {
       },
       addChannel(channel)
       {
-        // console.log('eioeroe')
+        // // console.log('eioeroe')
         this.channels.push(channel)
         this.$nextTick(() => {
           this.updateScrollPosition()
@@ -86,8 +87,19 @@ export default {
         const container = this.$refs.channelsButtons;
   
         container.scrollTop = container.scrollHeight;
-        console.log('Channel :', this.channelSelected);
-
+      },
+      joinChannel(content)
+      {
+        this.$emit('join-channel', content);
+      },
+      joinNoSuchChannel()
+      {
+        this.$refs.joinChannel.noSuchChannel();
+      },
+      joinAlreadyIn()
+      {
+        console.log('et laaaaaaaaaaaa');
+        this.$refs.joinChannel.alreadyIn();
       },
     },
 }

@@ -17,7 +17,7 @@ export class BlockshipGateway {
     @SubscribeMessage('removeBlockship')
     async refuseBlockship(@MessageBody() body) 
     {
-        console.log(body);
+        // console.log(body);
         const res = await this.blockshipService.deleteBlockship(body.userblocking_id, body.userblocked_id);
         this.server.emit('deleteBlockship', res);
     }

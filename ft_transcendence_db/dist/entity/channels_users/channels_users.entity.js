@@ -38,7 +38,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], ChannelsUsers.prototype, "isOwner", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'is_invited' }),
+    (0, typeorm_1.Column)({ name: 'is_invited', default: false }),
     __metadata("design:type", Boolean)
 ], ChannelsUsers.prototype, "isInvited", void 0);
 exports.ChannelsUsers = ChannelsUsers = __decorate([

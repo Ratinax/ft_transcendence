@@ -35,7 +35,6 @@ let UserController = exports.UserController = class UserController {
     async signUp(body) {
         try {
             const res = await this.callFunction(this.userService.signUp, body);
-            console.log(res);
             return (res);
         }
         catch (e) {

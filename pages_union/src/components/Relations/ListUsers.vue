@@ -52,7 +52,7 @@ export default {
             {
                 const res = await axios.get(`http://localhost:3000/${getText}/${this.user.id}`);
                 this.users = res.data;
-                console.log('this.users :',this.users);
+                // console.log('this.users :',this.users);
             }
             catch (e)
             {

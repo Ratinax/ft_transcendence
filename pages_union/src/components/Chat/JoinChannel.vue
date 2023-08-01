@@ -1,8 +1,8 @@
 <template>
     <div class="modal-overlay" v-if="show">
       <div class="modal">
-        <div v-if="isEmpty === true">
-            <p class="error">You must enter a channel name</p>
+        <div v-if="matrixIndex > 0">
+            <p class="error">{{ matrixError[matrixIndex] }}</p>
         </div>
         <form @submit.prevent="joinAChannel">
           <div class="input-container">
@@ -14,6 +14,7 @@
         <form @submit.prevent="close">
           <button>Close</button>
         </form>
+        
       </div>
     </div>
   </template>
@@ -30,6 +31,14 @@ export default {
       channelName: '',
       password: '',
       isEmpty: false,
+      matrixError: [
+                'allright',
+                'You must enter a channel name',
+                'No such channel',
+                'You are alrady in that channel',
+                'Wrong password',
+            ],
+      matrixIndex: 0,
     }
   },
   methods: 
@@ -39,10 +48,15 @@ export default {
     {
       if (this.channelName === '')
       {
-        this.isEmpty = true;
+        this.matrixIndex = 1;
         return ;
       }
-      this.resetData();
+      this.$emit('join-channel', {channelName: this.channelName, password: this.password});
+      if (this.matrixIndex === 0)
+      {
+        console.log('matrix index :', this.matrixIndex);
+        this.resetData();
+      }
     },
     close()
     {
@@ -54,7 +68,16 @@ export default {
       this.channelName = '';
       this.password = '';
       this.isEmpty = false;
-    }
+      this.matrixIndex = 0;
+    },
+    noSuchChannel()
+    {
+      this.matrixIndex = 2;
+    },
+    alreadyIn()
+    {
+      this.matrixIndex = 3;
+    },
   },
 };
 </script>

@@ -37,4 +37,27 @@ export class ChannelsUsersService {
         const newRelation = this.channelsUsersRepository.create(channels_users);
         return (this.channelsUsersRepository.save(newRelation));
     }
+    async findRelation(user_id: number, channel_id: number)
+    {
+        console.log('les u id :', user_id, channel_id);
+        const relation = await this.channelsUsersRepository
+            .createQueryBuilder('channelsUsers')
+            .where('channel_id = :channel_id AND user_id = :user_id', { channel_id: channel_id, user_id: user_id })
+            .getMany();
+        console.log('la relation :', relation)
+        return (relation);
+    }
+    async findChannelsOfUsers(user_id: number)
+    {
+        const usersAndChannels = await this.channelsUsersRepository
+            .createQueryBuilder('channelsUsers')
+            .innerJoinAndSelect('channelsUsers.user', 'user')
+            .innerJoinAndSelect('channelsUsers.channel', 'channel')
+            .where('user.id = :user_id AND is_invited = false', { user_id })
+            .getMany();
+        const channels = usersAndChannels.map((channelsUsers) => (
+            channelsUsers.channel
+        ));
+        return (channels);
+    }
 }
