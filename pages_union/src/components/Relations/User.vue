@@ -25,7 +25,7 @@ export default {
     {
         getImageUrl(imageName) 
         {
-            return `http://localhost:3000/users/images/${imageName}`;
+            return `http://${process.env.VUE_APP_IP}:3000/users/images/${imageName}`;
         },
         accept()
         {

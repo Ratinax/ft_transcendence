@@ -82,6 +82,7 @@ export default {
     },
     close()
     {
+      console.log(`${process.env.VUE_APP_TEST}`)
       this.resetData();
       this.$emit('close');
     },

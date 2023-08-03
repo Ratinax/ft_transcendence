@@ -35,7 +35,7 @@ export default {
         }
         try 
         {
-          const response = await axios.get(`http://localhost:3000/messages/${channel.name}`);
+          const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}`);
           this.messages = response.data;
         } 
         catch (error) 

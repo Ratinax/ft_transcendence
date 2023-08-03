@@ -50,7 +50,7 @@ export default {
                 return ;
             try
             {
-                const res = await axios.get(`http://localhost:3000/${getText}/${this.user.id}`);
+                const res = await axios.get(`http://${process.env.VUE_APP_IP}:3000/${getText}/${this.user.id}`);
                 this.users = res.data;
                 // console.log('this.users :',this.users);
             }

@@ -66,18 +66,19 @@ export default {
         },
         async register()
         {
+            console.log(`${process.env.VUE_APP_IP2}`)
+            console.log(`${process.env.VUE_APP_TEST}`)
             let user;
             this.handleInputErrors()
             if (this.matrixIndex > 0)
                 return ;
             try 
             {
-                const res = await axios.post('http://localhost:3000/users/signup', { 
+                const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/signup`, { 
                     pseudo: this.pseudo,
                     password: this.password,
                     isConnected: true,
                     image: this.imageDataURL });
-                // console.log('res :', res.data);
                 user = res.data;
             }
             catch(e)

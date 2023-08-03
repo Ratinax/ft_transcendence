@@ -56,7 +56,7 @@ export default {
       async fetchChannels() {
         try 
         {
-          const response = await axios.get(`http://localhost:3000/channels/${this.user.id}`);
+          const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels/${this.user.id}`);
           this.channels = response.data;
         } 
         catch (error) 

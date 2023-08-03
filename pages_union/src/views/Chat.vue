@@ -44,7 +44,7 @@ export default {
   },
   async mounted()
   {
-    this.socket = io('http://localhost:3000/');
+    this.socket = io(`http://${process.env.VUE_APP_IP}:3000/`);
     this.socket.on('updateMessage', (response) => {
       if (response.channel_id === this.selectedChannel.channel_id)
         this.updateMessages();

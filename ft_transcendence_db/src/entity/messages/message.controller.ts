@@ -24,6 +24,5 @@ export class MessageController {
     async post(@Body() body)
     {
         return (await this.messageService.post(body));
-        
     }
 }
