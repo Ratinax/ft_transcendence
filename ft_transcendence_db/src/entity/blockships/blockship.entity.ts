@@ -1,6 +1,15 @@
 import { Users } from "../users/user.entity";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 
+
+/**
+ * User entity 
+ * 
+ * attributs :
+ * - id: number
+ * - userblocking: User
+ * - userblocked: User
+ */
 @Entity()
 export class Blockships {
     @PrimaryGeneratedColumn()

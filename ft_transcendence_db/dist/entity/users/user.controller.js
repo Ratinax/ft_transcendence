@@ -20,9 +20,6 @@ let UserController = exports.UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    async findAll() {
-        return (await this.userService.findAll());
-    }
     async callFunction(fct, body) {
         try {
             const res = await this.userService.callFunction(fct.bind(this.userService), body);
@@ -52,12 +49,6 @@ let UserController = exports.UserController = class UserController {
         return res.sendFile(imagePath);
     }
 };
-__decorate([
-    (0, common_1.Get)(''),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Post)('signup'),
     __param(0, (0, common_1.Body)()),

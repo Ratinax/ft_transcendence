@@ -19,19 +19,6 @@ let ChannelService = exports.ChannelService = class ChannelService {
     constructor(channelRepository) {
         this.channelRepository = channelRepository;
     }
-    async callFunction(fct, body) {
-        let res;
-        try {
-            res = await fct(body);
-            return (res);
-        }
-        catch (error) {
-            return (false);
-        }
-    }
-    async findAll() {
-        return this.channelRepository.find();
-    }
     async findByName(channelName) {
         return this.channelRepository
             .createQueryBuilder('channel')

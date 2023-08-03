@@ -8,7 +8,7 @@ async function bootstrap() {
     origin: '*',
   });
   app.use(express.json({ limit: '50mb' }));
-  app.use(express.urlencoded({ limit: '50mb', extended: true }));
+  app.use(express.urlencoded({ limit: '50mb', extended: true })); // max 50mb to receive form
   
   await app.listen(3000);
 }

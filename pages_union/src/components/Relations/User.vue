@@ -74,25 +74,6 @@ export default {
   height: auto; 
 }
 
-.circle 
-{
-  width: 1em;
-  height: 1em;
-  border-radius: 50%; 
-  margin-left: 1em;
-  flex-shrink: 0
-  
-}
-.green
-{
-    background-color: green;
-}
-.red
-{
-    
-    background-color: red;
-}
-
 .box 
 {
     position: relative;

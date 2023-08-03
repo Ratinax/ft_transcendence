@@ -19,9 +19,6 @@ let BlockshipController = exports.BlockshipController = class BlockshipControlle
     constructor(blockshipService) {
         this.blockshipService = blockshipService;
     }
-    async findAll() {
-        return (await this.blockshipService.findAll());
-    }
     async findUserblockedFromId(id) {
         try {
             const res = await this.blockshipService.findUserblockedFromId(id);
@@ -32,12 +29,6 @@ let BlockshipController = exports.BlockshipController = class BlockshipControlle
         }
     }
 };
-__decorate([
-    (0, common_1.Get)(''),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], BlockshipController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('userblockedby/:id'),
     __param(0, (0, common_1.Param)('id')),

@@ -19,19 +19,6 @@ let MessageService = exports.MessageService = class MessageService {
     constructor(messageRepository) {
         this.messageRepository = messageRepository;
     }
-    async callFunction(fct, body) {
-        let res;
-        try {
-            res = await fct(body);
-            return (res);
-        }
-        catch (error) {
-            return (false);
-        }
-    }
-    async findAll() {
-        return this.messageRepository.find();
-    }
     async findMessageFromChannel(channelName) {
         return this.messageRepository
             .createQueryBuilder('message')

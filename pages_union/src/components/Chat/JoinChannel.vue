@@ -40,6 +40,7 @@ export default {
                 'No such channel',
                 'You are alrady in that channel',
                 'Wrong password',
+                'You are banned from this channel',
             ],
       matrixIndex: 0,
     }
@@ -51,7 +52,6 @@ export default {
           this.noSuchChannel();
       });
       this.socket.on('joinAlreadyIn', (response) => {
-        console.log('teeest')
         if (response.user.id === this.user.id)
           this.alreadyIn();
       });
@@ -62,6 +62,10 @@ export default {
       this.socket.on('joinGoodRequest', (response) => {
         if (response.user.id === this.user.id)
           this.goodRequest();
+      });
+      this.socket.on('joinBanned', (response) => {
+        if (response.user.id === this.user.id)
+          this.joinBanned();
       });
   },
   methods: 
@@ -99,6 +103,10 @@ export default {
     wrongPassword()
     {
       this.matrixIndex = 4;
+    },
+    joinBanned()
+    {
+      this.matrixIndex = 5;
     },
     goodRequest()
     {

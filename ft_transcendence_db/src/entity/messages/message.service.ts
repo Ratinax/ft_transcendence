@@ -8,24 +8,12 @@ export class MessageService {
         @Inject('MESSAGE_REPOSITORY')
         private messageRepository: Repository<Messages>,
     ) {}
-    async callFunction(fct, body)
-    {
-        let res;
-        try
-        {
-            res = await fct(body);
-            return (res);
-        }
-        catch (error)
-        {
-            return (false);
-        }
-    }
-    async findAll(): Promise<Messages[]>
-    {
-        return this.messageRepository.find();
-    }
-
+    /**
+     * find all the messages from a channel
+     * 
+     * @param channelName name of channel
+     * @returns result of the request
+     */
     async findMessageFromChannel(channelName)
     {
         return this.messageRepository
@@ -36,6 +24,12 @@ export class MessageService {
         .getMany();
     }
 
+    /**
+     * create a new message
+     * 
+     * @param message The message to be created {user, channel, dateSent, content}
+     * @returns the result of the request
+     */
     async post(message: Partial<Messages>)
     {
         const newMessage = this.messageRepository.create(message);

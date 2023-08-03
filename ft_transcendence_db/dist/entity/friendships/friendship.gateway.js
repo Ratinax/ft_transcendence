@@ -16,6 +16,7 @@ exports.FriendshipGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const friendship_service_1 = require("./friendship.service");
 const socket_io_1 = require("socket.io");
+const common_1 = require("@nestjs/common");
 let FriendshipGateway = exports.FriendshipGateway = class FriendshipGateway {
     constructor(friendshipService) {
         this.friendshipService = friendshipService;
@@ -25,8 +26,13 @@ let FriendshipGateway = exports.FriendshipGateway = class FriendshipGateway {
         this.server.emit('acceptFriendship', res);
     }
     async removeFriendship(body) {
-        const res = await this.friendshipService.deleteFriendship(body.friend_id, body.user_id);
-        this.server.emit('deleteFriendship', res);
+        try {
+            const res = await this.friendshipService.deleteFriendship(body.friend_id, body.user_id);
+            this.server.emit('deleteFriendship', res);
+        }
+        catch (e) {
+            throw new common_1.InternalServerErrorException(e);
+        }
     }
 };
 __decorate([

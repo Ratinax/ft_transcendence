@@ -19,25 +19,13 @@ let MessageController = exports.MessageController = class MessageController {
     constructor(messageService) {
         this.messageService = messageService;
     }
-    async findAll() {
-        return (await this.messageService.findAll());
-    }
     async find(channelname) {
         return this.messageService.findMessageFromChannel(channelname);
     }
-    callFunction(fct, body) {
-        return (this.messageService.callFunction(fct.bind(this.messageService), body));
-    }
     async post(body) {
-        return (await this.callFunction(this.messageService.post, body));
+        return (await this.messageService.post(body));
     }
 };
-__decorate([
-    (0, common_1.Get)(''),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], MessageController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':channelname'),
     __param(0, (0, common_1.Param)('channelname')),

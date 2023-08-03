@@ -16,16 +16,7 @@ let StatisticController = exports.StatisticController = class StatisticControlle
     constructor(statisticService) {
         this.statisticService = statisticService;
     }
-    async findAll() {
-        return (await this.statisticService.findAll());
-    }
 };
-__decorate([
-    (0, common_1.Get)(''),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], StatisticController.prototype, "findAll", null);
 exports.StatisticController = StatisticController = __decorate([
     (0, common_1.Controller)('statistics'),
     __metadata("design:paramtypes", [statistic_service_1.StatisticService])

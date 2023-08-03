@@ -5,4 +5,6 @@ export declare class ChannelsUsersGateway {
     server: Server;
     constructor(channelsUsersService: ChannelsUsersService);
     findUsersOfChannel(body: any): Promise<void>;
+    ban(body: any): Promise<import("./channels_users.entity").ChannelsUsers>;
+    kick(body: any): Promise<import("./channels_users.entity").ChannelsUsers[]>;
 }

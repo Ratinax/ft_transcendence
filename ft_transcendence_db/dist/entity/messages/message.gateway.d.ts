@@ -6,5 +6,4 @@ export declare class MessagesGateway {
     server: Server;
     constructor(messagesService: MessageService);
     create(message: Messages): Promise<Messages>;
-    findAll(): Promise<Messages[]>;
 }

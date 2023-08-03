@@ -1,5 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
+/**
+ * User entity
+ * 
+ * attributs :
+ * - id: number
+ * - pseudo: string
+ * - password: string
+ * - profilPic: string
+ * - isConnected: boolean
+ */
 @Entity()
 export class Users {
     @PrimaryGeneratedColumn()

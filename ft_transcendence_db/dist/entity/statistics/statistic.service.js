@@ -19,9 +19,6 @@ let StatisticService = exports.StatisticService = class StatisticService {
     constructor(statisticRepository) {
         this.statisticRepository = statisticRepository;
     }
-    async findAll() {
-        return this.statisticRepository.find();
-    }
 };
 exports.StatisticService = StatisticService = __decorate([
     (0, common_1.Injectable)(),

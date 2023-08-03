@@ -19,15 +19,16 @@ let ChannelsUsersService = exports.ChannelsUsersService = class ChannelsUsersSer
     constructor(channelsUsersRepository) {
         this.channelsUsersRepository = channelsUsersRepository;
     }
-    async findAll() {
-        return this.channelsUsersRepository.find();
+    createNew(channels_users) {
+        const newRelation = this.channelsUsersRepository.create(channels_users);
+        return (this.channelsUsersRepository.save(newRelation));
     }
     async findUsersOfChannel(channelName) {
         const usersAndChannels = await this.channelsUsersRepository
             .createQueryBuilder('channelsUsers')
             .innerJoinAndSelect('channelsUsers.user', 'user')
             .innerJoinAndSelect('channelsUsers.channel', 'channel')
-            .where('channel.name = :channelName', { channelName })
+            .where('channel.name = :channelName AND is_invited = false AND is_banned = false', { channelName })
             .getMany();
         const users = usersAndChannels.map((channelsUsers) => ({
             id: channelsUsers.user.id,
@@ -37,21 +38,16 @@ let ChannelsUsersService = exports.ChannelsUsersService = class ChannelsUsersSer
             isConnected: channelsUsers.user.isConnected,
             isOwner: channelsUsers.isOwner,
             isAdmin: channelsUsers.isAdmin,
-            isInvited: channelsUsers.isInvited
+            isInvited: channelsUsers.isInvited,
+            isBanned: channelsUsers.isBanned
         }));
         return (users);
     }
-    createNew(channels_users) {
-        const newRelation = this.channelsUsersRepository.create(channels_users);
-        return (this.channelsUsersRepository.save(newRelation));
-    }
     async findRelation(user_id, channel_id) {
-        console.log('les u id :', user_id, channel_id);
         const relation = await this.channelsUsersRepository
             .createQueryBuilder('channelsUsers')
             .where('channel_id = :channel_id AND user_id = :user_id', { channel_id: channel_id, user_id: user_id })
             .getMany();
-        console.log('la relation :', relation);
         return (relation);
     }
     async findChannelsOfUsers(user_id) {
@@ -59,10 +55,32 @@ let ChannelsUsersService = exports.ChannelsUsersService = class ChannelsUsersSer
             .createQueryBuilder('channelsUsers')
             .innerJoinAndSelect('channelsUsers.user', 'user')
             .innerJoinAndSelect('channelsUsers.channel', 'channel')
-            .where('user.id = :user_id AND is_invited = false', { user_id })
+            .where('user.id = :user_id AND is_invited = false AND is_banned = false', { user_id })
             .getMany();
         const channels = usersAndChannels.map((channelsUsers) => (channelsUsers.channel));
         return (channels);
+    }
+    async ban(channel, userBanned) {
+        const relation = await this.findRelation(userBanned.id, channel.channel_id);
+        if (!relation || !relation[0])
+            return (null);
+        const relationModified = this.channelsUsersRepository.create({
+            id: relation[0].id,
+            channel: channel,
+            user: {
+                id: userBanned.id,
+            },
+            isAdmin: false,
+            isOwner: false,
+            isInvited: false,
+            isBanned: true,
+        });
+        return (this.channelsUsersRepository.save(relationModified));
+    }
+    async kick(channel, userBanned) {
+        const relation = await this.findRelation(userBanned.id, channel.channel_id);
+        if (relation)
+            return (await this.channelsUsersRepository.remove(relation));
     }
 };
 exports.ChannelsUsersService = ChannelsUsersService = __decorate([

@@ -1,8 +1,17 @@
-
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { Users } from "../users/user.entity";
 import { Channels } from "../channels/channel.entity";
 
+/**
+ * Messsage entity
+ * 
+ * attributs :
+ * - id: number
+ * - user: User
+ * - channel: Channel
+ * - dateSent: Date
+ * - content: string
+ */
 
 @Entity()
 export class Messages {

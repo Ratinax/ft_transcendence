@@ -31,9 +31,6 @@ let UserService = exports.UserService = class UserService {
             throw new common_1.InternalServerErrorException(e);
         }
     }
-    async findAll() {
-        return this.userRepository.find();
-    }
     async signUp(body) {
         let imageName;
         let userFound = await this.userRepository.findOne({ where: { pseudo: body.pseudo } });

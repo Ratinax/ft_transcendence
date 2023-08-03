@@ -39,7 +39,6 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
             return ({ response, response2 });
         }
         catch (e) {
-            console.error('une erreur :', e);
             return ('Error');
         }
     }
@@ -59,7 +58,10 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
         }
         const relation = await this.channelsUsersService.findRelation(user.id, channel.channel_id);
         if (relation && relation[0]) {
-            this.server.emit('joinAlreadyIn', { user: user });
+            if (relation[0].isBanned === true)
+                this.server.emit('joinBanned', { user: user });
+            else
+                this.server.emit('joinAlreadyIn', { user: user });
             return;
         }
         if (password != channel.password) {
@@ -75,9 +77,6 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
         });
         this.server.emit('updateListChannels', { channel: channel, user: user });
         this.server.emit('joinGoodRequest', { channel: channel, user: user });
-    }
-    findAll() {
-        return this.channelService.findAll();
     }
 };
 __decorate([
@@ -98,12 +97,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChannelGateway.prototype, "join", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)('findAllChannels'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], ChannelGateway.prototype, "findAll", null);
 exports.ChannelGateway = ChannelGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {

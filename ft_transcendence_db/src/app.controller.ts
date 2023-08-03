@@ -5,14 +5,9 @@ import { AppService } from './app.service';
 export class AppController {
     constructor (private readonly appService: AppService) {}
     @Get()
-    getHello()//@Query('code') code: string, @Res() res)
+    getHello()
     {
         return this.appService.getHello();
     }
-    // @Get('socket.io')
-    // test()
-    // {
-    //     return 'lalala';
-    // }
 
 }

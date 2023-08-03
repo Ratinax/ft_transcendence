@@ -19,9 +19,6 @@ let FriendshipController = exports.FriendshipController = class FriendshipContro
     constructor(friendshipService) {
         this.friendshipService = friendshipService;
     }
-    async findAll() {
-        return (await this.friendshipService.findAll());
-    }
     async findFriendOfId(id) {
         return (await this.friendshipService.findFriendOfId(id));
     }
@@ -29,12 +26,6 @@ let FriendshipController = exports.FriendshipController = class FriendshipContro
         return (await this.friendshipService.findPending(id));
     }
 };
-__decorate([
-    (0, common_1.Get)(''),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], FriendshipController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('friendsof/:id'),
     __param(0, (0, common_1.Param)('id')),

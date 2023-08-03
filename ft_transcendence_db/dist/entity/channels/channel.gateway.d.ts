@@ -14,5 +14,4 @@ export declare class ChannelGateway {
         response2: import("../channels_users/channels_users.entity").ChannelsUsers;
     }>;
     join(body: any): Promise<void>;
-    findAll(): Promise<import("./channel.entity").Channels[]>;
 }

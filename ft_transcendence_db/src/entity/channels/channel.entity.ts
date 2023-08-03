@@ -1,5 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
+/**
+ * User entity
+ * 
+ * attributs :
+ * - channel_id: number
+ * - password: string
+ * - name: string
+ * - isADm: boolean
+ * - category: string (Public or Private)
+ */
 @Entity()
 export class Channels {
     @PrimaryGeneratedColumn()
@@ -14,7 +24,7 @@ export class Channels {
     @Column({ type: 'varchar', length: 100, name:'name' })
     name: string;
 
-    @Column({ name: 'category' })
-    category: string;
+    @Column({ name: 'category' }) // Public or Private
+    category: string; 
 
 }

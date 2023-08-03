@@ -19,19 +19,10 @@ let ChannelsUsersController = exports.ChannelsUsersController = class ChannelsUs
     constructor(channelsUsersService) {
         this.channelsUsersService = channelsUsersService;
     }
-    async findAll() {
-        return (await this.channelsUsersService.findAll());
-    }
     async createNew(body) {
         return (await this.channelsUsersService.createNew(body));
     }
 };
-__decorate([
-    (0, common_1.Get)(''),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], ChannelsUsersController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Post)(''),
     __param(0, (0, common_1.Body)()),

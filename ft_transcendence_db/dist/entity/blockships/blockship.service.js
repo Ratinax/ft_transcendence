@@ -19,9 +19,6 @@ let BlockshipService = exports.BlockshipService = class BlockshipService {
     constructor(blockshipRepository) {
         this.blockshipRepository = blockshipRepository;
     }
-    async findAll() {
-        return this.blockshipRepository.find();
-    }
     async findUserblockedFromId(id) {
         const blockships = await this.blockshipRepository
             .createQueryBuilder('blockships')
@@ -37,9 +34,9 @@ let BlockshipService = exports.BlockshipService = class BlockshipService {
         }));
         return (users);
     }
-    async deleteBlockship(friend_id, user_id) {
+    async deleteBlockship(blocked_id, user_id) {
         const blockship = await this.blockshipRepository.findOne({
-            where: { userblocking: { id: user_id }, userblocked: { id: friend_id } },
+            where: { userblocking: { id: user_id }, userblocked: { id: blocked_id } },
         });
         const res = await this.blockshipRepository.delete(blockship.id);
         return (res);

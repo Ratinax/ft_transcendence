@@ -1,6 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
 import { Users } from "../users/user.entity";
 
+/**
+ * Statistic entity
+ * 
+ * attributs :
+ * - id: number
+ * - user: User
+ * - nbVictory: number
+ * - nbDefeat: number
+ */
 @Entity()
 export class Statistics {
     @PrimaryGeneratedColumn()

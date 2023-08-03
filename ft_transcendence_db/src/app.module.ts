@@ -14,7 +14,7 @@ import { AppService } from './app.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeOrmConfig), 
+    TypeOrmModule.forRoot(typeOrmConfig), // configure
     UserModule, 
     ChannelModule, 
     MessageModule, 

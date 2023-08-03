@@ -14,10 +14,15 @@ export class BlockshipGateway {
 
     constructor(private readonly blockshipService: BlockshipService) {}
 
+    /**
+     * remove blockship
+     * 
+     * @param body blockship to be removed {userblocking_id, userblocked_id}
+     * @emits deleteBlockship result of request
+     */
     @SubscribeMessage('removeBlockship')
     async refuseBlockship(@MessageBody() body) 
     {
-        // console.log(body);
         const res = await this.blockshipService.deleteBlockship(body.userblocking_id, body.userblocked_id);
         this.server.emit('deleteBlockship', res);
     }

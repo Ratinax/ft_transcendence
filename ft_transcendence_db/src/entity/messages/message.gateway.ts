@@ -15,19 +15,20 @@ export class MessagesGateway {
 
   constructor(private readonly messagesService: MessageService) {}
 
+  /**
+   * create a new message
+   * 
+   * @param message message to be created
+   * @returns response of request
+   * @emits 'updateMessage' {channel_id}
+   */
   @SubscribeMessage('createMessage')
   async create(
     @MessageBody() message: Messages) {
     const response = await this.messagesService.post(message);
     
-    this.server.emit('updateMessage', response);
+    this.server.emit('updateMessage', {channel_id: message.channel});
 
     return response;
   }
-
-  @SubscribeMessage('findAllMessages')
-  findAll() {
-    return this.messagesService.findAll();
-  }
-
 }

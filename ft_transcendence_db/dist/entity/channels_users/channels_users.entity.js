@@ -41,6 +41,10 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'is_invited', default: false }),
     __metadata("design:type", Boolean)
 ], ChannelsUsers.prototype, "isInvited", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'is_banned', default: false }),
+    __metadata("design:type", Boolean)
+], ChannelsUsers.prototype, "isBanned", void 0);
 exports.ChannelsUsers = ChannelsUsers = __decorate([
     (0, typeorm_1.Entity)()
 ], ChannelsUsers);

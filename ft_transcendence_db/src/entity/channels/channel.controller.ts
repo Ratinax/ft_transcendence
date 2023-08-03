@@ -6,16 +6,12 @@ import { ChannelsUsersService } from '../channels_users/channels_users.service';
 @Controller('channels')
 export class ChannelController {
     constructor (private readonly channelService: ChannelService, private readonly channelsUsersService: ChannelsUsersService) {}
-    callFunction(fct, body)
-    {
-        return (this.channelService.callFunction(fct.bind(this.channelService), body));
-    }
-    @Get('')
-    async findAll()
-    {
-        const channels = await this.channelService.findAll();
-        return (channels);
-    }
+    /**
+     * get channel list of a user
+     * 
+     * @param user_id id of user
+     * @returns result of request
+     */
     @Get(':id')
     async find(@Param('id') user_id : number)
     {
@@ -23,9 +19,15 @@ export class ChannelController {
         return (channels);
     }
 
+    /**
+     * create a new channel
+     * 
+     * @param body channel to be created {channel_id, password, isADm, name, category}
+     * @returns result of request
+     */
     @Post('create')
     async createChannel(@Body() body)
     {
-        return (await this.callFunction(this.channelService.createChannel, body));
+        return (await this.channelService.createChannel(body));
     }
 }

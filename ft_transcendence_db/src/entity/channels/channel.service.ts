@@ -8,23 +8,12 @@ export class ChannelService {
         @Inject('CHANNEL_REPOSITORY')
         private channelRepository: Repository<Channels>,
     ) {}
-    async callFunction(fct, body)
-    {
-        let res;
-        try
-        {
-            res = await fct(body);
-            return (res);
-        }
-        catch (error)
-        {
-            return (false);
-        }
-    }
-    async findAll(): Promise<Channels[]>
-    {
-        return this.channelRepository.find();
-    }
+    /**
+     * find channel by name
+     * 
+     * @param channelName channel name
+     * @returns result of request
+     */
     async findByName(channelName): Promise<Channels[]>
     {
         return this.channelRepository
@@ -33,6 +22,12 @@ export class ChannelService {
         .getMany();
     }
 
+    /**
+     * create channel
+     * 
+     * @param channel {channel_id, password, isADm, name, category}
+     * @returns result of request
+     */
     async createChannel(channel: Partial<Channels>)
     {
         const newChannel = this.channelRepository.create(channel);

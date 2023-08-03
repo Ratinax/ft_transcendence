@@ -8,8 +8,4 @@ export class StatisticService {
         @Inject('STATISTIC_REPOSITORY')
         private statisticRepository: Repository<Statistics>,
     ) {}
-    async findAll(): Promise<Statistics[]>
-    {
-        return this.statisticRepository.find();
-    }
 }

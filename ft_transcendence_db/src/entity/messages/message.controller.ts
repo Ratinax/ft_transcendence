@@ -4,24 +4,26 @@ import { MessageService } from './message.service';
 @Controller('messages')
 export class MessageController {
     constructor (private readonly messageService: MessageService) {}
-    @Get('')
-    async findAll()
-    {
-        return (await this.messageService.findAll());
-    }
+    /**
+     * 
+     * @param channelname name of channel
+     * @returns result of the request
+     */
     @Get(':channelname')
     async find(@Param('channelname') channelname: string)
     {
         return this.messageService.findMessageFromChannel(channelname);
     }
-    callFunction(fct, body)
-    {
-        return (this.messageService.callFunction(fct.bind(this.messageService), body));
-    }
+    /**
+     * create a new message
+     * 
+     * @param body the message to be post {user, channel, dateSent, content}
+     * @returns the result of the request
+     */
     @Post('create')
     async post(@Body() body)
     {
-        return (await this.callFunction(this.messageService.post, body));
+        return (await this.messageService.post(body));
         
     }
 }

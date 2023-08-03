@@ -19,9 +19,6 @@ let FriendshipService = exports.FriendshipService = class FriendshipService {
     constructor(friendshipRepository) {
         this.friendshipRepository = friendshipRepository;
     }
-    async findAll() {
-        return this.friendshipRepository.find();
-    }
     async findFriendOfId(id) {
         const friendshipsFromFriend = await this.friendshipRepository
             .createQueryBuilder('friendships')
@@ -75,9 +72,16 @@ let FriendshipService = exports.FriendshipService = class FriendshipService {
         return this.friendshipRepository.save(friendship);
     }
     async deleteFriendship(friend_id, user_id) {
-        const friendship = await this.friendshipRepository.findOne({
+        let friendship = await this.friendshipRepository.findOne({
             where: { user: { id: user_id }, friend: { id: friend_id } },
         });
+        if (!friendship) {
+            friendship = await this.friendshipRepository.findOne({
+                where: { user: { id: friend_id }, friend: { id: user_id } },
+            });
+        }
+        if (!friendship)
+            throw new Error('no such friendship.');
         const res = await this.friendshipRepository.delete(friendship.id);
         return (res);
     }

@@ -16,6 +16,12 @@ export class ChannelGateway {
 
   constructor(private readonly channelService: ChannelService, private readonly channelsUsersService: ChannelsUsersService) {}
 
+  /**
+   * 
+   * @param data - {channel, user}
+   * @returns responses of request | 'Error'
+   * @emits updateListChannels {channel, user}
+   */
   @SubscribeMessage('createChannel')
   async create(
     @MessageBody() data: {channel: any, user: any}) {
@@ -36,10 +42,20 @@ export class ChannelGateway {
       }
       catch (e)
       {
-        console.error('une erreur :', e)
         return ('Error');
       }
   }
+  /**
+   * 
+   * @param body channel to join {password, channelName, user}
+   * 
+   * @emits joinNoSuchChannel {user} - in case of failing
+   * @emits joinBanned {user} - in case of failing
+   * @emits joinAlreadyIn {user} - in case of failing
+   * @emits joinWrongPassword {user} - in case of failing
+   * @emits updateListChannels {channel, user}
+   * @emits joinGoodRequest {channel, user}
+   */
   @SubscribeMessage('joinChannel')
   async join(@MessageBody() body)
   {
@@ -64,7 +80,10 @@ export class ChannelGateway {
 
     if (relation && relation[0])
     {
-      this.server.emit('joinAlreadyIn', {user: user})
+      if (relation[0].isBanned === true)
+        this.server.emit('joinBanned', {user: user})
+      else
+        this.server.emit('joinAlreadyIn', {user: user})
       return ;
     }
     if (password != channel.password) // TODO comparer avec les mdp hash
@@ -81,13 +100,5 @@ export class ChannelGateway {
     });
     this.server.emit('updateListChannels', {channel: channel, user: user});
     this.server.emit('joinGoodRequest', {channel: channel, user: user});
-
   }
-
-  @SubscribeMessage('findAllChannels')
-  findAll() 
-  {
-    return this.channelService.findAll();
-  }
-
 }

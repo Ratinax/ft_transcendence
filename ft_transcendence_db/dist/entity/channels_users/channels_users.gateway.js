@@ -26,7 +26,28 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
             this.server.emit('updateListUsers', { users: res, channel: body.channel });
         }
         catch (e) {
+            console.log(e);
         }
+    }
+    async ban(body) {
+        const res = await this.channelsUsersService.ban(body.channel, body.userBanned);
+        const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+        this.server.emit('updateAfterBan', {
+            users: users,
+            channel: body.channel,
+            userBanned: body.userBanned
+        });
+        return (res);
+    }
+    async kick(body) {
+        const res = await this.channelsUsersService.kick(body.channel, body.userKicked);
+        const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+        this.server.emit('updateAfterKick', {
+            users: users,
+            channel: body.channel,
+            userKicked: body.userKicked
+        });
+        return (res);
     }
 };
 __decorate([
@@ -40,6 +61,20 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsUsersGateway.prototype, "findUsersOfChannel", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('banUser'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsUsersGateway.prototype, "ban", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('kickUser'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsUsersGateway.prototype, "kick", null);
 exports.ChannelsUsersGateway = ChannelsUsersGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {

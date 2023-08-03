@@ -8,10 +8,12 @@ export class BlockshipService {
         @Inject('BLOCKSHIP_REPOSITORY')
         private blockshipRepository: Repository<Blockships>,
     ) {}
-    async findAll(): Promise<Blockships[]>
-    {
-        return this.blockshipRepository.find();
-    }
+    /**
+     * get users blocked from user
+     * 
+     * @param id user id
+     * @returns result of request
+     */
     async findUserblockedFromId(id: number)
     {
         const blockships = await this.blockshipRepository
@@ -27,10 +29,17 @@ export class BlockshipService {
             isConnected: blockship.userblocked.isConnected}));
         return (users);
     }
-    async deleteBlockship(friend_id: number, user_id: number)
+    /**
+     * delete blockship
+     * 
+     * @param blocked_id id of user blocked
+     * @param user_id id of user blocking
+     * @returns result of request
+     */
+    async deleteBlockship(blocked_id: number, user_id: number)
     {
         const blockship = await this.blockshipRepository.findOne({
-            where: { userblocking: { id: user_id }, userblocked: { id: friend_id } },
+            where: { userblocking: { id: user_id }, userblocked: { id: blocked_id } },
           });
 
         const res = await this.blockshipRepository.delete(blockship.id);

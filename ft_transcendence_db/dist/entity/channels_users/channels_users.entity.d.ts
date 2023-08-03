@@ -7,4 +7,5 @@ export declare class ChannelsUsers {
     isAdmin: boolean;
     isOwner: boolean;
     isInvited: boolean;
+    isBanned: boolean;
 }

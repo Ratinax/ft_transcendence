@@ -21,27 +21,14 @@ let ChannelController = exports.ChannelController = class ChannelController {
         this.channelService = channelService;
         this.channelsUsersService = channelsUsersService;
     }
-    callFunction(fct, body) {
-        return (this.channelService.callFunction(fct.bind(this.channelService), body));
-    }
-    async findAll() {
-        const channels = await this.channelService.findAll();
-        return (channels);
-    }
     async find(user_id) {
         const channels = await this.channelsUsersService.findChannelsOfUsers(user_id);
         return (channels);
     }
     async createChannel(body) {
-        return (await this.callFunction(this.channelService.createChannel, body));
+        return (await this.channelService.createChannel(body));
     }
 };
-__decorate([
-    (0, common_1.Get)(''),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], ChannelController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

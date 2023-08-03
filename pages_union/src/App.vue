@@ -9,7 +9,6 @@
 export default {
   name: 'App',
   components: {
-    
   }
 }
 </script>
@@ -41,5 +40,22 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 9999;
+}
+
+.circle 
+{
+  width: 1em;
+  height: 1em;
+  border-radius: 50%; 
+  margin-left: 1em;
+  flex-shrink: 0
+}
+.green
+{
+  background-color: green;
+}
+.red
+{
+  background-color: red;
 }
 </style>

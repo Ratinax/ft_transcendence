@@ -23,11 +23,8 @@ let MessagesGateway = exports.MessagesGateway = class MessagesGateway {
     }
     async create(message) {
         const response = await this.messagesService.post(message);
-        this.server.emit('updateMessage', response);
+        this.server.emit('updateMessage', { channel_id: message.channel });
         return response;
-    }
-    findAll() {
-        return this.messagesService.findAll();
     }
 };
 __decorate([
@@ -41,12 +38,6 @@ __decorate([
     __metadata("design:paramtypes", [message_entity_1.Messages]),
     __metadata("design:returntype", Promise)
 ], MessagesGateway.prototype, "create", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)('findAllMessages'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], MessagesGateway.prototype, "findAll", null);
 exports.MessagesGateway = MessagesGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {

@@ -2,6 +2,20 @@ import { Channels } from "../channels/channel.entity";
 import { Users } from "../users/user.entity";
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "typeorm";
 
+
+/**
+ * ChannelsUser entity
+ * 
+ * attributs :
+ * - id: number
+ * - user: User
+ * - channel: Channel
+ * - isAdmin: boolean
+ * - isOwner: boolean
+ * - isInvited: boolean
+ * - isBanned: boolean
+ */
+
 @Entity()
 export class ChannelsUsers {
     @PrimaryGeneratedColumn()
@@ -23,4 +37,7 @@ export class ChannelsUsers {
 
     @Column({ name: 'is_invited', default: false })
     isInvited: boolean;
+
+    @Column({ name: 'is_banned', default: false })
+    isBanned: boolean;
 }
