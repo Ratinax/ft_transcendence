@@ -69,6 +69,11 @@ export default {
             else
                 this.userSelected = user;
         },
+        getUserInChannel()
+        {
+            return (this.userInChannel);
+        },
+        
     }
 }
 </script>

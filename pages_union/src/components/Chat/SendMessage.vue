@@ -1,10 +1,21 @@
 <template>
     <div class="send-message">
-        <form @submit.prevent="sendMessage">
-            <label></label>
-            <input v-model="messageText" placeholder="Send a message"/>
-            <button type="submit">Send</button>
-          </form>
+        <div v-if="showContent">
+                <form @submit.prevent="sendMessage" class="send-message-form">
+                    <label></label>
+                    <input v-model="messageText" placeholder="Send a message"/>
+                    <!-- <button type="submit">Send</button> -->
+                </form>
+            <!--<div class="option-list">
+                <p class="options">Leave channel</p>
+            </div>
+            <div>
+                <p class="options">Set Password</p>
+                <p class="options">Remove Password</p>
+                <p class="options">Change Password</p>
+            </div> -->
+            
+        </div>
     </div>
 </template>
 
@@ -16,6 +27,7 @@ export default {
     name: 'SendMessage',
     props: 
     {
+        showContent: Boolean,
         socket: Socket,
         userId: Number,
         channelId: Number,
@@ -26,11 +38,11 @@ export default {
             messageText: '',
         }
     },
-    methods: 
+    methods:
     {
-        getCurrentDate() {
+        getCurrentDate() 
+        {
             const currentDate = new Date();
-
             const year = currentDate.getFullYear();
             const month = String(currentDate.getMonth() + 1).padStart(2, '0');
             const day = String(currentDate.getDate()).padStart(2, '0');
@@ -58,9 +70,22 @@ export default {
 </script>
 
 <style>
+
 .send-message
 {
     border: 0.1vh solid black;
     height: 6.6vh;
+    position: relative;
 }
+
+.send-message input
+{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+}
+
 </style>

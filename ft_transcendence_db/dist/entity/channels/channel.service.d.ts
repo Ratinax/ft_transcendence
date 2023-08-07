@@ -5,4 +5,5 @@ export declare class ChannelService {
     constructor(channelRepository: Repository<Channels>);
     findByName(channelName: any): Promise<Channels[]>;
     createChannel(channel: Partial<Channels>): Promise<Channels>;
+    setPassword(channel: any, password: string): Promise<Channels>;
 }

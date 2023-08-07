@@ -33,4 +33,19 @@ export class ChannelService {
         const newChannel = this.channelRepository.create(channel);
         return (this.channelRepository.save(newChannel));
     }
+    /**
+     * set password to channel and Protected by Password as category
+     * 
+     * @param channel channel
+     * @param password password
+     * @returns result of request
+     */
+    async setPassword(channel, password: string)
+    {
+        const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
+
+        relation.category = 'Protected by Password';
+        relation.password = password; // TODO hash password
+        return (this.channelRepository.save(relation));
+    }
 }

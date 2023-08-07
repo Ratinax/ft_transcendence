@@ -1,9 +1,10 @@
 <template>
     <div class="container">
-        <ListChannels ref="listChannels"  v-if="socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @create-channel="createChannel"/>
+        <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @create-channel="createChannel" @leave-channel="onLeaveChannel"
+        @get-is-user-owner="onGetIsUserOwner"/>
         <div class="messageszone">
           <Messages ref="messages"/>
-          <SendMessage :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
+          <SendMessage :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
         </div>
         <ListUsersChat ref="listUsersChat" v-if="socket" :user="user" :channel="selectedChannel" :socket="socket"/>
     </div>
@@ -57,28 +58,21 @@ export default {
       if (response.channel.channel_id === this.selectedChannel.channel_id)
           this.updateListUsers(response.users);
     });
-    this.socket.on('updateAfterBan', (response) => {
-      if (response.userBanned.id === this.user.id
+    this.socket.on('updateAfterPart', (response) => {
+      if (response.user.id === this.user.id 
         || response.channel.channel_id === this.selectedChannel.channel_id)
       {
-        this.updateListUsers(response.users);
-        this.updateListChannels(response.channel);
-      }
-    });
-    this.socket.on('updateAfterKick', (response) => {
-      if (response.userKicked.id === this.user.id 
-        || response.channel.channel_id === this.selectedChannel.channel_id)
-      {
-        this.updateListChannels(response.channel);
-        if (response.userKicked.id === this.user.id)
+        if (response.user.id === this.user.id)
         {
-          console.log('fwkihwewweke')
+          this.updateListChannels({});
           this.updateMessages();
           this.updateListUsers(null);
-          // this.selectedChannel = null;
         }
         else
+        {
+          this.updateListChannels(response.channel);
           this.updateListUsers(response.users);
+        }
       }
     });
   },
@@ -127,6 +121,16 @@ export default {
     updateListUsers(users)
     {
       this.$refs.listUsersChat.updateListUsers(users);
+    },
+    onLeaveChannel(channel)
+    {
+      this.socket.emit('leaveChannel', {channel: channel, user: this.user})
+    },
+    onGetIsUserOwner(channel_id)
+    {
+      // const result = this.$refs.listUsersChat.updateListUsers();
+      const result = this.$refs.listUsersChat.getUserInChannel();
+      this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
     }
   }
 }
@@ -155,5 +159,30 @@ export default {
     color: white;
     background-color: #e95433;
 }
+
+.option-list 
+{
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  z-index: 2;
+
+}
+
+.options
+{
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.options:hover
+{
+  background-color: #c0c0c5;
+}
+
+
 </style>
   

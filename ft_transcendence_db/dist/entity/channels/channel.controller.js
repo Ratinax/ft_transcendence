@@ -28,6 +28,9 @@ let ChannelController = exports.ChannelController = class ChannelController {
     async createChannel(body) {
         return (await this.channelService.createChannel(body));
     }
+    async setPassword(body) {
+        return (await this, this.channelService.setPassword(body.channel, body.password));
+    }
 };
 __decorate([
     (0, common_1.Get)(':id'),
@@ -43,6 +46,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChannelController.prototype, "createChannel", null);
+__decorate([
+    (0, common_1.Post)('setPassword'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChannelController.prototype, "setPassword", null);
 exports.ChannelController = ChannelController = __decorate([
     (0, common_1.Controller)('channels'),
     __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService])

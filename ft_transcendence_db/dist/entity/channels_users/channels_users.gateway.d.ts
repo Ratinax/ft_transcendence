@@ -7,4 +7,7 @@ export declare class ChannelsUsersGateway {
     findUsersOfChannel(body: any): Promise<void>;
     ban(body: any): Promise<import("./channels_users.entity").ChannelsUsers>;
     kick(body: any): Promise<import("./channels_users.entity").ChannelsUsers[]>;
+    leaveChannel(body: any): Promise<import("./channels_users.entity").ChannelsUsers[]>;
+    setAdmin(body: any): Promise<import("./channels_users.entity").ChannelsUsers>;
+    removeAdmin(body: any): Promise<import("./channels_users.entity").ChannelsUsers>;
 }

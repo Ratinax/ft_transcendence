@@ -30,4 +30,15 @@ export class ChannelController {
     {
         return (await this.channelService.createChannel(body));
     }
+    /**
+     * set password to channel and Protected by Password as category
+     * 
+     * @param body {channel, password}
+     * @returns result of request
+     */
+    @Post('setPassword')
+    async setPassword(@Body() body)
+    {
+        return (await this,this.channelService.setPassword(body.channel, body.password));
+    }
 }

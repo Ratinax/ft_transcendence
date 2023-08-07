@@ -84,38 +84,59 @@ export class ChannelsUsersService {
      * Modify the relation to set isBanned to true if exists
      * 
      * @param channel channel from which user is banned
-     * @param userBanned the user banned
+     * @param user the user banned
      * @returns {Object | null} the relation modified
      */
-    async ban(channel, userBanned)
+    async ban(channel, user)
     {
-        const relation = await this.findRelation(userBanned.id, channel.channel_id);
+        const relation = await this.findRelation(user.id, channel.channel_id);
         if (!relation || !relation[0])
             return (null);
-        const relationModified = this.channelsUsersRepository.create({
-            id: relation[0].id,
-            channel: channel,
-            user: {
-                id: userBanned.id,
-            },
-            isAdmin: false,
-            isOwner: false,
-            isInvited: false,
-            isBanned: true,
-        });
-        return (this.channelsUsersRepository.save(relationModified));
+        relation[0].isBanned = true;
+        return (this.channelsUsersRepository.save(relation[0]));
     }
     /**
      * remove relation
      * 
-     * @param channel channel to kick user from
-     * @param userBanned user banned
+     * @param channel channel users leaves
+     * @param userBanned user
      * @returns result of request
      */
-    async kick(channel, userBanned)
+    async leave(channel, user)
     {
-        const relation = await this.findRelation(userBanned.id, channel.channel_id);
+        const relation = await this.findRelation(user.id, channel.channel_id);
         if (relation)
             return (await this.channelsUsersRepository.remove(relation));
+    }
+    /**
+     * set user as admin in channel
+     * 
+     * @param channel channel to set user admin in
+     * @param user user to be set admin
+     * @returns result of request
+     */
+    async setAdmin(channel, user)
+    {
+        const relation = await this.findRelation(user.id, channel.channel_id);
+        if (!relation || !relation[0])
+            return (null);
+        relation[0].isAdmin = true;
+        return (this.channelsUsersRepository.save(relation[0]));
+    }
+
+    /**
+     * set user as admin in channel
+     * 
+     * @param channel channel to remove admin from user
+     * @param user user to be removed admin
+     * @returns result of request
+     */
+    async removeAdmin(channel, user)
+    {
+        const relation = await this.findRelation(user.id, channel.channel_id);
+        if (!relation || !relation[0])
+            return (null);
+        relation[0].isAdmin = false;
+        return (this.channelsUsersRepository.save(relation[0]));
     }
 }

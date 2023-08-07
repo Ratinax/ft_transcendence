@@ -30,22 +30,50 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         }
     }
     async ban(body) {
-        const res = await this.channelsUsersService.ban(body.channel, body.userBanned);
+        const res = await this.channelsUsersService.ban(body.channel, body.user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-        this.server.emit('updateAfterBan', {
+        this.server.emit('updateAfterPart', {
             users: users,
             channel: body.channel,
-            userBanned: body.userBanned
+            user: body.user
         });
         return (res);
     }
     async kick(body) {
-        const res = await this.channelsUsersService.kick(body.channel, body.userKicked);
+        const res = await this.channelsUsersService.leave(body.channel, body.user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-        this.server.emit('updateAfterKick', {
+        this.server.emit('updateAfterPart', {
             users: users,
             channel: body.channel,
-            userKicked: body.userKicked
+            user: body.user
+        });
+        return (res);
+    }
+    async leaveChannel(body) {
+        const res = await this.channelsUsersService.leave(body.channel, body.user);
+        const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+        this.server.emit('updateAfterPart', {
+            users: users,
+            channel: body.channel,
+            user: body.user
+        });
+        return (res);
+    }
+    async setAdmin(body) {
+        const res = await this.channelsUsersService.setAdmin(body.channel, body.user);
+        const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+        this.server.emit('updateListUsers', {
+            users: users,
+            channel: body.channel
+        });
+        return (res);
+    }
+    async removeAdmin(body) {
+        const res = await this.channelsUsersService.removeAdmin(body.channel, body.user);
+        const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+        this.server.emit('updateListUsers', {
+            users: users,
+            channel: body.channel
         });
         return (res);
     }
@@ -75,6 +103,27 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsUsersGateway.prototype, "kick", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('leaveChannel'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsUsersGateway.prototype, "leaveChannel", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('setAdmin'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsUsersGateway.prototype, "setAdmin", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('removeAdmin'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsUsersGateway.prototype, "removeAdmin", null);
 exports.ChannelsUsersGateway = ChannelsUsersGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {

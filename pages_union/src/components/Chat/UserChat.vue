@@ -4,7 +4,7 @@
             <span id="user-pseudo" :class="{'admin': userInChat.isAdmin, 'owner': userInChat.isOwner, 'selection-color' : isSelected}" @click="handleUserClicked">{{ userInChat.pseudo }}</span>
             <div :class="{'circle': true, 'green': userInChat.isConnected, 'red': !userInChat.isConnected}"></div>
         </div>
-        <div v-if="isSelected" class="popup">
+        <div v-if="isSelected" class="option-list">
             <div v-if="userInChat.id !== userInChannel.id">
                 <div v-if="userInChannel.isAdmin && !userInChat.isOwner">
                     <p class="options" @click="kick">Kick</p> 
@@ -13,10 +13,10 @@
                 </div>
                 <div v-if="userInChannel.isOwner">
                     <div v-if="!userInChat.isAdmin">
-                        <p class="options">Set Admin</p>
+                        <p class="options" @click="setAdmin">Set Admin</p>
                     </div>
                     <div v-if="userInChat.isAdmin">
-                        <p class="options">Remove Admin</p>
+                        <p class="options" @click="removeAdmin">Remove Admin</p>
                     </div>
                 </div>
             </div>
@@ -44,11 +44,19 @@ export default {
         },
         ban()
         {
-            this.socket.emit('banUser', {channel: this.channel, userBanned : this.userInChat});
+            this.socket.emit('banUser', {channel: this.channel, user: this.userInChat});
         },
         kick()
         {
-            this.socket.emit('kickUser', {channel: this.channel, userKicked : this.userInChat});
+            this.socket.emit('kickUser', {channel: this.channel, user: this.userInChat});
+        },
+        setAdmin()
+        {
+            this.socket.emit('setAdmin', {channel: this.channel, user: this.userInChat});
+        },
+        removeAdmin()
+        {
+            this.socket.emit('removeAdmin', {channel: this.channel, user: this.userInChat});
         },
     }
 }
@@ -67,25 +75,6 @@ export default {
 .owner
 {
     color: orange;
-}
-
-.popup {
-
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.options
-{
-    padding: 0;
-    margin: 0;
-}
-
-.options:hover
-{
-    /* text-decoration: underline; */
-    background-color: #c0c0c5;
 }
 
 .user-in-chat

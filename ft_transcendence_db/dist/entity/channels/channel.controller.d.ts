@@ -6,4 +6,5 @@ export declare class ChannelController {
     constructor(channelService: ChannelService, channelsUsersService: ChannelsUsersService);
     find(user_id: number): Promise<import("./channel.entity").Channels[]>;
     createChannel(body: any): Promise<import("./channel.entity").Channels>;
+    setPassword(body: any): Promise<import("./channel.entity").Channels>;
 }

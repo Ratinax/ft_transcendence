@@ -1,7 +1,9 @@
 <template>
   <div class="list-channels" ref="channelsButtons">
     <div class="channels-buttons">
-      <channel v-for="channel in channels" :key="channel.id" :channel="channel" :isSelected="channelSelected.channel_id === channel.channel_id" @channel-clicked="handleChannelClicked"/>
+      <channel ref="channelRef" v-for="channel in channels" :key="channel.id" :channel="channel" :socket="socket" :isSelected="channelSelected.channel_id === channel.channel_id" @channel-clicked="handleChannelClicked" @leave-channel="onLeaveChannel"
+      @get-is-user-owner="onGetIsUserOwner"
+      @update-channels="onUpdateChannels"/>
       <div :class="{'nochannel': channels.length === 0, 'buttons': true}">
         <div class="new-channel">
           <button @click="showCreateChannel = true">Create Channel</button>
@@ -20,8 +22,6 @@
 </template>
 
 <script>
-
-// import { Socket } from 'socket.io-client';
 import Channel from './Channel.vue';
 import CreateChannel from './CreateChannel.vue';
 import JoinChannel from './JoinChannel.vue';
@@ -42,10 +42,9 @@ export default {
     },
     data() {
       return {
-          channels: [],
-          showCreateChannel: false,
-          showJoinChannel: false,
-          
+        channels: [],
+        showCreateChannel: false,
+        showJoinChannel: false,
       }
     },
     created() 
@@ -76,13 +75,14 @@ export default {
           this.updateScrollPosition()
         })
       },
-      handleChannelClicked(channel) {
+      handleChannelClicked(channel) 
+      {
         this.$emit('channel-selected', channel);
       },
-      async createChannel(content)
+      createChannel(content)
       {
         this.showCreateChannel = false;
-        await this.$emit('create-channel', content);
+        this.$emit('create-channel', content);
       },
       updateScrollPosition()
       {
@@ -90,6 +90,29 @@ export default {
   
         container.scrollTop = container.scrollHeight;
       },
+      onLeaveChannel(channel)
+      {
+        this.$emit('leave-channel', channel);
+      },
+      onGetIsUserOwner(channel_id)
+      {
+        this.$emit('get-is-user-owner', channel_id);
+      },
+      setIsUserOwner(result, channel_id)
+      {
+        for (let i = 0; i < this.$refs.channelRef.length; i++)
+        {
+          if (this.$refs.channelRef[i].channel.channel_id === channel_id)
+          {
+            this.$refs.channelRef[i].setIsUserOwner(result);
+            break ;
+          }
+        }
+      },
+      onUpdateChannels()
+      {
+        this.fetchChannels();
+      }
     },
 }
 </script>

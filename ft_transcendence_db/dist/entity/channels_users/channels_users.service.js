@@ -60,27 +60,31 @@ let ChannelsUsersService = exports.ChannelsUsersService = class ChannelsUsersSer
         const channels = usersAndChannels.map((channelsUsers) => (channelsUsers.channel));
         return (channels);
     }
-    async ban(channel, userBanned) {
-        const relation = await this.findRelation(userBanned.id, channel.channel_id);
+    async ban(channel, user) {
+        const relation = await this.findRelation(user.id, channel.channel_id);
         if (!relation || !relation[0])
             return (null);
-        const relationModified = this.channelsUsersRepository.create({
-            id: relation[0].id,
-            channel: channel,
-            user: {
-                id: userBanned.id,
-            },
-            isAdmin: false,
-            isOwner: false,
-            isInvited: false,
-            isBanned: true,
-        });
-        return (this.channelsUsersRepository.save(relationModified));
+        relation[0].isBanned = true;
+        return (this.channelsUsersRepository.save(relation[0]));
     }
-    async kick(channel, userBanned) {
-        const relation = await this.findRelation(userBanned.id, channel.channel_id);
+    async leave(channel, user) {
+        const relation = await this.findRelation(user.id, channel.channel_id);
         if (relation)
             return (await this.channelsUsersRepository.remove(relation));
+    }
+    async setAdmin(channel, user) {
+        const relation = await this.findRelation(user.id, channel.channel_id);
+        if (!relation || !relation[0])
+            return (null);
+        relation[0].isAdmin = true;
+        return (this.channelsUsersRepository.save(relation[0]));
+    }
+    async removeAdmin(channel, user) {
+        const relation = await this.findRelation(user.id, channel.channel_id);
+        if (!relation || !relation[0])
+            return (null);
+        relation[0].isAdmin = false;
+        return (this.channelsUsersRepository.save(relation[0]));
     }
 };
 exports.ChannelsUsersService = ChannelsUsersService = __decorate([

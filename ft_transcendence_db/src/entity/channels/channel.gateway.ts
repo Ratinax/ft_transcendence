@@ -62,13 +62,13 @@ export class ChannelGateway {
     const password = body.password;
     const channelName = body.channelName;
     const user = body.user;
-  
     let channel;
+
     try
     {
       const channels = await this.channelService.findByName(channelName);
       if (!channels || !channels[0])
-        throw new InternalServerErrorException('no such channel');
+        throw new InternalServerErrorException('no such channel'); 
       channel = channels[0];
     }
     catch (e)
@@ -101,4 +101,5 @@ export class ChannelGateway {
     this.server.emit('updateListChannels', {channel: channel, user: user});
     this.server.emit('joinGoodRequest', {channel: channel, user: user});
   }
+  // @SubscribeMessage
 }

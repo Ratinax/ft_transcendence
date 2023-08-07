@@ -17,6 +17,8 @@ export declare class ChannelsUsersService {
     }[]>;
     findRelation(user_id: number, channel_id: number): Promise<ChannelsUsers[]>;
     findChannelsOfUsers(user_id: number): Promise<import("../channels/channel.entity").Channels[]>;
-    ban(channel: any, userBanned: any): Promise<ChannelsUsers>;
-    kick(channel: any, userBanned: any): Promise<ChannelsUsers[]>;
+    ban(channel: any, user: any): Promise<ChannelsUsers>;
+    leave(channel: any, user: any): Promise<ChannelsUsers[]>;
+    setAdmin(channel: any, user: any): Promise<ChannelsUsers>;
+    removeAdmin(channel: any, user: any): Promise<ChannelsUsers>;
 }

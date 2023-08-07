@@ -35,37 +35,92 @@ export class ChannelsUsersGateway {
   /**
    * Modify the relation of a user to a channel to set isBanned = true 
    * 
-   * @param {Object} body - {userBanned, channel}
+   * @param {Object} body - {user, channel}
    * @returns result of request
-   * @emits updateAfterBan {users, channel, userBanned}
+   * @emits updateAfterPart {users, channel, user}
    */
   @SubscribeMessage('banUser')
   async ban(@MessageBody() body) 
   {
-    const res = await this.channelsUsersService.ban(body.channel, body.userBanned);
+    const res = await this.channelsUsersService.ban(body.channel, body.user);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-    this.server.emit('updateAfterBan', {
+    this.server.emit('updateAfterPart', {
       users: users, 
       channel: body.channel,
-      userBanned: body.userBanned});
+      user: body.user});
     return (res);
   }
   /**
    * Delete the relation of a user to a channel
    * 
-   * @param body - {userKicked, channel}
+   * @param body - {user, channel}
    * @returns result of request kick
-   * @emits updateAfterBan {users, channel, userKicked}
+   * @emits updateAfterPart {users, channel, user}
    */
   @SubscribeMessage('kickUser')
   async kick(@MessageBody() body) 
   {
-    const res = await this.channelsUsersService.kick(body.channel, body.userKicked);
+    const res = await this.channelsUsersService.leave(body.channel, body.user);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-    this.server.emit('updateAfterKick', {
+    this.server.emit('updateAfterPart', {
       users: users, 
       channel: body.channel,
-      userKicked: body.userKicked});
+      user: body.user});
+    return (res);
+  }
+  /**
+   * Delete the relation of a user to a channel
+   * 
+   * @param body - {user, channel}
+   * @returns result of request leave
+   * @emits updateAfterPart {users, channel, user}
+   */
+  @SubscribeMessage('leaveChannel')
+  async leaveChannel(@MessageBody() body) 
+  {
+    const res = await this.channelsUsersService.leave(body.channel, body.user);
+    const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+    this.server.emit('updateAfterPart', {
+      users: users, 
+      channel: body.channel,
+      user: body.user});
+    return (res);
+  }
+  /**
+   * set user of channel to Admin
+   * 
+   * @param body - {channel, user}
+   * @returns result of request
+   * @emits updateListUsers {users, channel}
+   */
+  @SubscribeMessage('setAdmin')
+  async setAdmin(@MessageBody() body) 
+  {
+    const res = await this.channelsUsersService.setAdmin(body.channel, body.user);
+    const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+
+    this.server.emit('updateListUsers', {
+      users: users, 
+      channel: body.channel});
+    return (res);
+  }
+  
+  /**
+   * remove admin rights on a user
+   * 
+   * @param body - {channel, user}
+   * @returns result of request
+   * @emits updateListUsers {users, channel}
+   */
+  @SubscribeMessage('removeAdmin')
+  async removeAdmin(@MessageBody() body) 
+  {
+    const res = await this.channelsUsersService.removeAdmin(body.channel, body.user);
+    const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+
+    this.server.emit('updateListUsers', {
+      users: users, 
+      channel: body.channel});
     return (res);
   }
 }

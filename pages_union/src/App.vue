@@ -46,9 +46,11 @@ export default {
 {
   width: 1em;
   height: 1em;
-  border-radius: 50%; 
+  border-radius: 50%;
   margin-left: 1em;
-  flex-shrink: 0
+  flex-shrink: 0;
+  justify-content: center;
+  text-align: center;
 }
 .green
 {
