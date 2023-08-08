@@ -41,6 +41,7 @@ export default {
                 'You are alrady in that channel',
                 'Wrong password',
                 'You are banned from this channel',
+                'This channel is in private mode',
             ],
       matrixIndex: 0,
     }
@@ -66,6 +67,10 @@ export default {
       this.socket.on('joinBanned', (response) => {
         if (response.user.id === this.user.id)
           this.joinBanned();
+      });
+      this.socket.on('joinPrivateMode', (response) => {
+        if (response.user.id === this.user.id)
+          this.privateMode();
       });
   },
   methods: 
@@ -112,6 +117,10 @@ export default {
     goodRequest()
     {
       this.close();
+    },
+    privateMode()
+    {
+      this.matrixIndex = 6;
     }
   },
 };

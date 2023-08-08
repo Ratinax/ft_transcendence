@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Channels } from './channel.entity';
 
@@ -30,11 +30,17 @@ export class ChannelService {
      */
     async createChannel(channel: Partial<Channels>)
     {
+        const channelAllreadyExisting = await this.channelRepository.findOne({where: {name: channel.name}});
+        if (channelAllreadyExisting)
+        {
+            console.log(channelAllreadyExisting)
+            throw new InternalServerErrorException('channel allready exists');
+        }
         const newChannel = this.channelRepository.create(channel);
         return (this.channelRepository.save(newChannel));
     }
     /**
-     * set password to channel and Protected by Password as category
+     * set password to channel and Protected by password as category
      * 
      * @param channel channel
      * @param password password
@@ -44,7 +50,7 @@ export class ChannelService {
     {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
 
-        relation.category = 'Protected by Password';
+        relation.category = 'Protected by password';
         relation.password = password; // TODO hash password
         return (this.channelRepository.save(relation));
     }

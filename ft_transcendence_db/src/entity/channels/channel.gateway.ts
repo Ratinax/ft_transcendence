@@ -21,11 +21,18 @@ export class ChannelGateway {
    * @param data - {channel, user}
    * @returns responses of request | 'Error'
    * @emits updateListChannels {channel, user}
+   * @emits createGoodRequest {user}
+   * @emits createAlreadyExists  {user} - in case of failing
+   * @emits createPasswordOrNameWrongSize {user} - in case of failing
+   * @emits createWrongCategory {user} - in case of failing
    */
   @SubscribeMessage('createChannel')
   async create(
     @MessageBody() data: {channel: any, user: any}) {
-      const channel = data.channel.channel;
+      // check input errors
+      if (!this.createGoodInputs(data.channel, data.user))
+        return ('input error');
+      const channel = data.channel;
       const user = data.user;
       try 
       {
@@ -38,12 +45,33 @@ export class ChannelGateway {
           isOwner: true,
           isInvited: false,
         });
+        this.server.emit('createGoodRequest', {user: user});
         return ({response, response2});
       }
       catch (e)
       {
-        return ('Error');
+        this.server.emit('createAlreadyExists', {user: user});
       }
+  }
+  createGoodInputs(channel, user)
+  {
+    if (channel.name.length < 3 
+      || channel.name.length > 20 ||
+      ((channel.password.length < 3 
+        || channel.password.length > 20) && channel.category === 'Protected by password'))
+    {
+      this.server.emit('createPasswordOrNameWrongSize', {user: user});
+      return (0);
+    }
+    if (channel.category !== 'Private'
+    && channel.category !== 'Public'
+    && channel.category !== 'Protected by password')
+    {
+      console.log(channel.category);
+      this.server.emit('createWrongCategory', {user: user});
+      return (0);
+    }
+    return (1);
   }
   /**
    * 
@@ -84,6 +112,11 @@ export class ChannelGateway {
         this.server.emit('joinBanned', {user: user})
       else
         this.server.emit('joinAlreadyIn', {user: user})
+        return ;
+      }
+    if (channel.category === 'Private')
+    {
+      this.server.emit('joinPrivateMode', {user: user})
       return ;
     }
     if (password != channel.password) // TODO comparer avec les mdp hash

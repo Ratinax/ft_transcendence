@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @create-channel="createChannel" @leave-channel="onLeaveChannel"
+        <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @leave-channel="onLeaveChannel"
         @get-is-user-owner="onGetIsUserOwner"/>
         <div class="messageszone">
           <Messages ref="messages"/>
@@ -101,10 +101,6 @@ export default {
     {
       this.selectedChannel = channel;
       this.findUsersOfChannel()
-    },
-    createChannel(content)
-    {
-      this.socket.emit('createChannel', { channel: content, user: this.user}); // TODO metter a content.channel
     },
     createMessage(content)
     {

@@ -1,13 +1,13 @@
 <template>
   <div class="list-channels" ref="channelsButtons">
     <div class="channels-buttons">
-      <channel ref="channelRef" v-for="channel in channels" :key="channel.id" :channel="channel" :socket="socket" :isSelected="channelSelected.channel_id === channel.channel_id" @channel-clicked="handleChannelClicked" @leave-channel="onLeaveChannel"
+      <channel ref="channelRef" v-for="channel in channels" :key="channel.id" :channel="channel" :socket="socket" :user="user" :isSelected="channelSelected.channel_id === channel.channel_id" @channel-clicked="handleChannelClicked" @leave-channel="onLeaveChannel"
       @get-is-user-owner="onGetIsUserOwner"
       @update-channels="onUpdateChannels"/>
       <div :class="{'nochannel': channels.length === 0, 'buttons': true}">
         <div class="new-channel">
           <button @click="showCreateChannel = true">Create Channel</button>
-          <CreateChannel :show="showCreateChannel" @close="showCreateChannel = false" @create-channel="createChannel" >
+          <CreateChannel :show="showCreateChannel" :socket="socket" :user="user" @close="showCreateChannel = false">
             <!-- Contenu du pop-up personnalisé -->
           </CreateChannel>
         </div>
@@ -78,11 +78,6 @@ export default {
       handleChannelClicked(channel) 
       {
         this.$emit('channel-selected', channel);
-      },
-      createChannel(content)
-      {
-        this.showCreateChannel = false;
-        this.$emit('create-channel', content);
       },
       updateScrollPosition()
       {

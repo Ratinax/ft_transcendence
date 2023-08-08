@@ -18,20 +18,8 @@ export class ChannelController {
         const channels = await this.channelsUsersService.findChannelsOfUsers(user_id);
         return (channels);
     }
-
     /**
-     * create a new channel
-     * 
-     * @param body channel to be created {channel_id, password, isADm, name, category}
-     * @returns result of request
-     */
-    @Post('create')
-    async createChannel(@Body() body)
-    {
-        return (await this.channelService.createChannel(body));
-    }
-    /**
-     * set password to channel and Protected by Password as category
+     * set password to channel and Protected by password as category
      * 
      * @param body {channel, password}
      * @returns result of request
