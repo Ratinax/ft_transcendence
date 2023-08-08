@@ -67,15 +67,38 @@ export default {
         {
             this.$emit('leave-channel', this.channel);
         },
-        changePassword()
+        async changePassword()
         {
-
+            try
+            {
+                const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
+                {
+                    channel: this.channel,
+                    password: 'test', //TODO mettre bon mot de passe qui vient de pop-up au lieu de test
+                });
+                console.log(res);
+                this.$emit('update-channels');
+            }
+            catch (e)
+            {
+                console.error(e);
+            }
         },
-        removePassword()
+        async removePassword()
         {
-            console.log(this.channel);
-            // this.socket
-            // this.$emit('update-channels');
+            try
+            {
+                const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
+                {
+                    channel: this.channel
+                });
+                console.log(res);
+                this.$emit('update-channels');
+            }
+            catch (e)
+            {
+                console.error(e);
+            }
         },
         async setPassword()
         {
@@ -84,7 +107,7 @@ export default {
                 const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
                 {
                     channel: this.channel,
-                    password: 'test', //TODO mettre bon mot de passe qui vient de pop up au lieu de test
+                    password: 'test', //TODO mettre bon mot de passe qui vient de pop-up au lieu de test
                 });
                 console.log(res);
                 this.$emit('update-channels');
@@ -94,7 +117,7 @@ export default {
             }
             catch (e)
             {
-                console.error('Error un fetchUsers:', e);
+                console.error(e);
             }
         },
     }

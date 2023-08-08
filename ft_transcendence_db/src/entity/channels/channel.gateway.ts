@@ -53,7 +53,14 @@ export class ChannelGateway {
         this.server.emit('createAlreadyExists', {user: user});
       }
   }
-  createGoodInputs(channel, user)
+  /**
+   * check if good args for create
+   * 
+   * @param channel channel
+   * @param user user
+   * @returns true if succeed
+   */
+  createGoodInputs(channel, user): Boolean
   {
     if (channel.name.length < 3 
       || channel.name.length > 20 ||
@@ -61,7 +68,7 @@ export class ChannelGateway {
         || channel.password.length > 20) && channel.category === 'Protected by password'))
     {
       this.server.emit('createPasswordOrNameWrongSize', {user: user});
-      return (0);
+      return (false);
     }
     if (channel.category !== 'Private'
     && channel.category !== 'Public'
@@ -69,9 +76,9 @@ export class ChannelGateway {
     {
       console.log(channel.category);
       this.server.emit('createWrongCategory', {user: user});
-      return (0);
+      return (false);
     }
-    return (1);
+    return (true);
   }
   /**
    * 

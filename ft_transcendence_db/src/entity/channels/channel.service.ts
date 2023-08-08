@@ -54,4 +54,35 @@ export class ChannelService {
         relation.password = password; // TODO hash password
         return (this.channelRepository.save(relation));
     }
+
+    /**
+     * remove password to channel and set Public to category
+     * 
+     * @param channel channel
+     * @returns result of request
+     */
+    async removePassword(channel)
+    {
+        const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
+
+        relation.category = 'Public';
+        relation.password = '';
+        return (this.channelRepository.save(relation));
+    }
+
+    /**
+     * change password of a channel
+     * 
+     * @param channel channel
+     * @param password password
+     * @returns result of request
+     */
+    async changePassword(channel, password: string)
+    {
+        const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
+
+        relation.category = 'Protected by password';
+        relation.password = password; // TODO hash password
+        return (this.channelRepository.save(relation));
+    }
 }

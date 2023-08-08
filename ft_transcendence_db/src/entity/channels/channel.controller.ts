@@ -29,4 +29,21 @@ export class ChannelController {
     {
         return (await this,this.channelService.setPassword(body.channel, body.password));
     }
+    /**
+     * remove password to channel and set Public to category
+     * 
+     * @param body {channel}
+     * @returns result of request
+     */
+    @Post('removePassword')
+    async removePassword(@Body() body)
+    {
+        return (await this,this.channelService.removePassword(body.channel));
+    }
+
+    @Post('changePassword')
+    async changePassword(@Body() body)
+    {
+        return (await this,this.channelService.changePassword(body.channel, body.password));
+    }
 }
