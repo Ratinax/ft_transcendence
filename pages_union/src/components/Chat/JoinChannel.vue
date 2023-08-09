@@ -33,7 +33,6 @@ export default {
     return {
       channelName: '',
       password: '',
-      isEmpty: false,
       matrixError: [
                 'allright',
                 'You must enter a channel name',
@@ -95,7 +94,6 @@ export default {
     {
       this.channelName = '';
       this.password = '';
-      this.isEmpty = false;
       this.matrixIndex = 0;
     },
     noSuchChannel()

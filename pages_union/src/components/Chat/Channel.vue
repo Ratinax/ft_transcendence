@@ -15,27 +15,33 @@
                 </div>
             </div>
         </div>
-            <div class="option-list" v-if="isSelected && optionSelected">
-                <p class="options" @click="leaveChannel">Leave Channel</p>
-                <div v-if="isUserOwner">
-                    <div v-if="channel.password && channel.password.length > 0"> <!--TODO changer condition pcq innacceptable d'avoir le password dans le programme du front-->
-                        <p class="options" @click="changePassword">Change password</p>
-                        <p class="options" @click="removePassword">Remove password</p>
-                    </div>
-                    <div v-else>
-                        <p class="options" @click="setPassword">Set password</p>
-                    </div>
+        <div class="option-list" v-if="isSelected && optionSelected">
+            <p class="options" @click="leaveChannel">Leave Channel</p>
+            <div v-if="isUserOwner">
+                <div v-if="channel.password && channel.password.length > 0"> <!--TODO changer condition pcq innacceptable d'avoir le password dans le programme du front-->
+                    <p class="options" @click="setShowPasswordPopUp('change')">Change password</p>
+                    <p class="options" @click="removePassword">Remove password</p>
+                </div>
+                <div v-else>
+                    <p class="options" @click="setShowPasswordPopUp('set')">Set password</p>
                 </div>
             </div>
+        </div>
+        <SetPassword ref="SetPassword" :show="showPasswordPopUp" :isChange="passwordPopUpType === 'change'" :isSet="passwordPopUpType === 'set'" @set-password="setPassword" @change-password="changePassword" @close="closePasswordPopUp"/>
         <div class="white-space"></div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+import SetPassword from './SetPassword.vue';
 
 export default {
     name: 'Channel-Component',
+    components:
+    {
+        SetPassword,
+    },
     props: 
     {
         channel: Object, 
@@ -45,8 +51,10 @@ export default {
     data()
     {
         return {
+            showPasswordPopUp: false,
             optionSelected: false,
             isUserOwner: false,
+            passwordPopUpType: '',
         }
     },
     methods: {
@@ -67,21 +75,44 @@ export default {
         {
             this.$emit('leave-channel', this.channel);
         },
-        async changePassword()
+        async changePassword(password)
         {
             try
             {
-                const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
+                await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
                 {
                     channel: this.channel,
-                    password: 'test', //TODO mettre bon mot de passe qui vient de pop-up au lieu de test
+                    password: password,
                 });
-                console.log(res);
+                this.$refs.SetPassword.goodRequest();
                 this.$emit('update-channels');
             }
             catch (e)
             {
-                console.error(e);
+                console.log('le e :', e);
+                if (e.response.data.message === 'Password not good length')
+                    this.$refs.SetPassword.notGoodLength()
+            }
+        },
+        
+        async setPassword(password)
+        {
+            try
+            {
+                await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
+                {
+                    channel: this.channel,
+                    password: password,
+                });
+                this.$refs.SetPassword.goodRequest();
+                this.$emit('update-channels');
+            }
+            catch (e)
+            {
+                console.log('le e :', e);
+
+                if (e.response.data.message === 'Password not good length')
+                    this.$refs.SetPassword.notGoodLength()
             }
         },
         async removePassword()
@@ -100,26 +131,15 @@ export default {
                 console.error(e);
             }
         },
-        async setPassword()
+        setShowPasswordPopUp(content)
         {
-            try
-            {
-                const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
-                {
-                    channel: this.channel,
-                    password: 'test', //TODO mettre bon mot de passe qui vient de pop-up au lieu de test
-                });
-                console.log(res);
-                this.$emit('update-channels');
-
-                // this.users = res.data;
-                // console.log('this.users :',this.users);
-            }
-            catch (e)
-            {
-                console.error(e);
-            }
+            this.showPasswordPopUp = true;
+            this.passwordPopUpType = content;
         },
+        closePasswordPopUp()
+        {
+            this.showPasswordPopUp = false;
+        }
     }
 }
 </script>

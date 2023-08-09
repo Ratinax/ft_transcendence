@@ -35,6 +35,8 @@ let ChannelService = exports.ChannelService = class ChannelService {
         return (this.channelRepository.save(newChannel));
     }
     async setPassword(channel, password) {
+        if (password.length > 20 || password.length < 3)
+            throw new common_1.InternalServerErrorException('Password not good length');
         const relation = await this.channelRepository.findOne({ where: { channel_id: channel.channel_id } });
         relation.category = 'Protected by password';
         relation.password = password;
@@ -47,6 +49,8 @@ let ChannelService = exports.ChannelService = class ChannelService {
         return (this.channelRepository.save(relation));
     }
     async changePassword(channel, password) {
+        if (password.length > 20 || password.length < 3)
+            throw new common_1.InternalServerErrorException('Password not good length');
         const relation = await this.channelRepository.findOne({ where: { channel_id: channel.channel_id } });
         relation.category = 'Protected by password';
         relation.password = password;
