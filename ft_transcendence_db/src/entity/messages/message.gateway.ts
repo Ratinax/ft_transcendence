@@ -19,9 +19,10 @@ export class MessagesGateway {
   /**
    * create a new message
    * 
-   * @param body {channel, user, message, dateSent}
+   * @param body {channel_id, user_id, message, dateSent}
    * @returns response of request
    * @emits 'updateMessage' {channel_id}
+   * @emits 'sendMessageTimeout' {channel_id, user_id, duration}
    * @throws new InternalServerErrorException('no such relation')
    */
   @SubscribeMessage('createMessage')
