@@ -44,6 +44,7 @@ let MessagesGateway = exports.MessagesGateway = class MessagesGateway {
             user: body.user_id,
         });
         this.server.emit('updateMessage', { channel_id: body.channel_id });
+        this.server.emit('sendMessageGoodRequest', { channel_id: body.channel_id, user_id: body.user_id });
         return response;
     }
 };

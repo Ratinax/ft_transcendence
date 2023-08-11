@@ -74,8 +74,13 @@ export default {
             duration -= hours * 3600;
             const minutes = Math.floor(duration / 60);
             duration -= minutes * 60;
-            const seconds = duration;
+            const seconds = Math.floor(duration);
             this.durationTimeoutString = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+        },
+        goodRequest()
+        {
+            this.durationTimeoutString = '';
+            this.isUserTimeout = false;
         }
     }
 

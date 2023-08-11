@@ -79,6 +79,10 @@ export default {
       if (this.selectedChannel.channel_id === response.channel_id && this.user.id === response.user_id)
         this.sendMessageTimeout(response.duration);
     });
+    this.socket.on('sendMessageGoodRequest', (response) => {
+      if (this.selectedChannel.channel_id === response.channel_id && this.user.id === response.user_id)
+        this.sendMessageGoodRequest();
+    });
   },
   methods:
   {
@@ -135,6 +139,10 @@ export default {
     sendMessageTimeout(duration)
     {
       this.$refs.sendMessage.timeout(duration);
+    },
+    sendMessageGoodRequest()
+    {
+      this.$refs.sendMessage.goodRequest();
     }
   }
 }

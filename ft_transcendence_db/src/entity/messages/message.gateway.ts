@@ -23,6 +23,7 @@ export class MessagesGateway {
    * @returns response of request
    * @emits 'updateMessage' {channel_id}
    * @emits 'sendMessageTimeout' {channel_id, user_id, duration}
+   * @emits 'sendMessageGoodRequest {channel_id, user_id}
    * @throws new InternalServerErrorException('no such relation')
    */
   @SubscribeMessage('createMessage')
@@ -55,6 +56,7 @@ export class MessagesGateway {
       });
       
       this.server.emit('updateMessage', {channel_id: body.channel_id});
+      this.server.emit('sendMessageGoodRequest', {channel_id: body.channel_id, user_id: body.user_id});
 
       return response;
   }
