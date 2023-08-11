@@ -4,13 +4,17 @@ import { MessageService } from './message.service';
 import { messageProviders } from './message.providers';
 import { DatabaseModule } from 'src/database/database.module';
 import { MessagesGateway } from './message.gateway';
+import { channelsUsersProviders } from '../channels_users/channels_users.providers';
+import { ChannelsUsersService } from '../channels_users/channels_users.service';
 
 @Module({
   imports: [DatabaseModule],
   providers: [
     ...messageProviders,
+    ...channelsUsersProviders,
     MessageService,
     MessagesGateway,
+    ChannelsUsersService,
   ],
     controllers: [MessageController],
 })

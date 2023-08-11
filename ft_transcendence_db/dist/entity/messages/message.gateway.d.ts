@@ -1,9 +1,10 @@
 import { MessageService } from './message.service';
 import { Server } from 'socket.io';
-import { Messages } from './message.entity';
+import { ChannelsUsersService } from '../channels_users/channels_users.service';
 export declare class MessagesGateway {
     private readonly messagesService;
+    private readonly channelsUsersService;
     server: Server;
-    constructor(messagesService: MessageService);
-    create(message: Messages): Promise<Messages>;
+    constructor(messagesService: MessageService, channelsUsersService: ChannelsUsersService);
+    create(body: any): Promise<"user timeout" | import("./message.entity").Messages>;
 }

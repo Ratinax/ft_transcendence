@@ -123,4 +123,28 @@ export class ChannelsUsersGateway {
       channel: body.channel});
     return (res);
   }
+  /**
+   * 
+   * @param body {user, userTimeouted, duration_timeout}
+   * @returns result of request | null
+   * @emits timeoutWrongAmount {channel, user}
+   * @emits updateListUsers {channel, users}
+   * @emits timeoutGoodRequest {channel, user}
+   */
+  @SubscribeMessage('timeoutUser')
+  async timeoutUser(@MessageBody() body)
+  {
+    if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) // 30 days and 10 seconds
+    {
+      this.server.emit('timeoutWrongAmount', {channel: body.channel, user: body.user});
+      console.log('bad')
+      return (null);
+    }
+    const res = await this.channelsUsersService.timeoutUser(body.channel, body.userTimeouted, body.duration_timeout);
+    const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+    
+    this.server.emit('updateListUsers', {channel: body.channel, users: users});
+    this.server.emit('timeoutGoodRequest', {channel: body.channel, user: body.user});
+    return (res);
+  }
 }

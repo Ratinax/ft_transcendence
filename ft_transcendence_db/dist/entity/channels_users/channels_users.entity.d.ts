@@ -8,4 +8,6 @@ export declare class ChannelsUsers {
     isOwner: boolean;
     isInvited: boolean;
     isBanned: boolean;
+    dateTimeout: Date;
+    durationTimeout: Number;
 }

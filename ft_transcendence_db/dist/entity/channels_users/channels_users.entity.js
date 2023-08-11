@@ -45,6 +45,14 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'is_banned', default: false }),
     __metadata("design:type", Boolean)
 ], ChannelsUsers.prototype, "isBanned", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'date_timeout', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", Date)
+], ChannelsUsers.prototype, "dateTimeout", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'duration_timeout', type: 'integer', default: 0 }),
+    __metadata("design:type", Number)
+], ChannelsUsers.prototype, "durationTimeout", void 0);
 exports.ChannelsUsers = ChannelsUsers = __decorate([
     (0, typeorm_1.Entity)()
 ], ChannelsUsers);

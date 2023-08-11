@@ -39,11 +39,14 @@ let ChannelsUsersService = exports.ChannelsUsersService = class ChannelsUsersSer
             isOwner: channelsUsers.isOwner,
             isAdmin: channelsUsers.isAdmin,
             isInvited: channelsUsers.isInvited,
-            isBanned: channelsUsers.isBanned
+            isBanned: channelsUsers.isBanned,
+            dateTimeout: channelsUsers.dateTimeout,
+            durationTimeout: channelsUsers.durationTimeout,
         }));
         return (users);
     }
     async findRelation(user_id, channel_id) {
+        console.log(user_id, channel_id);
         const relation = await this.channelsUsersRepository
             .createQueryBuilder('channelsUsers')
             .where('channel_id = :channel_id AND user_id = :user_id', { channel_id: channel_id, user_id: user_id })
@@ -85,6 +88,31 @@ let ChannelsUsersService = exports.ChannelsUsersService = class ChannelsUsersSer
             return (null);
         relation[0].isAdmin = false;
         return (this.channelsUsersRepository.save(relation[0]));
+    }
+    getCurrentDate() {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const hours = String(currentDate.getHours()).padStart(2, '0');
+        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+        const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        return formattedDate;
+    }
+    async timeoutUser(channel, user, duration) {
+        const relation = await this.channelsUsersRepository.findOne({ where: {
+                user: {
+                    id: user.id,
+                },
+                channel: {
+                    channel_id: channel.channel_id,
+                }
+            } });
+        relation.dateTimeout = new Date(this.getCurrentDate());
+        console.log(new Date(relation.dateTimeout));
+        relation.durationTimeout = duration;
+        return (this.channelsUsersRepository.save(relation));
     }
 };
 exports.ChannelsUsersService = ChannelsUsersService = __decorate([

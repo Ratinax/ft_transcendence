@@ -40,4 +40,10 @@ export class ChannelsUsers {
 
     @Column({ name: 'is_banned', default: false })
     isBanned: boolean;
+
+    @Column({ name: 'date_timeout', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+    dateTimeout: Date;
+
+    @Column({name: 'duration_timeout', type: 'integer', default: 0})
+    durationTimeout: Number;
 }

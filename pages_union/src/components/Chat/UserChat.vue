@@ -9,7 +9,7 @@
                 <div v-if="userInChannel.isAdmin && !userInChat.isOwner">
                     <p class="options" @click="kick">Kick</p> 
                     <p class="options" @click="ban">Ban</p>
-                    <p class="options">Time out</p>
+                    <p class="options" @click="showTimeOut = true">Time out</p>
                 </div>
                 <div v-if="userInChannel.isOwner">
                     <div v-if="!userInChat.isAdmin">
@@ -22,20 +22,43 @@
             </div>
             <p class="options">See Profile</p>
         </div>
+        <TimeOut ref="timeout" :show="showTimeOut" @timeout-user="onTimeoutUser" @close="closeTimeOut"/>
     </div>
 </template>
 
 <script>
 import { Socket } from 'socket.io-client';
+import TimeOut from './TimeOut.vue';
 export default {
     name: 'UserChat-Component',
+    components:
+    {
+        TimeOut,
+    },
     props: 
     {
         userInChannel: Object, // the user on the website with id, isAdmin, isOwner 
-        userInChat: Object, // the other in the chat 
+        userInChat: Object, // the other user in the chat 
         isSelected: Boolean,
         socket: Socket,
         channel: Object,
+    },
+    data()
+    {
+        return {
+            showTimeOut: false,
+        }
+    },
+    mounted()
+    {
+        this.socket.on('timeoutGoodRequest', (response) => {
+            if (response.channel.channel_id === this.channel.channel_id && response.user.id === this.userInChannel.id)
+                this.$refs.timeout.goodRequest();
+        });
+        this.socket.on('timeoutWrongAmount', (response) => {
+            if (response.channel.channel_id === this.channel.channel_id && response.user.id === this.userInChannel.id)
+                this.$refs.timeout.notGoodAmount();
+        });
     },
     methods: {
         handleUserClicked() 
@@ -58,6 +81,14 @@ export default {
         {
             this.socket.emit('removeAdmin', {channel: this.channel, user: this.userInChat});
         },
+        onTimeoutUser(nbSeconds)
+        {
+            this.socket.emit('timeoutUser', {user: this.userInChannel, userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds});
+        },
+        closeTimeOut()
+        {
+            this.showTimeOut = false;
+        },
     }
 }
 </script>
@@ -66,7 +97,6 @@ export default {
 #user-pseudo
 {
     cursor: pointer;
-    /* display: flex; */
 }
 .admin
 {
@@ -84,13 +114,4 @@ export default {
     align-items: center;
 }
 
-/* 
-.popup p {
-  margin: 0;
-  padding: 0;
-}
-
-.popup button {
-  margin-top: 10px;
-} */
 </style>

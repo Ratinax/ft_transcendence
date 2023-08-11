@@ -14,6 +14,8 @@ export declare class ChannelsUsersService {
         isAdmin: boolean;
         isInvited: boolean;
         isBanned: boolean;
+        dateTimeout: Date;
+        durationTimeout: Number;
     }[]>;
     findRelation(user_id: number, channel_id: number): Promise<ChannelsUsers[]>;
     findChannelsOfUsers(user_id: number): Promise<import("../channels/channel.entity").Channels[]>;
@@ -21,4 +23,6 @@ export declare class ChannelsUsersService {
     leave(channel: any, user: any): Promise<ChannelsUsers[]>;
     setAdmin(channel: any, user: any): Promise<ChannelsUsers>;
     removeAdmin(channel: any, user: any): Promise<ChannelsUsers>;
+    getCurrentDate(): string;
+    timeoutUser(channel: any, user: any, duration: any): Promise<ChannelsUsers>;
 }

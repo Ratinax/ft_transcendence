@@ -56,6 +56,8 @@ export default {
         {
             this.users = users;
             this.setAccessWrites();
+            // TODO checker si le mec est timeout avec des getUTCHours et tt...
+            // console.log('users :', (new Date(users[1].dateTimeout)).getUTCHours());
         },
         /**
          * set the user selected in the list

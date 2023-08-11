@@ -4,7 +4,7 @@
         @get-is-user-owner="onGetIsUserOwner"/>
         <div class="messageszone">
           <Messages ref="messages"/>
-          <SendMessage :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
+          <SendMessage ref="sendMessage" :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
         </div>
         <ListUsersChat ref="listUsersChat" v-if="socket" :user="user" :channel="selectedChannel" :socket="socket"/>
     </div>
@@ -75,6 +75,10 @@ export default {
         }
       }
     });
+    this.socket.on('sendMessageTimeout', (response) => {
+      if (this.selectedChannel.channel_id === response.channel_id && this.user.id === response.user_id)
+        this.sendMessageTimeout(response.duration);
+    });
   },
   methods:
   {
@@ -127,6 +131,10 @@ export default {
       // const result = this.$refs.listUsersChat.updateListUsers();
       const result = this.$refs.listUsersChat.getUserInChannel();
       this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
+    },
+    sendMessageTimeout(duration)
+    {
+      this.$refs.sendMessage.timeout(duration);
     }
   }
 }

@@ -42,7 +42,10 @@ export class ChannelsUsersService {
             isOwner: channelsUsers.isOwner,
             isAdmin: channelsUsers.isAdmin, 
             isInvited: channelsUsers.isInvited,
-            isBanned: channelsUsers.isBanned}));
+            isBanned: channelsUsers.isBanned,
+            dateTimeout: channelsUsers.dateTimeout,
+            durationTimeout: channelsUsers.durationTimeout,
+            }));
         return (users);
     }
     
@@ -55,6 +58,7 @@ export class ChannelsUsersService {
      */
     async findRelation(user_id: number, channel_id: number)
     {
+        console.log(user_id, channel_id);
         const relation = await this.channelsUsersRepository
             .createQueryBuilder('channelsUsers')
             .where('channel_id = :channel_id AND user_id = :user_id', { channel_id: channel_id, user_id: user_id })
@@ -138,5 +142,49 @@ export class ChannelsUsersService {
             return (null);
         relation[0].isAdmin = false;
         return (this.channelsUsersRepository.save(relation[0]));
+    }
+
+    /**
+     * get the current date
+     * 
+     * @returns the date formatted year-month-day hours:minutes:seconds
+     */
+    getCurrentDate()
+    {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const hours = String(currentDate.getHours()).padStart(2, '0');
+        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+        const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+        return formattedDate;
+    }
+
+    /**
+     * timeout a user
+     * 
+     * @param channel channel
+     * @param user user
+     * @param duration duration of ban in seconds
+     * @returns result of request
+     */
+    async timeoutUser(channel, user, duration)
+    {
+        const relation = await this.channelsUsersRepository.findOne({where :{
+            user: {
+                id: user.id,
+            },
+            channel: {
+                channel_id: channel.channel_id,
+            }
+            }});
+        relation.dateTimeout = new Date(this.getCurrentDate());
+        console.log(new Date(relation.dateTimeout))
+        relation.durationTimeout = duration;
+        return (this.channelsUsersRepository.save(relation));
     }
 }

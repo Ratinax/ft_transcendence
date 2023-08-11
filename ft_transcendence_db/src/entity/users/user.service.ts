@@ -10,7 +10,6 @@ export class UserService {
         @Inject('USER_REPOSITORY')
         private userRepository: Repository<Users>,
     ) {}
-
     /**
      * call a function of UserService
      * 

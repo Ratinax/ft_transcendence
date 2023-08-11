@@ -2,8 +2,8 @@
     <div class="send-message">
         <div v-if="showContent">
                 <form @submit.prevent="sendMessage" class="send-message-form">
-                    <label></label>
-                    <input v-model="messageText" placeholder="Send a message"/>
+                    <input v-model="messageText" placeholder="Send a message" v-if="!isUserTimeout"/>
+                    <input v-model="messageText" class="input-error" :placeholder="'You cannot send messages because you are timeout for ' + durationTimeoutString" v-else/>
                     <!-- <button type="submit">Send</button> -->
                 </form>
             <!--<div class="option-list">
@@ -14,7 +14,6 @@
                 <p class="options">Remove Password</p>
                 <p class="options">Change Password</p>
             </div> -->
-            
         </div>
     </div>
 </template>
@@ -36,6 +35,8 @@ export default {
     {
         return {
             messageText: '',
+            isUserTimeout: false,
+            durationTimeoutString: String,
         }
     },
     methods:
@@ -57,12 +58,24 @@ export default {
         async sendMessage()
         {
             this.$emit('create-message', {
-                channel: this.channelId,
-                user: this.userId,
-                content: this.messageText,
+                channel_id: this.channelId,
+                user_id: this.userId,
+                message: this.messageText,
                 dateSent: this.getCurrentDate(),
             })
-            this.messageText = ''
+            this.messageText = '';
+        },
+        timeout(duration)
+        {
+            this.isUserTimeout = true;
+            const days = Math.floor(duration / 86400);
+            duration -= days * 86400;
+            const hours = Math.floor(duration / 3600);
+            duration -= hours * 3600;
+            const minutes = Math.floor(duration / 60);
+            duration -= minutes * 60;
+            const seconds = duration;
+            this.durationTimeoutString = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
         }
     }
 
@@ -87,5 +100,8 @@ export default {
     right: 0;
     box-sizing: border-box;
 }
-
+.input-error::placeholder
+{
+    color: red;
+}
 </style>

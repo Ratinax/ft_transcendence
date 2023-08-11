@@ -77,6 +77,18 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         });
         return (res);
     }
+    async timeoutUser(body) {
+        if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) {
+            this.server.emit('timeoutWrongAmount', { channel: body.channel, user: body.user });
+            console.log('bad');
+            return (null);
+        }
+        const res = await this.channelsUsersService.timeoutUser(body.channel, body.userTimeouted, body.duration_timeout);
+        const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+        this.server.emit('updateListUsers', { channel: body.channel, users: users });
+        this.server.emit('timeoutGoodRequest', { channel: body.channel, user: body.user });
+        return (res);
+    }
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
@@ -124,6 +136,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsUsersGateway.prototype, "removeAdmin", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('timeoutUser'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsUsersGateway.prototype, "timeoutUser", null);
 exports.ChannelsUsersGateway = ChannelsUsersGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {

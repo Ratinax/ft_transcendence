@@ -16,14 +16,34 @@ exports.MessagesGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const message_service_1 = require("./message.service");
 const socket_io_1 = require("socket.io");
-const message_entity_1 = require("./message.entity");
+const channels_users_service_1 = require("../channels_users/channels_users.service");
+const common_1 = require("@nestjs/common");
 let MessagesGateway = exports.MessagesGateway = class MessagesGateway {
-    constructor(messagesService) {
+    constructor(messagesService, channelsUsersService) {
         this.messagesService = messagesService;
+        this.channelsUsersService = channelsUsersService;
     }
-    async create(message) {
-        const response = await this.messagesService.post(message);
-        this.server.emit('updateMessage', { channel_id: message.channel });
+    async create(body) {
+        console.log(body);
+        const relation = await this.channelsUsersService.findRelation(body.user_id, body.channel_id);
+        if (!relation || !relation[0])
+            throw new common_1.InternalServerErrorException('no such relation');
+        const timeoutDate = new Date(relation[0].dateTimeout);
+        const currentDate = new Date(body.dateSent);
+        const timeoutDuration = relation[0].durationTimeout;
+        const timeoutSeconds = timeoutDate.getTime() / 1000;
+        const currentSeconds = currentDate.getTime() / 1000;
+        if (timeoutSeconds + +timeoutDuration > currentSeconds) {
+            this.server.emit('sendMessageTimeout', { channel_id: body.channel_id, user_id: body.user_id, duration: timeoutSeconds + +timeoutDuration - currentSeconds });
+            return 'user timeout';
+        }
+        const response = await this.messagesService.post({
+            content: body.message,
+            dateSent: body.dateSent,
+            channel: body.channel_id,
+            user: body.user_id,
+        });
+        this.server.emit('updateMessage', { channel_id: body.channel_id });
         return response;
     }
 };
@@ -35,7 +55,7 @@ __decorate([
     (0, websockets_1.SubscribeMessage)('createMessage'),
     __param(0, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [message_entity_1.Messages]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MessagesGateway.prototype, "create", null);
 exports.MessagesGateway = MessagesGateway = __decorate([
@@ -44,6 +64,6 @@ exports.MessagesGateway = MessagesGateway = __decorate([
             origin: '*',
         },
     }),
-    __metadata("design:paramtypes", [message_service_1.MessageService])
+    __metadata("design:paramtypes", [message_service_1.MessageService, channels_users_service_1.ChannelsUsersService])
 ], MessagesGateway);
 //# sourceMappingURL=message.gateway.js.map

@@ -105,7 +105,7 @@ export default {
                     password: password,
                 });
                 this.$refs.SetPassword.goodRequest();
-                this.$emit('update-channels');
+                this.$emit('up-channels');
             }
             catch (e)
             {
