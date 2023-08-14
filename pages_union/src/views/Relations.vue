@@ -61,10 +61,8 @@
       },
       onRemoveRelation(body)
       {
-        // console.log(body)
         if (body.relationType === 'friend')
         {
-          // console.log('ici');
           this.socket.emit('removeFriendship', body);
         }
         else

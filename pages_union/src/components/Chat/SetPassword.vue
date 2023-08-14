@@ -63,7 +63,6 @@ export default {
     },
     setPassword()
     {
-        console.log(this.password);
         if (this.password !== this.passwordCheck)
         {
             this.matrixIndex = 1;

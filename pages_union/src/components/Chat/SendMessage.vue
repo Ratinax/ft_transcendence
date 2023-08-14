@@ -4,16 +4,7 @@
                 <form @submit.prevent="sendMessage" class="send-message-form">
                     <input v-model="messageText" placeholder="Send a message" v-if="!isUserTimeout"/>
                     <input v-model="messageText" class="input-error" :placeholder="'You cannot send messages because you are timeout for ' + durationTimeoutString" v-else/>
-                    <!-- <button type="submit">Send</button> -->
                 </form>
-            <!--<div class="option-list">
-                <p class="options">Leave channel</p>
-            </div>
-            <div>
-                <p class="options">Set Password</p>
-                <p class="options">Remove Password</p>
-                <p class="options">Change Password</p>
-            </div> -->
         </div>
     </div>
 </template>

@@ -29,7 +29,6 @@ export class ChannelsUsersGateway {
     }
     catch (e)
     {
-      console.log(e);
     }
   }
   /**
@@ -137,7 +136,6 @@ export class ChannelsUsersGateway {
     if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) // 30 days and 10 seconds
     {
       this.server.emit('timeoutWrongAmount', {channel: body.channel, user: body.user});
-      console.log('bad')
       return (null);
     }
     const res = await this.channelsUsersService.timeoutUser(body.channel, body.userTimeouted, body.duration_timeout);

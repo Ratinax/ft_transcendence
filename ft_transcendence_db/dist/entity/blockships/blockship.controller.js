@@ -25,7 +25,6 @@ let BlockshipController = exports.BlockshipController = class BlockshipControlle
             return (res);
         }
         catch (e) {
-            console.log('error truc :', e);
         }
     }
 };

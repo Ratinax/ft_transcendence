@@ -28,7 +28,6 @@ let ChannelService = exports.ChannelService = class ChannelService {
     async createChannel(channel) {
         const channelAllreadyExisting = await this.channelRepository.findOne({ where: { name: channel.name } });
         if (channelAllreadyExisting) {
-            console.log(channelAllreadyExisting);
             throw new common_1.InternalServerErrorException('channel allready exists');
         }
         const newChannel = this.channelRepository.create(channel);

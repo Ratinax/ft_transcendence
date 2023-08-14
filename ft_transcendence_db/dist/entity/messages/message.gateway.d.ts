@@ -6,5 +6,5 @@ export declare class MessagesGateway {
     private readonly channelsUsersService;
     server: Server;
     constructor(messagesService: MessageService, channelsUsersService: ChannelsUsersService);
-    create(body: any): Promise<"user timeout" | import("./message.entity").Messages>;
+    create(body: any): Promise<import("./message.entity").Messages | "user timeout">;
 }

@@ -74,7 +74,6 @@ export class ChannelGateway {
     && channel.category !== 'Public'
     && channel.category !== 'Protected by password')
     {
-      console.log(channel.category);
       this.server.emit('createWrongCategory', {user: user});
       return (false);
     }

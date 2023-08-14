@@ -36,7 +36,6 @@ export class UserController {
     @Post('signup')
     async signUp(@Body() body)
     {
-        console.log('received request');
         try
         {
             const res = await this.callFunction(this.userService.signUp, body);

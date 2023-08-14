@@ -58,7 +58,6 @@ export class ChannelsUsersService {
      */
     async findRelation(user_id: number, channel_id: number)
     {
-        console.log(user_id, channel_id);
         const relation = await this.channelsUsersRepository
             .createQueryBuilder('channelsUsers')
             .where('channel_id = :channel_id AND user_id = :user_id', { channel_id: channel_id, user_id: user_id })
@@ -183,7 +182,6 @@ export class ChannelsUsersService {
             }
             }});
         relation.dateTimeout = new Date(this.getCurrentDate());
-        console.log(new Date(relation.dateTimeout))
         relation.durationTimeout = duration;
         return (this.channelsUsersRepository.save(relation));
     }

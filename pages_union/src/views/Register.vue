@@ -66,8 +66,6 @@ export default {
         },
         async register()
         {
-            console.log(`${process.env.VUE_APP_IP2}`)
-            console.log(`${process.env.VUE_APP_TEST}`)
             let user;
             this.handleInputErrors()
             if (this.matrixIndex > 0)
@@ -84,7 +82,6 @@ export default {
             catch(e)
             {
                 console.error('Error registering user:', e);
-                // console.log(e);
                 if (!e.response)
                     return ;
                 if (e.response.status === 413)
@@ -94,7 +91,6 @@ export default {
                 return ;
             }
             this.resetData();
-            // console.log('ca c est un vrai user :', user)
             this.$router.push({path: '/chat', query: { user: encodeURIComponent(JSON.stringify(user)) }}); // TODO : faire autrement pour passer le user
         },
         resetData()

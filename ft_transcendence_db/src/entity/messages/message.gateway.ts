@@ -30,7 +30,6 @@ export class MessagesGateway {
   async create(
     @MessageBody() body) 
     {
-      console.log(body);
       const relation = await this.channelsUsersService.findRelation(body.user_id, body.channel_id);
       if (!relation || !relation[0])
         throw new InternalServerErrorException('no such relation');

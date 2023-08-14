@@ -89,7 +89,6 @@ export default {
             }
             catch (e)
             {
-                console.log('le e :', e);
                 if (e.response.data.message === 'Password not good length')
                     this.$refs.SetPassword.notGoodLength()
             }
@@ -109,8 +108,6 @@ export default {
             }
             catch (e)
             {
-                console.log('le e :', e);
-
                 if (e.response.data.message === 'Password not good length')
                     this.$refs.SetPassword.notGoodLength()
             }
@@ -119,11 +116,10 @@ export default {
         {
             try
             {
-                const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
+                await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
                 {
                     channel: this.channel
                 });
-                console.log(res);
                 this.$emit('update-channels');
             }
             catch (e)

@@ -24,7 +24,6 @@ let MessagesGateway = exports.MessagesGateway = class MessagesGateway {
         this.channelsUsersService = channelsUsersService;
     }
     async create(body) {
-        console.log(body);
         const relation = await this.channelsUsersService.findRelation(body.user_id, body.channel_id);
         if (!relation || !relation[0])
             throw new common_1.InternalServerErrorException('no such relation');

@@ -26,7 +26,6 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
             this.server.emit('updateListUsers', { users: res, channel: body.channel });
         }
         catch (e) {
-            console.log(e);
         }
     }
     async ban(body) {
@@ -80,7 +79,6 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
     async timeoutUser(body) {
         if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) {
             this.server.emit('timeoutWrongAmount', { channel: body.channel, user: body.user });
-            console.log('bad');
             return (null);
         }
         const res = await this.channelsUsersService.timeoutUser(body.channel, body.userTimeouted, body.duration_timeout);

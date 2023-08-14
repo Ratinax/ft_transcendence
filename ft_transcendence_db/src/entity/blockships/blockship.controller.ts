@@ -20,7 +20,6 @@ export class BlockshipController {
         }
         catch (e)
         {
-            console.log('error truc :', e);
         }
     }
 }

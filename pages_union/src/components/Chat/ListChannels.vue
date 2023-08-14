@@ -69,7 +69,6 @@ export default {
       },
       addChannel(channel)
       {
-        // // console.log('eioeroe')
         this.channels.push(channel)
         this.$nextTick(() => {
           this.updateScrollPosition()
