@@ -48,6 +48,8 @@ export default {
         },
         async sendMessage()
         {
+            if (this.messageText === '')
+                return ;
             this.$emit('create-message', {
                 channel_id: this.channelId,
                 user_id: this.userId,
