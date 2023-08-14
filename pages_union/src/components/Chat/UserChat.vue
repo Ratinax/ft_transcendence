@@ -20,8 +20,8 @@
                     </div>
                 </div>
             </div>
-            <p class="options">See Profile</p>
-        </div>
+                <p class="options">See Profile</p>
+            </div>
         <TimeOut ref="timeout" :show="showTimeOut" @timeout-user="onTimeoutUser" @close="closeTimeOut"/>
     </div>
 </template>
@@ -97,6 +97,7 @@ export default {
 #user-pseudo
 {
     cursor: pointer;
+    transition: 300ms ease;
 }
 .admin
 {
@@ -113,5 +114,4 @@ export default {
     flex-direction: align;
     align-items: center;
 }
-
 </style>

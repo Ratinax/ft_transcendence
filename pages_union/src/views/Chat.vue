@@ -188,6 +188,8 @@ export default {
   padding: 0;
   margin: 0;
   cursor: pointer;
+  transition: 300ms ease;    padding-left: 0.1em
+
 }
 
 .options:hover

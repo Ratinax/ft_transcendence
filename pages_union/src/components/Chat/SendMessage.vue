@@ -97,6 +97,12 @@ export default {
     left: 0;
     right: 0;
     box-sizing: border-box;
+    transition: 300ms ease;
+    padding-left: 1em;
+}
+.send-message input:focus
+{
+    background-color: #d9d9d9;
 }
 .input-error::placeholder
 {

@@ -4,16 +4,17 @@
             <p>{{ channel.name }}</p>
         </div>
         <div class="inline">
+            
             <div v-if="isSelected" class="channel-options" @click="onSelectOption">
-                <div v-if="optionSelected">
-                    <div class="cross"></div>
+                    <div v-if="optionSelected">
+                        <div class="cross"></div>
+                    </div>
+                    <div v-else>
+                        <div class="dot dot1"></div>
+                        <div class="dot dot2"></div>
+                        <div class="dot dot3"></div>
+                    </div>
                 </div>
-                <div v-else>
-                    <div class="dot dot1"></div>
-                    <div class="dot dot2"></div>
-                    <div class="dot dot3"></div>
-                </div>
-            </div>
         </div>
         <div class="option-list" v-if="isSelected && optionSelected">
             <p class="options" @click="leaveChannel">Leave Channel</p>
@@ -141,10 +142,12 @@ export default {
 </script>
 
 <style>
+
 .channelname p
 {
     cursor: pointer;
     margin: 0;
+    transition: 300ms ease;
 }
 
 .inline
