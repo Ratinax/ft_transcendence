@@ -50,8 +50,13 @@ let UserService = exports.UserService = class UserService {
             isConnected: body.isConnected,
         };
         const newUser = this.userRepository.create(user);
-        const res = this.userRepository.save(newUser);
-        return (res);
+        const res = await this.userRepository.save(newUser);
+        return ({
+            pseudo: res.pseudo,
+            profilPic: res.profilPic,
+            isConnected: res.isConnected,
+            id: res.id,
+        });
     }
     async signIn(user) {
         let userFound = await this.userRepository.findOne({ where: { pseudo: user.pseudo } });

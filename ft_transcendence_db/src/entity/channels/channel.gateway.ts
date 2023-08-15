@@ -125,7 +125,7 @@ export class ChannelGateway {
       this.server.emit('joinPrivateMode', {user: user})
       return ;
     }
-    if (password != channel.password) // TODO comparer avec les mdp hash
+    if (!await this.channelService.comparePasswords(channel, password))
     {
       this.server.emit('joinWrongPassword', {user: user})
       return ;
@@ -140,5 +140,4 @@ export class ChannelGateway {
     this.server.emit('updateListChannels', {channel: channel, user: user});
     this.server.emit('joinGoodRequest', {channel: channel, user: user});
   }
-  // @SubscribeMessage
 }

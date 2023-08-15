@@ -65,7 +65,7 @@ export class ChannelsUsersService {
         return (relation);
     }
     /**
-     * Get the list of channels of a user
+     * Get the list of channels of a user without passwords
      * 
      * @param user_id id of user
      * @returns result of request
@@ -79,7 +79,12 @@ export class ChannelsUsersService {
             .where('user.id = :user_id AND is_invited = false AND is_banned = false', { user_id })
             .getMany();
         const channels = usersAndChannels.map((channelsUsers) => (
-            channelsUsers.channel
+            {
+                channel_id: channelsUsers.channel.channel_id,
+                isADm: channelsUsers.channel.isADm,
+                name: channelsUsers.channel.name,
+                category: channelsUsers.channel.category,
+            }
         ));
         return (channels);
     }
@@ -170,6 +175,8 @@ export class ChannelsUsersService {
      * @param user user
      * @param duration duration of ban in seconds
      * @returns result of request
+     * 
+     * Warning: returns password of user and channels
      */
     async timeoutUser(channel, user, duration)
     {

@@ -10,7 +10,12 @@ export declare class ChannelGateway {
         channel: any;
         user: any;
     }): Promise<"input error" | {
-        response: import("./channel.entity").Channels;
+        response: {
+            isADm: boolean;
+            name: string;
+            category: string;
+            channel_id: number;
+        };
         response2: import("../channels_users/channels_users.entity").ChannelsUsers;
     }>;
     createGoodInputs(channel: any, user: any): Boolean;

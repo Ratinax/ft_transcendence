@@ -23,11 +23,11 @@ export class ChannelsUsers {
 
     @ManyToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'user_id' })
-    user: Users;
+    user: Partial<Users>;
 
     @ManyToOne(() => Channels, { eager: true })
     @JoinColumn({ name: 'channel_id' })
-    channel: Channels;
+    channel: Partial<Channels>;
 
     @Column({ name: 'is_admin', default: false })
     isAdmin: boolean;

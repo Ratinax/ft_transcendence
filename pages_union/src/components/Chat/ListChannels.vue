@@ -8,7 +8,6 @@
         <div class="new-channel">
           <button @click="showCreateChannel = true">Create Channel</button>
           <CreateChannel :show="showCreateChannel" :socket="socket" :user="user" @close="showCreateChannel = false">
-            <!-- Contenu du pop-up personnalisé -->
           </CreateChannel>
         </div>
         <div class="join-channel">

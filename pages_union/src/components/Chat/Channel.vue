@@ -19,7 +19,7 @@
         <div class="option-list" v-if="isSelected && optionSelected">
             <p class="options" @click="leaveChannel">Leave Channel</p>
             <div v-if="isUserOwner">
-                <div v-if="channel.password && channel.password.length > 0"> <!--TODO changer condition pcq innacceptable d'avoir le password dans le programme du front-->
+                <div v-if="channel.category === 'Protected by password'">
                     <p class="options" @click="setShowPasswordPopUp('change')">Change password</p>
                     <p class="options" @click="removePassword">Remove password</p>
                 </div>
@@ -105,7 +105,7 @@ export default {
                     password: password,
                 });
                 this.$refs.SetPassword.goodRequest();
-                this.$emit('up-channels');
+                this.$emit('update-channels');
             }
             catch (e)
             {

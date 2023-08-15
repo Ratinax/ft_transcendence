@@ -26,7 +26,7 @@ let ChannelController = exports.ChannelController = class ChannelController {
         return (channels);
     }
     async setPassword(body) {
-        return (await this, this.channelService.setPassword(body.channel, body.password));
+        return (await this.channelService.setPassword(body.channel, body.password));
     }
     async removePassword(body) {
         return (await this, this.channelService.removePassword(body.channel));

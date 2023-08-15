@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChannelService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
+const bcrypt = require("bcrypt");
 let ChannelService = exports.ChannelService = class ChannelService {
     constructor(channelRepository) {
         this.channelRepository = channelRepository;
@@ -30,30 +31,61 @@ let ChannelService = exports.ChannelService = class ChannelService {
         if (channelAllreadyExisting) {
             throw new common_1.InternalServerErrorException('channel allready exists');
         }
-        const newChannel = this.channelRepository.create(channel);
-        return (this.channelRepository.save(newChannel));
+        const passwordHashed = await this.hashedPassword(channel.password);
+        const finalChannel = { ...channel, password: passwordHashed };
+        const newChannel = this.channelRepository.create(finalChannel);
+        const res = await this.channelRepository.save(newChannel);
+        return ({
+            isADm: res.isADm,
+            name: res.name,
+            category: res.category,
+            channel_id: res.channel_id,
+        });
     }
     async setPassword(channel, password) {
         if (password.length > 20 || password.length < 3)
             throw new common_1.InternalServerErrorException('Password not good length');
         const relation = await this.channelRepository.findOne({ where: { channel_id: channel.channel_id } });
+        const passwordHashed = await this.hashedPassword(password);
         relation.category = 'Protected by password';
-        relation.password = password;
-        return (this.channelRepository.save(relation));
+        relation.password = passwordHashed;
+        const res = await this.channelRepository.save(relation);
+        console.log(res);
+        return ({
+            isADm: res.isADm,
+            name: res.name,
+            category: res.category,
+            channel_id: res.channel_id,
+        });
     }
     async removePassword(channel) {
         const relation = await this.channelRepository.findOne({ where: { channel_id: channel.channel_id } });
         relation.category = 'Public';
         relation.password = '';
-        return (this.channelRepository.save(relation));
+        const res = await this.channelRepository.save(relation);
+        return ({ isADm: res.isADm,
+            name: res.name,
+            category: res.category,
+            channel_id: res.channel_id, });
     }
     async changePassword(channel, password) {
         if (password.length > 20 || password.length < 3)
             throw new common_1.InternalServerErrorException('Password not good length');
         const relation = await this.channelRepository.findOne({ where: { channel_id: channel.channel_id } });
+        const passwordHashed = await this.hashedPassword(password);
         relation.category = 'Protected by password';
-        relation.password = password;
-        return (this.channelRepository.save(relation));
+        relation.password = passwordHashed;
+        const res = await this.channelRepository.save(relation);
+        return ({ isADm: res.isADm,
+            name: res.name,
+            category: res.category,
+            channel_id: res.channel_id, });
+    }
+    async comparePasswords(channel, password) {
+        return (await bcrypt.compare(password + process.env.PEPPER, channel.password));
+    }
+    async hashedPassword(password) {
+        return (await bcrypt.hash(password + process.env.PEPPER, +process.env.SALTROUNDS));
     }
 };
 exports.ChannelService = ChannelService = __decorate([

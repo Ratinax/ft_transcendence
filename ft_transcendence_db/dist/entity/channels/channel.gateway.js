@@ -87,7 +87,7 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
             this.server.emit('joinPrivateMode', { user: user });
             return;
         }
-        if (password != channel.password) {
+        if (!await this.channelService.comparePasswords(channel, password)) {
             this.server.emit('joinWrongPassword', { user: user });
             return;
         }

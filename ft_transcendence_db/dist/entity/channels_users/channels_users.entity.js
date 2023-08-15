@@ -22,12 +22,12 @@ __decorate([
 __decorate([
     (0, typeorm_1.ManyToOne)(() => user_entity_1.Users, { eager: true }),
     (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
-    __metadata("design:type", user_entity_1.Users)
+    __metadata("design:type", Object)
 ], ChannelsUsers.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => channel_entity_1.Channels, { eager: true }),
     (0, typeorm_1.JoinColumn)({ name: 'channel_id' }),
-    __metadata("design:type", channel_entity_1.Channels)
+    __metadata("design:type", Object)
 ], ChannelsUsers.prototype, "channel", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'is_admin', default: false }),

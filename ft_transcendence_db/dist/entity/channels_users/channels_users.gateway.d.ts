@@ -10,5 +10,5 @@ export declare class ChannelsUsersGateway {
     leaveChannel(body: any): Promise<import("./channels_users.entity").ChannelsUsers[]>;
     setAdmin(body: any): Promise<import("./channels_users.entity").ChannelsUsers>;
     removeAdmin(body: any): Promise<import("./channels_users.entity").ChannelsUsers>;
-    timeoutUser(body: any): Promise<import("./channels_users.entity").ChannelsUsers>;
+    timeoutUser(body: any): Promise<void>;
 }

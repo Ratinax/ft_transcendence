@@ -27,7 +27,7 @@ export class ChannelController {
     @Post('setPassword')
     async setPassword(@Body() body)
     {
-        return (await this,this.channelService.setPassword(body.channel, body.password));
+        return (await this.channelService.setPassword(body.channel, body.password));
     }
     /**
      * remove password to channel and set Public to category

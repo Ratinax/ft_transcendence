@@ -4,8 +4,28 @@ export declare class ChannelController {
     private readonly channelService;
     private readonly channelsUsersService;
     constructor(channelService: ChannelService, channelsUsersService: ChannelsUsersService);
-    find(user_id: number): Promise<import("./channel.entity").Channels[]>;
-    setPassword(body: any): Promise<import("./channel.entity").Channels>;
-    removePassword(body: any): Promise<import("./channel.entity").Channels>;
-    changePassword(body: any): Promise<import("./channel.entity").Channels>;
+    find(user_id: number): Promise<{
+        channel_id: number;
+        isADm: boolean;
+        name: string;
+        category: string;
+    }[]>;
+    setPassword(body: any): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
+    removePassword(body: any): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
+    changePassword(body: any): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
 }

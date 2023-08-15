@@ -2,8 +2,8 @@ import { Channels } from "../channels/channel.entity";
 import { Users } from "../users/user.entity";
 export declare class ChannelsUsers {
     id: number;
-    user: Users;
-    channel: Channels;
+    user: Partial<Users>;
+    channel: Partial<Channels>;
     isAdmin: boolean;
     isOwner: boolean;
     isInvited: boolean;

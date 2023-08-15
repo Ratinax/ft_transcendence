@@ -59,7 +59,12 @@ let ChannelsUsersService = exports.ChannelsUsersService = class ChannelsUsersSer
             .innerJoinAndSelect('channelsUsers.channel', 'channel')
             .where('user.id = :user_id AND is_invited = false AND is_banned = false', { user_id })
             .getMany();
-        const channels = usersAndChannels.map((channelsUsers) => (channelsUsers.channel));
+        const channels = usersAndChannels.map((channelsUsers) => ({
+            channel_id: channelsUsers.channel.channel_id,
+            isADm: channelsUsers.channel.isADm,
+            name: channelsUsers.channel.name,
+            category: channelsUsers.channel.category,
+        }));
         return (channels);
     }
     async ban(channel, user) {

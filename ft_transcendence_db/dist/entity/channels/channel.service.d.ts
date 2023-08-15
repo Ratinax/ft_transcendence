@@ -4,8 +4,30 @@ export declare class ChannelService {
     private channelRepository;
     constructor(channelRepository: Repository<Channels>);
     findByName(channelName: any): Promise<Channels[]>;
-    createChannel(channel: Partial<Channels>): Promise<Channels>;
-    setPassword(channel: any, password: string): Promise<Channels>;
-    removePassword(channel: any): Promise<Channels>;
-    changePassword(channel: any, password: string): Promise<Channels>;
+    createChannel(channel: Partial<Channels>): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
+    setPassword(channel: any, password: string): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
+    removePassword(channel: any): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
+    changePassword(channel: any, password: string): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
+    comparePasswords(channel: any, password: string): Promise<any>;
+    hashedPassword(password: string): Promise<any>;
 }
