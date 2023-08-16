@@ -59,7 +59,7 @@ export default defineComponent({
 	background: linear-gradient(white, var(--plight));
 	border-radius: 1em;
 	width: 45vh;
-	padding: 1em 1em 3em 1em;
+	padding: 1em 1em 2em 1em;
 }
 
 .log-mode {
@@ -75,6 +75,7 @@ export default defineComponent({
 }
 
 .log-footer {
+	padding-top: 1.4em;
 	font-size: 0.9em;
 }
 

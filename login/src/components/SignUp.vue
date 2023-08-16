@@ -1,19 +1,19 @@
 <template>
-	<div class="inputZone">
-		<form @submit.prevent="register">
+	<form @submit.prevent="register">
+		<!-- <div class="inputZone"> -->
 			<input type="text" placeholder="Username" v-model="pseudo" />
 			<input type="password" placeholder="Password" v-model="password" />
 			<input type="password" placeholder="Repeat Password" v-model="passwordCheck" />
-			<div class="buttonZone">
-				<button type="button" @click="chooseImage">CHOOSE PROFILE PIC</button>
-				<input type="file" accept="image/*" ref="imageInput" style="display: none" @change="onImageSelect" />
-				<button type="submit">REGISTER</button>
-			</div>
-		</form>
+		<!-- </div> -->
 		<div v-if="matrixIndex > 0">
-            <p class="error">{{ matrixError[matrixIndex] }}</p>
-        </div>
-	</div>
+			<p class="error">{{ matrixError[matrixIndex] }}</p>
+		</div>
+		<div class="buttonZone">
+			<button type="button" @click="chooseImage">CHOOSE PROFILE PIC</button>
+			<input type="file" accept="image/*" ref="imageInput" style="display: none" @change="onImageSelect" />
+			<button type="submit">REGISTER</button>
+		</div>
+	</form>
 </template>
 
 <script lang="ts">
@@ -23,9 +23,9 @@ import { useRouter } from 'vue-router'
 
 export default defineComponent({
 	setup() {
-		let pseudo: string = "";
-		let passwordCheck: string = "";
-		let password: string = "";
+		const pseudo = ref("");
+		const passwordCheck = ref("");
+		const password = ref("");
 		let matrixError: Array<String> = [
 			'allright',
 			'Passwords do not match',
@@ -36,36 +36,36 @@ export default defineComponent({
 			'Bad File Format (required .png .jpg)',
 			'File too large, must be 50mb max',
 		];
-		let matrixIndex: number = 0;
+		const matrixIndex =  ref(0);
 		let imageDataURL: any = "";
 		const router = useRouter();
-		const imageInput = ref<HTMLInputElement>();
+		const imageInput = ref<HTMLInputElement | null>(null);
 
 		function	handleInputErrors() {
-			matrixIndex = 0;
-			if (password !== passwordCheck)
-			matrixIndex = 1;
-			if (password.length < 8
-				|| password.length > 20)
-			matrixIndex = 2;
-			if (pseudo.length < 3
-				|| pseudo.length > 8)
-			matrixIndex = 3;
-			if (pseudo === ''
-				|| password === ''
-				|| passwordCheck === '')
-			matrixIndex = 4;
+			matrixIndex.value = 0;
+			if (password.value !== passwordCheck.value)
+			matrixIndex.value = 1;
+			if (password.value.length < 8
+				|| password.value.length > 20)
+			matrixIndex.value = 2;
+			if (pseudo.value.length < 3
+				|| pseudo.value.length > 8)
+			matrixIndex.value = 3;
+			if (pseudo.value === ''
+				|| password.value === ''
+				|| passwordCheck.value === '')
+			matrixIndex.value = 4;
 		}
 
 		function	resetData() {
-			pseudo = "";
-			passwordCheck = "";
-			password = "";
+			pseudo.value = "";
+			passwordCheck.value = "";
+			password.value = "";
 		}
 
 		async function	register() {
 			handleInputErrors();
-			if (matrixIndex > 0)
+			if (matrixIndex.value > 0)
 			return ;
 			try 
 			{
@@ -81,9 +81,9 @@ export default defineComponent({
 				console.error('Error registering user:', e);
 				console.log(e);
 				if (e.response.status === 413)
-				matrixIndex = 7;
+				matrixIndex.value = 7;
 				else
-				matrixIndex = 5;
+				matrixIndex.value = 5;
 				return ;
 			}
 			resetData();
@@ -100,7 +100,7 @@ export default defineComponent({
 				|| file.type === 'image/jpeg'
 				|| file.type === 'image/jpg'))
 			{
-				matrixIndex = 6;
+				matrixIndex.value = 6;
 				imageDataURL = null;
 				return ;
 			}
@@ -121,6 +121,7 @@ export default defineComponent({
 			matrixError,
 			matrixIndex,
 			imageDataURL,
+			imageInput,
 			handleInputErrors,
 			register,
 			chooseImage,
