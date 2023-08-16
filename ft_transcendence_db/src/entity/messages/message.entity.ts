@@ -11,6 +11,7 @@ import { Channels } from "../channels/channel.entity";
  * - channel: Channel
  * - dateSent: Date
  * - content: string
+ * - isAGameInvite: boolean
  */
 
 @Entity()
@@ -31,4 +32,7 @@ export class Messages {
 
   @Column({ type: 'text' })
   content: string;
+
+  @Column({default: false})
+  isAGameInvite: Boolean;
 }

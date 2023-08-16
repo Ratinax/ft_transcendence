@@ -6,4 +6,5 @@ export declare class Messages {
     channel: Channels;
     dateSent: Date;
     content: string;
+    isAGameInvite: Boolean;
 }

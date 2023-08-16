@@ -37,6 +37,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'text' }),
     __metadata("design:type", String)
 ], Messages.prototype, "content", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], Messages.prototype, "isAGameInvite", void 0);
 exports.Messages = Messages = __decorate([
     (0, typeorm_1.Entity)()
 ], Messages);

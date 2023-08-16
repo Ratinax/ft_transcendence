@@ -1,6 +1,10 @@
 <template>
   <div class="message">
-    <p>{{ username }} : {{  content }}</p>
+    <p v-if="!isAGameInvite">{{ username }} : {{  content }}</p>
+    <div>
+      <span class="user-inviting">{{ username }} &nbsp;</span>
+      <p class="invitation-game" @click="joinGame">Invited you to do a game to join click here</p>
+    </div>
   </div>
 </template>
 
@@ -10,10 +14,31 @@ export default {
     props: {
         username: String,
         content: String,
+        isAGameInvite: Boolean,
     },
+    methods: 
+    {
+      joinGame()
+      {
+        console.log('Feature incoming')
+        // TODO faire un emit de demarrage de game pour que le user du message et le user s'affrontent (sauf si c'est la meme personne)
+      }
+    }
 }
 </script>
 
 <style>
-
+.invitation-game
+{
+  cursor: pointer;
+  display: inline;
+  color: green;
+}
+.invitation-game:hover
+{
+  text-decoration: underline;
+}
+.user-inviting{
+  display: inline;
+}
 </style>

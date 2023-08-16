@@ -1,6 +1,6 @@
 <template>
   <div ref="messageContainer" class="messages">
-    <Message v-for="message in messages" :key="message.id" :username="message.user.pseudo" :content="message.content"/>
+    <Message v-for="message in messages" :key="message.id" :username="message.user.pseudo" :content="message.content" :isAGameInvite="message.isAGameInvite"/>
   </div>
 </template>
 

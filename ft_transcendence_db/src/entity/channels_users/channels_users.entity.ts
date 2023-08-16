@@ -16,6 +16,7 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "t
  * - isBanned: boolean
  */
 
+// TODO faire les invitations
 @Entity()
 export class ChannelsUsers {
     @PrimaryGeneratedColumn()
