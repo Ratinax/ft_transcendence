@@ -56,7 +56,10 @@ export default {
     });
     this.socket.on('updateListUsers', (response) => {
       if (response.channel.channel_id === this.selectedChannel.channel_id)
-          this.updateListUsers(response.users);
+      {
+        console.log('les nazi users :', response.users);
+        this.updateListUsers(response.users);
+      }
     });
     this.socket.on('updateAfterPart', (response) => {
       if (response.user.id === this.user.id 
@@ -124,6 +127,8 @@ export default {
      */
     updateListUsers(users)
     {
+      if (!this.$refs.listUsersChat)
+        return ;
       this.$refs.listUsersChat.updateListUsers(users);
     },
     onLeaveChannel(channel)
@@ -134,7 +139,8 @@ export default {
     {
       // const result = this.$refs.listUsersChat.updateListUsers();
       const result = this.$refs.listUsersChat.getUserInChannel();
-      this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
+      if (result)
+        this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
     },
     sendMessageTimeout(duration)
     {

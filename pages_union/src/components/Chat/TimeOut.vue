@@ -77,7 +77,6 @@ export default {
 
         if (isNaN(nDays) || isNaN(nHours) || isNaN(nMinutes) || isNaN(nSeconds))
             this.matrixIndex = 2;
-
         const totalSeconds = (nDays * 24 * 3600) + (nHours * 3600) + (nMinutes * 60) + nSeconds;
         this.$emit('timeout-user', totalSeconds);
     },

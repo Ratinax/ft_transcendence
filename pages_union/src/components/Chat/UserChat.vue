@@ -53,11 +53,17 @@ export default {
     {
         this.socket.on('timeoutGoodRequest', (response) => {
             if (response.channel.channel_id === this.channel.channel_id && response.user.id === this.userInChannel.id)
-                this.$refs.timeout.goodRequest();
+            {
+                if (this.$refs.timeout)
+                    this.$refs.timeout.goodRequest();
+            }
         });
         this.socket.on('timeoutWrongAmount', (response) => {
             if (response.channel.channel_id === this.channel.channel_id && response.user.id === this.userInChannel.id)
-                this.$refs.timeout.notGoodAmount();
+            {
+                if (this.$refs.timeout)
+                    this.$refs.timeout.notGoodAmount();
+            }
         });
     },
     methods: {
