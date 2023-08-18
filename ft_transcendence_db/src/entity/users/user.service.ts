@@ -42,8 +42,11 @@ export class UserService {
     {
         let imageName;
         let userFound = await this.userRepository.findOne({where: {pseudo : body.pseudo}});
+        
+        console.log(userFound);
         if (userFound)
         {
+            console.log(21)
             throw new InternalServerErrorException('already exists');
         }
         try 
@@ -52,7 +55,7 @@ export class UserService {
         }
         catch (e)
         {
-
+            console.log(e)
             throw new InternalServerErrorException(e);
         }
         const user = { // TODO hash password

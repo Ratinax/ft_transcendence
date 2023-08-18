@@ -30,11 +30,13 @@ let UserController = exports.UserController = class UserController {
         }
     }
     async signUp(body) {
+        console.log(body);
         try {
             const res = await this.callFunction(this.userService.signUp, body);
             return (res);
         }
         catch (e) {
+            console.log(e);
             throw new common_1.InternalServerErrorException(e);
         }
     }

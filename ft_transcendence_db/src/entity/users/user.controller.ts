@@ -36,6 +36,7 @@ export class UserController {
     @Post('signup')
     async signUp(@Body() body)
     {
+        console.log(body);
         try
         {
             const res = await this.callFunction(this.userService.signUp, body);
@@ -43,6 +44,7 @@ export class UserController {
         }
         catch (e)
         {
+            console.log(e);
             throw new InternalServerErrorException(e);
         }
     }

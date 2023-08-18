@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="chat-container">
         <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @leave-channel="onLeaveChannel"
         @get-is-user-owner="onGetIsUserOwner"/>
         <div class="messageszone">
@@ -156,7 +156,7 @@ export default {
 </script>
 
 <style>
-.container
+.chat-container
 {
   display: flex;
   width: 95%;
