@@ -1,7 +1,7 @@
 <template>
   <div class="message">
     <p v-if="!isAGameInvite">{{ username }} : {{  content }}</p>
-    <div>
+    <div v-else>
       <span class="user-inviting">{{ username }} &nbsp;</span>
       <p class="invitation-game" @click="joinGame">Invited you to do a game to join click here</p>
     </div>
@@ -40,5 +40,13 @@ export default {
 }
 .user-inviting{
   display: inline;
+}
+.message p
+{
+  margin-bottom: 0.8em;
+}
+.message div
+{
+  margin-bottom: 0.8em;
 }
 </style>
