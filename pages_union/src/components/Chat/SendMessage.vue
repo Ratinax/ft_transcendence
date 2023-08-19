@@ -5,6 +5,9 @@
                     <input v-model="messageText" placeholder="Send a message" v-if="!isUserTimeout"/>
                     <input v-model="messageText" class="input-error" :placeholder="'You cannot send messages because you are timeout for ' + durationTimeoutString" v-else/>
                 </form>
+                <form @submit.prevent="inviteInGame">
+                    <button type="submit">Invite in game</button>
+                </form>
         </div>
     </div>
 </template>
@@ -55,6 +58,7 @@ export default {
                 user_id: this.userId,
                 message: this.messageText,
                 dateSent: this.getCurrentDate(),
+                isAGameInvite: false,
             })
             this.messageText = '';
         },
@@ -74,7 +78,17 @@ export default {
         {
             this.durationTimeoutString = '';
             this.isUserTimeout = false;
-        }
+        },
+        inviteInGame()
+        {
+            this.$emit('create-message', {
+                channel_id: this.channelId,
+                user_id: this.userId,
+                message: '',
+                dateSent: this.getCurrentDate(),
+                isAGameInvite: true,
+            })
+        },
     }
 
 }
@@ -95,10 +109,19 @@ export default {
     top: 0;
     bottom: 0;
     left: 0;
-    right: 0;
-    box-sizing: border-box;
+    right: 7.5em;
+    /* box-sizing: border-box; */
     transition: 300ms ease;
     padding-left: 1em;
+}
+.send-message button
+{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    right: 0;
+    bottom: 0;
+    top: 0;
 }
 .send-message input:focus
 {

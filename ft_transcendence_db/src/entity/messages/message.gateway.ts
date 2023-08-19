@@ -19,7 +19,7 @@ export class MessagesGateway {
   /**
    * create a new message
    * 
-   * @param body {channel_id, user_id, message, dateSent}
+   * @param body - {channel_id, user_id, message, dateSent, isAGameInvite}
    * @returns response of request
    * @emits 'updateMessage' {channel_id}
    * @emits 'sendMessageTimeout' {channel_id, user_id, duration}
@@ -52,6 +52,7 @@ export class MessagesGateway {
         dateSent: body.dateSent,
         channel: body.channel_id,
         user: body.user_id,
+        isAGameInvite: body.isAGameInvite,
       });
       
       this.server.emit('updateMessage', {channel_id: body.channel_id});

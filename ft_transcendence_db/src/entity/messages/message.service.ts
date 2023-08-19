@@ -27,7 +27,7 @@ export class MessageService {
     /**
      * create a new message
      * 
-     * @param message The message to be created {user, channel, dateSent, content}
+     * @param message - {user, channel, dateSent, content, isAGameInvite}
      * @returns the result of the request
      */
     async post(message: Partial<Messages>)

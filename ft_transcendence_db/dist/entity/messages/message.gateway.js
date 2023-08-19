@@ -41,6 +41,7 @@ let MessagesGateway = exports.MessagesGateway = class MessagesGateway {
             dateSent: body.dateSent,
             channel: body.channel_id,
             user: body.user_id,
+            isAGameInvite: body.isAGameInvite,
         });
         this.server.emit('updateMessage', { channel_id: body.channel_id });
         this.server.emit('sendMessageGoodRequest', { channel_id: body.channel_id, user_id: body.user_id });
