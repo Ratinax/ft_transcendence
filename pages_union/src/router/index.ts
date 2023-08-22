@@ -4,6 +4,7 @@ import SignUp from '../views/SignUp.vue';
 import SignIn from '../views/SignIn.vue';
 import Chat from '../views/Chat.vue';
 import Relations from '../views/Relations.vue';
+import Menu from '../components/Menu.vue';
 
 const routes = [
     {
@@ -26,6 +27,10 @@ const routes = [
     {
         path: '/relations',
         component: Relations,
+    },
+    {
+        path: '/menu',
+        component: Menu,
     }
 ]
 

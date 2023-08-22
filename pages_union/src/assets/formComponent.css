@@ -3,7 +3,13 @@
 	margin: 0;
 	margin-top: 0.5em;
 }
-
+:root {
+	--pblack: #0b0c10;
+	--pdark: #1f2833;
+	--plight: #c5c6c7;
+	--pcyan: #66fcf1;
+	--pblue: #45a29e;
+}
 .register-input {
 	margin-top: 1em;
 	width: 30vh;

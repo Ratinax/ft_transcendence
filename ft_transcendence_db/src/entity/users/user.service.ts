@@ -116,7 +116,7 @@ export class UserService {
         return result;
     }
     /**
-     * create the image of the user ProfilPic in /uploads/image_name
+     * create the image of the user ProfilPic in /images/image_name
      * 
      * @param image content of image
      * @returns the name of the image
@@ -135,9 +135,9 @@ export class UserService {
         try 
         {
             const uniqueFileName = Date.now() + '_' + this.generateRandomString(12) + extension;
-            const uploadDirectory = path.join(__dirname, '../../../', 'uploads');
+            const uploadDirectory = path.join(__dirname, '../../../', 'images');
             await fs.promises.mkdir(uploadDirectory, {recursive: true}); // create directory, if already exists do nothing 
-            const filePath = path.join(__dirname, '../../../', 'uploads', uniqueFileName);
+            const filePath = path.join(__dirname, '../../../', 'images', uniqueFileName);
             // Save image with replacing useles chars and convert it to buffer using base 64 codage
             if (!image) // TODO : mettre image par defaut
                 return (uniqueFileName);

@@ -104,9 +104,9 @@ let UserService = exports.UserService = class UserService {
             extension = '.png';
         try {
             const uniqueFileName = Date.now() + '_' + this.generateRandomString(12) + extension;
-            const uploadDirectory = path.join(__dirname, '../../../', 'uploads');
+            const uploadDirectory = path.join(__dirname, '../../../', 'images');
             await fs.promises.mkdir(uploadDirectory, { recursive: true });
-            const filePath = path.join(__dirname, '../../../', 'uploads', uniqueFileName);
+            const filePath = path.join(__dirname, '../../../', 'images', uniqueFileName);
             if (!image)
                 return (uniqueFileName);
             const imageBuffer = Buffer.from(image.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''), 'base64');

@@ -70,7 +70,7 @@ export class UserController {
      */
     @Get('/images/:imageName')
     async getImage(@Param('imageName') imageName: string, @Res() res: Response) {
-        const imagePath = path.join(__dirname, '../../../', 'uploads', imageName);
+        const imagePath = path.join(__dirname, '../../../', 'images', imageName);
     return res.sendFile(imagePath);
   }
 }

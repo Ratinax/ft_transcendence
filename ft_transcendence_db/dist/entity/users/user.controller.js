@@ -47,7 +47,7 @@ let UserController = exports.UserController = class UserController {
         return (await this.callFunction(this.userService.logOut, body));
     }
     async getImage(imageName, res) {
-        const imagePath = path.join(__dirname, '../../../', 'uploads', imageName);
+        const imagePath = path.join(__dirname, '../../../', 'images', imageName);
         return res.sendFile(imagePath);
     }
 };
