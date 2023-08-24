@@ -3,7 +3,7 @@
     <div class="navigation-option profil-pic">
       <img :src="getImageUrl(user.profilPic)" alt="Image"/>
     </div>
-    <div class="navigation-option">
+    <div class="navigation-option" @click="goToMessages">
       <div class="messages-icon">
         <div class="line"></div>
         <div class="line"></div>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
 export default {
     name: 'Menu-component',
     // props: 
@@ -42,20 +43,26 @@ export default {
     data()
     {
       return {
+        router: useRouter(),
         user: {
-          id: 4,
-          pseudo: 'cdf',
+          id: 68,
+          pseudo: 'pagett',
           is_connected: true,
-          profilPic: '1690560246053_xRUXzj0l2c4o.png',
+          profilPic: '1692714223806_GRx6ncmzlhHi.png',
         }
       }
     },
     methods: 
     {
       getImageUrl(imageName) 
-        {
-            return `http://${process.env.VUE_APP_IP}:3000/users/images/${imageName}`;
-        },
+      {
+          return `http://${process.env.VUE_APP_IP}:3000/users/images/${imageName}`;
+      },
+      goToMessages()
+      {
+			this.router.push({path: '/menu', query: { user: encodeURIComponent(JSON.stringify(this.user))}});
+
+      }
     }
 }
 </script>
