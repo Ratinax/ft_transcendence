@@ -11,7 +11,7 @@
         <div class="line"></div>
       </div>
     </div>
-    <div class="navigation-option option-circle">
+    <div class="navigation-option option-circle" @click="goToRelations">
         <div class="horizontal-bar bar friend-bar"></div>
         <div class="vertical-bar bar friend-bar"></div>
         <div class="round-body head"></div>
@@ -61,6 +61,10 @@ export default {
       goToMessages()
       {
         this.router.push({path: '/chat', query: { user: encodeURIComponent(JSON.stringify(this.user))}});
+      },
+      goToRelations()
+      {
+        this.router.push({path: '/relations', query: { user: encodeURIComponent(JSON.stringify(this.user))}});
       }
     }
 }

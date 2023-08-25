@@ -40,7 +40,7 @@ export default {
     {
         async fetchUsers()
         {
-
+            console.log('da user :', this.user)
             let getText = 'blockships/userblockedby';
             if (this.isFriendList) 
                 getText = 'friendships/friendsof';

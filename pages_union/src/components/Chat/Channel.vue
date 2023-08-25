@@ -7,7 +7,7 @@
             
             <div v-if="isSelected" class="channel-options" @click="onSelectOption">
                     <div v-if="optionSelected">
-                        <div class="cross"></div>
+                        <div class="cross-options"></div>
                     </div>
                     <div v-else>
                         <div class="dot dot1"></div>
@@ -202,7 +202,7 @@ export default {
     transform: translate(+475%, -0%);
 }
 
-.cross 
+.cross-options 
 {
     position: relative;
     width: 0.5em;
@@ -211,14 +211,14 @@ export default {
     top: 0.25em;
 }
 
-.cross::before,
-.cross::after {
+.cross-options::before,
+.cross-options::after {
     content: "";
     position: absolute;
     background-color: #E9E6F9;
 }
 
-.cross::before {
+.cross-options::before {
   width: 100%;
   height: 0.1em;
   top: 50%;
@@ -226,7 +226,7 @@ export default {
   transform: translateY(-50%) rotate(45deg);
 }
 
-.cross::after {
+.cross-options::after {
   width: 0.1em;
   height: 100%;
   top: 0;

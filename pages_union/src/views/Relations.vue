@@ -1,12 +1,12 @@
 <template>
     <div class="relations-lists">
-      <ListUsers :is-friend-list="true" :user="client" :headerText="'Friend list'" ref="friendList" @remove-relation="onRemoveRelation"/>
-      <ListUsers :is-friend-request-list="true" :user="client" :headerText="'Friend request'" ref="friendRequest" @accept-friendship="onAcceptFriendship" @remove-relation="onRemoveRelation"/>
-      <ListUsers :is-block-list="true" :user="client" :headerText="'Block list'" ref="blockList" @remove-relation="onRemoveRelation"/>
+      <ListUsers v-if="user" :is-friend-list="true" :user="user" :headerText="'Friend list'" ref="friendList" @remove-relation="onRemoveRelation"/>
+      <ListUsers v-if="user" :is-friend-request-list="true" :user="user" :headerText="'Friend request'" ref="friendRequest" @accept-friendship="onAcceptFriendship" @remove-relation="onRemoveRelation"/>
+      <ListUsers v-if="user" :is-block-list="true" :user="user" :headerText="'Block list'" ref="blockList" @remove-relation="onRemoveRelation"/>
     </div>
   </template>
   
-  <script>
+<script>
   import ListUsers from '../components/Relations/ListUsers.vue'
   import { io } from 'socket.io-client';
   
@@ -15,6 +15,12 @@
     components: 
     {
       ListUsers,
+    },
+    data() 
+    {
+      return {
+        user: Object,
+      }
     },
     mounted()
     {
@@ -29,15 +35,12 @@
         this.deleteBlockship(response);
       });
     },
-    data()
+    created()
     {
-      return {
-        client: {
-        id: 1,
-        pseudo: 'lfuerfl',
-        isConnected: true,
-      },
-      }
+      const userJson = this.$route.query.user;
+
+      this.user = JSON.parse(decodeURIComponent(userJson));
+      console.log('le user :', this.user);
     },
     methods:
     {
@@ -74,7 +77,7 @@
       },
     }
   }
-  </script>
+</script>
   
   <style>
   .relations-lists

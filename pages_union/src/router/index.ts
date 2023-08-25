@@ -28,6 +28,8 @@ const routes = [
     {
         path: '/relations',
         component: Relations,
+        name: 'Relations',
+        props: true,
     },
     {
         path: '/menu',
