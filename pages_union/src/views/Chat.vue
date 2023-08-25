@@ -28,12 +28,15 @@ export default {
     SendMessage,
     ListUsersChat,
   },
+  props:
+  {
+  },
   data()
   {
     return {
+      user: Object,
       selectedChannel: {},
       socket: null,
-      user: Object,
     }
   },
   created()
@@ -41,7 +44,7 @@ export default {
     const userJson = this.$route.query.user;
 
     this.user = JSON.parse(decodeURIComponent(userJson));
-
+    console.log('le user :', this.user);
   },
   async mounted()
   {

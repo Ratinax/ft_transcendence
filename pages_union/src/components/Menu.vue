@@ -60,8 +60,7 @@ export default {
       },
       goToMessages()
       {
-			this.router.push({path: '/menu', query: { user: encodeURIComponent(JSON.stringify(this.user))}});
-
+        this.router.push({path: '/chat', query: { user: encodeURIComponent(JSON.stringify(this.user))}});
       }
     }
 }
@@ -99,7 +98,6 @@ export default {
   width: 0.5em;
   border-radius: 50%;
   background-color: var(--pblack);
-  /*var(--pblack)*/
 }
 
 .horizontal-bar.controller-bar
