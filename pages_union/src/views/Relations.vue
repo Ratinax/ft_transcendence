@@ -1,5 +1,6 @@
 <template>
-    <div class="relations-lists">
+  <div class="relations-lists">
+      <Menu/>
       <ListUsers v-if="user" :is-friend-list="true" :user="user" :headerText="'Friend list'" ref="friendList" @remove-relation="onRemoveRelation"/>
       <ListUsers v-if="user" :is-friend-request-list="true" :user="user" :headerText="'Friend request'" ref="friendRequest" @accept-friendship="onAcceptFriendship" @remove-relation="onRemoveRelation"/>
       <ListUsers v-if="user" :is-block-list="true" :user="user" :headerText="'Block list'" ref="blockList" @remove-relation="onRemoveRelation"/>
@@ -8,6 +9,7 @@
   
 <script>
   import ListUsers from '../components/Relations/ListUsers.vue'
+  import Menu from '../components/Menu.vue'
   import { io } from 'socket.io-client';
   
   export default {
@@ -15,6 +17,7 @@
     components: 
     {
       ListUsers,
+      Menu,
     },
     data() 
     {
@@ -79,9 +82,14 @@
   }
 </script>
   
-  <style>
-  .relations-lists
-  {
-    display: flex;
-  }
-  </style>
+<style>
+.relations-lists
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+</style>

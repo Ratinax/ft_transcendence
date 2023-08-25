@@ -1,5 +1,4 @@
 <template>
-  <div class="chat-upper-container">
     <div class="chat-container">
       <Menu/>
       <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @leave-channel="onLeaveChannel"
@@ -10,8 +9,7 @@
       </div>
       <ListUsersChat ref="listUsersChat" v-if="socket" :user="user" :channel="selectedChannel" :socket="socket"/>
     </div>
-  </div>
-  </template>
+</template>
   
 
 <script>
@@ -164,16 +162,13 @@ export default {
 </script>
 
 <style>
-.chat-upper-container
+.chat-container
 {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-}
-.chat-container
-{
   display: flex;
 	background: linear-gradient(45deg, var(--plight), var(--plight));
   height: 100%;

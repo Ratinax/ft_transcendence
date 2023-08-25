@@ -102,7 +102,7 @@ export default {
     
     display: flex;
     flex-direction: column;
-    height: 97vh;
+    height: 100%;
     width: 30%;
     white-space: nowrap;
     border-radius: 3%; 
