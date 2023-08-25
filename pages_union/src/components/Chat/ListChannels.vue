@@ -124,10 +124,10 @@ export default {
   white-space: nowrap;
   resize: horizontal;
   overflow: auto;
-  height: 97vh;
-  position: relative; /* to make intern components able to move*/
+  top: 0;
+  bottom: 0;
+  position: relative;
   flex: 0 0 auto; 
-   /* La div 'left' prend autant d'espace que possible */
   min-width: 20%;
   max-width: 30%;
 }

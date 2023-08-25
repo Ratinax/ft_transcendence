@@ -98,8 +98,8 @@ export default {
 
 .send-message
 {
-    border: 0.1vh solid black;
-    height: 6.6vh;
+    border: 0.1% solid black;
+    height: 9.9%;
     position: relative;
 }
 
@@ -110,7 +110,6 @@ export default {
     bottom: 0;
     left: 0;
     right: 7.5em;
-    /* box-sizing: border-box; */
     transition: 300ms ease;
     padding-left: 1em;
 }

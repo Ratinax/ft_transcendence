@@ -1,13 +1,16 @@
 <template>
+  <div class="chat-upper-container">
     <div class="chat-container">
-        <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @leave-channel="onLeaveChannel"
-        @get-is-user-owner="onGetIsUserOwner"/>
-        <div class="messageszone">
-          <Messages ref="messages"/>
-          <SendMessage ref="sendMessage" :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
-        </div>
-        <ListUsersChat ref="listUsersChat" v-if="socket" :user="user" :channel="selectedChannel" :socket="socket"/>
+      <Menu/>
+      <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @leave-channel="onLeaveChannel"
+      @get-is-user-owner="onGetIsUserOwner"/>
+      <div class="messageszone">
+        <Messages ref="messages"/>
+        <SendMessage ref="sendMessage" :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
+      </div>
+      <ListUsersChat ref="listUsersChat" v-if="socket" :user="user" :channel="selectedChannel" :socket="socket"/>
     </div>
+  </div>
   </template>
   
 
@@ -16,6 +19,7 @@ import ListChannels from "../components/Chat/ListChannels.vue";
 import ListUsersChat from "../components/Chat/ListUsersChat.vue";
 import Messages from "../components/Chat/Messages.vue";
 import SendMessage from "../components/Chat/SendMessage.vue";
+import Menu from "../components/Menu.vue"
 import { io } from 'socket.io-client';
 
 
@@ -27,6 +31,7 @@ export default {
     Messages,
     SendMessage,
     ListUsersChat,
+    Menu,
   },
   props:
   {
@@ -159,18 +164,26 @@ export default {
 </script>
 
 <style>
+.chat-upper-container
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 .chat-container
 {
   display: flex;
-  width: 95%;
+	background: linear-gradient(45deg, var(--plight), var(--plight));
+  height: 100%;
 }
 
 .messageszone
 {
-  /* border: 0.1em solid white; */
-  
   flex-direction: column;
-  max-width: 100%;
+  max-width: 60%;
+  max-height: 100%;
   flex: 1;
 }
 

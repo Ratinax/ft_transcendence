@@ -28,6 +28,10 @@ export default {
 </script>
 
 <style>
+.message
+{
+  overflow-wrap: break-word;
+}
 .invitation-game
 {
   cursor: pointer;

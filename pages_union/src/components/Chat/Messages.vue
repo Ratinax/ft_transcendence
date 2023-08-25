@@ -68,7 +68,7 @@ export default {
     border: 0.1vh solid black;
     flex: 1;
     position: relative;
-    height: 90vh;
+    height: 90%;
     padding-left: 1%;
     overflow-y: auto;
 }

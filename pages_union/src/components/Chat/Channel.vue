@@ -148,6 +148,8 @@ export default {
     cursor: pointer;
     margin: 0;
     transition: 300ms ease;
+	/* --plight: #c5c6c7; */
+    /* color: var(--plight); */
 }
 
 .inline

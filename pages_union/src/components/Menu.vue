@@ -216,12 +216,15 @@ export default {
 .navigation-menu
 {
   background-color: var(--pblack);
-  height: 60em;
+  top: 0;
+  bottom: 0;
+  max-height: 100%;
   width: 10em;
   border: 0.1em solid var(--pblack);
   display: flex;
   flex-direction: column;
   align-items: center; 
+  overflow: auto;
 }
 
 .navigation-option

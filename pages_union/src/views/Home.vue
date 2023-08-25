@@ -47,9 +47,12 @@ export default defineComponent({
 </script>
 
 <style>
+/* html
+{
+	
+} */
 .home-container {
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
-
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -59,7 +62,7 @@ export default defineComponent({
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
 	color: #2c3e50;
-	}
+}
 
 .home-box {
 	background: linear-gradient(white, var(--plight));

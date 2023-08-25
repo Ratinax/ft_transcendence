@@ -84,13 +84,13 @@ export default {
     border: 0.1vh solid black;
     max-width: 15%;
     flex: 1;
-    height: 96.8vh;
+    bottom: 0;
+    top: 0;
     overflow-y: auto;
     padding-left: 1%;
 }
 .user-chat
 {
-    /* padding-bottom: 2%; */
     padding-top: 4%;
 }
 </style>
