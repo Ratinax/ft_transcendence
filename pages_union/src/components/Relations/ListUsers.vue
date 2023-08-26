@@ -99,13 +99,11 @@ export default {
 {
     border: 0.2em solid white;
     background-color: #BABABA;
-    
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 30%;
+    width: calc(100% / 3);
     white-space: nowrap;
     border-radius: 3%; 
-
 }
 </style>

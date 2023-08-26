@@ -101,7 +101,8 @@ export default {
      */
     updateListChannels(channel)
     {
-      this.$refs.listChannels.fetchChannels();
+      if (this.$refs.listChannels)
+        this.$refs.listChannels.fetchChannels();
       this.setSelectedChannel(channel);
       this.updateMessages();
     },
