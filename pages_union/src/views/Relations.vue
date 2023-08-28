@@ -53,7 +53,9 @@
       },
       acceptFriendship()
       {
+        if (this.$refs.friendList)
           this.$refs.friendList.fetchUsers();
+        if (this.$refs.friendRequest)
           this.$refs.friendRequest.fetchUsers();
       },
       onRefuseFriendship(body)
@@ -62,8 +64,10 @@
       },
       deleteFriendship()
       {
-        this.$refs.friendRequest.fetchUsers();
-        this.$refs.friendList.fetchUsers();
+        if (this.$refs.friendRequest)
+          this.$refs.friendRequest.fetchUsers();
+        if (this.$refs.friendList)
+          this.$refs.friendList.fetchUsers();
       },
       onRemoveRelation(body)
       {
@@ -76,7 +80,8 @@
       },
       deleteBlockship()
       {
-        this.$refs.blockList.fetchUsers();
+        if (this.$refs.blockList)
+          this.$refs.blockList.fetchUsers();
       },
     }
   }

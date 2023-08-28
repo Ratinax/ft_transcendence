@@ -79,9 +79,13 @@ export default {
       },
       updateScrollPosition()
       {
-        const container = this.$refs.channelsButtons;
-  
-        container.scrollTop = container.scrollHeight;
+        if (this.$refs.channelsButtons)
+        {
+
+          const container = this.$refs.channelsButtons;
+          
+          container.scrollTop = container.scrollHeight;
+        }
       },
       onLeaveChannel(channel)
       {
@@ -95,7 +99,7 @@ export default {
       {
         for (let i = 0; i < this.$refs.channelRef.length; i++)
         {
-          if (this.$refs.channelRef[i].channel.channel_id === channel_id)
+          if (this.$refs.channelRef[i] && this.$refs.channelRef[i].channel.channel_id === channel_id)
           {
             this.$refs.channelRef[i].setIsUserOwner(result);
             break ;

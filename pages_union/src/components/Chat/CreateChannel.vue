@@ -82,6 +82,7 @@ export default {
           category: this.categories[this.selectedCategory - 1].name,
           isADm: false,
       }, user: this.user});
+      console.log('this.user :', this.user);
     },
     close()
     {

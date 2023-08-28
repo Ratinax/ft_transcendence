@@ -102,13 +102,16 @@ export default {
     updateListChannels(channel)
     {
       if (this.$refs.listChannels)
+      {
         this.$refs.listChannels.fetchChannels();
-      this.setSelectedChannel(channel);
-      this.updateMessages();
+        this.setSelectedChannel(channel);
+        this.updateMessages();
+      }
     },
     updateMessages()
     {
-      this.$refs.messages.updateMessages(this.selectedChannel);
+      if (this.$refs.messages)
+        this.$refs.messages.updateMessages(this.selectedChannel);
     },
     onChannelSelected(channel)
     {
@@ -134,9 +137,8 @@ export default {
      */
     updateListUsers(users)
     {
-      if (!this.$refs.listUsersChat)
-        return ;
-      this.$refs.listUsersChat.updateListUsers(users);
+      if (this.$refs.listUsersChat)
+        this.$refs.listUsersChat.updateListUsers(users);
     },
     onLeaveChannel(channel)
     {
@@ -144,18 +146,22 @@ export default {
     },
     onGetIsUserOwner(channel_id)
     {
-      // const result = this.$refs.listUsersChat.updateListUsers();
-      const result = this.$refs.listUsersChat.getUserInChannel();
-      if (result)
-        this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
+      if (this.$refs.listUsersChat)
+      {
+        const result = this.$refs.listUsersChat.getUserInChannel();
+        if (result)
+          this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
+      }
     },
     sendMessageTimeout(duration)
     {
-      this.$refs.sendMessage.timeout(duration);
+      if (this.$refs.sendMessage)
+        this.$refs.sendMessage.timeout(duration);
     },
     sendMessageGoodRequest()
     {
-      this.$refs.sendMessage.goodRequest();
+      if (this.$refs.sendMessage)
+        this.$refs.sendMessage.goodRequest();
     }
   }
 }

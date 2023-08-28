@@ -54,9 +54,12 @@ export default {
       },
       updateScrollPosition()
       {
-        const container = this.$refs.messageContainer;
-  
-        container.scrollTop = container.scrollHeight;
+        if (this.$refs.messageContainer)
+        {
+
+          const container = this.$refs.messageContainer; 
+          container.scrollTop = container.scrollHeight;
+        }
       }
     }
 }

@@ -85,12 +85,13 @@ export default {
                     channel: this.channel,
                     password: password,
                 });
-                this.$refs.SetPassword.goodRequest();
+                if (this.$refs.SetPassword)
+                    this.$refs.SetPassword.goodRequest();
                 this.$emit('update-channels');
             }
             catch (e)
             {
-                if (e.response.data.message === 'Password not good length')
+                if (e.response.data.message === 'Password not good length' && this.$refs.SetPassword)
                     this.$refs.SetPassword.notGoodLength()
             }
         },
@@ -104,12 +105,13 @@ export default {
                     channel: this.channel,
                     password: password,
                 });
-                this.$refs.SetPassword.goodRequest();
+                if (this.$refs.SetPassword)
+                    this.$refs.SetPassword.goodRequest();
                 this.$emit('update-channels');
             }
             catch (e)
             {
-                if (e.response.data.message === 'Password not good length')
+                if (e.response.data.message === 'Password not good length' && this.$refs.SetPassword)
                     this.$refs.SetPassword.notGoodLength()
             }
         },
