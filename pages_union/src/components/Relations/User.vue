@@ -65,7 +65,7 @@ export default {
     justify-content: center;
     align-items: center;
     border: 0.04em solid black;
-    flex-shrink: 0
+    flex-shrink: 0;
 }
 
 .round-image img 
@@ -88,6 +88,7 @@ export default {
     margin-left: 1em;
     display: inline-flex;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .box.arrow::after 
