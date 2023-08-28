@@ -14,7 +14,10 @@ export default {
     {
       Message,
     },
-    props: [],
+    props:
+    {
+      user: Object,
+    },
     data() {
       return {
           messages: [],
@@ -26,7 +29,6 @@ export default {
     },
     methods: 
     {
-      // TODO : faire en sorte qu'il ne fetch que les messages qu'il peut voir (pas par user bloque)
       async fetchMessages(channel)
       {
         if (!channel)
@@ -35,7 +37,9 @@ export default {
         }
         try 
         {
-          const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}`);
+          console.log('la, :', this.user);
+          const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}/${this.user.id}`);
+          console.log('ici')
           this.messages = response.data;
         } 
         catch (error) 

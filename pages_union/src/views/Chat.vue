@@ -4,7 +4,7 @@
       <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @leave-channel="onLeaveChannel"
       @get-is-user-owner="onGetIsUserOwner"/>
       <div class="messageszone">
-        <Messages ref="messages"/>
+        <Messages ref="messages" :user="user"/>
         <SendMessage ref="sendMessage" :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
       </div>
       <ListUsersChat ref="listUsersChat" v-if="socket" :user="user" :channel="selectedChannel" :socket="socket"/>

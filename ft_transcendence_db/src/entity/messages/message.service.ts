@@ -12,15 +12,29 @@ export class MessageService {
      * find all the messages from a channel
      * 
      * @param channelName name of channel
+     * @param listUserBlocked list of user blocked by user making request
      * @returns result of the request
      */
-    async findMessageFromChannel(channelName)
+    async findMessageFromChannel(channelName, listUserBlocked)
     {
+        let removeBlockString = '';
+        if (listUserBlocked.length > 0)
+        {
+            removeBlockString = 'AND user_id not in (';
+            for (let i = 0; i < listUserBlocked.length; i++)
+            {
+                removeBlockString += listUserBlocked[i];
+                if (i + 1 < listUserBlocked.length)
+                    removeBlockString += ', ';
+            }
+            removeBlockString += ')';
+        }
+
         return this.messageRepository
         .createQueryBuilder('message')
         .leftJoinAndSelect('message.channel', 'channel')
         .leftJoinAndSelect('message.user', 'user')
-        .where('channel.name = :name', { name: channelName })
+        .where(`channel.name = :name ${removeBlockString}`, { name: channelName })
         .getMany();
     }
 

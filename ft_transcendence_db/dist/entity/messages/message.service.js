@@ -19,12 +19,22 @@ let MessageService = exports.MessageService = class MessageService {
     constructor(messageRepository) {
         this.messageRepository = messageRepository;
     }
-    async findMessageFromChannel(channelName) {
+    async findMessageFromChannel(channelName, listUserBlocked) {
+        let removeBlockString = '';
+        if (listUserBlocked.length > 0) {
+            removeBlockString = 'AND user_id not in (';
+            for (let i = 0; i < listUserBlocked.length; i++) {
+                removeBlockString += listUserBlocked[i];
+                if (i + 1 < listUserBlocked.length)
+                    removeBlockString += ', ';
+            }
+            removeBlockString += ')';
+        }
         return this.messageRepository
             .createQueryBuilder('message')
             .leftJoinAndSelect('message.channel', 'channel')
             .leftJoinAndSelect('message.user', 'user')
-            .where('channel.name = :name', { name: channelName })
+            .where(`channel.name = :name ${removeBlockString}`, { name: channelName })
             .getMany();
     }
     async post(message) {

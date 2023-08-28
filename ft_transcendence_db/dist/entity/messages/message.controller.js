@@ -15,22 +15,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MessageController = void 0;
 const common_1 = require("@nestjs/common");
 const message_service_1 = require("./message.service");
+const blockship_service_1 = require("../blockships/blockship.service");
 let MessageController = exports.MessageController = class MessageController {
-    constructor(messageService) {
+    constructor(messageService, blockshipService) {
         this.messageService = messageService;
+        this.blockshipService = blockshipService;
     }
-    async find(channelname) {
-        return this.messageService.findMessageFromChannel(channelname);
+    async find(channelname, user_id) {
+        const listUserBlocked = await this.blockshipService.findUserblockedFromId(user_id);
+        let listUserBlockedId = [];
+        for (let i = 0; i < listUserBlocked.length; i++) {
+            listUserBlockedId.push(listUserBlocked[i].id);
+        }
+        console.log(listUserBlockedId);
+        return this.messageService.findMessageFromChannel(channelname, listUserBlockedId);
     }
     async post(body) {
         return (await this.messageService.post(body));
     }
 };
 __decorate([
-    (0, common_1.Get)(':channelname'),
+    (0, common_1.Get)(':channelname/:id'),
     __param(0, (0, common_1.Param)('channelname')),
+    __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], MessageController.prototype, "find", null);
 __decorate([
@@ -42,6 +51,6 @@ __decorate([
 ], MessageController.prototype, "post", null);
 exports.MessageController = MessageController = __decorate([
     (0, common_1.Controller)('messages'),
-    __metadata("design:paramtypes", [message_service_1.MessageService])
+    __metadata("design:paramtypes", [message_service_1.MessageService, blockship_service_1.BlockshipService])
 ], MessageController);
 //# sourceMappingURL=message.controller.js.map

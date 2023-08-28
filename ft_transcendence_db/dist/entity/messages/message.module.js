@@ -15,6 +15,8 @@ const database_module_1 = require("../../database/database.module");
 const message_gateway_1 = require("./message.gateway");
 const channels_users_providers_1 = require("../channels_users/channels_users.providers");
 const channels_users_service_1 = require("../channels_users/channels_users.service");
+const blockship_providers_1 = require("../blockships/blockship.providers");
+const blockship_service_1 = require("../blockships/blockship.service");
 let MessageModule = exports.MessageModule = class MessageModule {
 };
 exports.MessageModule = MessageModule = __decorate([
@@ -23,9 +25,11 @@ exports.MessageModule = MessageModule = __decorate([
         providers: [
             ...message_providers_1.messageProviders,
             ...channels_users_providers_1.channelsUsersProviders,
+            ...blockship_providers_1.blockshipProviders,
             message_service_1.MessageService,
             message_gateway_1.MessagesGateway,
             channels_users_service_1.ChannelsUsersService,
+            blockship_service_1.BlockshipService,
         ],
         controllers: [message_controller_1.MessageController],
     })

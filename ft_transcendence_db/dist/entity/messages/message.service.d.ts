@@ -3,6 +3,6 @@ import { Messages } from './message.entity';
 export declare class MessageService {
     private messageRepository;
     constructor(messageRepository: Repository<Messages>);
-    findMessageFromChannel(channelName: any): Promise<Messages[]>;
+    findMessageFromChannel(channelName: any, listUserBlocked: any): Promise<Messages[]>;
     post(message: Partial<Messages>): Promise<Messages>;
 }
