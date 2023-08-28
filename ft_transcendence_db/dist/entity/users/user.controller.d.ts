@@ -6,6 +6,7 @@ export declare class UserController {
     callFunction(fct: any, body: any): Promise<any>;
     signUp(body: any): Promise<any>;
     signIn(body: any): Promise<any>;
+    login42(code: any, res: Response): Promise<any>;
     logOut(body: any): Promise<any>;
     getImage(imageName: string, res: Response): Promise<void>;
 }

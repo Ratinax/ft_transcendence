@@ -27,7 +27,6 @@ let MessageController = exports.MessageController = class MessageController {
         for (let i = 0; i < listUserBlocked.length; i++) {
             listUserBlockedId.push(listUserBlocked[i].id);
         }
-        console.log(listUserBlockedId);
         return this.messageService.findMessageFromChannel(channelname, listUserBlockedId);
     }
     async post(body) {

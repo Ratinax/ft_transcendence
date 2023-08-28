@@ -55,6 +55,19 @@ export class UserController {
         return (await this.callFunction(this.userService.signIn, body))
     }
 
+    @Get('login42/:code')
+    async login42(@Param('code') code, @Res({passthrough: true}) res: Response)
+    {
+        const token = await this.userService.login42(code);
+		if (token)
+		{
+			res.cookie('42_TOKEN', token.data.access_token, {httpOnly: true, expires: new Date(Date.now() + token.data.expires_in * 1000)});
+			res.cookie('42_REFRESH', token.data.refresh_token, {httpOnly: true, maxAge: 1000000000});
+			return token.data; // TODO enlever pour securite
+		}
+		return 'Error';
+    }
+
     @Post('logout')
     async logOut(@Body() body)
     {

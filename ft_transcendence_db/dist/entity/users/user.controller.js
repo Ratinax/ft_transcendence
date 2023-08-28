@@ -44,6 +44,15 @@ let UserController = exports.UserController = class UserController {
     async signIn(body) {
         return (await this.callFunction(this.userService.signIn, body));
     }
+    async login42(code, res) {
+        const token = await this.userService.login42(code);
+        if (token) {
+            res.cookie('42_TOKEN', token.data.access_token, { httpOnly: true, expires: new Date(Date.now() + token.data.expires_in * 1000) });
+            res.cookie('42_REFRESH', token.data.refresh_token, { httpOnly: true, maxAge: 1000000000 });
+            return token.data;
+        }
+        return 'Error';
+    }
     async logOut(body) {
         return (await this.callFunction(this.userService.logOut, body));
     }
@@ -73,6 +82,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "signIn", null);
+__decorate([
+    (0, common_1.Get)('login42/:code'),
+    __param(0, (0, common_1.Param)('code')),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "login42", null);
 __decorate([
     (0, common_1.Post)('logout'),
     __param(0, (0, common_1.Body)()),
