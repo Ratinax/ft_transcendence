@@ -14,4 +14,6 @@ export declare class UserService {
     logOut(user: Partial<Users>): Promise<false | Users>;
     generateRandomString(length: number): string;
     uploadImage(image: string): Promise<string>;
+    comparePasswords(user: any, password: string): Promise<any>;
+    hashedPassword(password: string): Promise<any>;
 }

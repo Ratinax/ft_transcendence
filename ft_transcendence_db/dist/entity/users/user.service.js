@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require("bcrypt");
 let UserService = exports.UserService = class UserService {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -48,7 +49,7 @@ let UserService = exports.UserService = class UserService {
         }
         const user = {
             pseudo: body.pseudo,
-            password: body.password,
+            password: await this.hashedPassword(body.password),
             profilPic: imageName,
             isConnected: body.isConnected,
         };
@@ -65,7 +66,7 @@ let UserService = exports.UserService = class UserService {
         let userFound = await this.userRepository.findOne({ where: { pseudo: user.pseudo } });
         if (!userFound)
             return (false);
-        if (userFound.password !== user.password)
+        if (!this.comparePasswords(userFound, user.password))
             return ('Wrong password');
         const result = await this.userRepository.update(userFound.id, { isConnected: true });
         userFound = await this.userRepository.findOne({ where: { pseudo: user.pseudo } });
@@ -116,6 +117,12 @@ let UserService = exports.UserService = class UserService {
         catch (error) {
             throw new common_1.InternalServerErrorException('Failed to save image');
         }
+    }
+    async comparePasswords(user, password) {
+        return (await bcrypt.compare(password + process.env.PEPPER, user.password));
+    }
+    async hashedPassword(password) {
+        return (await bcrypt.hash(password + process.env.PEPPER, +process.env.SALTROUNDS));
     }
 };
 exports.UserService = UserService = __decorate([

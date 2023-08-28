@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Users } from './user.entity';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -58,9 +59,9 @@ export class UserService {
             console.log(e)
             throw new InternalServerErrorException(e);
         }
-        const user = { // TODO hash password
+        const user = {
             pseudo: body.pseudo,
-            password: body.password,
+            password: await this.hashedPassword(body.password),
             profilPic: imageName,
             isConnected: body.isConnected,
         };
@@ -78,7 +79,7 @@ export class UserService {
         let userFound = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
         if (!userFound)
             return (false);
-        if (userFound.password !== user.password)
+        if (!this.comparePasswords(userFound, user.password))
             return ('Wrong password');
         const result = await this.userRepository.update(userFound.id, { isConnected: true });
         userFound = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
@@ -105,7 +106,7 @@ export class UserService {
      * @param length length of the string to be created
      * @returns the random string created
      */
-    generateRandomString(length: number): string 
+    generateRandomString(length: number): string
     {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let result = '';
@@ -149,5 +150,25 @@ export class UserService {
         {
             throw new InternalServerErrorException('Failed to save image');
         }
+    }
+    /**
+     * compare password given with password hashed of channel
+     * 
+     * @param user user to compare password with
+     * @param password password to be compared
+     * @returns true | false
+     */
+    async comparePasswords(user, password: string)
+    {
+        return (await bcrypt.compare(password + process.env.PEPPER, user.password));
+    }
+    /**
+     * 
+     * @param password password to be hashed
+     * @returns the hashed version of password
+     */
+    async hashedPassword(password: string)
+    {
+        return (await bcrypt.hash(password + process.env.PEPPER, +process.env.SALTROUNDS))
     }
 }
