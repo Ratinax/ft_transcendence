@@ -55,6 +55,12 @@ export class UserController {
         return (await this.callFunction(this.userService.signIn, body))
     }
 
+    /**
+     * 
+     * @param code code sent by 42 when connect
+     * @param res interface already provided without givig it, used to set cookies
+     * @returns result of request
+     */
     @Get('login42/:code')
     async login42(@Param('code') code, @Res({passthrough: true}) res: Response)
     {
