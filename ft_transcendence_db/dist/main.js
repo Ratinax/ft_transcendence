@@ -4,11 +4,13 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const express = require("express");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 async function bootstrap() {
     dotenv.config();
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.use(cookieParser());
     app.enableCors({
-        origin: '*',
+        origin: `http://192.168.1.159:8080`,
         credentials: true,
     });
     app.use(express.json({ limit: '50mb' }));

@@ -7,13 +7,11 @@ export declare class FriendshipService {
         id: number;
         pseudo: string;
         profilPic: string;
-        isConnected: boolean;
     }[]>;
     findPending(id: number): Promise<{
         id: number;
         pseudo: string;
         profilPic: string;
-        isConnected: boolean;
     }[]>;
     acceptFriendship(friend_id: number, user_id: number): Promise<Friendships>;
     deleteFriendship(friend_id: number, user_id: number): Promise<import("typeorm").DeleteResult>;

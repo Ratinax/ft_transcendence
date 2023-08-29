@@ -17,9 +17,11 @@ const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const path = require("path");
 const fs = require("fs");
+const session_service_1 = require("../sessions/session.service");
 let UserController = exports.UserController = class UserController {
-    constructor(userService) {
+    constructor(userService, sessionService) {
         this.userService = userService;
+        this.sessionService = sessionService;
     }
     async callFunction(fct, body) {
         try {
@@ -30,16 +32,11 @@ let UserController = exports.UserController = class UserController {
             throw new common_1.InternalServerErrorException(e);
         }
     }
-    async signUp(body) {
-        console.log(body);
-        try {
-            const res = await this.callFunction(this.userService.signUp, body);
-            return (res);
-        }
-        catch (e) {
-            console.log(e);
-            throw new common_1.InternalServerErrorException(e);
-        }
+    async signUp(body, res) {
+        const user = await this.callFunction(this.userService.signUp, body);
+        const session = await this.sessionService.createSession(user.id);
+        res.cookie('SESSION_KEY', session.sessionKey, { httpOnly: true, expires: new Date(session.expirationDate) });
+        return (true);
     }
     async signIn(body) {
         return (await this.callFunction(this.userService.signIn, body));
@@ -67,12 +64,16 @@ let UserController = exports.UserController = class UserController {
             console.error('Error while loading image :', e);
         }
     }
+    test(req) {
+        console.log('ici', req.cookies);
+    }
 };
 __decorate([
     (0, common_1.Post)('signup'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "signUp", null);
 __decorate([
@@ -105,8 +106,15 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getImage", null);
+__decorate([
+    (0, common_1.Get)('test'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "test", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('users'),
-    __metadata("design:paramtypes", [user_service_1.UserService])
+    __metadata("design:paramtypes", [user_service_1.UserService, session_service_1.SessionService])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

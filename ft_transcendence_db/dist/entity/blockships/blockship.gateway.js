@@ -37,9 +37,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BlockshipGateway.prototype, "refuseBlockship", null);
 exports.BlockshipGateway = BlockshipGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({
+    (0, websockets_1.WebSocketGateway)(3001, {
         cors: {
-            origin: '*',
+            origin: `http://192.168.1.159:8080`,
+            credentials: true,
         },
     }),
     __metadata("design:paramtypes", [blockship_service_1.BlockshipService])

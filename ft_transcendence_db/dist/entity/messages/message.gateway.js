@@ -60,9 +60,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MessagesGateway.prototype, "create", null);
 exports.MessagesGateway = MessagesGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({
+    (0, websockets_1.WebSocketGateway)(3002, {
         cors: {
-            origin: '*',
+            origin: `http://192.168.1.159:8080`,
+            credentials: true,
         },
     }),
     __metadata("design:paramtypes", [message_service_1.MessageService, channels_users_service_1.ChannelsUsersService])

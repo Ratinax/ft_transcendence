@@ -28,10 +28,8 @@ export default defineComponent({
 		function login42()
 		{
 			const link = `https://api.intra.42.fr/oauth/authorize?client_id=${process.env.VUE_APP_CLIENT_ID}&redirect_uri=${process.env.VUE_APP_REDIRECT_URI}&response_type=code`;
-			console.log(link);
 			window.location.href = link;
 		}
-
 		return {login42, pseudo, password};
 	}
 });

@@ -27,7 +27,7 @@
     },
     mounted()
     {
-      this.socket = io(`http://${process.env.VUE_APP_IP}:3000/`);
+      this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`);
       this.socket.on('acceptFriendship', (response) => {
         this.acceptFriendship(response);
       });

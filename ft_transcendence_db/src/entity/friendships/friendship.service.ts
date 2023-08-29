@@ -31,13 +31,11 @@ export class FriendshipService {
         const usersFromFriend = friendshipsFromFriend.map((friendship) => ({
             id: friendship.friend.id, 
             pseudo: friendship.friend.pseudo, 
-            profilPic: friendship.friend.profilPic, 
-            isConnected: friendship.friend.isConnected}));
+            profilPic: friendship.friend.profilPic}));
         const usersFromUser = friendshipsFromUser.map((friendship) => ({
             id: friendship.user.id, 
             pseudo: friendship.user.pseudo, 
-            profilPic: friendship.user.profilPic, 
-            isConnected: friendship.user.isConnected}));
+            profilPic: friendship.user.profilPic}));
         return ([...usersFromFriend, ...usersFromUser]);
     }
     /**
@@ -58,8 +56,7 @@ export class FriendshipService {
         const usersAsking = friensdAsking.map((friendship) => ({
             id: friendship.user.id, 
             pseudo: friendship.user.pseudo, 
-            profilPic: friendship.user.profilPic, 
-            isConnected: friendship.user.isConnected}));
+            profilPic: friendship.user.profilPic}));
         return (usersAsking);
     }
     /**

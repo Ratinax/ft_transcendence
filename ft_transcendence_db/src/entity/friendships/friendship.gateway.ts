@@ -3,9 +3,10 @@ import { FriendshipService } from './friendship.service';
 import { Server } from 'socket.io';
 import { InternalServerErrorException } from '@nestjs/common';
 
-@WebSocketGateway({
+@WebSocketGateway(3002, {
   cors: {
-    origin: '*',
+    origin: `http://192.168.1.159:8080`,
+    credentials: true,
   },
 })
 export class FriendshipGateway {

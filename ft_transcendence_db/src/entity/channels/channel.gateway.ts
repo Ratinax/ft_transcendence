@@ -4,9 +4,10 @@ import { Server } from 'socket.io';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { InternalServerErrorException } from '@nestjs/common';
 
-@WebSocketGateway({
+@WebSocketGateway(3001, {
   cors: {
-    origin: '*',
+    origin: `http://192.168.1.159:8080`,
+    credentials: true,
   },
 })
 export class ChannelGateway {
@@ -29,7 +30,6 @@ export class ChannelGateway {
   @SubscribeMessage('createChannel')
   async create(
     @MessageBody() data: {channel: any, user: any}) {
-      // check input errors
       if (!this.createGoodInputs(data.channel, data.user))
         return ('input error');
       const channel = data.channel;

@@ -7,7 +7,6 @@ export declare class UserService {
     signUp(body: any): Promise<{
         pseudo: string;
         profilPic: string;
-        isConnected: boolean;
         id: number;
     }>;
     signIn(user: Partial<Users>): Promise<false | Users | "Wrong password">;

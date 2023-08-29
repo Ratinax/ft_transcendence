@@ -5,10 +5,27 @@
 </template>
 
 <script>
+import { Socket } from 'socket.io-client'
+import { io } from 'socket.io-client';
+import axios from 'axios';
+
 
 export default {
   name: 'App',
   components: {
+  },
+  data()
+  {
+    return {
+      socket: io(`http://${process.env.VUE_APP_IP}:3003/`, { withCredentials: true }),
+    }
+  },
+  mounted()
+  {
+    this.socket.on('pingAlive', async () => {
+      console.log('ca va ping back')
+        await axios.post(`http://${process.env.VUE_APP_IP}:3000/sessions/pingBack`, {}, { withCredentials: true });
+    })
   }
 }
 </script>

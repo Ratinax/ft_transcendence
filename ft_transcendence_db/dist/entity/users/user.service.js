@@ -51,15 +51,13 @@ let UserService = exports.UserService = class UserService {
         const user = {
             pseudo: body.pseudo,
             password: await this.hashedPassword(body.password),
-            profilPic: imageName,
-            isConnected: body.isConnected,
+            profilPic: imageName
         };
         const newUser = this.userRepository.create(user);
         const res = await this.userRepository.save(newUser);
         return ({
             pseudo: res.pseudo,
             profilPic: res.profilPic,
-            isConnected: res.isConnected,
             id: res.id,
         });
     }
@@ -69,7 +67,6 @@ let UserService = exports.UserService = class UserService {
             return (false);
         if (!this.comparePasswords(userFound, user.password))
             return ('Wrong password');
-        const result = await this.userRepository.update(userFound.id, { isConnected: true });
         userFound = await this.userRepository.findOne({ where: { pseudo: user.pseudo } });
         if (!userFound)
             return (false);
@@ -79,7 +76,6 @@ let UserService = exports.UserService = class UserService {
         let userFound = await this.userRepository.findOne({ where: { pseudo: user.pseudo } });
         if (!userFound)
             return (false);
-        const result = await this.userRepository.update(userFound.id, { isConnected: false });
         userFound = await this.userRepository.findOne({ where: { pseudo: user.pseudo } });
         if (!userFound)
             return (false);
@@ -112,7 +108,7 @@ let UserService = exports.UserService = class UserService {
         else if (extension === 'png;')
             extension = '.png';
         try {
-            const uniqueFileName = Date.now() + '_' + this.generateRandomString(12) + extension;
+            const uniqueFileName = Date.now() + '_' + this.generateRandomString(42) + extension;
             const uploadDirectory = path.join(__dirname, '../../../', 'images');
             await fs.promises.mkdir(uploadDirectory, { recursive: true });
             const filePath = path.join(__dirname, '../../../', 'images', uniqueFileName);

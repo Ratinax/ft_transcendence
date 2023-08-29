@@ -12,6 +12,8 @@ const user_controller_1 = require("./user.controller");
 const user_service_1 = require("./user.service");
 const user_providers_1 = require("./user.providers");
 const database_module_1 = require("../../database/database.module");
+const session_providers_1 = require("../sessions/session.providers");
+const session_service_1 = require("../sessions/session.service");
 let UserModule = exports.UserModule = class UserModule {
 };
 exports.UserModule = UserModule = __decorate([
@@ -19,6 +21,8 @@ exports.UserModule = UserModule = __decorate([
         imports: [database_module_1.DatabaseModule],
         providers: [
             ...user_providers_1.userProviders,
+            ...session_providers_1.sessionProviders,
+            session_service_1.SessionService,
             user_service_1.UserService,
         ],
         controllers: [user_controller_1.UserController],

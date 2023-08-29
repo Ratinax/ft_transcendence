@@ -19,6 +19,7 @@ const blockship_module_1 = require("./entity/blockships/blockship.module");
 const friendship_module_1 = require("./entity/friendships/friendship.module");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const session_module_1 = require("./entity/sessions/session.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -32,6 +33,7 @@ exports.AppModule = AppModule = __decorate([
             channels_users_module_1.ChannelsUsersModule,
             blockship_module_1.BlockshipModule,
             friendship_module_1.FriendshipModule,
+            session_module_1.SessionModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

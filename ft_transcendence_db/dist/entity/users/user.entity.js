@@ -29,10 +29,6 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'profil_pic', type: 'varchar', nullable: true }),
     __metadata("design:type", String)
 ], Users.prototype, "profilPic", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ name: 'is_connected', default: false }),
-    __metadata("design:type", Boolean)
-], Users.prototype, "isConnected", void 0);
 exports.Users = Users = __decorate([
     (0, typeorm_1.Entity)()
 ], Users);

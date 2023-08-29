@@ -26,7 +26,7 @@ export class BlockshipService {
             id: blockship.userblocked.id, 
             pseudo: blockship.userblocked.pseudo, 
             profilPic: blockship.userblocked.profilPic, 
-            isConnected: blockship.userblocked.isConnected}));
+            }));
         return (users);
     }
     /**

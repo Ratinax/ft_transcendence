@@ -70,11 +70,16 @@ export default defineComponent({
 			let user;
 			try
 			{
-				const res = await axios.post('http://localhost:3000/users/signup', { 
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/signup`, 
+				{ 
 					pseudo: pseudo.value,
 					password: password.value,
-					isConnected: true,
-					image: imageDataURL });
+					image: imageDataURL ,
+				},
+				{
+					withCredentials: true,
+				},
+				)
 				user = res.data;
 				console.log('res :', res);
 			}
@@ -82,7 +87,7 @@ export default defineComponent({
 			{
 				console.error('Error registering user:', e);
 				console.log(e);
-				if (e.response.status === 413)
+				if (e && e.reponse && e.response.status === 413)
 					matrixIndex.value = 7;
 				else
 					matrixIndex.value = 5;

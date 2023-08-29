@@ -2,9 +2,10 @@ import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, Conne
 import { BlockshipService } from './blockship.service';
 import { Server } from 'socket.io';
 
-@WebSocketGateway({
+@WebSocketGateway(3001, {
   cors: {
-    origin: '*',
+    origin: `http://192.168.1.159:8080`,
+    credentials: true,
   },
 })
 export class BlockshipGateway {
@@ -12,7 +13,8 @@ export class BlockshipGateway {
     @WebSocketServer()
     server: Server;
 
-    constructor(private readonly blockshipService: BlockshipService) {}
+    constructor(private readonly blockshipService: BlockshipService) {
+    }
 
     /**
      * remove blockship

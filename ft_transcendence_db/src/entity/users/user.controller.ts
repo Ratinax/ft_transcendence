@@ -1,12 +1,13 @@
-import { Body, Controller, Get, InternalServerErrorException, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, InternalServerErrorException, Param, Post, Req, Res } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
+import { SessionService } from '../sessions/session.service';
 
 @Controller('users')
 export class UserController {
-    constructor (private readonly userService: UserService) {}
+    constructor (private readonly userService: UserService, private readonly sessionService: SessionService) {}
     /**
      * call a function of userService
      * 
@@ -28,25 +29,18 @@ export class UserController {
         }
     }
     /**
-     * 
+     * //TODO doc
      * @param body user to be signed up {id, pseudo, password, profilPic, isConencted}
      * @returns the user created
      * @throws InternalServerErrorException in case of failing
      */
     @Post('signup')
-    async signUp(@Body() body)
+    async signUp(@Body() body, @Res({passthrough: true}) res: Response)
     {
-        console.log(body);
-        try
-        {
-            const res = await this.callFunction(this.userService.signUp, body);
-            return (res);
-        }
-        catch (e)
-        {
-            console.log(e);
-            throw new InternalServerErrorException(e);
-        }
+            const user = await this.callFunction(this.userService.signUp, body);
+            const session = await this.sessionService.createSession(user.id);
+            res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
+            return (true);
     }
 
     @Post('signin')
@@ -101,5 +95,10 @@ export class UserController {
         {
             console.error('Error while loading image :', e);
         }
+    }
+    @Get('test')
+    test(@Req() req)
+    {
+        console.log('ici', req.cookies);
     }
 }

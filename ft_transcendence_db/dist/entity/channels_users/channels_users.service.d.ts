@@ -9,7 +9,6 @@ export declare class ChannelsUsersService {
         pseudo: string;
         password: string;
         profilPic: string;
-        isConnected: boolean;
         isOwner: boolean;
         isAdmin: boolean;
         isInvited: boolean;

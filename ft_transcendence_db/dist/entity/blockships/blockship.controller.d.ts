@@ -6,6 +6,5 @@ export declare class BlockshipController {
         id: number;
         pseudo: string;
         profilPic: string;
-        isConnected: boolean;
     }[]>;
 }

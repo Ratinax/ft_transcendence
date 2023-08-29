@@ -121,9 +121,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelGateway.prototype, "join", null);
 exports.ChannelGateway = ChannelGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({
+    (0, websockets_1.WebSocketGateway)(3001, {
         cors: {
-            origin: '*',
+            origin: `http://192.168.1.159:8080`,
+            credentials: true,
         },
     }),
     __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService])

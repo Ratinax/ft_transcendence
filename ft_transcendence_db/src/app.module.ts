@@ -10,6 +10,7 @@ import { BlockshipModule } from './entity/blockships/blockship.module';
 import { FriendshipModule } from './entity/friendships/friendship.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { SessionModule } from './entity/sessions/session.module';
 
 
 @Module({
@@ -22,6 +23,7 @@ import { AppService } from './app.service';
     ChannelsUsersModule,
     BlockshipModule,
     FriendshipModule,
+    SessionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -34,6 +34,7 @@
 
 <script>
 import { useRouter } from 'vue-router';
+import { useCookies } from "vue3-cookies";
 export default {
     name: 'Menu-component',
     // props: 
@@ -44,10 +45,10 @@ export default {
     {
       return {
         router: useRouter(),
+        cookies: useCookies(),
         user: {
           id: 68,
           pseudo: 'pagett',
-          is_connected: true,
           profilPic: '1692714223806_GRx6ncmzlhHi.png',
         }
       }
@@ -58,7 +59,7 @@ export default {
       {
           return `http://${process.env.VUE_APP_IP}:3000/users/images/${imageName}`;
       },
-      goToMessages()
+      async goToMessages()
       {
         this.router.push({path: '/chat', query: { user: encodeURIComponent(JSON.stringify(this.user))}});
       },

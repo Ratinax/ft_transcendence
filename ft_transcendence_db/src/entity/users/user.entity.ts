@@ -8,7 +8,6 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
  * - pseudo: string
  * - password: string
  * - profilPic: string
- * - isConnected: boolean
  */
 @Entity()
 export class Users {
@@ -23,8 +22,4 @@ export class Users {
 
     @Column({ name: 'profil_pic', type: 'varchar', nullable: true })
     profilPic: string;
-    
-    @Column({ name: 'is_connected', default: false })
-    isConnected: boolean;
-
 }

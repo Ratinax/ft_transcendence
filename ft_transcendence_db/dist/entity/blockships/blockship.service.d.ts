@@ -7,7 +7,6 @@ export declare class BlockshipService {
         id: number;
         pseudo: string;
         profilPic: string;
-        isConnected: boolean;
     }[]>;
     deleteBlockship(blocked_id: number, user_id: number): Promise<import("typeorm").DeleteResult>;
 }

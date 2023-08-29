@@ -35,7 +35,6 @@ let ChannelsUsersService = exports.ChannelsUsersService = class ChannelsUsersSer
             pseudo: channelsUsers.user.pseudo,
             password: channelsUsers.user.password,
             profilPic: channelsUsers.user.profilPic,
-            isConnected: channelsUsers.user.isConnected,
             isOwner: channelsUsers.isOwner,
             isAdmin: channelsUsers.isAdmin,
             isInvited: channelsUsers.isInvited,

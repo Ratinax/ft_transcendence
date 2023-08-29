@@ -54,9 +54,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], FriendshipGateway.prototype, "removeFriendship", null);
 exports.FriendshipGateway = FriendshipGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({
+    (0, websockets_1.WebSocketGateway)(3002, {
         cors: {
-            origin: '*',
+            origin: `http://192.168.1.159:8080`,
+            credentials: true,
         },
     }),
     __metadata("design:paramtypes", [friendship_service_1.FriendshipService])
