@@ -1,8 +1,10 @@
 import { BlockshipService } from './blockship.service';
+import { SessionService } from '../sessions/session.service';
 export declare class BlockshipController {
     private readonly blockshipService;
-    constructor(blockshipService: BlockshipService);
-    findUserblockedFromId(id: number): Promise<{
+    private readonly sessionService;
+    constructor(blockshipService: BlockshipService, sessionService: SessionService);
+    findUserblockedFromId(id: number, req: any): Promise<{
         id: number;
         pseudo: string;
         profilPic: string;

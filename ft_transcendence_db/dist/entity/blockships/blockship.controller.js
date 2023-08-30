@@ -15,11 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlockshipController = void 0;
 const common_1 = require("@nestjs/common");
 const blockship_service_1 = require("./blockship.service");
+const session_service_1 = require("../sessions/session.service");
 let BlockshipController = exports.BlockshipController = class BlockshipController {
-    constructor(blockshipService) {
+    constructor(blockshipService, sessionService) {
         this.blockshipService = blockshipService;
+        this.sessionService = sessionService;
     }
-    async findUserblockedFromId(id) {
+    async findUserblockedFromId(id, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
         try {
             const res = await this.blockshipService.findUserblockedFromId(id);
             return (res);
@@ -31,12 +36,13 @@ let BlockshipController = exports.BlockshipController = class BlockshipControlle
 __decorate([
     (0, common_1.Get)('userblockedby/:id'),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], BlockshipController.prototype, "findUserblockedFromId", null);
 exports.BlockshipController = BlockshipController = __decorate([
     (0, common_1.Controller)('blockships'),
-    __metadata("design:paramtypes", [blockship_service_1.BlockshipService])
+    __metadata("design:paramtypes", [blockship_service_1.BlockshipService, session_service_1.SessionService])
 ], BlockshipController);
 //# sourceMappingURL=blockship.controller.js.map

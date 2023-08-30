@@ -38,7 +38,7 @@ export default {
         try 
         {
           console.log('la, :', this.user);
-          const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}/${this.user.id}`);
+          const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}/${this.user.id}`, {withCredentials: true});
           console.log('ici')
           this.messages = response.data;
         } 

@@ -15,33 +15,43 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FriendshipController = void 0;
 const common_1 = require("@nestjs/common");
 const friendship_service_1 = require("./friendship.service");
+const session_service_1 = require("../sessions/session.service");
 let FriendshipController = exports.FriendshipController = class FriendshipController {
-    constructor(friendshipService) {
+    constructor(friendshipService, sessionService) {
         this.friendshipService = friendshipService;
+        this.sessionService = sessionService;
     }
-    async findFriendOfId(id) {
+    async findFriendOfId(id, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
         return (await this.friendshipService.findFriendOfId(id));
     }
-    async findPending(id) {
+    async findPending(id, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
         return (await this.friendshipService.findPending(id));
     }
 };
 __decorate([
     (0, common_1.Get)('friendsof/:id'),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], FriendshipController.prototype, "findFriendOfId", null);
 __decorate([
     (0, common_1.Get)('pending/:id'),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], FriendshipController.prototype, "findPending", null);
 exports.FriendshipController = FriendshipController = __decorate([
     (0, common_1.Controller)('friendships'),
-    __metadata("design:paramtypes", [friendship_service_1.FriendshipService])
+    __metadata("design:paramtypes", [friendship_service_1.FriendshipService, session_service_1.SessionService])
 ], FriendshipController);
 //# sourceMappingURL=friendship.controller.js.map

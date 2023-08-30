@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { BlockshipService } from '../blockships/blockship.service';
+import { SessionService } from '../sessions/session.service';
 
 @Controller('messages')
 export class MessageController {
-    constructor (private readonly messageService: MessageService, private readonly blockshipService: BlockshipService) {}
+    constructor (private readonly messageService: MessageService, private readonly blockshipService: BlockshipService, private readonly sessionService: SessionService) {}
     /**
      * 
      * @param channelname name of channel
@@ -12,8 +13,13 @@ export class MessageController {
      * @returns result of the request
      */
     @Get(':channelname/:id')
-    async find(@Param('channelname') channelname: string, @Param('id') user_id)
+    async find(@Param('channelname') channelname: string, @Param('id') user_id, @Req() req)
     {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+            // TODO redirect to log page
+        }
         const listUserBlocked = await this.blockshipService.findUserblockedFromId(user_id);
         let listUserBlockedId = [];
         for (let i = 0; i < listUserBlocked.length; i++)

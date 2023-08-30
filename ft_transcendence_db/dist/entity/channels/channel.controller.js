@@ -16,55 +16,73 @@ exports.ChannelController = void 0;
 const common_1 = require("@nestjs/common");
 const channel_service_1 = require("./channel.service");
 const channels_users_service_1 = require("../channels_users/channels_users.service");
+const session_service_1 = require("../sessions/session.service");
 let ChannelController = exports.ChannelController = class ChannelController {
-    constructor(channelService, channelsUsersService) {
+    constructor(channelService, channelsUsersService, sessionService) {
         this.channelService = channelService;
         this.channelsUsersService = channelsUsersService;
+        this.sessionService = sessionService;
     }
-    async find(user_id) {
+    async find(user_id, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
         const channels = await this.channelsUsersService.findChannelsOfUsers(user_id);
         return (channels);
     }
-    async setPassword(body) {
+    async setPassword(body, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
         return (await this.channelService.setPassword(body.channel, body.password));
     }
-    async removePassword(body) {
+    async removePassword(body, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
         return (await this, this.channelService.removePassword(body.channel));
     }
-    async changePassword(body) {
+    async changePassword(body, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
         return (await this, this.channelService.changePassword(body.channel, body.password));
     }
 };
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelController.prototype, "find", null);
 __decorate([
     (0, common_1.Post)('setPassword'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelController.prototype, "setPassword", null);
 __decorate([
     (0, common_1.Post)('removePassword'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelController.prototype, "removePassword", null);
 __decorate([
     (0, common_1.Post)('changePassword'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelController.prototype, "changePassword", null);
 exports.ChannelController = ChannelController = __decorate([
     (0, common_1.Controller)('channels'),
-    __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService])
+    __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService, session_service_1.SessionService])
 ], ChannelController);
 //# sourceMappingURL=channel.controller.js.map

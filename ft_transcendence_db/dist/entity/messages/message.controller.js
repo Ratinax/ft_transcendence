@@ -16,12 +16,17 @@ exports.MessageController = void 0;
 const common_1 = require("@nestjs/common");
 const message_service_1 = require("./message.service");
 const blockship_service_1 = require("../blockships/blockship.service");
+const session_service_1 = require("../sessions/session.service");
 let MessageController = exports.MessageController = class MessageController {
-    constructor(messageService, blockshipService) {
+    constructor(messageService, blockshipService, sessionService) {
         this.messageService = messageService;
         this.blockshipService = blockshipService;
+        this.sessionService = sessionService;
     }
-    async find(channelname, user_id) {
+    async find(channelname, user_id, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
         const listUserBlocked = await this.blockshipService.findUserblockedFromId(user_id);
         let listUserBlockedId = [];
         for (let i = 0; i < listUserBlocked.length; i++) {
@@ -37,8 +42,9 @@ __decorate([
     (0, common_1.Get)(':channelname/:id'),
     __param(0, (0, common_1.Param)('channelname')),
     __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, Object, Object]),
     __metadata("design:returntype", Promise)
 ], MessageController.prototype, "find", null);
 __decorate([
@@ -50,6 +56,6 @@ __decorate([
 ], MessageController.prototype, "post", null);
 exports.MessageController = MessageController = __decorate([
     (0, common_1.Controller)('messages'),
-    __metadata("design:paramtypes", [message_service_1.MessageService, blockship_service_1.BlockshipService])
+    __metadata("design:paramtypes", [message_service_1.MessageService, blockship_service_1.BlockshipService, session_service_1.SessionService])
 ], MessageController);
 //# sourceMappingURL=message.controller.js.map

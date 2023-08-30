@@ -84,6 +84,9 @@ export default {
                 {
                     channel: this.channel,
                     password: password,
+                },
+                {
+                    withCredentials: true,
                 });
                 if (this.$refs.SetPassword)
                     this.$refs.SetPassword.goodRequest();
@@ -104,6 +107,9 @@ export default {
                 {
                     channel: this.channel,
                     password: password,
+                },
+                {
+                    withCredentials: true,
                 });
                 if (this.$refs.SetPassword)
                     this.$refs.SetPassword.goodRequest();
@@ -122,6 +128,9 @@ export default {
                 await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
                 {
                     channel: this.channel
+                },
+                {
+                    withCredentials: true,
                 });
                 this.$emit('update-channels');
             }
