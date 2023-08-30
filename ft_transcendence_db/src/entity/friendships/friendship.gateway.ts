@@ -2,6 +2,7 @@ import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, Conne
 import { FriendshipService } from './friendship.service';
 import { Server } from 'socket.io';
 import { InternalServerErrorException } from '@nestjs/common';
+import { SessionService } from '../sessions/session.service';
 
 @WebSocketGateway(3002, {
   cors: {
@@ -14,7 +15,7 @@ export class FriendshipGateway {
     @WebSocketServer()
     server: Server;
 
-    constructor(private readonly friendshipService: FriendshipService) {}
+    constructor(private readonly friendshipService: FriendshipService, private readonly sessionService: SessionService) {}
 
     /**
      * makes a request to accept a friend request
@@ -25,8 +26,13 @@ export class FriendshipGateway {
     @SubscribeMessage('acceptFriendship')
     async acceptFriendship(@MessageBody() body) 
     {
-        const res = await this.friendshipService.acceptFriendship(body.friend_id, body.user_id);
-        this.server.emit('acceptFriendship', res);
+      if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+      {
+        // TODO redirect to log page
+        return ('not connected');
+      }
+      const res = await this.friendshipService.acceptFriendship(body.friend_id, body.user_id);
+      this.server.emit('acceptFriendship', res);
     }
     /**
      * makes a request to remove a friendShip (the friendship can be either accepted or pending)
@@ -38,6 +44,11 @@ export class FriendshipGateway {
     @SubscribeMessage('removeFriendship')
     async removeFriendship(@MessageBody() body) 
     {
+      if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+      {
+        // TODO redirect to log page
+        return ('not connected');
+      }
       try
       {
         const res = await this.friendshipService.deleteFriendship(body.friend_id, body.user_id);

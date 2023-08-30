@@ -29,6 +29,8 @@
 <script>
 import { Socket } from 'socket.io-client';
 import TimeOut from './TimeOut.vue';
+import axios from 'axios';
+
 export default {
     name: 'UserChat-Component',
     components:
@@ -71,30 +73,45 @@ export default {
         {
             this.$emit('user-clicked', this.userInChat);
         },
-        ban()
+        async ban()
         {
-            this.socket.emit('banUser', {channel: this.channel, user: this.userInChat});
+            const sessionCookie = await this.getSessionCookie()
+            this.socket.emit('banUser', {channel: this.channel, user: this.userInChat, sessionCookie: sessionCookie});
         },
-        kick()
+        async kick()
         {
-            this.socket.emit('kickUser', {channel: this.channel, user: this.userInChat});
+            const sessionCookie = await this.getSessionCookie()
+            this.socket.emit('kickUser', {channel: this.channel, user: this.userInChat, sessionCookie: sessionCookie});
         },
-        setAdmin()
+        async setAdmin()
         {
-            this.socket.emit('setAdmin', {channel: this.channel, user: this.userInChat});
+            const sessionCookie = await this.getSessionCookie()
+            this.socket.emit('setAdmin', {channel: this.channel, user: this.userInChat, sessionCookie: sessionCookie});
         },
-        removeAdmin()
+        async removeAdmin()
         {
-            this.socket.emit('removeAdmin', {channel: this.channel, user: this.userInChat});
+            const sessionCookie = await this.getSessionCookie()
+            this.socket.emit('removeAdmin', {channel: this.channel, user: this.userInChat, sessionCookie: sessionCookie});
         },
-        onTimeoutUser(nbSeconds)
+        async onTimeoutUser(nbSeconds)
         {
-            this.socket.emit('timeoutUser', {user: this.userInChannel, userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds});
+            const sessionCookie = await this.getSessionCookie()
+            this.socket.emit('timeoutUser', {user: this.userInChannel, userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds, sessionCookie: sessionCookie});
         },
         closeTimeOut()
         {
             this.showTimeOut = false;
         },
+        async getSessionCookie()
+        {
+            const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+            if (!sessionCookie.data)
+            {
+                // TODO redirect to log page 
+                return (null);
+            }
+            return (sessionCookie.data);
+        }
     }
 }
 </script>

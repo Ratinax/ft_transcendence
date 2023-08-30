@@ -3,8 +3,9 @@ import { MessageService } from './message.service';
 import { Server } from 'socket.io';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { InternalServerErrorException } from '@nestjs/common';
+import { SessionService } from '../sessions/session.service';
 
-@WebSocketGateway(3002, {
+@WebSocketGateway(3001, {
   cors: {
     origin: `http://192.168.1.159:8080`,
     credentials: true,
@@ -15,12 +16,12 @@ export class MessagesGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly messagesService: MessageService, private readonly channelsUsersService: ChannelsUsersService) {}
+  constructor(private readonly messagesService: MessageService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
 
   /**
    * create a new message
    * 
-   * @param body - {channel_id, user_id, message, dateSent, isAGameInvite}
+   * @param body - {channel_id, user_id, message, dateSent, isAGameInvite, sessionCookie}
    * @returns response of request
    * @emits 'updateMessage' {channel_id}
    * @emits 'sendMessageTimeout' {channel_id, user_id, duration}
@@ -31,6 +32,11 @@ export class MessagesGateway {
   async create(
     @MessageBody() body) 
     {
+      if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+      {
+        // TODO redirect to log page
+        return ('not connected');
+      }
       const relation = await this.channelsUsersService.findRelation(body.user_id, body.channel_id);
       if (!relation || !relation[0])
         throw new InternalServerErrorException('no such relation');

@@ -18,12 +18,17 @@ const message_service_1 = require("./message.service");
 const socket_io_1 = require("socket.io");
 const channels_users_service_1 = require("../channels_users/channels_users.service");
 const common_1 = require("@nestjs/common");
+const session_service_1 = require("../sessions/session.service");
 let MessagesGateway = exports.MessagesGateway = class MessagesGateway {
-    constructor(messagesService, channelsUsersService) {
+    constructor(messagesService, channelsUsersService, sessionService) {
         this.messagesService = messagesService;
         this.channelsUsersService = channelsUsersService;
+        this.sessionService = sessionService;
     }
     async create(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         const relation = await this.channelsUsersService.findRelation(body.user_id, body.channel_id);
         if (!relation || !relation[0])
             throw new common_1.InternalServerErrorException('no such relation');
@@ -60,12 +65,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MessagesGateway.prototype, "create", null);
 exports.MessagesGateway = MessagesGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3002, {
+    (0, websockets_1.WebSocketGateway)(3001, {
         cors: {
             origin: `http://192.168.1.159:8080`,
             credentials: true,
         },
     }),
-    __metadata("design:paramtypes", [message_service_1.MessageService, channels_users_service_1.ChannelsUsersService])
+    __metadata("design:paramtypes", [message_service_1.MessageService, channels_users_service_1.ChannelsUsersService, session_service_1.SessionService])
 ], MessagesGateway);
 //# sourceMappingURL=message.gateway.js.map

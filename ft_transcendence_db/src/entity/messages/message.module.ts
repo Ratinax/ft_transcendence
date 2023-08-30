@@ -8,6 +8,8 @@ import { channelsUsersProviders } from '../channels_users/channels_users.provide
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { blockshipProviders } from '../blockships/blockship.providers';
 import { BlockshipService } from '../blockships/blockship.service';
+import { sessionProviders } from '../sessions/session.providers';
+import { SessionService } from '../sessions/session.service';
 
 @Module({
   imports: [DatabaseModule],
@@ -15,10 +17,12 @@ import { BlockshipService } from '../blockships/blockship.service';
     ...messageProviders,
     ...channelsUsersProviders,
     ...blockshipProviders,
+    ...sessionProviders,
     MessageService,
     MessagesGateway,
     ChannelsUsersService,
     BlockshipService,
+    SessionService,
   ],
     controllers: [MessageController],
 })

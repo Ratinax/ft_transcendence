@@ -24,6 +24,8 @@
   
 <script>
 import { Socket } from 'socket.io-client';
+import axios from 'axios';
+
 export default {
   name: 'CreateChannel',
   props: {
@@ -74,14 +76,22 @@ export default {
   },
   methods: 
   {
-    createChannel()
+    async createChannel()
     {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      console.log('da cookies :', sessionCookie);
+      if (!sessionCookie.data)
+      {
+        // TODO redirect to log page
+        return ;
+      }
       this.socket.emit('createChannel', { channel: {
         name: this.channelName,
           password: this.password,
           category: this.categories[this.selectedCategory - 1].name,
           isADm: false,
-      }, user: this.user});
+      }, user: this.user,
+      sessionCookie: sessionCookie.data});
       console.log('this.user :', this.user);
     },
     close()

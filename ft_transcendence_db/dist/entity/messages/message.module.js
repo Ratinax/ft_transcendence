@@ -17,6 +17,8 @@ const channels_users_providers_1 = require("../channels_users/channels_users.pro
 const channels_users_service_1 = require("../channels_users/channels_users.service");
 const blockship_providers_1 = require("../blockships/blockship.providers");
 const blockship_service_1 = require("../blockships/blockship.service");
+const session_providers_1 = require("../sessions/session.providers");
+const session_service_1 = require("../sessions/session.service");
 let MessageModule = exports.MessageModule = class MessageModule {
 };
 exports.MessageModule = MessageModule = __decorate([
@@ -26,10 +28,12 @@ exports.MessageModule = MessageModule = __decorate([
             ...message_providers_1.messageProviders,
             ...channels_users_providers_1.channelsUsersProviders,
             ...blockship_providers_1.blockshipProviders,
+            ...session_providers_1.sessionProviders,
             message_service_1.MessageService,
             message_gateway_1.MessagesGateway,
             channels_users_service_1.ChannelsUsersService,
             blockship_service_1.BlockshipService,
+            session_service_1.SessionService,
         ],
         controllers: [message_controller_1.MessageController],
     })

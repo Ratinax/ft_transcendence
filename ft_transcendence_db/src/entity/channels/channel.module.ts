@@ -6,6 +6,8 @@ import { DatabaseModule } from 'src/database/database.module';
 import { ChannelGateway } from './channel.gateway';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { channelsUsersProviders } from '../channels_users/channels_users.providers';
+import { sessionProviders } from '../sessions/session.providers';
+import { SessionService } from '../sessions/session.service';
 
 
 @Module({
@@ -13,9 +15,11 @@ import { channelsUsersProviders } from '../channels_users/channels_users.provide
   providers: [
     ...channelProviders,
     ...channelsUsersProviders,
+    ...sessionProviders,
     ChannelService,
     ChannelGateway,
     ChannelsUsersService,
+    SessionService,
   ],
     controllers: [ChannelController],
 })

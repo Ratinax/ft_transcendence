@@ -13,6 +13,8 @@ const friendship_service_1 = require("./friendship.service");
 const friendship_providers_1 = require("./friendship.providers");
 const database_module_1 = require("../../database/database.module");
 const friendship_gateway_1 = require("./friendship.gateway");
+const session_providers_1 = require("../sessions/session.providers");
+const session_service_1 = require("../sessions/session.service");
 let FriendshipModule = exports.FriendshipModule = class FriendshipModule {
 };
 exports.FriendshipModule = FriendshipModule = __decorate([
@@ -20,8 +22,10 @@ exports.FriendshipModule = FriendshipModule = __decorate([
         imports: [database_module_1.DatabaseModule],
         providers: [
             ...friendship_providers_1.friendshipProviders,
+            ...session_providers_1.sessionProviders,
             friendship_service_1.FriendshipService,
             friendship_gateway_1.FriendshipGateway,
+            session_service_1.SessionService,
         ],
         controllers: [friendship_controller_1.FriendshipController],
     })

@@ -17,15 +17,23 @@ const websockets_1 = require("@nestjs/websockets");
 const friendship_service_1 = require("./friendship.service");
 const socket_io_1 = require("socket.io");
 const common_1 = require("@nestjs/common");
+const session_service_1 = require("../sessions/session.service");
 let FriendshipGateway = exports.FriendshipGateway = class FriendshipGateway {
-    constructor(friendshipService) {
+    constructor(friendshipService, sessionService) {
         this.friendshipService = friendshipService;
+        this.sessionService = sessionService;
     }
     async acceptFriendship(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         const res = await this.friendshipService.acceptFriendship(body.friend_id, body.user_id);
         this.server.emit('acceptFriendship', res);
     }
     async removeFriendship(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         try {
             const res = await this.friendshipService.deleteFriendship(body.friend_id, body.user_id);
             this.server.emit('deleteFriendship', res);
@@ -60,6 +68,6 @@ exports.FriendshipGateway = FriendshipGateway = __decorate([
             credentials: true,
         },
     }),
-    __metadata("design:paramtypes", [friendship_service_1.FriendshipService])
+    __metadata("design:paramtypes", [friendship_service_1.FriendshipService, session_service_1.SessionService])
 ], FriendshipGateway);
 //# sourceMappingURL=friendship.gateway.js.map

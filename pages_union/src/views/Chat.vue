@@ -19,7 +19,7 @@ import Messages from "../components/Chat/Messages.vue";
 import SendMessage from "../components/Chat/SendMessage.vue";
 import Menu from "../components/Menu.vue"
 import { io } from 'socket.io-client';
-
+import axios from 'axios';
 
 export default {
   name: 'Chat-Page',
@@ -123,13 +123,15 @@ export default {
       this.selectedChannel = channel;
       this.findUsersOfChannel()
     },
-    createMessage(content)
+    async createMessage(content)
     {
-      this.socket.emit('createMessage', content);
+      const sessionCookie = await this.getSessionCookie();
+      this.socket.emit('createMessage', {...content, sessionCookie: sessionCookie});
     },
-    findUsersOfChannel()
+    async findUsersOfChannel()
     {
-      this.socket.emit('findUsersOfChannel', {channel: this.selectedChannel, user: this.user});
+      const sessionCookie = await this.getSessionCookie();
+      this.socket.emit('findUsersOfChannel', {channel: this.selectedChannel, user: this.user, sessionCookie: sessionCookie});
     },
     /**
      * 
@@ -140,9 +142,10 @@ export default {
       if (this.$refs.listUsersChat)
         this.$refs.listUsersChat.updateListUsers(users);
     },
-    onLeaveChannel(channel)
+    async onLeaveChannel(channel)
     {
-      this.socket.emit('leaveChannel', {channel: channel, user: this.user})
+      const sessionCookie = await this.getSessionCookie();
+      this.socket.emit('leaveChannel', {channel: channel, user: this.user, sessionCookie: sessionCookie})
     },
     onGetIsUserOwner(channel_id)
     {
@@ -162,6 +165,16 @@ export default {
     {
       if (this.$refs.sendMessage)
         this.$refs.sendMessage.goodRequest();
+    },
+    async getSessionCookie()
+    {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (!sessionCookie.data)
+      {
+        // TODO redirect to log page 
+        return (null);
+      }
+      return (sessionCookie.data);
     }
   }
 }

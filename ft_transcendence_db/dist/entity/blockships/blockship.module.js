@@ -13,6 +13,8 @@ const blockship_service_1 = require("./blockship.service");
 const blockship_providers_1 = require("./blockship.providers");
 const database_module_1 = require("../../database/database.module");
 const blockship_gateway_1 = require("./blockship.gateway");
+const session_providers_1 = require("../sessions/session.providers");
+const session_service_1 = require("../sessions/session.service");
 let BlockshipModule = exports.BlockshipModule = class BlockshipModule {
 };
 exports.BlockshipModule = BlockshipModule = __decorate([
@@ -20,8 +22,10 @@ exports.BlockshipModule = BlockshipModule = __decorate([
         imports: [database_module_1.DatabaseModule],
         providers: [
             ...blockship_providers_1.blockshipProviders,
+            ...session_providers_1.sessionProviders,
             blockship_service_1.BlockshipService,
             blockship_gateway_1.BlockshipGateway,
+            session_service_1.SessionService,
         ],
         controllers: [blockship_controller_1.BlockshipController],
     })

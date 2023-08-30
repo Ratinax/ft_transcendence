@@ -16,11 +16,17 @@ exports.BlockshipGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const blockship_service_1 = require("./blockship.service");
 const socket_io_1 = require("socket.io");
+const session_service_1 = require("../sessions/session.service");
 let BlockshipGateway = exports.BlockshipGateway = class BlockshipGateway {
-    constructor(blockshipService) {
+    constructor(blockshipService, sessionService) {
         this.blockshipService = blockshipService;
+        this.sessionService = sessionService;
     }
     async refuseBlockship(body) {
+        console.log(234);
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         const res = await this.blockshipService.deleteBlockship(body.userblocking_id, body.userblocked_id);
         this.server.emit('deleteBlockship', res);
     }
@@ -37,12 +43,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BlockshipGateway.prototype, "refuseBlockship", null);
 exports.BlockshipGateway = BlockshipGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3001, {
+    (0, websockets_1.WebSocketGateway)(3002, {
         cors: {
             origin: `http://192.168.1.159:8080`,
             credentials: true,
         },
     }),
-    __metadata("design:paramtypes", [blockship_service_1.BlockshipService])
+    __metadata("design:paramtypes", [blockship_service_1.BlockshipService, session_service_1.SessionService])
 ], BlockshipGateway);
 //# sourceMappingURL=blockship.gateway.js.map

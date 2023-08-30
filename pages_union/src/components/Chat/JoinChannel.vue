@@ -21,6 +21,7 @@
   
 <script>
 import { Socket } from 'socket.io-client';
+import axios from 'axios';
 export default {
   name: 'JoinChannel',
   props: {
@@ -74,7 +75,7 @@ export default {
   },
   methods: 
   {
-    joinAChannel()
+    async joinAChannel()
     {
       this.matrixIndex = 0;
       if (this.channelName === '')
@@ -82,7 +83,13 @@ export default {
         this.matrixIndex = 1;
         return ;
       }
-      this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, user: this.user})
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (!sessionCookie.data)
+      {
+        // TODO redirect to log page 
+        return ;
+      }
+      this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, user: this.user, sessionCookie: sessionCookie.data})
     },
     close()
     {

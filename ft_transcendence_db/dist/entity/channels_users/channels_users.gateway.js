@@ -16,11 +16,16 @@ exports.ChannelsUsersGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const channels_users_service_1 = require("./channels_users.service");
 const socket_io_1 = require("socket.io");
+const session_service_1 = require("../sessions/session.service");
 let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGateway {
-    constructor(channelsUsersService) {
+    constructor(channelsUsersService, sessionService) {
         this.channelsUsersService = channelsUsersService;
+        this.sessionService = sessionService;
     }
     async findUsersOfChannel(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         try {
             const res = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
             this.server.emit('updateListUsers', { users: res, channel: body.channel });
@@ -29,6 +34,9 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         }
     }
     async ban(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         const res = await this.channelsUsersService.ban(body.channel, body.user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateAfterPart', {
@@ -39,6 +47,9 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         return (res);
     }
     async kick(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         const res = await this.channelsUsersService.leave(body.channel, body.user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateAfterPart', {
@@ -49,6 +60,9 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         return (res);
     }
     async leaveChannel(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         const res = await this.channelsUsersService.leave(body.channel, body.user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateAfterPart', {
@@ -59,6 +73,9 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         return (res);
     }
     async setAdmin(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         const res = await this.channelsUsersService.setAdmin(body.channel, body.user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateListUsers', {
@@ -68,6 +85,9 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         return (res);
     }
     async removeAdmin(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         const res = await this.channelsUsersService.removeAdmin(body.channel, body.user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateListUsers', {
@@ -77,6 +97,9 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         return (res);
     }
     async timeoutUser(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) {
             this.server.emit('timeoutWrongAmount', { channel: body.channel, user: body.user });
             return;
@@ -147,6 +170,6 @@ exports.ChannelsUsersGateway = ChannelsUsersGateway = __decorate([
             credentials: true,
         },
     }),
-    __metadata("design:paramtypes", [channels_users_service_1.ChannelsUsersService])
+    __metadata("design:paramtypes", [channels_users_service_1.ChannelsUsersService, session_service_1.SessionService])
 ], ChannelsUsersGateway);
 //# sourceMappingURL=channels_users.gateway.js.map

@@ -3,6 +3,7 @@ import { ChannelService } from './channel.service';
 import { Server } from 'socket.io';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { InternalServerErrorException } from '@nestjs/common';
+import { SessionService } from '../sessions/session.service';
 
 @WebSocketGateway(3001, {
   cors: {
@@ -15,11 +16,11 @@ export class ChannelGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly channelService: ChannelService, private readonly channelsUsersService: ChannelsUsersService) {}
+  constructor(private readonly channelService: ChannelService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
 
   /**
    * 
-   * @param data - {channel, user}
+   * @param data - {channel, user, cookie}
    * @returns responses of request | 'Error'
    * @emits updateListChannels {channel, user}
    * @emits createGoodRequest {user}
@@ -28,30 +29,36 @@ export class ChannelGateway {
    * @emits createWrongCategory {user} - in case of failing
    */
   @SubscribeMessage('createChannel')
-  async create(
-    @MessageBody() data: {channel: any, user: any}) {
-      if (!this.createGoodInputs(data.channel, data.user))
-        return ('input error');
-      const channel = data.channel;
-      const user = data.user;
-      try 
-      {
-        const response = await this.channelService.createChannel(channel);
-        this.server.emit('updateListChannels', {channel: response, user: user});
-        const response2 = await this.channelsUsersService.createNew({
-          user: user,
-          channel: response,
-          isAdmin: true,
-          isOwner: true,
-          isInvited: false,
-        });
-        this.server.emit('createGoodRequest', {user: user});
-        return ({response, response2});
-      }
-      catch (e)
-      {
-        this.server.emit('createAlreadyExists', {user: user});
-      }
+  async create(@MessageBody() data)
+  {
+    // console.log('data :', data, '\n est expire :', await this.sessionService.getIsSessionExpired(data.sessionCookie))
+    if (await this.sessionService.getIsSessionExpired(data.sessionCookie))
+    {
+      // TODO redirect to log page
+      return ('not connected');
+    }
+    if (!this.createGoodInputs(data.channel, data.user))
+      return ('input error');
+    const channel = data.channel;
+    const user = data.user;
+    try 
+    {
+      const response = await this.channelService.createChannel(channel);
+      this.server.emit('updateListChannels', {channel: response, user: user});
+      const response2 = await this.channelsUsersService.createNew({
+        user: user,
+        channel: response,
+        isAdmin: true,
+        isOwner: true,
+        isInvited: false,
+      });
+      this.server.emit('createGoodRequest', {user: user});
+      return ({response, response2});
+    }
+    catch (e)
+    {
+      this.server.emit('createAlreadyExists', {user: user});
+    }
   }
   /**
    * check if good args for create
@@ -81,7 +88,7 @@ export class ChannelGateway {
   }
   /**
    * 
-   * @param body channel to join {password, channelName, user}
+   * @param body channel to join {password, channelName, user, sessionCookie}
    * 
    * @emits joinNoSuchChannel {user} - in case of failing
    * @emits joinBanned {user} - in case of failing
@@ -93,6 +100,12 @@ export class ChannelGateway {
   @SubscribeMessage('joinChannel')
   async join(@MessageBody() body)
   {
+    if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    {
+      // TODO redirect to log page
+      return ('not connected');
+    }
+
     const password = body.password;
     const channelName = body.channelName;
     const user = body.user;

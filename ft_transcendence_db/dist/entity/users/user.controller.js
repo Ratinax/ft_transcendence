@@ -57,6 +57,7 @@ let UserController = exports.UserController = class UserController {
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
         try {
             if (!fs.existsSync(imagePath)) {
+                return (null);
             }
             return (res.sendFile(imagePath));
         }

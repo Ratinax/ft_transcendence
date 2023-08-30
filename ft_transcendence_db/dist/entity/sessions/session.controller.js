@@ -19,11 +19,14 @@ let SessionController = exports.SessionController = class SessionController {
     constructor(sessionService) {
         this.sessionService = sessionService;
     }
-    async test(req, res) {
+    async pingBack(req, res) {
         const sessionCookie = await this.sessionService.refreshSessionKey(req.cookies['SESSION_KEY']);
         if (!sessionCookie)
             return (null);
         res.cookie('SESSION_KEY', sessionCookie.sessionKey, { httpOnly: true, expires: new Date(sessionCookie.expirationDate) });
+    }
+    getCookies(req) {
+        return (req.cookies['SESSION_KEY']);
     }
 };
 __decorate([
@@ -33,7 +36,14 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], SessionController.prototype, "test", null);
+], SessionController.prototype, "pingBack", null);
+__decorate([
+    (0, common_1.Get)('cookies'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], SessionController.prototype, "getCookies", null);
 exports.SessionController = SessionController = __decorate([
     (0, common_1.Controller)('sessions'),
     __metadata("design:paramtypes", [session_service_1.SessionService])

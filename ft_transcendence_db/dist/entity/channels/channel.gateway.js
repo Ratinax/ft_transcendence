@@ -18,12 +18,17 @@ const channel_service_1 = require("./channel.service");
 const socket_io_1 = require("socket.io");
 const channels_users_service_1 = require("../channels_users/channels_users.service");
 const common_1 = require("@nestjs/common");
+const session_service_1 = require("../sessions/session.service");
 let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
-    constructor(channelService, channelsUsersService) {
+    constructor(channelService, channelsUsersService, sessionService) {
         this.channelService = channelService;
         this.channelsUsersService = channelsUsersService;
+        this.sessionService = sessionService;
     }
     async create(data) {
+        if (await this.sessionService.getIsSessionExpired(data.sessionCookie)) {
+            return ('not connected');
+        }
         if (!this.createGoodInputs(data.channel, data.user))
             return ('input error');
         const channel = data.channel;
@@ -62,6 +67,9 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
         return (true);
     }
     async join(body) {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
+            return ('not connected');
+        }
         const password = body.password;
         const channelName = body.channelName;
         const user = body.user;
@@ -127,6 +135,6 @@ exports.ChannelGateway = ChannelGateway = __decorate([
             credentials: true,
         },
     }),
-    __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService])
+    __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService, session_service_1.SessionService])
 ], ChannelGateway);
 //# sourceMappingURL=channel.gateway.js.map

@@ -87,7 +87,8 @@ export class UserController {
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
         try {
             if (!fs.existsSync(imagePath)) {
-                // TODO imagePath = quelquechose qui existes; 
+                // TODO imagePath = quelquechose qui existes;
+                return (null); 
               }
             return (res.sendFile(imagePath));
         }

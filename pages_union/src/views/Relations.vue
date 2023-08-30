@@ -11,6 +11,7 @@
   import ListUsers from '../components/Relations/ListUsers.vue'
   import Menu from '../components/Menu.vue'
   import { io } from 'socket.io-client';
+  import axios from 'axios';
   
   export default {
     name: 'Relations-Page',
@@ -47,9 +48,10 @@
     },
     methods:
     {
-      onAcceptFriendship(body)
+      async onAcceptFriendship(body)
       {
-        this.socket.emit('acceptFriendship', body);
+        const sessionCookie = await this.getSessionCookie();
+        this.socket.emit('acceptFriendship', {...body, sessionCookie: sessionCookie});
       },
       acceptFriendship()
       {
@@ -58,9 +60,10 @@
         if (this.$refs.friendRequest)
           this.$refs.friendRequest.fetchUsers();
       },
-      onRefuseFriendship(body)
+      async onRefuseFriendship(body)
       {
-        this.socket.emit('refuseFriendship', body);
+        const sessionCookie = await this.getSessionCookie();
+        this.socket.emit('removeFriendship', {...body, sessionCookie: sessionCookie});
       },
       deleteFriendship()
       {
@@ -69,19 +72,34 @@
         if (this.$refs.friendList)
           this.$refs.friendList.fetchUsers();
       },
-      onRemoveRelation(body)
+      async onRemoveRelation(body)
       {
+        const sessionCookie = await this.getSessionCookie();
+        console.log(body ,sessionCookie);
         if (body.relationType === 'friend')
         {
-          this.socket.emit('removeFriendship', body);
+          this.socket.emit('removeFriendship', {...body, sessionCookie: sessionCookie});
         }
         else
-          this.socket.emit('removeBlockship', body);
+        {
+          console.log('ca va remove blockship avec', body, sessionCookie);
+          this.socket.emit('removeBlockship', {...body, sessionCookie: sessionCookie});
+        }
       },
       deleteBlockship()
       {
         if (this.$refs.blockList)
           this.$refs.blockList.fetchUsers();
+      },
+      async getSessionCookie()
+      {
+        const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+        if (!sessionCookie.data)
+        {
+          // TODO redirect to log page 
+          return (null);
+        }
+        return (sessionCookie.data);
       },
     }
   }

@@ -23,8 +23,13 @@ export default {
   mounted()
   {
     this.socket.on('pingAlive', async () => {
-      console.log('ca va ping back')
-        await axios.post(`http://${process.env.VUE_APP_IP}:3000/sessions/pingBack`, {}, { withCredentials: true });
+      await axios.post(`http://${process.env.VUE_APP_IP}:3000/sessions/pingBack`, {}, { withCredentials: true });
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (!sessionCookie.data)
+      {
+        // TODO handle if error
+      }
+      this.socket.emit('pingBack', { cookies: sessionCookie.data });
     })
   }
 }
