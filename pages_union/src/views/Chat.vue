@@ -56,40 +56,40 @@ export default {
       if (response.channel_id === this.selectedChannel.channel_id)
         this.updateMessages();
     });
-    this.socket.on('updateListChannels', (response) => {
-      if (response.user.id === this.user.id)
+    this.socket.on('updateListChannels', async (response) => {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (response.sessionCookie === sessionCookie.data)
         this.updateListChannels(response.channel);
     });
     this.socket.on('updateListUsers', (response) => {
       if (response.channel.channel_id === this.selectedChannel.channel_id)
       {
-        console.log('les nazi users :', response.users);
         this.updateListUsers(response.users);
       }
     });
-    this.socket.on('updateAfterPart', (response) => {
-      if (response.user.id === this.user.id 
-        || response.channel.channel_id === this.selectedChannel.channel_id)
+    this.socket.on('updateAfterPart', async (response) => {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+
+      if (sessionCookie.data === response.sessionCookie)
       {
-        if (response.user.id === this.user.id)
-        {
-          this.updateListChannels({});
-          this.updateMessages();
-          this.updateListUsers(null);
-        }
-        else
-        {
-          this.updateListChannels(response.channel);
-          this.updateListUsers(response.users);
-        }
+        this.updateListChannels({});
+        this.updateMessages();
+        this.updateListUsers(null);
+      }
+      else if (response.channel.channel_id === this.selectedChannel.channel_id)
+      {
+        this.updateListChannels(response.channel);
+        this.updateListUsers(response.users);
       }
     });
-    this.socket.on('sendMessageTimeout', (response) => {
-      if (this.selectedChannel.channel_id === response.channel_id && this.user.id === response.user_id)
+    this.socket.on('sendMessageTimeout', async (response) => {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (this.selectedChannel.channel_id === response.channel_id && sessionCookie.data === response.sessionCookie)
         this.sendMessageTimeout(response.duration);
     });
-    this.socket.on('sendMessageGoodRequest', (response) => {
-      if (this.selectedChannel.channel_id === response.channel_id && this.user.id === response.user_id)
+    this.socket.on('sendMessageGoodRequest', async (response) => {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (this.selectedChannel.channel_id === response.channel_id && sessionCookie.data === response.sessionCookie)
         this.sendMessageGoodRequest();
     });
   },
@@ -131,7 +131,7 @@ export default {
     async findUsersOfChannel()
     {
       const sessionCookie = await this.getSessionCookie();
-      this.socket.emit('findUsersOfChannel', {channel: this.selectedChannel, user: this.user, sessionCookie: sessionCookie});
+      this.socket.emit('findUsersOfChannel', {channel: this.selectedChannel, sessionCookie: sessionCookie});
     },
     /**
      * 
@@ -145,7 +145,7 @@ export default {
     async onLeaveChannel(channel)
     {
       const sessionCookie = await this.getSessionCookie();
-      this.socket.emit('leaveChannel', {channel: channel, user: this.user, sessionCookie: sessionCookie})
+      this.socket.emit('leaveChannel', {channel: channel, sessionCookie: sessionCookie})
     },
     onGetIsUserOwner(channel_id)
     {

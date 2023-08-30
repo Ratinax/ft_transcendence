@@ -6,7 +6,7 @@ export declare class ChannelController {
     private readonly channelsUsersService;
     private readonly sessionService;
     constructor(channelService: ChannelService, channelsUsersService: ChannelsUsersService, sessionService: SessionService);
-    find(user_id: number, req: any): Promise<{
+    find(req: any): Promise<{
         channel_id: number;
         isADm: boolean;
         name: string;

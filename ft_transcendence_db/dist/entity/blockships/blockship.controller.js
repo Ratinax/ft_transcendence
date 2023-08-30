@@ -21,12 +21,13 @@ let BlockshipController = exports.BlockshipController = class BlockshipControlle
         this.blockshipService = blockshipService;
         this.sessionService = sessionService;
     }
-    async findUserblockedFromId(id, req) {
+    async findUserblockedFromId(req) {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         try {
-            const res = await this.blockshipService.findUserblockedFromId(id);
+            const res = await this.blockshipService.findUserblockedFromId(user.id);
             return (res);
         }
         catch (e) {
@@ -34,11 +35,10 @@ let BlockshipController = exports.BlockshipController = class BlockshipControlle
     }
 };
 __decorate([
-    (0, common_1.Get)('userblockedby/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Req)()),
+    (0, common_1.Get)('userblockedby'),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], BlockshipController.prototype, "findUserblockedFromId", null);
 exports.BlockshipController = BlockshipController = __decorate([

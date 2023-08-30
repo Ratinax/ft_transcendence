@@ -4,7 +4,7 @@
             <h1>{{ headerText }}</h1>
         </div>
         <div class="users">
-            <User v-for="user in users" :key="user.id" :user="user" :isARequest="isFriendRequestList" @accept-friendship="onAcceptFriendship" @refuse-friendship="onRefuseFriendship" @remove-relation="onRemoveRelation"/>
+            <User v-for="user in users" :key="user.id" :user="user" :isARequest="isFriendRequestList" @accept-friendship="onAcceptFriendship" @remove-relation="onRemoveRelation"/>
         </div>
     </div>
   
@@ -50,7 +50,7 @@ export default {
                 return ;
             try
             {
-                const res = await axios.get(`http://${process.env.VUE_APP_IP}:3000/${getText}/${this.user.id}`);
+                const res = await axios.get(`http://${process.env.VUE_APP_IP}:3000/${getText}`, {withCredentials: true});
                 this.users = res.data;
             }
             catch (e)
@@ -58,24 +58,20 @@ export default {
                 console.error('Error un fetchUsers:', e);
             }
         },
-        onAcceptFriendship(user_id)
+        onAcceptFriendship()
         {
-            this.$emit('accept-friendship', {user_id : user_id, friend_id : this.user.id})
+            this.$emit('accept-friendship', {friend_id : this.user.id})
         },
         updateFriendList(users)
         {
             this.users = users;
         },
-        onRefuseFriendship(user_id)
-        {
-            this.$emit('refuse-friendship', {user_id : user_id, friend_id : this.user.id})
-        },
-        onRemoveRelation(user_id)
+        onRemoveRelation()
         {
             if (this.isFriendList || this.isFriendRequestList)
-                this.$emit('remove-relation', {relationType: 'friend', user_id : user_id, friend_id : this.user.id})
+                this.$emit('remove-relation', {relationType: 'friend', friend_id : this.user.id})
             else
-                this.$emit('remove-relation', {relationType: 'block', userblocking_id : user_id, userblocked_id : this.user.id})
+                this.$emit('remove-relation', {relationType: 'block', userblocked_id : this.user.id})
 
         },
     },

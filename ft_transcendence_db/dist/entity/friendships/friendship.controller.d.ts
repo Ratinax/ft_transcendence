@@ -4,12 +4,12 @@ export declare class FriendshipController {
     private readonly friendshipService;
     private readonly sessionService;
     constructor(friendshipService: FriendshipService, sessionService: SessionService);
-    findFriendOfId(id: number, req: any): Promise<{
+    findFriendOfId(req: any): Promise<{
         id: number;
         pseudo: string;
         profilPic: string;
     }[]>;
-    findPending(id: number, req: any): Promise<{
+    findPending(req: any): Promise<{
         id: number;
         pseudo: string;
         profilPic: string;

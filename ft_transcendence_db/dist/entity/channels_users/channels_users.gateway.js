@@ -26,6 +26,7 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
+        const user = await this.sessionService.getUser(body.sessionCookie);
         try {
             const res = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
             this.server.emit('updateListUsers', { users: res, channel: body.channel });
@@ -37,12 +38,13 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
-        const res = await this.channelsUsersService.ban(body.channel, body.user);
+        const user = await this.sessionService.getUser(body.sessionCookie);
+        const res = await this.channelsUsersService.ban(body.channel, user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateAfterPart', {
             users: users,
             channel: body.channel,
-            user: body.user
+            sessionCookie: body.sessionCookie
         });
         return (res);
     }
@@ -50,12 +52,13 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
-        const res = await this.channelsUsersService.leave(body.channel, body.user);
+        const user = await this.sessionService.getUser(body.sessionCookie);
+        const res = await this.channelsUsersService.leave(body.channel, user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateAfterPart', {
             users: users,
             channel: body.channel,
-            user: body.user
+            sessionCookie: body.sessionCookie
         });
         return (res);
     }
@@ -63,12 +66,13 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
-        const res = await this.channelsUsersService.leave(body.channel, body.user);
+        const user = await this.sessionService.getUser(body.sessionCookie);
+        const res = await this.channelsUsersService.leave(body.channel, user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateAfterPart', {
             users: users,
             channel: body.channel,
-            user: body.user
+            body: body.sessionCookie
         });
         return (res);
     }
@@ -76,7 +80,8 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
-        const res = await this.channelsUsersService.setAdmin(body.channel, body.user);
+        const user = await this.sessionService.getUser(body.sessionCookie);
+        const res = await this.channelsUsersService.setAdmin(body.channel, user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateListUsers', {
             users: users,
@@ -88,7 +93,8 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
-        const res = await this.channelsUsersService.removeAdmin(body.channel, body.user);
+        const user = await this.sessionService.getUser(body.sessionCookie);
+        const res = await this.channelsUsersService.removeAdmin(body.channel, user);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateListUsers', {
             users: users,
@@ -100,14 +106,15 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
+        const user = await this.sessionService.getUser(body.sessionCookie);
         if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) {
-            this.server.emit('timeoutWrongAmount', { channel: body.channel, user: body.user });
+            this.server.emit('timeoutWrongAmount', { channel: body.channel, sessionCookie: body.sessionCookie });
             return;
         }
         await this.channelsUsersService.timeoutUser(body.channel, body.userTimeouted, body.duration_timeout);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateListUsers', { channel: body.channel, users: users });
-        this.server.emit('timeoutGoodRequest', { channel: body.channel, user: body.user });
+        this.server.emit('timeoutGoodRequest', { channel: body.channel, sessionCookie: body.sessionCookie });
     }
 };
 __decorate([

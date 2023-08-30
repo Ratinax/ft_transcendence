@@ -13,15 +13,16 @@ export class ChannelController {
      * @param user_id id of user
      * @returns result of request
      */
-    @Get(':id')
-    async find(@Param('id') user_id : number, @Req() req)
+    @Get('')
+    async find(@Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
             // TODO redirect to log page
         }
-        const channels = await this.channelsUsersService.findChannelsOfUsers(user_id);
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        const channels = await this.channelsUsersService.findChannelsOfUsers(user.id);
         return (channels);
     }
     /**
@@ -38,6 +39,7 @@ export class ChannelController {
             return (null);
             // TODO redirect to log page
         }
+        // TODO check if user can do that
         return (await this.channelService.setPassword(body.channel, body.password));
     }
     /**
@@ -54,6 +56,7 @@ export class ChannelController {
             return (null);
             // TODO redirect to log page
         }
+        // TODO check if user can do that
         return (await this,this.channelService.removePassword(body.channel));
     }
 
@@ -65,6 +68,7 @@ export class ChannelController {
             return (null);
             // TODO redirect to log page
         }
-        return (await this,this.channelService.changePassword(body.channel, body.password));
+        // TODO check if user can do that
+        return (await this.channelService.changePassword(body.channel, body.password));
     }
 }

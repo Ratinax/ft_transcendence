@@ -4,7 +4,7 @@ export declare class BlockshipController {
     private readonly blockshipService;
     private readonly sessionService;
     constructor(blockshipService: BlockshipService, sessionService: SessionService);
-    findUserblockedFromId(id: number, req: any): Promise<{
+    findUserblockedFromId(req: any): Promise<{
         id: number;
         pseudo: string;
         profilPic: string;

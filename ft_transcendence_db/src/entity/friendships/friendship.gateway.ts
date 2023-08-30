@@ -20,7 +20,7 @@ export class FriendshipGateway {
     /**
      * makes a request to accept a friend request
      * 
-     * @param body - {friend_id, user_id}
+     * @param body - {friend_id}
      * @emits 'acceptFriendship' with the result of the request as content
      */
     @SubscribeMessage('acceptFriendship')
@@ -31,13 +31,14 @@ export class FriendshipGateway {
         // TODO redirect to log page
         return ('not connected');
       }
-      const res = await this.friendshipService.acceptFriendship(body.friend_id, body.user_id);
+      const user = await this.sessionService.getUser(body.sessionCookie);
+      const res = await this.friendshipService.acceptFriendship(body.friend_id, user.id);
       this.server.emit('acceptFriendship', res);
     }
     /**
      * makes a request to remove a friendShip (the friendship can be either accepted or pending)
      * 
-     * @param body - {friend_id, user_id}
+     * @param body - {friend_id}
      * @emits 'deleteFriendship' with the result of the request as content
      * @throws InternalServerErrorException when error in request
      */
@@ -49,9 +50,10 @@ export class FriendshipGateway {
         // TODO redirect to log page
         return ('not connected');
       }
+      const user = await this.sessionService.getUser(body.sessionCookie);
       try
       {
-        const res = await this.friendshipService.deleteFriendship(body.friend_id, body.user_id);
+        const res = await this.friendshipService.deleteFriendship(body.friend_id, user.id);
         this.server.emit('deleteFriendship', res);
       }
       catch (e)

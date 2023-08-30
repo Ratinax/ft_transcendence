@@ -17,6 +17,6 @@ export declare class ChannelGateway {
         };
         response2: import("../channels_users/channels_users.entity").ChannelsUsers;
     }>;
-    createGoodInputs(channel: any, user: any): Boolean;
+    createGoodInputs(channel: any, sessionCookie: any): Boolean;
     join(body: any): Promise<string>;
 }

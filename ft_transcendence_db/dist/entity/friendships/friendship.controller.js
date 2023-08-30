@@ -21,33 +21,33 @@ let FriendshipController = exports.FriendshipController = class FriendshipContro
         this.friendshipService = friendshipService;
         this.sessionService = sessionService;
     }
-    async findFriendOfId(id, req) {
+    async findFriendOfId(req) {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
-        return (await this.friendshipService.findFriendOfId(id));
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        return (await this.friendshipService.findFriendOfId(user.id));
     }
-    async findPending(id, req) {
+    async findPending(req) {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
-        return (await this.friendshipService.findPending(id));
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        return (await this.friendshipService.findPending(user.id));
     }
 };
 __decorate([
-    (0, common_1.Get)('friendsof/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Req)()),
+    (0, common_1.Get)('friendsof/'),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FriendshipController.prototype, "findFriendOfId", null);
 __decorate([
-    (0, common_1.Get)('pending/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Req)()),
+    (0, common_1.Get)('pending/'),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FriendshipController.prototype, "findPending", null);
 exports.FriendshipController = FriendshipController = __decorate([

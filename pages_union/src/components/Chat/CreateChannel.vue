@@ -55,21 +55,25 @@ export default {
   },
   mounted()
   {
-    this.socket.on('createGoodRequest', (response) => {
-        if (response.user.id === this.user.id)
+    this.socket.on('createGoodRequest', async (response) => {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (response.sessionCookie === sessionCookie.data)
           this.goodRequest();
     });
-    this.socket.on('createAlreadyExists', (response) => {
-      if (response.user.id === this.user.id)
-        this.alreadyExists();
+    this.socket.on('createAlreadyExists', async (response) => {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (response.sessionCookie === sessionCookie.data)
+          this.alreadyExists();
     });
-    this.socket.on('createPasswordOrNameWrongSize', (response) => {
-      if (response.user.id === this.user.id)
+    this.socket.on('createPasswordOrNameWrongSize', async (response) => {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (response.sessionCookie === sessionCookie.data)
         this.wrongInputLength();
         
     });
-    this.socket.on('createWrongCategory', (response) => {
-      if (response.user.id === this.user.id)
+    this.socket.on('createWrongCategory', async (response) => {
+      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      if (response.sessionCookie === sessionCookie.data)
         this.wrongCategory();
         
     });
@@ -90,7 +94,7 @@ export default {
           password: this.password,
           category: this.categories[this.selectedCategory - 1].name,
           isADm: false,
-      }, user: this.user,
+      },
       sessionCookie: sessionCookie.data});
       console.log('this.user :', this.user);
     },

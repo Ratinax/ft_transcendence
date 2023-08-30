@@ -11,17 +11,18 @@ export class BlockshipController {
      * @param id id of user
      * @returns result of request
      */
-    @Get('userblockedby/:id')
-    async findUserblockedFromId(@Param('id') id: number, @Req() req)
+    @Get('userblockedby')
+    async findUserblockedFromId(@Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
             // TODO redirect to log page
         }
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         try 
         {
-            const res = await this.blockshipService.findUserblockedFromId(id);
+            const res = await this.blockshipService.findUserblockedFromId(user.id);
             return (res);
         }
         catch (e)

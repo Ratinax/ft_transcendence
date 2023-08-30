@@ -12,15 +12,16 @@ export class MessageController {
      * @param id id of user who mades the request
      * @returns result of the request
      */
-    @Get(':channelname/:id')
-    async find(@Param('channelname') channelname: string, @Param('id') user_id, @Req() req)
+    @Get(':channelname')
+    async find(@Param('channelname') channelname: string, @Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
             // TODO redirect to log page
         }
-        const listUserBlocked = await this.blockshipService.findUserblockedFromId(user_id);
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        const listUserBlocked = await this.blockshipService.findUserblockedFromId(user.id);
         let listUserBlockedId = [];
         for (let i = 0; i < listUserBlocked.length; i++)
         {

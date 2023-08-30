@@ -11,30 +11,32 @@ export class FriendshipController {
      * @param id id of the user 
      * @returns the result of the request
      */
-    @Get('friendsof/:id')
-    async findFriendOfId(@Param('id') id: number, @Req() req)
+    @Get('friendsof/')
+    async findFriendOfId(@Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
             // TODO redirect to log page
         }
-        return (await this.friendshipService.findFriendOfId(id));
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        return (await this.friendshipService.findFriendOfId(user.id));
     }
     /**
      * get the friend requests that have been sent to the user
      * 
-     * @param id id of the user
+     * @param req 
      * @returns the result of the request
      */
-    @Get('pending/:id')
-    async findPending(@Param('id') id: number, @Req() req)
+    @Get('pending/')
+    async findPending(@Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
             // TODO redirect to log page
         }
-        return (await this.friendshipService.findPending(id));
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        return (await this.friendshipService.findPending(user.id));
     }
 }

@@ -28,7 +28,7 @@
     },
     mounted()
     {
-      this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`);
+      this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`); // TODO effectuer l'action que sur l'user concernee pcq la requete sur tt les users
       this.socket.on('acceptFriendship', (response) => {
         this.acceptFriendship(response);
       });
@@ -59,11 +59,6 @@
           this.$refs.friendList.fetchUsers();
         if (this.$refs.friendRequest)
           this.$refs.friendRequest.fetchUsers();
-      },
-      async onRefuseFriendship(body)
-      {
-        const sessionCookie = await this.getSessionCookie();
-        this.socket.emit('removeFriendship', {...body, sessionCookie: sessionCookie});
       },
       deleteFriendship()
       {

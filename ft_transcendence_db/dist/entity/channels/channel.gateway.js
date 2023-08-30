@@ -27,15 +27,16 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
     }
     async create(data) {
         if (await this.sessionService.getIsSessionExpired(data.sessionCookie)) {
+            console.log('not connected');
             return ('not connected');
         }
-        if (!this.createGoodInputs(data.channel, data.user))
+        const user = await this.sessionService.getUser(data.sessionCookie);
+        if (!this.createGoodInputs(data.channel, data.sessionCookie))
             return ('input error');
         const channel = data.channel;
-        const user = data.user;
         try {
             const response = await this.channelService.createChannel(channel);
-            this.server.emit('updateListChannels', { channel: response, user: user });
+            this.server.emit('updateListChannels', { channel: response, sessionCookie: data.sessionCookie });
             const response2 = await this.channelsUsersService.createNew({
                 user: user,
                 channel: response,
@@ -43,25 +44,25 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
                 isOwner: true,
                 isInvited: false,
             });
-            this.server.emit('createGoodRequest', { user: user });
+            this.server.emit('createGoodRequest', { sessionCookie: data.sessionCookie });
             return ({ response, response2 });
         }
         catch (e) {
-            this.server.emit('createAlreadyExists', { user: user });
+            this.server.emit('createAlreadyExists', { sessionCookie: data.sessionCookie });
         }
     }
-    createGoodInputs(channel, user) {
+    createGoodInputs(channel, sessionCookie) {
         if (channel.name.length < 3
             || channel.name.length > 20 ||
             ((channel.password.length < 3
                 || channel.password.length > 20) && channel.category === 'Protected by password')) {
-            this.server.emit('createPasswordOrNameWrongSize', { user: user });
+            this.server.emit('createPasswordOrNameWrongSize', { sessionCookie: sessionCookie });
             return (false);
         }
         if (channel.category !== 'Private'
             && channel.category !== 'Public'
             && channel.category !== 'Protected by password') {
-            this.server.emit('createWrongCategory', { user: user });
+            this.server.emit('createWrongCategory', { sessionCookie: sessionCookie });
             return (false);
         }
         return (true);
@@ -70,9 +71,9 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
+        const user = await this.sessionService.getUser(body.sessionCookie);
         const password = body.password;
         const channelName = body.channelName;
-        const user = body.user;
         let channel;
         try {
             const channels = await this.channelService.findByName(channelName);
@@ -81,22 +82,22 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
             channel = channels[0];
         }
         catch (e) {
-            this.server.emit('joinNoSuchChannel', { user: user });
+            this.server.emit('joinNoSuchChannel', { sessionCookie: body.sessionCookie });
         }
         const relation = await this.channelsUsersService.findRelation(user.id, channel.channel_id);
         if (relation && relation[0]) {
             if (relation[0].isBanned === true)
-                this.server.emit('joinBanned', { user: user });
+                this.server.emit('joinBanned', { sessionCookie: body.sessionCookie });
             else
-                this.server.emit('joinAlreadyIn', { user: user });
+                this.server.emit('joinAlreadyIn', { sessionCookie: body.sessionCookie });
             return;
         }
         if (channel.category === 'Private') {
-            this.server.emit('joinPrivateMode', { user: user });
+            this.server.emit('joinPrivateMode', { sessionCookie: body.sessionCookie });
             return;
         }
         if (!await this.channelService.comparePasswords(channel, password)) {
-            this.server.emit('joinWrongPassword', { user: user });
+            this.server.emit('joinWrongPassword', { sessionCookie: body.sessionCookie });
             return;
         }
         await this.channelsUsersService.createNew({
@@ -106,8 +107,8 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
             isOwner: false,
             isInvited: false,
         });
-        this.server.emit('updateListChannels', { channel: channel, user: user });
-        this.server.emit('joinGoodRequest', { channel: channel, user: user });
+        this.server.emit('updateListChannels', { channel: channel, sessionCookie: body.sessionCookie });
+        this.server.emit('joinGoodRequest', { channel: channel, sessionCookie: body.sessionCookie });
     }
 };
 __decorate([

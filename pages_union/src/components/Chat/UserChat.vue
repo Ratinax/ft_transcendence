@@ -53,15 +53,18 @@ export default {
     },
     mounted()
     {
-        this.socket.on('timeoutGoodRequest', (response) => {
-            if (response.channel.channel_id === this.channel.channel_id && response.user.id === this.userInChannel.id)
+        this.socket.on('timeoutGoodRequest', async (response) => {
+            const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+
+            if (response.channel.channel_id === this.channel.channel_id && sessionCookie.data === response.sessionCookie)
             {
                 if (this.$refs.timeout)
                     this.$refs.timeout.goodRequest();
             }
         });
-        this.socket.on('timeoutWrongAmount', (response) => {
-            if (response.channel.channel_id === this.channel.channel_id && response.user.id === this.userInChannel.id)
+        this.socket.on('timeoutWrongAmount', async (response) => {
+            const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+            if (response.channel.channel_id === this.channel.channel_id && sessionCookie.data === response.sessionCookie)
             {
                 if (this.$refs.timeout)
                     this.$refs.timeout.notGoodAmount();
@@ -76,27 +79,27 @@ export default {
         async ban()
         {
             const sessionCookie = await this.getSessionCookie()
-            this.socket.emit('banUser', {channel: this.channel, user: this.userInChat, sessionCookie: sessionCookie});
+            this.socket.emit('banUser', {channel: this.channel, sessionCookie: sessionCookie});
         },
         async kick()
         {
             const sessionCookie = await this.getSessionCookie()
-            this.socket.emit('kickUser', {channel: this.channel, user: this.userInChat, sessionCookie: sessionCookie});
+            this.socket.emit('kickUser', {channel: this.channel, sessionCookie: sessionCookie});
         },
         async setAdmin()
         {
             const sessionCookie = await this.getSessionCookie()
-            this.socket.emit('setAdmin', {channel: this.channel, user: this.userInChat, sessionCookie: sessionCookie});
+            this.socket.emit('setAdmin', {channel: this.channel, sessionCookie: sessionCookie});
         },
         async removeAdmin()
         {
             const sessionCookie = await this.getSessionCookie()
-            this.socket.emit('removeAdmin', {channel: this.channel, user: this.userInChat, sessionCookie: sessionCookie});
+            this.socket.emit('removeAdmin', {channel: this.channel, sessionCookie: sessionCookie});
         },
         async onTimeoutUser(nbSeconds)
         {
             const sessionCookie = await this.getSessionCookie()
-            this.socket.emit('timeoutUser', {user: this.userInChannel, userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds, sessionCookie: sessionCookie});
+            this.socket.emit('timeoutUser', {userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds, sessionCookie: sessionCookie});
         },
         closeTimeOut()
         {

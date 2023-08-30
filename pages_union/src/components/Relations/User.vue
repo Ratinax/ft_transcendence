@@ -29,11 +29,11 @@ export default {
         },
         accept()
         {
-            this.$emit('accept-friendship', this.user.id);
+            this.$emit('accept-friendship');
         },
         remove()
         {
-            this.$emit('remove-relation', this.user.id);
+            this.$emit('remove-relation');
         },
     }
 }

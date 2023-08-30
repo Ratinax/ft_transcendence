@@ -23,11 +23,12 @@ let MessageController = exports.MessageController = class MessageController {
         this.blockshipService = blockshipService;
         this.sessionService = sessionService;
     }
-    async find(channelname, user_id, req) {
+    async find(channelname, req) {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
-        const listUserBlocked = await this.blockshipService.findUserblockedFromId(user_id);
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        const listUserBlocked = await this.blockshipService.findUserblockedFromId(user.id);
         let listUserBlockedId = [];
         for (let i = 0; i < listUserBlocked.length; i++) {
             listUserBlockedId.push(listUserBlocked[i].id);
@@ -39,12 +40,11 @@ let MessageController = exports.MessageController = class MessageController {
     }
 };
 __decorate([
-    (0, common_1.Get)(':channelname/:id'),
+    (0, common_1.Get)(':channelname'),
     __param(0, (0, common_1.Param)('channelname')),
-    __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, common_1.Req)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], MessageController.prototype, "find", null);
 __decorate([

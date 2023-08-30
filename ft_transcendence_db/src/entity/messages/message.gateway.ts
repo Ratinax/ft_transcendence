@@ -37,7 +37,9 @@ export class MessagesGateway {
         // TODO redirect to log page
         return ('not connected');
       }
-      const relation = await this.channelsUsersService.findRelation(body.user_id, body.channel_id);
+      const user = await this.sessionService.getUser(body.sessionCookie);
+      
+      const relation = await this.channelsUsersService.findRelation(user.id, body.channel_id);
       if (!relation || !relation[0])
         throw new InternalServerErrorException('no such relation');
       
@@ -50,7 +52,7 @@ export class MessagesGateway {
 
       if (timeoutSeconds + +timeoutDuration > currentSeconds)
       {
-        this.server.emit('sendMessageTimeout', {channel_id: body.channel_id, user_id: body.user_id, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
+        this.server.emit('sendMessageTimeout', {channel_id: body.channel_id, sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
         return 'user timeout';
       }
 
@@ -58,12 +60,15 @@ export class MessagesGateway {
         content: body.message,
         dateSent: body.dateSent,
         channel: body.channel_id,
-        user: body.user_id,
+        user: {
+          ...user,
+          password: 'random useless string', // TODO check if can put a random useless string
+        },
         isAGameInvite: body.isAGameInvite,
       });
       
       this.server.emit('updateMessage', {channel_id: body.channel_id});
-      this.server.emit('sendMessageGoodRequest', {channel_id: body.channel_id, user_id: body.user_id});
+      this.server.emit('sendMessageGoodRequest', {channel_id: body.channel_id, sessionCookie: body.sessionCookie});
 
       return response;
   }

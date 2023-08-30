@@ -27,15 +27,17 @@ let FriendshipGateway = exports.FriendshipGateway = class FriendshipGateway {
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
-        const res = await this.friendshipService.acceptFriendship(body.friend_id, body.user_id);
+        const user = await this.sessionService.getUser(body.sessionCookie);
+        const res = await this.friendshipService.acceptFriendship(body.friend_id, user.id);
         this.server.emit('acceptFriendship', res);
     }
     async removeFriendship(body) {
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
+        const user = await this.sessionService.getUser(body.sessionCookie);
         try {
-            const res = await this.friendshipService.deleteFriendship(body.friend_id, body.user_id);
+            const res = await this.friendshipService.deleteFriendship(body.friend_id, user.id);
             this.server.emit('deleteFriendship', res);
         }
         catch (e) {

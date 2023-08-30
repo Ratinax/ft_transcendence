@@ -7,9 +7,8 @@ export declare class SessionService {
     getUser(sessionKey: string): Promise<{
         id: number;
         pseudo: string;
-        password: string;
         profilPic: string;
-    }[]>;
+    }>;
     getIsSessionExpired(sessionKey: any): Promise<boolean>;
     refreshSessionKey(sessionKey: any): Promise<Sessions>;
     removeNoMoreConnected(): Promise<void>;

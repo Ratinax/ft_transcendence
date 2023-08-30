@@ -20,7 +20,7 @@ export class BlockshipGateway {
     /**
      * remove blockship
      * 
-     * @param body blockship to be removed {userblocking_id, userblocked_id, sessionCookie}
+     * @param body blockship to be removed {userblocked_id, sessionCookie}
      * @emits deleteBlockship result of request
      */
     @SubscribeMessage('removeBlockship')
@@ -31,7 +31,8 @@ export class BlockshipGateway {
         // TODO redirect to log page
         return ('not connected');
       }
-        const res = await this.blockshipService.deleteBlockship(body.userblocking_id, body.userblocked_id);
-        this.server.emit('deleteBlockship', res);
+      const user = await this.sessionService.getUser(body.sessionCookie);
+      const res = await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
+      this.server.emit('deleteBlockship', res);
     }
 }

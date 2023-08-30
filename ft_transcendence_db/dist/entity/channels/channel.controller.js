@@ -23,11 +23,12 @@ let ChannelController = exports.ChannelController = class ChannelController {
         this.channelsUsersService = channelsUsersService;
         this.sessionService = sessionService;
     }
-    async find(user_id, req) {
+    async find(req) {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
-        const channels = await this.channelsUsersService.findChannelsOfUsers(user_id);
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        const channels = await this.channelsUsersService.findChannelsOfUsers(user.id);
         return (channels);
     }
     async setPassword(body, req) {
@@ -46,15 +47,14 @@ let ChannelController = exports.ChannelController = class ChannelController {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
-        return (await this, this.channelService.changePassword(body.channel, body.password));
+        return (await this.channelService.changePassword(body.channel, body.password));
     }
 };
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Req)()),
+    (0, common_1.Get)(''),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChannelController.prototype, "find", null);
 __decorate([

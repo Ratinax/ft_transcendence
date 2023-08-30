@@ -20,7 +20,7 @@ export class ChannelGateway {
 
   /**
    * 
-   * @param data - {channel, user, cookie}
+   * @param data - {channel, cookie}
    * @returns responses of request | 'Error'
    * @emits updateListChannels {channel, user}
    * @emits createGoodRequest {user}
@@ -31,20 +31,20 @@ export class ChannelGateway {
   @SubscribeMessage('createChannel')
   async create(@MessageBody() data)
   {
-    // console.log('data :', data, '\n est expire :', await this.sessionService.getIsSessionExpired(data.sessionCookie))
     if (await this.sessionService.getIsSessionExpired(data.sessionCookie))
     {
       // TODO redirect to log page
+      console.log('not connected');
       return ('not connected');
     }
-    if (!this.createGoodInputs(data.channel, data.user))
+    const user = await this.sessionService.getUser(data.sessionCookie);
+    if (!this.createGoodInputs(data.channel, data.sessionCookie))
       return ('input error');
     const channel = data.channel;
-    const user = data.user;
     try 
     {
       const response = await this.channelService.createChannel(channel);
-      this.server.emit('updateListChannels', {channel: response, user: user});
+      this.server.emit('updateListChannels', {channel: response, sessionCookie: data.sessionCookie});
       const response2 = await this.channelsUsersService.createNew({
         user: user,
         channel: response,
@@ -52,12 +52,12 @@ export class ChannelGateway {
         isOwner: true,
         isInvited: false,
       });
-      this.server.emit('createGoodRequest', {user: user});
+      this.server.emit('createGoodRequest', {sessionCookie: data.sessionCookie});
       return ({response, response2});
     }
     catch (e)
     {
-      this.server.emit('createAlreadyExists', {user: user});
+      this.server.emit('createAlreadyExists', {sessionCookie: data.sessionCookie});
     }
   }
   /**
@@ -67,28 +67,28 @@ export class ChannelGateway {
    * @param user user
    * @returns true if succeed
    */
-  createGoodInputs(channel, user): Boolean
+  createGoodInputs(channel, sessionCookie): Boolean
   {
     if (channel.name.length < 3 
       || channel.name.length > 20 ||
       ((channel.password.length < 3 
         || channel.password.length > 20) && channel.category === 'Protected by password'))
     {
-      this.server.emit('createPasswordOrNameWrongSize', {user: user});
+      this.server.emit('createPasswordOrNameWrongSize', {sessionCookie: sessionCookie});
       return (false);
     }
     if (channel.category !== 'Private'
     && channel.category !== 'Public'
     && channel.category !== 'Protected by password')
     {
-      this.server.emit('createWrongCategory', {user: user});
+      this.server.emit('createWrongCategory', {sessionCookie: sessionCookie});
       return (false);
     }
     return (true);
   }
   /**
    * 
-   * @param body channel to join {password, channelName, user, sessionCookie}
+   * @param body channel to join {password, channelName, sessionCookie}
    * 
    * @emits joinNoSuchChannel {user} - in case of failing
    * @emits joinBanned {user} - in case of failing
@@ -105,10 +105,10 @@ export class ChannelGateway {
       // TODO redirect to log page
       return ('not connected');
     }
-
+    const user = await this.sessionService.getUser(body.sessionCookie);
     const password = body.password;
     const channelName = body.channelName;
-    const user = body.user;
+    // const user = body.user;
     let channel;
 
     try
@@ -120,7 +120,7 @@ export class ChannelGateway {
     }
     catch (e)
     {
-      this.server.emit('joinNoSuchChannel', {user: user});
+      this.server.emit('joinNoSuchChannel', {sessionCookie: body.sessionCookie});
     }
 
     const relation = await this.channelsUsersService.findRelation(user.id, channel.channel_id);
@@ -128,19 +128,19 @@ export class ChannelGateway {
     if (relation && relation[0])
     {
       if (relation[0].isBanned === true)
-        this.server.emit('joinBanned', {user: user})
+        this.server.emit('joinBanned', {sessionCookie: body.sessionCookie})
       else
-        this.server.emit('joinAlreadyIn', {user: user})
+        this.server.emit('joinAlreadyIn', {sessionCookie: body.sessionCookie})
         return ;
       }
     if (channel.category === 'Private')
     {
-      this.server.emit('joinPrivateMode', {user: user})
+      this.server.emit('joinPrivateMode', {sessionCookie: body.sessionCookie})
       return ;
     }
     if (!await this.channelService.comparePasswords(channel, password))
     {
-      this.server.emit('joinWrongPassword', {user: user})
+      this.server.emit('joinWrongPassword', {sessionCookie: body.sessionCookie})
       return ;
     }
     await this.channelsUsersService.createNew({
@@ -150,7 +150,7 @@ export class ChannelGateway {
       isOwner: false,
       isInvited: false,
     });
-    this.server.emit('updateListChannels', {channel: channel, user: user});
-    this.server.emit('joinGoodRequest', {channel: channel, user: user});
+    this.server.emit('updateListChannels', {channel: channel, sessionCookie: body.sessionCookie});
+    this.server.emit('joinGoodRequest', {channel: channel, sessionCookie: body.sessionCookie});
   }
 }

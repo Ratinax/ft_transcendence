@@ -55,7 +55,6 @@ export default {
                 return ;
             this.$emit('create-message', {
                 channel_id: this.channelId,
-                user_id: this.userId,
                 message: this.messageText,
                 dateSent: this.getCurrentDate(),
                 isAGameInvite: false,

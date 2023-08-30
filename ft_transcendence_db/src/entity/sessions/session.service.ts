@@ -16,7 +16,7 @@ export class SessionService{
                 id: user_id,
             },
             sessionKey: sessionKey,
-            expirationDate: new Date(Date.now() + 5000),
+            expirationDate: new Date(Date.now() + 10000),
         }
         const newSession = this.sessionRepository.create(session);
         const res = await this.sessionRepository.save(newSession);
@@ -24,8 +24,11 @@ export class SessionService{
     }
     async getUser(sessionKey: string)
     {
-        if (this.getIsSessionExpired(sessionKey))
+        if (await this.getIsSessionExpired(sessionKey))
+        {
+            console.log('c est expired')
             return (null);
+        }
         const relations = await this.sessionRepository
         .createQueryBuilder('sessions')
         .innerJoinAndSelect('sessions.user', 'user')
@@ -34,10 +37,10 @@ export class SessionService{
         const user = relations.map((sessions) => ({
                 id: sessions.user.id,
                 pseudo: sessions.user.pseudo,
-                password: sessions.user.password,
+                // password: sessions.user.password,
                 profilPic: sessions.user.profilPic,
             }));
-        return (user);
+        return (user[0]);
     }
     async getIsSessionExpired(sessionKey)
     {
@@ -45,9 +48,13 @@ export class SessionService{
             where: { sessionKey: sessionKey },
           });
         if (!relation)
+        {
             return (true);
+        }
         if (new Date(Date.now()) > relation.expirationDate)
-          return (true);
+        {
+            return (true);
+        }
         return (false);
     }
     async refreshSessionKey(sessionKey)
@@ -57,7 +64,7 @@ export class SessionService{
           });
         if (!relation)
             return (null);
-        relation.expirationDate = new Date(Date.now() + 5000);
+        relation.expirationDate = new Date(Date.now() + 10000);
         const res = this.sessionRepository.save(relation);
         return (res);
     }
