@@ -7,6 +7,7 @@
 <script>
 import { Socket } from 'socket.io-client';
 import UserChat from './UserChat.vue';
+import axios from 'axios';
 export default {
     name: 'ListUsersChat',
     components:
@@ -15,7 +16,6 @@ export default {
     },
     props:
     {
-        user: Object,
         socket: Socket,
         channel: Object,
     },
@@ -32,25 +32,16 @@ export default {
         /**
          * set access writes for the user, set to null if no users
          */
-        setAccessWrites()
+        async setAccessWrites()
         {
+
+            const userPerms = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/userPerms`, { withCredentials: true });
             if (!this.users)
             {
                 this.userInChannel = null;
                 return ;
             }
-            for (let i = 0; i < this.users.length; i++)
-            {
-                if (this.users[i].id === this.user.id)
-                {
-                    this.userInChannel = {
-                        isAdmin: this.users[i].isAdmin,
-                        isOwner: this.users[i].isOwner,
-                        id: this.users[i].id,
-                    }
-                    break;
-                }
-            }
+            this.userInChannel = userPerms.data;
         },
         updateListUsers(users)
         {
@@ -58,9 +49,9 @@ export default {
             this.setAccessWrites();
         },
         /**
-         * set the user selected in the list
+         * set the user to selected in the list
          * 
-         * @param {} user - the user clicked in the list
+         * @param user - the user clicked in the list
          */
         handleUserClicked(user)
         {

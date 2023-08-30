@@ -21,7 +21,7 @@ export class MessagesGateway {
   /**
    * create a new message
    * 
-   * @param body - {channel_id, user_id, message, dateSent, isAGameInvite, sessionCookie}
+   * @param body - {channel_id, message, dateSent, isAGameInvite, sessionCookie}
    * @returns response of request
    * @emits 'updateMessage' {channel_id}
    * @emits 'sendMessageTimeout' {channel_id, user_id, duration}

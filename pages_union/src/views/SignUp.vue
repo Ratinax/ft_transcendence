@@ -94,7 +94,7 @@ export default defineComponent({
 				return ;
 			}
 			resetData();
-			router.push({path: '/menu', query: { user: encodeURIComponent(JSON.stringify(user))}});
+			router.push({path: '/chat'});
 		}
 
 		function	chooseImage() {

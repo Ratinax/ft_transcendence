@@ -1,18 +1,18 @@
 <template>
   <div class="list-channels" ref="channelsButtons">
     <div class="channels-buttons">
-      <channel ref="channelRef" v-for="channel in channels" :key="channel.id" :channel="channel" :socket="socket" :user="user" :isSelected="channelSelected.channel_id === channel.channel_id" @channel-clicked="handleChannelClicked" @leave-channel="onLeaveChannel"
+      <channel ref="channelRef" v-for="channel in channels" :key="channel.id" :channel="channel" :socket="socket" :isSelected="channelSelected.channel_id === channel.channel_id" @channel-clicked="handleChannelClicked" @leave-channel="onLeaveChannel"
       @get-is-user-owner="onGetIsUserOwner"
       @update-channels="onUpdateChannels"/>
       <div :class="{'nochannel': channels.length === 0, 'buttons': true}">
         <div class="new-channel">
           <button @click="showCreateChannel = true">Create Channel</button>
-          <CreateChannel :show="showCreateChannel" :socket="socket" :user="user" @close="showCreateChannel = false">
+          <CreateChannel :show="showCreateChannel" :socket="socket" @close="showCreateChannel = false">
           </CreateChannel>
         </div>
         <div class="join-channel">
           <button @click="showJoinChannel = true">Join Channel</button>
-          <JoinChannel :show="showJoinChannel" :socket="socket" :user="user" ref='joinChannel' @close="showJoinChannel = false" >
+          <JoinChannel :show="showJoinChannel" :socket="socket" ref='joinChannel' @close="showJoinChannel = false" >
           </JoinChannel>
         </div>
       </div>
@@ -35,7 +35,6 @@ export default {
     },
     props: 
     {
-      user: Object,
       channelSelected: Object,
       socket: null,
     },

@@ -14,10 +14,6 @@ export default {
     {
       Message,
     },
-    props:
-    {
-      user: Object,
-    },
     data() {
       return {
           messages: [],
@@ -37,9 +33,7 @@ export default {
         }
         try 
         {
-          console.log('la, :', this.user);
           const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}`, {withCredentials: true});
-          console.log('ici')
           this.messages = response.data;
         } 
         catch (error) 

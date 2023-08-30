@@ -27,7 +27,6 @@ export default {
   props: {
     show: Boolean,
     socket: Socket,
-    user: Object,
   },
   data()
   {

@@ -31,7 +31,6 @@ export default {
   props: {
     show: Boolean,
     socket: Socket,
-    user: Object,
   },
   data()
   {
@@ -96,7 +95,6 @@ export default {
           isADm: false,
       },
       sessionCookie: sessionCookie.data});
-      console.log('this.user :', this.user);
     },
     close()
     {

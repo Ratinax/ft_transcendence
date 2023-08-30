@@ -1,7 +1,7 @@
 <template>
   <div class="navigation-menu">
     <div class="navigation-option profil-pic">
-      <img :src="getImageUrl(user.profilPic)" alt="Image"/>
+      <img :src="getImageUrl(profilPic)" alt="Image"/>
     </div>
     <div class="navigation-option" @click="goToMessages">
       <div class="messages-icon">
@@ -34,7 +34,6 @@
 
 <script>
 import { useRouter } from 'vue-router';
-import { useCookies } from "vue3-cookies";
 export default {
     name: 'Menu-component',
     // props: 
@@ -45,13 +44,12 @@ export default {
     {
       return {
         router: useRouter(),
-        cookies: useCookies(),
-        user: {
-          id: 68,
-          pseudo: 'pagett',
-          profilPic: '1692714223806_GRx6ncmzlhHi.png',
-        }
+        profilPic: String,
       }
+    },
+    mounted()
+    {
+      this.profilPic = '1693385826683_zjBxZkq3ozufshYYKi4YbicbOXQNr6jZeEjnQswbKl.png';
     },
     methods: 
     {

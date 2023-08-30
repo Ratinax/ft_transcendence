@@ -22,7 +22,6 @@ export default {
     {
         showContent: Boolean,
         socket: Socket,
-        userId: Number,
         channelId: Number,
     },
     data()
@@ -82,7 +81,6 @@ export default {
         {
             this.$emit('create-message', {
                 channel_id: this.channelId,
-                user_id: this.userId,
                 message: '',
                 dateSent: this.getCurrentDate(),
                 isAGameInvite: true,

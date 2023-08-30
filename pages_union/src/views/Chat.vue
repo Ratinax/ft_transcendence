@@ -1,13 +1,13 @@
 <template>
     <div class="chat-container">
       <Menu/>
-      <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :user="user" :socket="socket" @channel-selected="onChannelSelected" @leave-channel="onLeaveChannel"
+      <ListChannels ref="listChannels"  v-if="!!socket" :channelSelected="selectedChannel" :socket="socket" @channel-selected="onChannelSelected" @leave-channel="onLeaveChannel"
       @get-is-user-owner="onGetIsUserOwner"/>
       <div class="messageszone">
-        <Messages ref="messages" :user="user"/>
-        <SendMessage ref="sendMessage" :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id" :socket="socket" :userId="user.id" @create-message="createMessage"/>
+        <Messages ref="messages"/>
+        <SendMessage ref="sendMessage" :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id" :socket="socket" @create-message="createMessage"/>
       </div>
-      <ListUsersChat ref="listUsersChat" v-if="socket" :user="user" :channel="selectedChannel" :socket="socket"/>
+      <ListUsersChat ref="listUsersChat" v-if="socket" :channel="selectedChannel" :socket="socket"/>
     </div>
 </template>
   
@@ -37,17 +37,9 @@ export default {
   data()
   {
     return {
-      user: Object,
       selectedChannel: {},
       socket: null,
     }
-  },
-  created()
-  {
-    const userJson = this.$route.query.user;
-
-    this.user = JSON.parse(decodeURIComponent(userJson));
-    console.log('le user :', this.user);
   },
   async mounted()
   {

@@ -14,6 +14,8 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "t
  * - isOwner: boolean
  * - isInvited: boolean
  * - isBanned: boolean
+ * - dateTimeout: Date
+ * - durationTimeout: Number
  */
 
 // TODO faire les invitations
