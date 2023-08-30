@@ -9,6 +9,7 @@ export declare class SessionService {
         pseudo: string;
         profilPic: string;
     }>;
+    getSessionKey(user_id: number): Promise<string>;
     getIsSessionExpired(sessionKey: any): Promise<boolean>;
     refreshSessionKey(sessionKey: any): Promise<Sessions>;
     removeNoMoreConnected(): Promise<void>;

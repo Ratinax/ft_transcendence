@@ -56,12 +56,16 @@ export default {
     this.socket.on('updateListUsers', (response) => {
       if (response.channel.channel_id === this.selectedChannel.channel_id)
       {
+        // console.log('laaa');
         this.updateListUsers(response.users);
       }
     });
     this.socket.on('updateAfterPart', async (response) => {
       const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
+      console.log('laaa');
 
+      console.log((sessionCookie.data === response.sessionCookie), sessionCookie.data, response.sessionCookie)
+      // console.log()
       if (sessionCookie.data === response.sessionCookie)
       {
         this.updateListChannels({});

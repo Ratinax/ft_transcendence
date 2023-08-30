@@ -79,22 +79,22 @@ export default {
         async ban()
         {
             const sessionCookie = await this.getSessionCookie()
-            this.socket.emit('banUser', {channel: this.channel, sessionCookie: sessionCookie});
+            this.socket.emit('banUser', {channel: this.channel, userBanned: this.userInChat, sessionCookie: sessionCookie});
         },
         async kick()
         {
             const sessionCookie = await this.getSessionCookie()
-            this.socket.emit('kickUser', {channel: this.channel, sessionCookie: sessionCookie});
+            this.socket.emit('kickUser', {channel: this.channel, userKicked: this.userInChat, sessionCookie: sessionCookie});
         },
         async setAdmin()
         {
             const sessionCookie = await this.getSessionCookie()
-            this.socket.emit('setAdmin', {channel: this.channel, sessionCookie: sessionCookie});
+            this.socket.emit('setAdmin', {channel: this.channel, userSetAdmin: this.userInChat, sessionCookie: sessionCookie});
         },
         async removeAdmin()
         {
             const sessionCookie = await this.getSessionCookie()
-            this.socket.emit('removeAdmin', {channel: this.channel, sessionCookie: sessionCookie});
+            this.socket.emit('removeAdmin', {channel: this.channel, userRemovedAdmin: this.userInChat, sessionCookie: sessionCookie});
         },
         async onTimeoutUser(nbSeconds)
         {

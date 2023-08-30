@@ -43,7 +43,7 @@ export class ChannelsUsersGateway {
   /**
    * Modify the relation of a user to a channel to set isBanned = true 
    * 
-   * @param {Object} body - {channel, sessionCookie}
+   * @param {Object} body - {channel, userBanned, sessionCookie}
    * @returns result of request
    * @emits updateAfterPart {users, channel, user}
    */
@@ -56,18 +56,18 @@ export class ChannelsUsersGateway {
       return ('not connected');
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
-    const res = await this.channelsUsersService.ban(body.channel, user);
+    const res = await this.channelsUsersService.ban(body.channel, body.userBanned);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.emit('updateAfterPart', {
       users: users, 
       channel: body.channel,
-      sessionCookie: body.sessionCookie});
+      sessionCookie: await this.sessionService.getSessionKey(body.userBanned.id)});
     return (res);
   }
   /**
    * Delete the relation of a user to a channel
    * 
-   * @param body - {channel, sessionCookie}
+   * @param body - {channel, userKicked, sessionCookie}
    * @returns result of request kick
    * @emits updateAfterPart {users, channel, user}
    */
@@ -80,12 +80,12 @@ export class ChannelsUsersGateway {
       return ('not connected');
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
-    const res = await this.channelsUsersService.leave(body.channel, user);
+    const res = await this.channelsUsersService.leave(body.channel, body.userKicked);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.emit('updateAfterPart', {
       users: users, 
       channel: body.channel,
-      sessionCookie: body.sessionCookie});
+      sessionCookie: await this.sessionService.getSessionKey(body.userKicked.id)});
     return (res);
   }
   /**
@@ -115,7 +115,7 @@ export class ChannelsUsersGateway {
   /**
    * set user of channel to Admin
    * 
-   * @param body - {channel, sessionCookie}
+   * @param body - {channel, userSetAdmin, sessionCookie}
    * @returns result of request
    * @emits updateListUsers {users, channel}
    */
@@ -127,8 +127,9 @@ export class ChannelsUsersGateway {
       // TODO redirect to log page
       return ('not connected');
     }
-    const user = await this.sessionService.getUser(body.sessionCookie);
-    const res = await this.channelsUsersService.setAdmin(body.channel, user);
+    // TODO check perms
+    // const user = await this.sessionService.getUser(body.sessionCookie);
+    const res = await this.channelsUsersService.setAdmin(body.channel, body.userSetAdmin);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
 
     this.server.emit('updateListUsers', {
@@ -140,7 +141,7 @@ export class ChannelsUsersGateway {
   /**
    * remove admin rights on a user
    * 
-   * @param body - {channel, sessionCookie}
+   * @param body - {channel, userRemovedAdmin, sessionCookie}
    * @returns result of request
    * @emits updateListUsers {users, channel}
    */
@@ -153,7 +154,7 @@ export class ChannelsUsersGateway {
       return ('not connected');
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
-    const res = await this.channelsUsersService.removeAdmin(body.channel, user);
+    const res = await this.channelsUsersService.removeAdmin(body.channel, body.userRemovedAdmin);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
 
     this.server.emit('updateListUsers', {

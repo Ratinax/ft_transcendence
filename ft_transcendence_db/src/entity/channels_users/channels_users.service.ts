@@ -106,7 +106,7 @@ export class ChannelsUsersService {
      * remove relation
      * 
      * @param channel channel users leaves
-     * @param userBanned user
+     * @param user user who leaves
      * @returns result of request
      */
     async leave(channel, user)

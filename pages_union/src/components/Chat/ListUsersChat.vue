@@ -34,19 +34,23 @@ export default {
          */
         async setAccessWrites()
         {
-
-            const userPerms = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/userPerms?channelId=${this.channel.channel_id}`,
-            { withCredentials: true }, 
-            );
-            if (!this.users)
+            console.log('le channel :', this.channel);
+            if (!this.users || !this.channel || !this.channel.channel_id )
             {
                 this.userInChannel = null;
                 return ;
             }
-            this.userInChannel = userPerms.data;
+            const userPerms = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/userPerms?channelId=${this.channel.channel_id}`,
+            { withCredentials: true }, 
+            );
+            if (userPerms.data)
+                this.userInChannel = userPerms.data;
+            else
+                this.userInChannel = null;
         },
         updateListUsers(users)
         {
+            console.log('les zusers:', users);
             this.users = users;
             this.setAccessWrites();
         },

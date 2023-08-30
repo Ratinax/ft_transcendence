@@ -39,12 +39,12 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
             return ('not connected');
         }
         const user = await this.sessionService.getUser(body.sessionCookie);
-        const res = await this.channelsUsersService.ban(body.channel, user);
+        const res = await this.channelsUsersService.ban(body.channel, body.userBanned);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateAfterPart', {
             users: users,
             channel: body.channel,
-            sessionCookie: body.sessionCookie
+            sessionCookie: await this.sessionService.getSessionKey(body.userBanned.id)
         });
         return (res);
     }
@@ -53,12 +53,12 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
             return ('not connected');
         }
         const user = await this.sessionService.getUser(body.sessionCookie);
-        const res = await this.channelsUsersService.leave(body.channel, user);
+        const res = await this.channelsUsersService.leave(body.channel, body.userKicked);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateAfterPart', {
             users: users,
             channel: body.channel,
-            sessionCookie: body.sessionCookie
+            sessionCookie: await this.sessionService.getSessionKey(body.userKicked.id)
         });
         return (res);
     }
@@ -80,8 +80,7 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
-        const user = await this.sessionService.getUser(body.sessionCookie);
-        const res = await this.channelsUsersService.setAdmin(body.channel, user);
+        const res = await this.channelsUsersService.setAdmin(body.channel, body.userSetAdmin);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateListUsers', {
             users: users,
@@ -94,7 +93,7 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
             return ('not connected');
         }
         const user = await this.sessionService.getUser(body.sessionCookie);
-        const res = await this.channelsUsersService.removeAdmin(body.channel, user);
+        const res = await this.channelsUsersService.removeAdmin(body.channel, body.userRemovedAdmin);
         const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
         this.server.emit('updateListUsers', {
             users: users,

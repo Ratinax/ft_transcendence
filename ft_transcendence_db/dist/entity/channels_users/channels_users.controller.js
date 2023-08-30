@@ -27,6 +27,8 @@ let ChannelsUsersController = exports.ChannelsUsersController = class ChannelsUs
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const res = await this.channelsUsersService.findRelation(user.id, channelId);
+        if (!res || !res[0])
+            return (null);
         const userPerms = {
             id: res[0].id,
             isAdmin: res[0].isAdmin,

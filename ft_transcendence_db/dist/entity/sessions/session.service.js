@@ -48,6 +48,10 @@ let SessionService = exports.SessionService = class SessionService {
         }));
         return (user[0]);
     }
+    async getSessionKey(user_id) {
+        const relation = await this.sessionRepository.findOne({ where: { user: { id: user_id } } });
+        return (relation.sessionKey);
+    }
     async getIsSessionExpired(sessionKey) {
         const relation = await this.sessionRepository.findOne({
             where: { sessionKey: sessionKey },
