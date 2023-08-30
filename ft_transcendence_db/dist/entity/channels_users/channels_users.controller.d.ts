@@ -4,7 +4,7 @@ export declare class ChannelsUsersController {
     private readonly channelsUsersService;
     private readonly sessionService;
     constructor(channelsUsersService: ChannelsUsersService, sessionService: SessionService);
-    getUserWithPermissions(req: any, body: any): Promise<{
+    getUserWithPermissions(req: any, channelId: any): Promise<{
         id: number;
         isAdmin: boolean;
         isOwner: boolean;

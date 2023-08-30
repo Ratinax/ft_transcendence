@@ -62,7 +62,7 @@ export class FriendshipService {
     /**
      * accept a friendship request
      * 
-     * @param friend_id id of user accpeting the friendship request
+     * @param friend_id id of user accepting the friendship request
      * @param user_id id of user that sent the request
      * @returns result of the request
      * @throws Error('Friendship not found.')

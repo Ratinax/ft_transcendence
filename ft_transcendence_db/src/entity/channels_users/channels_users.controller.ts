@@ -1,4 +1,4 @@
-import { Get, Controller, Req, Body } from '@nestjs/common';
+import { Get, Controller, Req, Body, Query } from '@nestjs/common';
 import { ChannelsUsersService } from './channels_users.service';
 import { SessionService } from '../sessions/session.service';
 
@@ -12,7 +12,7 @@ export class ChannelsUsersController {
      * @returns null | user with permissions
      */
     @Get('userPerms')
-    async getUserWithPermissions(@Req() req, @Body() body)
+    async getUserWithPermissions(@Req() req, @Query('channelId') channelId)
     {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -20,7 +20,7 @@ export class ChannelsUsersController {
             // TODO redirect to log page
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const res = await this.channelsUsersService.findRelation(user.id, body.channel.channel_id);
+        const res = await this.channelsUsersService.findRelation(user.id, channelId);
         const userPerms = {
             id: res[0].id,
             isAdmin: res[0].isAdmin,

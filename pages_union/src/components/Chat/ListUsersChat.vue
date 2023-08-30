@@ -35,7 +35,9 @@ export default {
         async setAccessWrites()
         {
 
-            const userPerms = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/userPerms`, { withCredentials: true });
+            const userPerms = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/userPerms?channelId=${this.channel.channel_id}`,
+            { withCredentials: true }, 
+            );
             if (!this.users)
             {
                 this.userInChannel = null;

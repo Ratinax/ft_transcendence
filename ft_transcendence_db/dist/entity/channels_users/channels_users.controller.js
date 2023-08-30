@@ -21,12 +21,12 @@ let ChannelsUsersController = exports.ChannelsUsersController = class ChannelsUs
         this.channelsUsersService = channelsUsersService;
         this.sessionService = sessionService;
     }
-    async getUserWithPermissions(req, body) {
+    async getUserWithPermissions(req, channelId) {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const res = await this.channelsUsersService.findRelation(user.id, body.channel.channel_id);
+        const res = await this.channelsUsersService.findRelation(user.id, channelId);
         const userPerms = {
             id: res[0].id,
             isAdmin: res[0].isAdmin,
@@ -40,7 +40,7 @@ let ChannelsUsersController = exports.ChannelsUsersController = class ChannelsUs
 __decorate([
     (0, common_1.Get)('userPerms'),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Query)('channelId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

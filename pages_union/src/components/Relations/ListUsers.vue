@@ -20,7 +20,6 @@ export default {
         User,
     },
     props:{
-        user: Object,
         isBlockList: Boolean,
         isFriendList: Boolean,
         isFriendRequestList: Boolean,
@@ -40,14 +39,11 @@ export default {
     {
         async fetchUsers()
         {
-            console.log('da user :', this.user)
             let getText = 'blockships/userblockedby';
             if (this.isFriendList) 
                 getText = 'friendships/friendsof';
             else if (this.isFriendRequestList)
                 getText = 'friendships/pending';
-            if (this.user.length <= 0)
-                return ;
             try
             {
                 const res = await axios.get(`http://${process.env.VUE_APP_IP}:3000/${getText}`, {withCredentials: true});
@@ -58,20 +54,20 @@ export default {
                 console.error('Error un fetchUsers:', e);
             }
         },
-        onAcceptFriendship()
+        onAcceptFriendship(asking_user_id)
         {
-            this.$emit('accept-friendship', {friend_id : this.user.id})
+            this.$emit('accept-friendship', {friend_id : asking_user_id})
         },
         updateFriendList(users)
         {
             this.users = users;
         },
-        onRemoveRelation()
+        onRemoveRelation(removed_user_id) // TODO la suite removed_user_id
         {
             if (this.isFriendList || this.isFriendRequestList)
-                this.$emit('remove-relation', {relationType: 'friend', friend_id : this.user.id})
+                this.$emit('remove-relation', {relationType: 'friend', friend_id : removed_user_id})
             else
-                this.$emit('remove-relation', {relationType: 'block', userblocked_id : this.user.id})
+                this.$emit('remove-relation', {relationType: 'block', userblocked_id : removed_user_id})
 
         },
     },

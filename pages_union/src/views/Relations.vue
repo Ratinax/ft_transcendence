@@ -1,9 +1,9 @@
 <template>
   <div class="relations-lists">
       <Menu/>
-      <ListUsers v-if="user" :is-friend-list="true" :user="user" :headerText="'Friend list'" ref="friendList" @remove-relation="onRemoveRelation"/>
-      <ListUsers v-if="user" :is-friend-request-list="true" :user="user" :headerText="'Friend request'" ref="friendRequest" @accept-friendship="onAcceptFriendship" @remove-relation="onRemoveRelation"/>
-      <ListUsers v-if="user" :is-block-list="true" :user="user" :headerText="'Block list'" ref="blockList" @remove-relation="onRemoveRelation"/>
+      <ListUsers :is-friend-list="true" :headerText="'Friend list'" ref="friendList" @remove-relation="onRemoveRelation"/>
+      <ListUsers :is-friend-request-list="true" :headerText="'Friend request'" ref="friendRequest" @accept-friendship="onAcceptFriendship" @remove-relation="onRemoveRelation"/>
+      <ListUsers :is-block-list="true" :headerText="'Block list'" ref="blockList" @remove-relation="onRemoveRelation"/>
     </div>
   </template>
   
@@ -20,12 +20,6 @@
       ListUsers,
       Menu,
     },
-    data() 
-    {
-      return {
-        user: Object,
-      }
-    },
     mounted()
     {
       this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`); // TODO effectuer l'action que sur l'user concernee pcq la requete sur tt les users
@@ -38,13 +32,6 @@
       this.socket.on('deleteBlockship', (response) => {
         this.deleteBlockship(response);
       });
-    },
-    created()
-    {
-      const userJson = this.$route.query.user;
-
-      this.user = JSON.parse(decodeURIComponent(userJson));
-      console.log('le user :', this.user);
     },
     methods:
     {
@@ -77,7 +64,6 @@
         }
         else
         {
-          console.log('ca va remove blockship avec', body, sessionCookie);
           this.socket.emit('removeBlockship', {...body, sessionCookie: sessionCookie});
         }
       },

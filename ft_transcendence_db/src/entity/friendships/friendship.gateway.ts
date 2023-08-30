@@ -32,7 +32,7 @@ export class FriendshipGateway {
         return ('not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
-      const res = await this.friendshipService.acceptFriendship(body.friend_id, user.id);
+      const res = await this.friendshipService.acceptFriendship(user.id, body.friend_id);
       this.server.emit('acceptFriendship', res);
     }
     /**
