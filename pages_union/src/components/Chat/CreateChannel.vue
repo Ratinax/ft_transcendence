@@ -82,7 +82,6 @@ export default {
     async createChannel()
     {
       const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      console.log('da cookies :', sessionCookie);
       if (!sessionCookie.data)
       {
         // TODO redirect to log page

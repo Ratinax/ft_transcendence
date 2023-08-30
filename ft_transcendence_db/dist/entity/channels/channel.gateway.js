@@ -27,7 +27,6 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
     }
     async create(data) {
         if (await this.sessionService.getIsSessionExpired(data.sessionCookie)) {
-            console.log('not connected');
             return ('not connected');
         }
         const user = await this.sessionService.getUser(data.sessionCookie);

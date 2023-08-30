@@ -53,6 +53,13 @@ let UserController = exports.UserController = class UserController {
     async logOut(body) {
         return (await this.callFunction(this.userService.logOut, body));
     }
+    async getImageName(req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        return (user.profilPic);
+    }
     async getImage(imageName, res) {
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
         try {
@@ -64,9 +71,6 @@ let UserController = exports.UserController = class UserController {
         catch (e) {
             console.error('Error while loading image :', e);
         }
-    }
-    test(req) {
-        console.log('ici', req.cookies);
     }
 };
 __decorate([
@@ -100,6 +104,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "logOut", null);
 __decorate([
+    (0, common_1.Get)('imageName'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getImageName", null);
+__decorate([
     (0, common_1.Get)('/images/:imageName'),
     __param(0, (0, common_1.Param)('imageName')),
     __param(1, (0, common_1.Res)()),
@@ -107,13 +118,6 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getImage", null);
-__decorate([
-    (0, common_1.Get)('test'),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "test", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [user_service_1.UserService, session_service_1.SessionService])

@@ -57,7 +57,6 @@
       async onRemoveRelation(body)
       {
         const sessionCookie = await this.getSessionCookie();
-        console.log(body ,sessionCookie);
         if (body.relationType === 'friend')
         {
           this.socket.emit('removeFriendship', {...body, sessionCookie: sessionCookie});

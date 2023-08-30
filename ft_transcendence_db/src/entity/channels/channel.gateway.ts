@@ -34,7 +34,6 @@ export class ChannelGateway {
     if (await this.sessionService.getIsSessionExpired(data.sessionCookie))
     {
       // TODO redirect to log page
-      console.log('not connected');
       return ('not connected');
     }
     const user = await this.sessionService.getUser(data.sessionCookie);

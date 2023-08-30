@@ -81,12 +81,10 @@ export default defineComponent({
 				},
 				)
 				user = res.data;
-				console.log('res :', res);
 			}
 			catch(e: any)
 			{
 				console.error('Error registering user:', e);
-				console.log(e);
 				if (e && e.reponse && e.response.status === 413)
 					matrixIndex.value = 7;
 				else

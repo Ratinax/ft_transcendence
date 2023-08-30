@@ -26,7 +26,6 @@ export class SessionService{
     {
         if (await this.getIsSessionExpired(sessionKey))
         {
-            console.log('c est expired')
             return (null);
         }
         const relations = await this.sessionRepository

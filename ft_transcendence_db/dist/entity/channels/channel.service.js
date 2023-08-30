@@ -50,7 +50,6 @@ let ChannelService = exports.ChannelService = class ChannelService {
         relation.category = 'Protected by password';
         relation.password = passwordHashed;
         const res = await this.channelRepository.save(relation);
-        console.log(res);
         return ({
             isADm: res.isADm,
             name: res.name,

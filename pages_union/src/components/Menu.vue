@@ -34,12 +34,9 @@
 
 <script>
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 export default {
     name: 'Menu-component',
-    // props: 
-    // {
-    //   user: Object,
-    // },
     data()
     {
       return {
@@ -47,9 +44,9 @@ export default {
         profilPic: String,
       }
     },
-    mounted()
+    async mounted()
     {
-      this.profilPic = '1693385826683_zjBxZkq3ozufshYYKi4YbicbOXQNr6jZeEjnQswbKl.png';
+      this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageName`, {withCredentials: true})).data; // TODO change to real user page
     },
     methods: 
     {

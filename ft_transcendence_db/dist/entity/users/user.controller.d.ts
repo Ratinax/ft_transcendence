@@ -10,6 +10,6 @@ export declare class UserController {
     signIn(body: any): Promise<any>;
     login42(code: any, res: Response): Promise<any>;
     logOut(body: any): Promise<any>;
+    getImageName(req: any): Promise<string>;
     getImage(imageName: string, res: Response): Promise<void>;
-    test(req: any): void;
 }

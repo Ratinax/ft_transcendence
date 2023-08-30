@@ -37,12 +37,11 @@ export class UserController {
     @Post('signup')
     async signUp(@Body() body, @Res({passthrough: true}) res: Response)
     {
-            const user = await this.callFunction(this.userService.signUp, body);
-            const session = await this.sessionService.createSession(user.id);
-            res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
-            return (true);
+        const user = await this.callFunction(this.userService.signUp, body);
+        const session = await this.sessionService.createSession(user.id);
+        res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
+        return (true);
     }
-
     @Post('signin')
     async signIn(@Body() body)
     {
@@ -74,6 +73,18 @@ export class UserController {
         return (await this.callFunction(this.userService.logOut, body))
     }
 
+    @Get('imageName')
+    async getImageName(@Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+            // TODO redirect to log page
+        }
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        return (user.profilPic);
+    }
+
     /**
      * get the image according to its name
      * 
@@ -96,10 +107,5 @@ export class UserController {
         {
             console.error('Error while loading image :', e);
         }
-    }
-    @Get('test')
-    test(@Req() req)
-    {
-        console.log('ici', req.cookies);
     }
 }

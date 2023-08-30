@@ -1,11 +1,10 @@
 <template>
-  <div id="applie">
+  <div>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client';
 import axios from 'axios';
 
@@ -24,12 +23,6 @@ export default {
   {
     this.socket.on('pingAlive', async () => {
       await axios.post(`http://${process.env.VUE_APP_IP}:3000/sessions/pingBack`, {}, { withCredentials: true });
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (!sessionCookie.data)
-      {
-        // TODO handle if error
-      }
-      this.socket.emit('pingBack', { cookies: sessionCookie.data });
     })
   }
 }

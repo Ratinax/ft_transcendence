@@ -47,10 +47,7 @@ export default defineComponent({
 </script>
 
 <style>
-/* html
-{
-	
-} */
+
 .home-container {
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
 	display: flex;
