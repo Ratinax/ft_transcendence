@@ -8,6 +8,9 @@ export class SessionController {
     @Post('pingBack')
     async pingBack(@Req() req, @Res({passthrough: true}) res: Response)
     {
+        // console.log(req.cookies['SESSION_KEY']);
+        if (!req.cookies['SESSION_KEY'])
+            return (null);
         const sessionCookie = await this.sessionService.refreshSessionKey(req.cookies['SESSION_KEY']);
         if (!sessionCookie)
             return (null);

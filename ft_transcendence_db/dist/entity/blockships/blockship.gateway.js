@@ -23,7 +23,6 @@ let BlockshipGateway = exports.BlockshipGateway = class BlockshipGateway {
         this.sessionService = sessionService;
     }
     async refuseBlockship(body) {
-        console.log(234);
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }

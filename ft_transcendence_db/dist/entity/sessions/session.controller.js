@@ -20,6 +20,8 @@ let SessionController = exports.SessionController = class SessionController {
         this.sessionService = sessionService;
     }
     async pingBack(req, res) {
+        if (!req.cookies['SESSION_KEY'])
+            return (null);
         const sessionCookie = await this.sessionService.refreshSessionKey(req.cookies['SESSION_KEY']);
         if (!sessionCookie)
             return (null);
