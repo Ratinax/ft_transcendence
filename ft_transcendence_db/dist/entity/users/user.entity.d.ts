@@ -3,4 +3,5 @@ export declare class Users {
     pseudo: string;
     password: string;
     profilPic: string;
+    is42User: Boolean;
 }

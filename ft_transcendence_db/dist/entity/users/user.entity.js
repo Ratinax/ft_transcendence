@@ -22,13 +22,17 @@ __decorate([
     __metadata("design:type", String)
 ], Users.prototype, "pseudo", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 100 }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, default: '' }),
     __metadata("design:type", String)
 ], Users.prototype, "password", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'profil_pic', type: 'varchar', nullable: true }),
     __metadata("design:type", String)
 ], Users.prototype, "profilPic", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'is_42_user', type: 'boolean', default: false }),
+    __metadata("design:type", Boolean)
+], Users.prototype, "is42User", void 0);
 exports.Users = Users = __decorate([
     (0, typeorm_1.Entity)()
 ], Users);

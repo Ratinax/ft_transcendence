@@ -1,4 +1,4 @@
-import { Body, Controller, Get, InternalServerErrorException, Param, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, InternalServerErrorException, Param, Post, Query, Req, Res } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 import * as path from 'path';
@@ -49,7 +49,9 @@ export class UserController {
         // TODO check input
         const user = await this.callFunction(this.userService.signIn, body);
         if (!user || user === 'Wrong password')
-            return (false);
+            return (false); // TODO handle error in front
+        if (user.is42User)
+            return (false); // TODO handle its a user 42, cannot connect like this
         const session = await this.sessionService.createSession(user.id);
         res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         return (true);
@@ -61,19 +63,24 @@ export class UserController {
      * @param res interface already provided without givig it, used to set cookies
      * @returns result of request
      */
-    @Get('login42/:code')
-    async login42(@Param('code') code, @Res({passthrough: true}) res: Response)
+    @Get('callback42/:code')
+    async getToken(@Param('code') code: string, @Res({passthrough: true}) res: Response)
     {
-        const token = await this.userService.login42(code);
-		if (token)
+        const token = await this.userService.getToken(code);
+        if (token && token.data)
 		{
+            const infos = await this.userService.getMyInfos(token.data.access_token);
+            const user = await this.callFunction(this.userService.login42, {pseudo: infos.data.login, profilPic: infos.data.image.link, is42User: true});
+            if (!user) // TODO faire quelque chose quand renvoie null
+                return (false);
+            const session = await this.sessionService.createSession(user.id);
+            res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
 			res.cookie('42_TOKEN', token.data.access_token, {httpOnly: true, expires: new Date(Date.now() + token.data.expires_in * 1000)});
 			res.cookie('42_REFRESH', token.data.refresh_token, {httpOnly: true, maxAge: 1000000000});
-			return token.data; // TODO enlever pour securite
+			return (true);
 		}
-		return 'Error';
+        return (false); // TODO handle le fait que ce soit pas le meme false que plus haut
     }
-
     @Post('logout')
     async logOut(@Body() body)
     {
@@ -89,7 +96,9 @@ export class UserController {
             // TODO redirect to log page
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        return (user.profilPic);
+        if (user.is42User)
+            return (user.profilPic);
+        return (`http://192.168.1.159:3000/users/images/${user.profilPic}`); // TODO remove ip in code
     }
 
     /**

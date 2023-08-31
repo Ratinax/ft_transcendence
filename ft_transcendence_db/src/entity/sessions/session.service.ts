@@ -38,6 +38,7 @@ export class SessionService{
                 pseudo: sessions.user.pseudo,
                 // password: sessions.user.password,
                 profilPic: sessions.user.profilPic,
+                is42User: sessions.user.is42User,
             }));
         return (user[0]);
     }

@@ -42,18 +42,26 @@ let UserController = exports.UserController = class UserController {
         const user = await this.callFunction(this.userService.signIn, body);
         if (!user || user === 'Wrong password')
             return (false);
+        if (user.is42User)
+            return (false);
         const session = await this.sessionService.createSession(user.id);
         res.cookie('SESSION_KEY', session.sessionKey, { httpOnly: true, expires: new Date(session.expirationDate) });
         return (true);
     }
-    async login42(code, res) {
-        const token = await this.userService.login42(code);
-        if (token) {
+    async getToken(code, res) {
+        const token = await this.userService.getToken(code);
+        if (token && token.data) {
+            const infos = await this.userService.getMyInfos(token.data.access_token);
+            const user = await this.callFunction(this.userService.login42, { pseudo: infos.data.login, profilPic: infos.data.image.link, is42User: true });
+            if (!user)
+                return (false);
+            const session = await this.sessionService.createSession(user.id);
+            res.cookie('SESSION_KEY', session.sessionKey, { httpOnly: true, expires: new Date(session.expirationDate) });
             res.cookie('42_TOKEN', token.data.access_token, { httpOnly: true, expires: new Date(Date.now() + token.data.expires_in * 1000) });
             res.cookie('42_REFRESH', token.data.refresh_token, { httpOnly: true, maxAge: 1000000000 });
-            return token.data;
+            return (true);
         }
-        return 'Error';
+        return (false);
     }
     async logOut(body) {
         return (await this.callFunction(this.userService.logOut, body));
@@ -63,7 +71,9 @@ let UserController = exports.UserController = class UserController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        return (user.profilPic);
+        if (user.is42User)
+            return (user.profilPic);
+        return (`http://192.168.1.159:3000/users/images/${user.profilPic}`);
     }
     async getImage(imageName, res) {
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
@@ -95,13 +105,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "signIn", null);
 __decorate([
-    (0, common_1.Get)('login42/:code'),
+    (0, common_1.Get)('callback42/:code'),
     __param(0, (0, common_1.Param)('code')),
     __param(1, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
-], UserController.prototype, "login42", null);
+], UserController.prototype, "getToken", null);
 __decorate([
     (0, common_1.Post)('logout'),
     __param(0, (0, common_1.Body)()),

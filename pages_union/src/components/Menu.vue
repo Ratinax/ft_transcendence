@@ -1,7 +1,7 @@
 <template>
   <div class="navigation-menu">
     <div class="navigation-option profil-pic">
-      <img :src="getImageUrl(profilPic)" alt="Image"/>
+      <img :src="profilPic" alt="Image"/>
     </div>
     <div class="navigation-option" @click="goToMessages">
       <div class="messages-icon">
@@ -41,7 +41,7 @@ export default {
     {
       return {
         router: useRouter(),
-        profilPic: String,
+        profilPic: '',
       }
     },
     async mounted()
@@ -50,10 +50,6 @@ export default {
     },
     methods: 
     {
-      getImageUrl(imageName) 
-      {
-          return `http://${process.env.VUE_APP_IP}:3000/users/images/${imageName}`;
-      },
       async goToMessages()
       {
         this.router.push({path: '/chat'});

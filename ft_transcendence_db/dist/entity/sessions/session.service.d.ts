@@ -8,6 +8,7 @@ export declare class SessionService {
         id: number;
         pseudo: string;
         profilPic: string;
+        is42User: Boolean;
     }>;
     getSessionKey(user_id: number): Promise<string>;
     getIsSessionExpired(sessionKey: any): Promise<boolean>;

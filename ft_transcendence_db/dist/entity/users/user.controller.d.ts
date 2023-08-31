@@ -8,7 +8,7 @@ export declare class UserController {
     callFunction(fct: any, body: any): Promise<any>;
     signUp(body: any, res: Response): Promise<boolean>;
     signIn(body: any, res: Response): Promise<boolean>;
-    login42(code: any, res: Response): Promise<any>;
+    getToken(code: string, res: Response): Promise<boolean>;
     logOut(body: any): Promise<any>;
     getImageName(req: any): Promise<string>;
     getImage(imageName: string, res: Response): Promise<void>;

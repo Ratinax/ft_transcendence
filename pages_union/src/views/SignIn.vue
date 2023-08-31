@@ -31,7 +31,7 @@ export default defineComponent({
 		const password = ref("");
 		const router = useRouter();
 		
-		function login42()
+		async function login42()
 		{
 			const link = `https://api.intra.42.fr/oauth/authorize?client_id=${process.env.VUE_APP_CLIENT_ID}&redirect_uri=${process.env.VUE_APP_REDIRECT_URI}&response_type=code`;
 			window.location.href = link;

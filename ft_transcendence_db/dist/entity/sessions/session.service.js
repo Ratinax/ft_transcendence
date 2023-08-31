@@ -45,6 +45,7 @@ let SessionService = exports.SessionService = class SessionService {
             id: sessions.user.id,
             pseudo: sessions.user.pseudo,
             profilPic: sessions.user.profilPic,
+            is42User: sessions.user.is42User,
         }));
         return (user[0]);
     }

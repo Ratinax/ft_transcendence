@@ -10,10 +10,16 @@ export declare class UserService {
         id: number;
     }>;
     signIn(user: Partial<Users>): Promise<false | Users | "Wrong password">;
+    login42(user: Partial<Users>): Promise<Users | {
+        pseudo: string;
+        profilPic: string;
+        id: number;
+    }>;
     logOut(user: Partial<Users>): Promise<false | Users>;
-    login42(code: any): Promise<void | import("axios").AxiosResponse<any, any>>;
+    getToken(code: any): Promise<import("axios").AxiosResponse<any, any>>;
     generateRandomString(length: number): string;
     uploadImage(image: string): Promise<string>;
     comparePasswords(user: any, password: string): Promise<any>;
     hashedPassword(password: string): Promise<any>;
+    getMyInfos(token: any): Promise<any>;
 }

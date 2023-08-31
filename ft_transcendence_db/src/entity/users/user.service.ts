@@ -79,7 +79,30 @@ export class UserService {
             return ('Wrong password');
         return (userFound);
     }
-
+    async login42(user: Partial<Users>)
+    {
+        let userFromPseudo = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
+        let userFrom42 = await this.userRepository.findOne({where: {pseudo : user.pseudo, is42User: true}});
+        if (userFromPseudo && !userFrom42)
+        {
+            // TODO handle le fait que quelqu'un ai deja ce pseudo et ne soit pas de 42
+            return (null);
+        }
+        else if (!userFromPseudo)
+        {
+            const newUser = this.userRepository.create(user);
+            const res = await this.userRepository.save(newUser);
+            return ({
+                pseudo: res.pseudo,
+                profilPic: res.profilPic,
+                id: res.id,
+            });
+        }
+        else if (userFrom42)
+        {
+            return (userFrom42);
+        }
+    }
     async logOut(user: Partial<Users>)
     {
         let userFound = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
@@ -90,13 +113,22 @@ export class UserService {
             return (false);
         return (userFound);
     }
-    async login42(code)
+    async getToken(code)
     {
-        const	token = await axios({
-            method: 'post',
-			url: `https://api.intra.42.fr/oauth/token?client_id=u-s4t2ud-94bfa47720442c69e6266c335aaccc7262119a51ef0af6de8e5c8937db806547&client_secret=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&redirect_uri=http%3A%2F%2F10.0.4.53%3A8080%2F&grant_type=authorization_code&code=${code}`,
-		}).catch(console.error);
-		return token;
+        try
+        {
+            const	token = await axios({
+                method: 'post',
+                url: `https://api.intra.42.fr/oauth/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${process.env.REDIRECT_URI}&grant_type=authorization_code&code=${code}`,
+            })
+            // console.log('da mother token data:', token.data)
+            return token;
+        }
+        catch (e)
+        {
+            // console.log('daaere mfee :', e);
+            return (null);
+        }
     }
     /**
      * generate a random string
@@ -169,4 +201,12 @@ export class UserService {
     {
         return (await bcrypt.hash(password + process.env.PEPPER, +process.env.SALTROUNDS))
     }
+    async getMyInfos(token) : Promise<any> {
+		const	userInfos = await axios({
+			method: 'get',
+			url: 'https://api.intra.42.fr/v2/me',
+			headers: {Authorization: `Bearer ${token}`}
+		}).catch(console.error);
+		return userInfos;
+	}
 }

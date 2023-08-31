@@ -4,6 +4,8 @@ import SignUp from '../views/SignUp.vue';
 import SignIn from '../views/SignIn.vue';
 import Chat from '../views/Chat.vue';
 import Relations from '../views/Relations.vue';
+import Callback42 from '../views/Callback42.vue';
+
 import axios from 'axios';
 const routes = [
     {
@@ -47,6 +49,12 @@ const routes = [
               next('/');
             }
         }
+    },
+    {
+        path: '/callback42',
+        component: Callback42,
+        name: 'Callback42',
+        props: true,
     },
 ]
 
