@@ -37,15 +37,22 @@ export class UserController {
     @Post('signup')
     async signUp(@Body() body, @Res({passthrough: true}) res: Response)
     {
+        // TODO check input
         const user = await this.callFunction(this.userService.signUp, body);
         const session = await this.sessionService.createSession(user.id);
         res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         return (true);
     }
     @Post('signin')
-    async signIn(@Body() body)
+    async signIn(@Body() body, @Res({passthrough: true}) res: Response)
     {
-        return (await this.callFunction(this.userService.signIn, body))
+        // TODO check input
+        const user = await this.callFunction(this.userService.signIn, body);
+        if (!user || user === 'Wrong password')
+            return (false);
+        const session = await this.sessionService.createSession(user.id);
+        res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
+        return (true);
     }
 
     /**

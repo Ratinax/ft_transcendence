@@ -67,7 +67,6 @@ export default defineComponent({
 			handleInputErrors();
 			if (matrixIndex.value > 0)
 				return ;
-			let user;
 			try
 			{
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/signup`, 
@@ -80,11 +79,9 @@ export default defineComponent({
 					withCredentials: true,
 				},
 				)
-				user = res.data;
 			}
 			catch(e: any)
 			{
-				console.error('Error registering user:', e);
 				if (e && e.reponse && e.response.status === 413)
 					matrixIndex.value = 7;
 				else

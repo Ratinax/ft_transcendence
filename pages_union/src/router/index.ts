@@ -24,7 +24,7 @@ const routes = [
         component: Chat,
         props: true,
         // Check if session cookie, if not, redirect to logpage
-        beforeEnter: async (next: any) => {
+        beforeEnter: async (to: any, from: any, next: any) => {
             const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
             if (sessionCookie !== '') {
               next();
@@ -39,7 +39,7 @@ const routes = [
         name: 'Relations',
         props: true,
         // Check if session cookie, if not, redirect to logpage
-        beforeEnter: async (next: any) => {
+        beforeEnter: async (to: any, from: any, next: any) => {
             const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
             if (sessionCookie !== '') {
               next();

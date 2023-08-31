@@ -64,9 +64,6 @@ let UserService = exports.UserService = class UserService {
             return (false);
         if (!this.comparePasswords(userFound, user.password))
             return ('Wrong password');
-        userFound = await this.userRepository.findOne({ where: { pseudo: user.pseudo } });
-        if (!userFound)
-            return (false);
         return (userFound);
     }
     async logOut(user) {

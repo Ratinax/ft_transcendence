@@ -38,8 +38,13 @@ let UserController = exports.UserController = class UserController {
         res.cookie('SESSION_KEY', session.sessionKey, { httpOnly: true, expires: new Date(session.expirationDate) });
         return (true);
     }
-    async signIn(body) {
-        return (await this.callFunction(this.userService.signIn, body));
+    async signIn(body, res) {
+        const user = await this.callFunction(this.userService.signIn, body);
+        if (!user || user === 'Wrong password')
+            return (false);
+        const session = await this.sessionService.createSession(user.id);
+        res.cookie('SESSION_KEY', session.sessionKey, { httpOnly: true, expires: new Date(session.expirationDate) });
+        return (true);
     }
     async login42(code, res) {
         const token = await this.userService.login42(code);
@@ -84,8 +89,9 @@ __decorate([
 __decorate([
     (0, common_1.Post)('signin'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "signIn", null);
 __decorate([
