@@ -1,6 +1,6 @@
 <template>
   <div v-if="userInChannel !== null" class="list-users-chat">
-    <UserChat class="user-chat" v-for="userInChat in users" :userInChannel="userInChannel" :key="userInChat.id" :userInChat="userInChat" :isSelected="userSelected && userSelected.id === userInChat.id" :socket="socket" :channel="channel" @user-clicked="handleUserClicked"/>
+    <UserChat class="user-chat" v-for="userInChat in users" :sessionCookie="sessionCookie" :userInChannel="userInChannel" :key="userInChat.id" :userInChat="userInChat" :isSelected="userSelected && userSelected.id === userInChat.id" :socket="socket" :channel="channel" @user-clicked="handleUserClicked"/>
   </div>
 </template>
 
@@ -16,6 +16,7 @@ export default {
     },
     props:
     {
+        sessionCookie: String,
         socket: Socket,
         channel: Object,
     },

@@ -7,12 +7,12 @@
       <div :class="{'nochannel': channels.length === 0, 'buttons': true}">
         <div class="new-channel">
           <button @click="showCreateChannel = true">Create Channel</button>
-          <CreateChannel :show="showCreateChannel" :socket="socket" @close="showCreateChannel = false">
+          <CreateChannel :show="showCreateChannel" :sessionCookie="sessionCookie" :socket="socket" @close="showCreateChannel = false">
           </CreateChannel>
         </div>
         <div class="join-channel">
           <button @click="showJoinChannel = true">Join Channel</button>
-          <JoinChannel :show="showJoinChannel" :socket="socket" ref='joinChannel' @close="showJoinChannel = false" >
+          <JoinChannel :show="showJoinChannel" :sessionCookie="sessionCookie" :socket="socket" ref='joinChannel' @close="showJoinChannel = false" >
           </JoinChannel>
         </div>
       </div>
@@ -35,6 +35,7 @@ export default {
     },
     props: 
     {
+      sessionCookie: String,
       channelSelected: Object,
       socket: null,
     },

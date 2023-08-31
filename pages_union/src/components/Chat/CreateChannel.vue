@@ -24,13 +24,13 @@
   
 <script>
 import { Socket } from 'socket.io-client';
-import axios from 'axios';
 
 export default {
   name: 'CreateChannel',
   props: {
     show: Boolean,
     socket: Socket,
+    sessionCookie: String,
   },
   data()
   {
@@ -55,24 +55,20 @@ export default {
   mounted()
   {
     this.socket.on('createGoodRequest', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
           this.goodRequest();
     });
     this.socket.on('createAlreadyExists', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
           this.alreadyExists();
     });
     this.socket.on('createPasswordOrNameWrongSize', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
         this.wrongInputLength();
         
     });
     this.socket.on('createWrongCategory', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
         this.wrongCategory();
         
     });
@@ -81,19 +77,13 @@ export default {
   {
     async createChannel()
     {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (!sessionCookie.data)
-      {
-        // TODO redirect to log page
-        return ;
-      }
       this.socket.emit('createChannel', { channel: {
         name: this.channelName,
           password: this.password,
           category: this.categories[this.selectedCategory - 1].name,
           isADm: false,
       },
-      sessionCookie: sessionCookie.data});
+      sessionCookie: this.sessionCookie});
     },
     close()
     {

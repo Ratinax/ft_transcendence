@@ -21,12 +21,13 @@
   
 <script>
 import { Socket } from 'socket.io-client';
-import axios from 'axios';
+
 export default {
   name: 'JoinChannel',
   props: {
     show: Boolean,
     socket: Socket,
+    sessionCookie: String,
   },
   data()
   {
@@ -48,33 +49,27 @@ export default {
   mounted()
   {
     this.socket.on('joinNoSuchChannel', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
           this.noSuchChannel();
       });
     this.socket.on('joinAlreadyIn', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
         this.alreadyIn();
     });
     this.socket.on('joinWrongPassword', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
         this.wrongPassword();
     });
     this.socket.on('joinGoodRequest', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
         this.goodRequest();
     });
     this.socket.on('joinBanned', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
         this.joinBanned();
     });
     this.socket.on('joinPrivateMode', async (response) => {
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (response.sessionCookie === sessionCookie.data)
+      if (response.sessionCookie === this.sessionCookie)
         this.privateMode();
     });
   },
@@ -88,13 +83,7 @@ export default {
         this.matrixIndex = 1;
         return ;
       }
-      const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-      if (!sessionCookie.data)
-      {
-        // TODO redirect to log page 
-        return ;
-      }
-      this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, sessionCookie: sessionCookie.data})
+      this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, sessionCookie: this.sessionCookie})
     },
     close()
     {
