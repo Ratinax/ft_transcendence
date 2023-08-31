@@ -20,8 +20,15 @@
       ListUsers,
       Menu,
     },
-    mounted()
+    data()
     {
+      return {
+        sessionCookie: '',
+      }
+    },
+    async mounted()
+    {
+      this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
       this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`); // TODO effectuer l'action que sur l'user concernee pcq la requete sur tt les users
       this.socket.on('acceptFriendship', (response) => {
         this.acceptFriendship(response);
@@ -37,8 +44,7 @@
     {
       async onAcceptFriendship(body)
       {
-        const sessionCookie = await this.getSessionCookie();
-        this.socket.emit('acceptFriendship', {...body, sessionCookie: sessionCookie});
+        this.socket.emit('acceptFriendship', {...body, sessionCookie: this.sessionCookie});
       },
       acceptFriendship()
       {
@@ -56,30 +62,19 @@
       },
       async onRemoveRelation(body)
       {
-        const sessionCookie = await this.getSessionCookie();
         if (body.relationType === 'friend')
         {
-          this.socket.emit('removeFriendship', {...body, sessionCookie: sessionCookie});
+          this.socket.emit('removeFriendship', {...body, sessionCookie: this.sessionCookie});
         }
         else
         {
-          this.socket.emit('removeBlockship', {...body, sessionCookie: sessionCookie});
+          this.socket.emit('removeBlockship', {...body, sessionCookie: this.sessionCookie});
         }
       },
       deleteBlockship()
       {
         if (this.$refs.blockList)
           this.$refs.blockList.fetchUsers();
-      },
-      async getSessionCookie()
-      {
-        const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true });
-        if (!sessionCookie.data)
-        {
-          // TODO redirect to log page 
-          return (null);
-        }
-        return (sessionCookie.data);
       },
     }
   }

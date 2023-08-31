@@ -45,9 +45,6 @@ export default {
   async mounted()
   {
     this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
-    console.log(this.sessionCookie)
-    if (!this.sessionCookie)
-      this.$router.push({path: '/'});
     this.socket = io(`http://${process.env.VUE_APP_IP}:3001/`);
     this.socket.on('updateMessage', (response) => {
       if (response.channel_id === this.selectedChannel.channel_id)
