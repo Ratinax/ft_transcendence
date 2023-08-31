@@ -1,7 +1,7 @@
 <template>
   <div class="navigation-menu">
     <div class="navigation-option profil-pic">
-      <img :src="profilPic" alt="Image"/>
+      <img :src="profilPic" alt="Profil"/>
     </div>
     <div class="navigation-option" @click="goToMessages">
       <div class="messages-icon">
@@ -47,6 +47,7 @@ export default {
     async mounted()
     {
       this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageName`, {withCredentials: true})).data; // TODO change to real user page
+    
     },
     methods: 
     {
@@ -63,6 +64,17 @@ export default {
 </script>
 
 <style>
+.navigation-option.profil-pic 
+{
+  border: 0.1em solid var(--plight);
+}
+.navigation-option.profil-pic img
+{
+  color: var(--plight);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .navigation-option .button.top
 {
   margin-top: 2.2em;
