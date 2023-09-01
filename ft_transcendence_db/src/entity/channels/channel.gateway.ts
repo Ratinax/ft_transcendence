@@ -4,13 +4,21 @@ import { Server } from 'socket.io';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
+import { ConfigIp } from 'src/config-ip';
 
-@WebSocketGateway(3001, {
-  cors: {
-    origin: `http://192.168.1.159:8080`,
-    credentials: true,
-  },
-})
+
+function getWebSocketGatewayOptions() {
+  return {
+    cors: {
+      origin: `http://${ConfigIp.IP}:8080`,
+      credentials: true,
+    },
+  };
+}
+
+@WebSocketGateway(3001, getWebSocketGatewayOptions()
+)
+
 export class ChannelGateway {
 
   @WebSocketServer()
@@ -28,7 +36,7 @@ export class ChannelGateway {
    * @emits createPasswordOrNameWrongSize {user} - in case of failing
    * @emits createWrongCategory {user} - in case of failing
    */
-  @SubscribeMessage('createChannel')
+  @SubscribeMessage('createChannel') // TODO handle no special caractere because errors can happend like in : 'ah ouais ??'
   async create(@MessageBody() data)
   {
     if (await this.sessionService.getIsSessionExpired(data.sessionCookie))
@@ -112,12 +120,13 @@ export class ChannelGateway {
     {
       const channels = await this.channelService.findByName(channelName);
       if (!channels || !channels[0])
-        throw new InternalServerErrorException('no such channel'); 
-      channel = channels[0];
+        throw new InternalServerErrorException('no such channel');
+        channel = channels[0];
     }
     catch (e)
     {
       this.server.emit('joinNoSuchChannel', {sessionCookie: body.sessionCookie});
+      return ;
     }
 
     const relation = await this.channelsUsersService.findRelation(user.id, channel.channel_id);

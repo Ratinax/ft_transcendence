@@ -3,13 +3,13 @@ import { AppModule } from './app.module';
 import * as express from 'express';
 import * as dotenv from 'dotenv';
 import * as cookieParser from 'cookie-parser';
+import { ConfigIp } from './config-ip';
 
 async function bootstrap() {
-  dotenv.config();
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
   app.enableCors({
-    origin: `http://192.168.1.159:8080`,
+    origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
   });
   app.use(express.json({ limit: '50mb' }));

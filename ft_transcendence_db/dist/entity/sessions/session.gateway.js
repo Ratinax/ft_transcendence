@@ -13,6 +13,7 @@ exports.SessionGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const session_service_1 = require("./session.service");
 const socket_io_1 = require("socket.io");
+const config_ip_1 = require("../../config-ip");
 let SessionGateway = exports.SessionGateway = class SessionGateway {
     constructor(sessionService) {
         this.sessionService = sessionService;
@@ -41,7 +42,7 @@ __decorate([
 exports.SessionGateway = SessionGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3003, {
         cors: {
-            origin: `http://192.168.1.159:8080`,
+            origin: `http://${config_ip_1.ConfigIp.IP}:8080`,
             credentials: true,
         },
     }),

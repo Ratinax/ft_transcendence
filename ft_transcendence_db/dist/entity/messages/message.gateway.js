@@ -19,6 +19,7 @@ const socket_io_1 = require("socket.io");
 const channels_users_service_1 = require("../channels_users/channels_users.service");
 const common_1 = require("@nestjs/common");
 const session_service_1 = require("../sessions/session.service");
+const config_ip_1 = require("../../config-ip");
 let MessagesGateway = exports.MessagesGateway = class MessagesGateway {
     constructor(messagesService, channelsUsersService, sessionService) {
         this.messagesService = messagesService;
@@ -71,7 +72,7 @@ __decorate([
 exports.MessagesGateway = MessagesGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3001, {
         cors: {
-            origin: `http://192.168.1.159:8080`,
+            origin: `http://${config_ip_1.ConfigIp.IP}:8080`,
             credentials: true,
         },
     }),

@@ -2,10 +2,11 @@ import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from
 import { SessionService } from './session.service';
 import { Server } from 'socket.io';
 import { InternalServerErrorException, OnModuleInit, Req } from '@nestjs/common';
+import { ConfigIp } from 'src/config-ip';
 
 @WebSocketGateway(3003, {
   cors: {
-    origin: `http://192.168.1.159:8080`,
+    origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
   },
 })

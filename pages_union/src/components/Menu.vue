@@ -75,10 +75,10 @@ export default {
 
 .navigation-option img
 {
-  min-width: 100%;
-  min-height: 100%;
+  min-width: 110%;
+  min-height: 110%;
   position: absolute;
-  margin-left: 0.2em;
+  margin-left: 0.1em;
 }
 .navigation-option .button.top
 {

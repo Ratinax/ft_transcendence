@@ -73,7 +73,7 @@ let UserController = exports.UserController = class UserController {
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         if (user.is42User)
             return (user.profilPic);
-        return (`http://192.168.1.159:3000/users/images/${user.profilPic}`);
+        return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
     }
     async getImage(imageName, res) {
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);

@@ -2,10 +2,11 @@ import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, Conne
 import { ChannelsUsersService } from './channels_users.service';
 import { Server } from 'socket.io';
 import { SessionService } from '../sessions/session.service';
+import { ConfigIp } from 'src/config-ip';
 
 @WebSocketGateway(3001, {
   cors: {
-    origin: `http://192.168.1.159:8080`,
+    origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
   },
 })

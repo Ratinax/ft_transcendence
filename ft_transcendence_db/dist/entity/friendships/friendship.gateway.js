@@ -18,6 +18,7 @@ const friendship_service_1 = require("./friendship.service");
 const socket_io_1 = require("socket.io");
 const common_1 = require("@nestjs/common");
 const session_service_1 = require("../sessions/session.service");
+const config_ip_1 = require("../../config-ip");
 let FriendshipGateway = exports.FriendshipGateway = class FriendshipGateway {
     constructor(friendshipService, sessionService) {
         this.friendshipService = friendshipService;
@@ -66,7 +67,7 @@ __decorate([
 exports.FriendshipGateway = FriendshipGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3002, {
         cors: {
-            origin: `http://192.168.1.159:8080`,
+            origin: `http://${config_ip_1.ConfigIp.IP}:8080`,
             credentials: true,
         },
     }),

@@ -17,6 +17,7 @@ const websockets_1 = require("@nestjs/websockets");
 const channels_users_service_1 = require("./channels_users.service");
 const socket_io_1 = require("socket.io");
 const session_service_1 = require("../sessions/session.service");
+const config_ip_1 = require("../../config-ip");
 let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGateway {
     constructor(channelsUsersService, sessionService) {
         this.channelsUsersService = channelsUsersService;
@@ -171,7 +172,7 @@ __decorate([
 exports.ChannelsUsersGateway = ChannelsUsersGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3001, {
         cors: {
-            origin: `http://192.168.1.159:8080`,
+            origin: `http://${config_ip_1.ConfigIp.IP}:8080`,
             credentials: true,
         },
     }),

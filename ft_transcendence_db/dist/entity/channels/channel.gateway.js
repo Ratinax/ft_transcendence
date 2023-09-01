@@ -19,6 +19,15 @@ const socket_io_1 = require("socket.io");
 const channels_users_service_1 = require("../channels_users/channels_users.service");
 const common_1 = require("@nestjs/common");
 const session_service_1 = require("../sessions/session.service");
+const config_ip_1 = require("../../config-ip");
+function getWebSocketGatewayOptions() {
+    return {
+        cors: {
+            origin: `http://${config_ip_1.ConfigIp.IP}:8080`,
+            credentials: true,
+        },
+    };
+}
 let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
     constructor(channelService, channelsUsersService, sessionService) {
         this.channelService = channelService;
@@ -82,6 +91,7 @@ let ChannelGateway = exports.ChannelGateway = class ChannelGateway {
         }
         catch (e) {
             this.server.emit('joinNoSuchChannel', { sessionCookie: body.sessionCookie });
+            return;
         }
         const relation = await this.channelsUsersService.findRelation(user.id, channel.channel_id);
         if (relation && relation[0]) {
@@ -129,12 +139,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelGateway.prototype, "join", null);
 exports.ChannelGateway = ChannelGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3001, {
-        cors: {
-            origin: `http://192.168.1.159:8080`,
-            credentials: true,
-        },
-    }),
+    (0, websockets_1.WebSocketGateway)(3001, getWebSocketGatewayOptions()),
     __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService, session_service_1.SessionService])
 ], ChannelGateway);
 //# sourceMappingURL=channel.gateway.js.map

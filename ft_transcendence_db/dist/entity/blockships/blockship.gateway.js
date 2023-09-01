@@ -17,6 +17,7 @@ const websockets_1 = require("@nestjs/websockets");
 const blockship_service_1 = require("./blockship.service");
 const socket_io_1 = require("socket.io");
 const session_service_1 = require("../sessions/session.service");
+const config_ip_1 = require("../../config-ip");
 let BlockshipGateway = exports.BlockshipGateway = class BlockshipGateway {
     constructor(blockshipService, sessionService) {
         this.blockshipService = blockshipService;
@@ -45,7 +46,7 @@ __decorate([
 exports.BlockshipGateway = BlockshipGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(3002, {
         cors: {
-            origin: `http://192.168.1.159:8080`,
+            origin: `http://${config_ip_1.ConfigIp.IP}:8080`,
             credentials: true,
         },
     }),

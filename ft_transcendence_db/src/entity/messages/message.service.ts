@@ -29,7 +29,6 @@ export class MessageService {
             }
             removeBlockString += ')';
         }
-
         return this.messageRepository
         .createQueryBuilder('message')
         .leftJoinAndSelect('message.channel', 'channel')

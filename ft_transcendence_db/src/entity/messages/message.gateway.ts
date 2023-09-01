@@ -4,10 +4,11 @@ import { Server } from 'socket.io';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
+import { ConfigIp } from 'src/config-ip';
 
 @WebSocketGateway(3001, {
   cors: {
-    origin: `http://192.168.1.159:8080`,
+    origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
   },
 })
@@ -41,18 +42,18 @@ export class MessagesGateway {
       const relation = await this.channelsUsersService.findRelation(user.id, body.channel_id);
       if (!relation || !relation[0])
         throw new InternalServerErrorException('no such relation');
-      
-      const timeoutDate = new Date(relation[0].dateTimeout);
-      const currentDate = new Date(body.dateSent);
-      const timeoutDuration = relation[0].durationTimeout;
-
-      const timeoutSeconds = timeoutDate.getTime() / 1000;
-      const currentSeconds = currentDate.getTime() / 1000;
-
-      if (timeoutSeconds + +timeoutDuration > currentSeconds)
-      {
-        this.server.emit('sendMessageTimeout', {channel_id: body.channel_id, sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
-        return 'user timeout';
+        
+        const timeoutDate = new Date(relation[0].dateTimeout);
+        const currentDate = new Date(body.dateSent);
+        const timeoutDuration = relation[0].durationTimeout;
+        
+        const timeoutSeconds = timeoutDate.getTime() / 1000;
+        const currentSeconds = currentDate.getTime() / 1000;
+        
+        if (timeoutSeconds + +timeoutDuration > currentSeconds)
+        {
+          this.server.emit('sendMessageTimeout', {channel_id: body.channel_id, sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
+          return 'user timeout';
       }
 
       const response = await this.messagesService.post({

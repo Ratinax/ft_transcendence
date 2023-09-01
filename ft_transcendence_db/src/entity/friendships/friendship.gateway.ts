@@ -3,10 +3,11 @@ import { FriendshipService } from './friendship.service';
 import { Server } from 'socket.io';
 import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
+import { ConfigIp } from 'src/config-ip';
 
 @WebSocketGateway(3002, {
   cors: {
-    origin: `http://192.168.1.159:8080`,
+    origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
   },
 })
