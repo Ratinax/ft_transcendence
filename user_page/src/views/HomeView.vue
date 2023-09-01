@@ -154,14 +154,13 @@ p {
 }
 
 .user-page-button:active {
-  border: none;
-  transform: translateY(3px);
-  height: 90%;
+  box-shadow: none;
+  transform: translateY(4px);
 }
 
 .add-button {
   background: rgba(0, 255, 0, 0.875);
-  border-bottom: .2em solid green;
+  box-shadow: 0 4px 0 green;
 }
 
 .add-button:hover {
@@ -170,7 +169,7 @@ p {
 
 .block-button {
   background: rgb(251, 80, 80, 0.875);
-  border-bottom: .2em solid red;
+  box-shadow: 0 4px 0 red;
 }
 
 .block-button:hover {
