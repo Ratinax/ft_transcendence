@@ -46,7 +46,7 @@ export default {
     },
     async mounted()
     {
-      this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageName`, {withCredentials: true})).data; // TODO change to real user page
+      this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageName`, {withCredentials: true})).data;
     
     },
     methods: 

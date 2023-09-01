@@ -17,7 +17,6 @@ export class ChannelsUsersController {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
-            // TODO redirect to log page
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const res = await this.channelsUsersService.findRelation(user.id, channelId);

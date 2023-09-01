@@ -27,10 +27,8 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      // TODO redirect to log page
       return ('not connected');
     }
-    const user = await this.sessionService.getUser(body.sessionCookie); // TODO check if user is usefool
     try 
     {
         const res = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
@@ -52,7 +50,6 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      // TODO redirect to log page
       return ('not connected');
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
@@ -76,7 +73,6 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      // TODO redirect to log page
       return ('not connected');
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
@@ -100,7 +96,6 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      // TODO redirect to log page
       return ('not connected');
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
@@ -124,7 +119,6 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      // TODO redirect to log page
       return ('not connected');
     }
     // TODO check perms
@@ -150,7 +144,6 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      // TODO redirect to log page
       return ('not connected');
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
@@ -174,7 +167,6 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      // TODO redirect to log page
       return ('not connected');
     }
     const user = await this.sessionService.getUser(body.sessionCookie);

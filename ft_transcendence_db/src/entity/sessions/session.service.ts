@@ -75,7 +75,7 @@ export class SessionService{
         return (res);
     }
     
-    async removeNoMoreConnected() // TODO check if work
+    async removeNoMoreConnected()
     {
         const relations = await this.sessionRepository
         .createQueryBuilder('sessions')

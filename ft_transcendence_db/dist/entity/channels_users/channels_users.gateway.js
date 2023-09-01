@@ -26,7 +26,6 @@ let ChannelsUsersGateway = exports.ChannelsUsersGateway = class ChannelsUsersGat
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
             return ('not connected');
         }
-        const user = await this.sessionService.getUser(body.sessionCookie);
         try {
             const res = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
             this.server.emit('updateListUsers', { users: res, channel: body.channel });

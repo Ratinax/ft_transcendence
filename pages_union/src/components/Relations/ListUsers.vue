@@ -62,7 +62,7 @@ export default {
         {
             this.users = users;
         },
-        onRemoveRelation(removed_user_id) // TODO la suite removed_user_id
+        onRemoveRelation(removed_user_id)
         {
             if (this.isFriendList || this.isFriendRequestList)
                 this.$emit('remove-relation', {relationType: 'friend', friend_id : removed_user_id})

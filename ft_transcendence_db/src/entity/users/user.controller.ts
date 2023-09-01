@@ -29,7 +29,6 @@ export class UserController {
         }
     }
     /**
-     * //TODO doc
      * @param body user to be signed up {id, pseudo, password, profilPic, isConencted}
      * @returns the user created
      * @throws InternalServerErrorException in case of failing
@@ -93,7 +92,6 @@ export class UserController {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
-            // TODO redirect to log page
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         if (user.is42User)
@@ -114,7 +112,7 @@ export class UserController {
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
         try {
             if (!fs.existsSync(imagePath)) {
-                // TODO imagePath = quelquechose qui existes;
+                // TODO imagePath = quelquechose qui existes pour image par defaut;
                 return (null); 
               }
             return (res.sendFile(imagePath));

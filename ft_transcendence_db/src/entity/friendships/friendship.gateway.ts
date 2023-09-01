@@ -28,7 +28,6 @@ export class FriendshipGateway {
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
-        // TODO redirect to log page
         return ('not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
@@ -47,7 +46,6 @@ export class FriendshipGateway {
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
-        // TODO redirect to log page
         return ('not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
