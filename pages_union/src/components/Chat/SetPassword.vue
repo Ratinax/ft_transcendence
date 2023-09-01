@@ -19,7 +19,7 @@
   </template>
   
 <script>
-// import { Socket } from 'socket.io-client';
+
 export default {
   name: 'SetPassword',
   props: {

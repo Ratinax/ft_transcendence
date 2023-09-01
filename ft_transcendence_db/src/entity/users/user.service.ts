@@ -121,12 +121,10 @@ export class UserService {
                 method: 'post',
                 url: `https://api.intra.42.fr/oauth/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${process.env.REDIRECT_URI}&grant_type=authorization_code&code=${code}`,
             })
-            // console.log('da mother token data:', token.data)
             return token;
         }
         catch (e)
         {
-            // console.log('daaere mfee :', e);
             return (null);
         }
     }

@@ -35,7 +35,6 @@ export default {
          */
         async setAccessWrites()
         {
-            console.log('le channel :', this.channel);
             if (!this.users || !this.channel || !this.channel.channel_id )
             {
                 this.userInChannel = null;
@@ -51,7 +50,6 @@ export default {
         },
         updateListUsers(users)
         {
-            console.log('les zusers:', users);
             this.users = users;
             this.setAccessWrites();
         },

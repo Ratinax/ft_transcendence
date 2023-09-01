@@ -75,6 +75,7 @@ export default {
 
 .navigation-option img
 {
+  color: var(--plight);
   min-width: 110%;
   min-height: 110%;
   position: absolute;

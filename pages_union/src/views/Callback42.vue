@@ -26,7 +26,6 @@ export default {
         {
             this.$router.replace({path: '/chat'})
         }
-        console.log(res.data)
     }
 }
 </script>

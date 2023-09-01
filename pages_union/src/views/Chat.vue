@@ -57,7 +57,6 @@ export default {
     this.socket.on('updateListUsers', (response) => {
       if (response.channel.channel_id === this.selectedChannel.channel_id)
       {
-        // console.log('laaa');
         this.updateListUsers(response.users);
       }
     });
