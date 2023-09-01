@@ -66,14 +66,19 @@ export default {
 <style>
 .navigation-option.profil-pic 
 {
-  border: 0.1em solid var(--plight);
-}
-.navigation-option.profil-pic img
-{
-  color: var(--plight);
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 0.1em solid var(--plight);
+}
+
+.navigation-option img
+{
+  min-width: 100%;
+  min-height: 100%;
+  position: absolute;
+  margin-left: 0.2em;
 }
 .navigation-option .button.top
 {
@@ -252,11 +257,6 @@ export default {
   width: 8em;
   height: 8em;
   border-radius: 50%;
-}
-.navigation-option img
-{
-  width: 100%;
-  height: 100%;
 }
 
 .messages-icon
