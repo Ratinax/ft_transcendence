@@ -1,5 +1,5 @@
 <template>
-	<form @submit.prevent="register">
+	<form class="col" @submit.prevent="register">
 		<!-- <div class="inputZone"> -->
 			<input type="text" placeholder="Username" v-model="pseudo" />
 			<input type="password" placeholder="Password" v-model="password" />
@@ -8,10 +8,10 @@
 		<div v-if="matrixIndex > 0">
 			<p class="error">{{ matrixError[matrixIndex] }}</p>
 		</div>
-		<div class="buttonZone">
-			<button type="button" @click="chooseImage">CHOOSE PROFILE PIC</button>
+		<div class="row buttonZone">
+			<button class="ft-button" type="button" @click="chooseImage">CHOOSE PROFILE PIC</button>
 			<input type="file" accept="image/*" ref="imageInput" style="display: none" @change="onImageSelect" />
-			<button type="submit">REGISTER</button>
+			<button class="ft-button" type="submit">REGISTER</button>
 		</div>
 	</form>
 </template>
@@ -132,6 +132,4 @@ export default defineComponent({
 </script>
 
 
-<style src="../assets/formComponent.css" lang="css">
-
-</style>
+<style scoped src="../assets/formComponent.css" lang="css"></style>

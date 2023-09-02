@@ -1,6 +1,6 @@
 <template>
-	<div class="container">
-		<div class="box">
+	<div class="col log-in-page">
+		<div class="col log-box">
 			<div class="log-mode">
 				<h1 class="log-text">
 					<Transition name="fadeTitle" mode="out-in">
@@ -16,7 +16,7 @@
 				<span v-if="!register">No account yet</span>
 				<span v-else>Already have an account</span>
 				?
-				<span class="sign-up-text" @click="changeMode">Sign {{ logMode }}</span> 
+				<span class="sign-up-text" @click="changeMode">Sign {{ logMode }}</span>
 			</div>
 		</div>
 	</div>
@@ -35,30 +35,34 @@ export default defineComponent({
 		const register = ref(false);
 		const logMode = ref("up");
 
-		function	changeMode() {
+		function changeMode() {
 			activeComponent.value = activeComponent.value === SignUp ? SignIn : SignUp;
 			register.value = !register.value;
 			logMode.value = logMode.value === "up" ? "in" : "up";
 		}
 
-		return {  changeMode, activeComponent, register, logMode };
+		return { changeMode, activeComponent, register, logMode };
 	}
 });
 </script>
 
+<style src="../../../css/global.css" rel="stylesheet" lang="css"></style>
 <style>
 
-.container {
-	display: flex;
+html {
+	background: linear-gradient(45deg, var(--pblack), var(--pdark));
+}
+
+.log-in-page {
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
 }
 
-.box {
+.log-box {
 	background: linear-gradient(white, var(--plight));
 	border-radius: 1em;
-	width: 45vh;
+	width: 500px;
 	padding: 1em 1em 2em 1em;
 }
 
@@ -108,5 +112,4 @@ export default defineComponent({
 .fadeTitle-leave-to {
 	opacity: 0;
 }
-
 </style>

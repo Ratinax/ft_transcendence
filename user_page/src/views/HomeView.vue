@@ -16,25 +16,25 @@
         </div>
       </div>
       <div class="row button-zone">
-        <button class="user-page-button block-button">BLOCK USER</button>
-        <button class="user-page-button add-button">ADD FRIEND</button>
+        <button class="ft-button block-button">BLOCK USER</button>
+        <button class="ft-button add-button">ADD FRIEND</button>
       </div>
       <div class="row user-box user-stats">
         <div class="col user-stat">
           <h1 class="text">Game(s) played</h1>
-          <p class="text user-score">{{ userGamesPlayed }}</p>
+          <p class="text user-score fade-text">{{ userGamesPlayed }}</p>
         </div>
         <div class="col user-stat">
           <h1 class="text">Win rate</h1>
           <radial-progress-bar :diameter="200" :completed-steps="userWins" :total-steps="userGamesPlayed"
-            :startColor="'#66fcf1'" :stopColor="'#45a29e'" :innerStrokeColor="'#e82e50'" :innerStrokeWidth="15" :strokeWidth="15"
-            :strokeLinecap="'line'">
+            :startColor="'#66fcf1'" :stopColor="'#45a29e'" :innerStrokeColor="'#e82e50'" :innerStrokeWidth="15"
+            :strokeWidth="15" :strokeLinecap="'line'">
             <p class="text user-win-rate">{{ userWinRate }}%</p>
           </radial-progress-bar>
         </div>
         <div class="col user-stat">
           <h1 class="text">Win(s)</h1>
-          <p class="text user-score">{{ userWins }}</p>
+          <p class="text user-score fade-text">{{ userWins }}</p>
         </div>
       </div>
     </div>
@@ -64,11 +64,15 @@ export default defineComponent({
 });
 </script>
 
+<style src="../../../css/global.css" rel="stylesheet" lang="css"></style>
 <style>
 /* Page structure */
-
 p {
   margin: 0;
+}
+
+html {
+  background: linear-gradient(45deg, var(--pblack), var(--pdark));
 }
 
 .text {
@@ -146,18 +150,6 @@ p {
   margin-bottom: 4em;
 }
 
-.user-page-button {
-  border-radius: 1em;
-  font-size: 1.2em;
-  padding: 0.5em 1em;
-  border: 0;
-}
-
-.user-page-button:active {
-  box-shadow: none;
-  transform: translateY(4px);
-}
-
 .add-button {
   background: rgba(0, 255, 0, 0.875);
   box-shadow: 0 4px 0 green;
@@ -193,10 +185,6 @@ p {
 
 
 .user-score {
-  background: linear-gradient(var(--pcyan) 40%, var(--pblue));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   font-size: 9em;
   padding-top: .1em;
 }

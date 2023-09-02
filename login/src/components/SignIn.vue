@@ -3,12 +3,12 @@
 		<form action="#">
 			<input type="text" placeholder="Username" />
 			<input type="password" placeholder="Password" />
-			<div class="buttonZone">
-				<button>
+			<div class="row buttonZone">
+				<button class="row ft-button">
 					<img src="../assets/42_logo.svg" alt="logo 42">
 						LOGIN
 				</button>
-				<button type="submit">
+				<button class="ft-button" type="submit">
 					LOGIN
 				</button>
 			</div>
@@ -24,6 +24,4 @@ export default defineComponent({
 });
 </script>
 
-<style src="../assets/formComponent.css" lang="css">
-
-</style>
+<style scoped src="../assets/formComponent.css" lang="css"></style>
