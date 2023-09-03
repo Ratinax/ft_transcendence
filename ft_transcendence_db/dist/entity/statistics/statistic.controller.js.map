@@ -1,1 +1,0 @@
-{"version":3,"file":"statistic.controller.js","sourceRoot":"","sources":["../../../src/entity/statistics/statistic.controller.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,2CAAiD;AACjD,2DAAuD;AAGhD,IAAM,mBAAmB,iCAAzB,MAAM,mBAAmB;IAC5B,YAA8B,gBAAkC;QAAlC,qBAAgB,GAAhB,gBAAgB,CAAkB;IAAG,CAAC;CACvE,CAAA;8BAFY,mBAAmB;IAD/B,IAAA,mBAAU,EAAC,YAAY,CAAC;qCAE2B,oCAAgB;GADvD,mBAAmB,CAE/B"}
