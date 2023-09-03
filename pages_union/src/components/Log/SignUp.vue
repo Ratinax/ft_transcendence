@@ -1,17 +1,15 @@
 <template>
-	<form @submit.prevent="register">
-		<!-- <div class="inputZone"> -->
-			<input class="register-input" type="text" placeholder="Username" v-model="pseudo" />
-			<input class="register-input" type="password" placeholder="Password" v-model="password" />
-			<input class="register-input" type="password" placeholder="Repeat Password" v-model="passwordCheck" />
-		<!-- </div> -->
+	<form class="col" @submit.prevent="register">
+			<input type="text" placeholder="Username" v-model="pseudo" />
+			<input type="password" placeholder="Password" v-model="password" />
+			<input type="password" placeholder="Repeat Password" v-model="passwordCheck" />
 		<div v-if="matrixIndex > 0">
 			<p class="error">{{ matrixError[matrixIndex] }}</p>
 		</div>
-		<div class="buttonZone">
-			<button class="register-button" type="button" @click="chooseImage">CHOOSE PROFILE PIC</button>
-			<input class="register-input" type="file" accept="image/*" ref="imageInput" style="display: none" @change="onImageSelect" />
-			<button class="register-button" type="submit">REGISTER</button>
+		<div class="row buttonZone">
+			<button class="ft-button" type="button" @click="chooseImage">CHOOSE PROFILE PIC</button>
+			<input type="file" accept="image/*" ref="imageInput" style="display: none" @change="onImageSelect" />
+			<button class="ft-button" type="submit">REGISTER</button>
 		</div>
 	</form>
 </template>
@@ -134,6 +132,6 @@ export default defineComponent({
 </script>
 
 
-<style src="../assets/formComponent.css" lang="css">
+<style scoped src="../../assets/formComponent.css" lang="css">
 
 </style>

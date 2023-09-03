@@ -1,6 +1,6 @@
 <template>
-	<div class="home-container">
-		<div class="home-box">
+	<div class="col log-in-page">
+		<div class="col log-box">
 			<div class="log-mode">
 				<h1 class="log-text">
 					<Transition name="fadeTitle" mode="out-in">
@@ -16,7 +16,7 @@
 				<span v-if="!register">No account yet</span>
 				<span v-else>Already have an account</span>
 				?
-				<span class="sign-up-text" @click="changeMode">Sign {{ logMode }}</span> 
+				<span class="sign-up-text" @click="changeMode">Sign {{ logMode }}</span>
 			</div>
 		</div>
 	</div>
@@ -24,8 +24,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, shallowRef } from 'vue';
-import SignIn from './SignIn.vue';
-import SignUp from './SignUp.vue';
+import SignIn from '../components/Log/SignIn.vue';
+import SignUp from '../components/Log/SignUp.vue';
 
 export default defineComponent({
 	name: 'HomeView',
@@ -46,25 +46,25 @@ export default defineComponent({
 });
 </script>
 
+<style src="../assets/global.css" rel="stylesheet" lang="css"></style>
+
 <style>
 
-.home-container {
+html {
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
-	display: flex;
+}
+
+.log-in-page {
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
-	color: #2c3e50;
 }
 
-.home-box {
+.log-box {
 	background: linear-gradient(white, var(--plight));
 	border-radius: 1em;
-	width: 45vh;
+	width: 500px;
 	padding: 1em 1em 2em 1em;
 }
 
