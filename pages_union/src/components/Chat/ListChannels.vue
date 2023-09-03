@@ -1,17 +1,17 @@
 <template>
-  <div class="list-channels" ref="channelsButtons">
+  <div class="col channel-list" ref="channelsButtons">
     <div class="channels-buttons">
       <channel ref="channelRef" v-for="channel in channels" :key="channel.id" :channel="channel" :socket="socket" :isSelected="channelSelected.channel_id === channel.channel_id" @channel-clicked="handleChannelClicked" @leave-channel="onLeaveChannel"
       @get-is-user-owner="onGetIsUserOwner"
       @update-channels="onUpdateChannels"/>
       <div :class="{'nochannel': channels.length === 0, 'buttons': true}">
         <div class="new-channel">
-          <button @click="showCreateChannel = true">Create Channel</button>
+          <button class="ft-button" @click="showCreateChannel = true">Create Channel</button>
           <CreateChannel :show="showCreateChannel" :sessionCookie="sessionCookie" :socket="socket" @close="showCreateChannel = false">
           </CreateChannel>
         </div>
         <div class="join-channel">
-          <button @click="showJoinChannel = true">Join Channel</button>
+          <button class="ft-button" @click="showJoinChannel = true">Join Channel</button>
           <JoinChannel :show="showJoinChannel" :sessionCookie="sessionCookie" :socket="socket" ref='joinChannel' @close="showJoinChannel = false" >
           </JoinChannel>
         </div>
@@ -116,52 +116,13 @@ export default {
 
 <style>
 
-.nochannel
-{
-  top: 0;
+.channel-list {
+  width: 20%;
 }
 
-.list-channels
-{
-  border: 0.1vh solid black;
-  /* width: 25%; */
-  white-space: nowrap;
-  resize: horizontal;
-  overflow: auto;
-  top: 0;
-  bottom: 0;
-  position: relative;
-  flex: 0 0 auto; 
-  min-width: 20%;
-  max-width: 30%;
+.ft-button {
+  background: var(--pcyan);
+  box-shadow: 0 4px 0 var(--pblue);
 }
-.buttons
-{
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* top: 0; */
-  /* justify-content: space-between; */
-}
-.new-channel
-{
-  /* flex: 0 0 auto; */
-  /* flex: 1; */
-  /* justify-content: space-between; */
-  display: inline-block;
-}
-.join-channel
-{
-  /* flex: 1; */
-  /* flex: 0 0 auto; */
-  display: inline-block;
-}
-.channels-buttons
-{
-  /* overflow-y: auto; */
-  position: absolute;
-  left: 5%;
-  width: 100%;
-  padding-bottom: 0.6em;
-}
+
 </style>

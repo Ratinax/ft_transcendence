@@ -1,14 +1,19 @@
 <template>
-    <div class="chat-container">
-      <Menu/>
-      <ListChannels ref="listChannels"  v-if="socket && sessionCookie" :sessionCookie="sessionCookie" :channelSelected="selectedChannel" :socket="socket" @channel-selected="onChannelSelected" @leave-channel="onLeaveChannel"
-      @get-is-user-owner="onGetIsUserOwner"/>
-      <div class="messageszone">
-        <Messages ref="messages"/>
-        <SendMessage ref="sendMessage" :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id" :socket="socket" @create-message="createMessage"/>
-      </div>
-      <ListUsersChat ref="listUsersChat" v-if="socket && sessionCookie" :sessionCookie="sessionCookie" :channel="selectedChannel" :socket="socket"/>
+  <div class="row chat-page">
+  <Menu />
+  <div class="row chat-container">
+    <ListChannels ref="listChannels" v-if="socket && sessionCookie" :sessionCookie="sessionCookie"
+      :channelSelected="selectedChannel" :socket="socket" @channel-selected="onChannelSelected"
+      @leave-channel="onLeaveChannel" @get-is-user-owner="onGetIsUserOwner" />
+    <div class="messageszone">
+      <Messages ref="messages" />
+      <SendMessage ref="sendMessage" :showContent="!!selectedChannel.channel_id" :channelId="selectedChannel.channel_id"
+        :socket="socket" @create-message="createMessage" />
     </div>
+    <ListUsersChat ref="listUsersChat" v-if="socket && sessionCookie" :sessionCookie="sessionCookie"
+      :channel="selectedChannel" :socket="socket" />
+  </div>
+  </div>
 </template>
   
 
@@ -34,16 +39,14 @@ export default {
   props:
   {
   },
-  data()
-  {
+  data() {
     return {
       selectedChannel: {},
       socket: null,
       sessionCookie: '',
     }
   },
-  async mounted()
-  {
+  async mounted() {
     this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
     this.socket = io(`http://${process.env.VUE_APP_IP}:3001/`);
     this.socket.on('updateMessage', (response) => {
@@ -55,20 +58,17 @@ export default {
         this.updateListChannels(response.channel);
     });
     this.socket.on('updateListUsers', (response) => {
-      if (response.channel.channel_id === this.selectedChannel.channel_id)
-      {
+      if (response.channel.channel_id === this.selectedChannel.channel_id) {
         this.updateListUsers(response.users);
       }
     });
     this.socket.on('updateAfterPart', async (response) => {
-      if (this.sessionCookie === response.sessionCookie)
-      {
+      if (this.sessionCookie === response.sessionCookie) {
         this.updateListChannels({});
         this.updateMessages();
         this.updateListUsers(null);
       }
-      else if (response.channel.channel_id === this.selectedChannel.channel_id)
-      {
+      else if (response.channel.channel_id === this.selectedChannel.channel_id) {
         this.updateListChannels(response.channel);
         this.updateListUsers(response.users);
       }
@@ -88,90 +88,75 @@ export default {
      * 
      * @param {Object} channel - Channel from which a user has entered or left
      */
-    updateListChannels(channel)
-    {
-      if (this.$refs.listChannels)
-      {
+    updateListChannels(channel) {
+      if (this.$refs.listChannels) {
         this.$refs.listChannels.fetchChannels();
         this.setSelectedChannel(channel);
         this.updateMessages();
       }
     },
-    updateMessages()
-    {
+    updateMessages() {
       if (this.$refs.messages)
         this.$refs.messages.updateMessages(this.selectedChannel);
     },
-    onChannelSelected(channel)
-    {
+    onChannelSelected(channel) {
       this.setSelectedChannel(channel);
       this.updateMessages();
     },
-    setSelectedChannel(channel)
-    {
+    setSelectedChannel(channel) {
       this.selectedChannel = channel;
       this.findUsersOfChannel()
     },
-    async createMessage(content)
-    {
-      this.socket.emit('createMessage', {...content, sessionCookie: this.sessionCookie});
+    async createMessage(content) {
+      this.socket.emit('createMessage', { ...content, sessionCookie: this.sessionCookie });
     },
-    async findUsersOfChannel()
-    {
-      this.socket.emit('findUsersOfChannel', {channel: this.selectedChannel, sessionCookie: this.sessionCookie});
+    async findUsersOfChannel() {
+      this.socket.emit('findUsersOfChannel', { channel: this.selectedChannel, sessionCookie: this.sessionCookie });
     },
     /**
      * 
      * @param {List} users - the list of users of the selectedChannel 
      */
-    updateListUsers(users)
-    {
+    updateListUsers(users) {
       if (this.$refs.listUsersChat)
         this.$refs.listUsersChat.updateListUsers(users);
     },
-    async onLeaveChannel(channel)
-    {
-      this.socket.emit('leaveChannel', {channel: channel, sessionCookie: this.sessionCookie})
+    async onLeaveChannel(channel) {
+      this.socket.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
     },
-    onGetIsUserOwner(channel_id)
-    {
-      if (this.$refs.listUsersChat)
-      {
+    onGetIsUserOwner(channel_id) {
+      if (this.$refs.listUsersChat) {
         const result = this.$refs.listUsersChat.getUserInChannel();
         if (result)
           this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
       }
     },
-    sendMessageTimeout(duration)
-    {
+    sendMessageTimeout(duration) {
       if (this.$refs.sendMessage)
         this.$refs.sendMessage.timeout(duration);
     },
-    sendMessageGoodRequest()
-    {
+    sendMessageGoodRequest() {
       if (this.$refs.sendMessage)
         this.$refs.sendMessage.goodRequest();
     },
   }
 }
-  
+
 </script>
 
 <style>
-.chat-container
-{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-	background: linear-gradient(45deg, var(--plight), var(--plight));
-  height: 100%;
+
+.chat-page {
+  height: 100vh;
 }
 
-.messageszone
-{
+.chat-container {
+  background: linear-gradient(45deg, var(--pblack), var(--pdark));
+  width: 100%;
+  color: white;
+}
+
+.messageszone {
   flex-direction: column;
   max-width: 60%;
   max-height: 100%;
@@ -179,14 +164,12 @@ export default {
 }
 
 
-.selection-color
-{
-    color: white;
-    background-color: #e95433;
+.selection-color {
+  color: white;
+  background-color: #e95433;
 }
 
-.option-list 
-{
+.option-list {
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -195,21 +178,17 @@ export default {
 
 }
 
-.options
-{
+.options {
   overflow: hidden;
   padding: 0;
   margin: 0;
   cursor: pointer;
-  transition: 300ms ease;    padding-left: 0.1em
-
+  transition: 300ms ease;
+  padding-left: 0.1em
 }
 
-.options:hover
-{
+.options:hover {
   background-color: #c0c0c5;
 }
-
-
 </style>
   

@@ -44,6 +44,7 @@ html {
     font-size: 1.3em;
     padding: 0.5em 1em;
     border: none;
+    text-transform: uppercase;
 }
 
 .ft-button:active {

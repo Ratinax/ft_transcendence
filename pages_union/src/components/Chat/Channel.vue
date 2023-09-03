@@ -157,6 +157,7 @@ export default {
 .channelname p
 {
     cursor: pointer;
+    border: 5px solid red;
     margin: 0;
     transition: 300ms ease;
 	/* --plight: #c5c6c7; */

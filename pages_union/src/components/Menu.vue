@@ -28,7 +28,6 @@
         <div class="button right"></div>
         <div class="button bottom"></div>
     </div>
-
   </div>
 </template>
 
@@ -76,10 +75,8 @@ export default {
 .navigation-option img
 {
   color: var(--plight);
-  min-width: 110%;
-  min-height: 110%;
-  position: absolute;
-  margin-left: 0.1em;
+  height: 100%;
+  padding-left: 0.7em;
 }
 .navigation-option .button.top
 {
@@ -230,15 +227,13 @@ export default {
 .navigation-menu
 {
   background-color: var(--pblack);
-  top: 0;
-  bottom: 0;
-  max-height: 100%;
-  width: 10em;
-  border: 0.1em solid var(--pblack);
+  width: 15%;
   display: flex;
   flex-direction: column;
   align-items: center; 
-  overflow: auto;
+  z-index: 999;
+  border: 2px solid var(--pcyan);
+  border-radius: .4em;
 }
 
 .navigation-option
@@ -305,4 +300,10 @@ export default {
 {
   overflow: visible;
 }
+
+.navigation-option:hover {
+  transform: scale(107%);
+  transition: transform 0.2s ease;
+}
+
 </style>
