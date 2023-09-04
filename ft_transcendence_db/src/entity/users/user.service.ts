@@ -207,4 +207,17 @@ export class UserService {
 		}).catch(console.error);
 		return userInfos;
 	}
+    async getUsers(userPart: string)
+    {
+        const users = await this.userRepository.createQueryBuilder('users')
+        .where('pseudo LIKE :userPart', { userPart: `%${userPart}%` })
+            .getMany();
+        console.log(users);
+        const usersMapped = users.map((user) => ({
+            id: user.id, 
+            pseudo: user.pseudo, 
+            profilPic: user.profilPic, 
+            }));
+        return (usersMapped);
+    }
 }

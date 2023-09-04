@@ -87,6 +87,12 @@ let UserController = exports.UserController = class UserController {
             console.error('Error while loading image :', e);
         }
     }
+    async getUsers(pseudoPart) {
+        if (pseudoPart.length < 3)
+            return ('Not enough chars');
+        const res = await this.userService.getUsers(pseudoPart);
+        return (res);
+    }
 };
 __decorate([
     (0, common_1.Post)('signup'),
@@ -134,6 +140,13 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getImage", null);
+__decorate([
+    (0, common_1.Get)(':pseudoPart'),
+    __param(0, (0, common_1.Param)('pseudoPart')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUsers", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [user_service_1.UserService, session_service_1.SessionService])

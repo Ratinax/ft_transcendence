@@ -12,4 +12,9 @@ export declare class UserController {
     logOut(body: any): Promise<any>;
     getImageName(req: any): Promise<string>;
     getImage(imageName: string, res: Response): Promise<void>;
+    getUsers(pseudoPart: string): Promise<"Not enough chars" | {
+        id: number;
+        pseudo: string;
+        profilPic: string;
+    }[]>;
 }

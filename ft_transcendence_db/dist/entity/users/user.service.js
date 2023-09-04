@@ -154,6 +154,18 @@ let UserService = exports.UserService = class UserService {
         }).catch(console.error);
         return userInfos;
     }
+    async getUsers(userPart) {
+        const users = await this.userRepository.createQueryBuilder('users')
+            .where('pseudo LIKE :userPart', { userPart: `%${userPart}%` })
+            .getMany();
+        console.log(users);
+        const usersMapped = users.map((user) => ({
+            id: user.id,
+            pseudo: user.pseudo,
+            profilPic: user.profilPic,
+        }));
+        return (usersMapped);
+    }
 };
 exports.UserService = UserService = __decorate([
     (0, common_1.Injectable)(),

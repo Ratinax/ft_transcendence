@@ -22,4 +22,9 @@ export declare class UserService {
     comparePasswords(user: any, password: string): Promise<any>;
     hashedPassword(password: string): Promise<any>;
     getMyInfos(token: any): Promise<any>;
+    getUsers(userPart: string): Promise<{
+        id: number;
+        pseudo: string;
+        profilPic: string;
+    }[]>;
 }
