@@ -1,16 +1,16 @@
 <template>
 	<div class="inputZone">
-		<input class="register-input" type="text" placeholder="Username" v-model="pseudo" />
-		<input class="register-input" type="password" placeholder="Password" v-model="password"/>
-		<div class="buttonZone">
+			<input type="text" placeholder="Username" v-model="pseudo" />
+			<input type="password" placeholder="Password" v-model="password"/>
+			<div class="row buttonZone">
 			<form @submit.prevent="login42">
-				<button class="register-button" type="submit">
-					<img src="../assets/42_logo.svg" alt="logo 42">
+				<button class="row ft-button" type="submit">
+					<img src="../../assets/42_logo.svg" alt="logo 42">
 						LOGIN
 				</button>
 			</form>
 			<form @submit.prevent="login">
-				<button type="submit" class="register-button">
+				<button class="ft-button" type="submit">
 					LOGIN
 				</button>
 			</form>
@@ -73,6 +73,6 @@ export default defineComponent({
 });
 </script>
 
-<style src="../assets/formComponent.css" lang="css">
+<style scoped src="../../assets/formComponent.css" lang="css">
 
 </style>
