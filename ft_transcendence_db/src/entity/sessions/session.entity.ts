@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne } from "typeorm";
 import { Users } from "../users/user.entity";
 
 /**
@@ -15,7 +15,7 @@ export class Sessions {
     @PrimaryGeneratedColumn()
     id: number;
   
-    @ManyToOne(() => Users, { eager: true })
+    @OneToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'user_id' })
     user: Partial<Users>;
     

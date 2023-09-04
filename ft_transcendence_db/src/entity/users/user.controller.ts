@@ -122,4 +122,12 @@ export class UserController {
             console.error('Error while loading image :', e);
         }
     }
+    @Get(':pseudoPart')
+    async getUsers(@Param('pseudoPart') pseudoPart: string)
+    {
+        if (pseudoPart.length < 3)
+            return ('Not enough chars');
+        const res = await this.userService.getUsers(pseudoPart);
+        return (res);
+    }
 }

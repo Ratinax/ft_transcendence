@@ -6,7 +6,7 @@ import { Users } from "../users/user.entity";
  * 
  * attributs :
  * - id: number
- * - user: Uer asking for friendship
+ * - user: User asking for friendship
  * - friend: User being asked as a friend
  * - statu: status of friendship (pending or accepted)
  */
