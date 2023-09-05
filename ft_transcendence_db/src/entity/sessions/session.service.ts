@@ -15,7 +15,7 @@ export class SessionService{
         }}});
         if (preSession)
         {
-            preSession.expirationDate = new Date(Date.now() + 10000);
+            preSession.expirationDate = new Date(Date.now() + 10000); // TODO check if 10000 is good or if way more
             return (await this.sessionRepository.save(preSession));
         }
         const sessionKey = this.generateRandomString(42);
