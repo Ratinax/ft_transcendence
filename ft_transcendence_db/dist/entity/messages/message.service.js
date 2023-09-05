@@ -49,7 +49,8 @@ let MessageService = exports.MessageService = class MessageService {
     }
     async post(message) {
         const newMessage = this.messageRepository.create(message);
-        return (this.messageRepository.save(newMessage));
+        const res = await this.messageRepository.save(newMessage);
+        return (res);
     }
 };
 exports.MessageService = MessageService = __decorate([

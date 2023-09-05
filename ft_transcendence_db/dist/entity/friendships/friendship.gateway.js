@@ -29,8 +29,8 @@ let FriendshipGateway = exports.FriendshipGateway = class FriendshipGateway {
             return ('not connected');
         }
         const user = await this.sessionService.getUser(body.sessionCookie);
-        const res = await this.friendshipService.acceptFriendship(user.id, body.friend_id);
-        this.server.emit('acceptFriendship', res);
+        await this.friendshipService.acceptFriendship(user.id, body.friend_id);
+        this.server.emit('acceptFriendship', { sessionCookie: body.sessionCookie });
     }
     async removeFriendship(body) {
         if (await this.sessionService.getIsSessionExpired(body.sessionCookie)) {
@@ -38,8 +38,8 @@ let FriendshipGateway = exports.FriendshipGateway = class FriendshipGateway {
         }
         const user = await this.sessionService.getUser(body.sessionCookie);
         try {
-            const res = await this.friendshipService.deleteFriendship(body.friend_id, user.id);
-            this.server.emit('deleteFriendship', res);
+            await this.friendshipService.deleteFriendship(body.friend_id, user.id);
+            this.server.emit('deleteFriendship', { sessionCookie: body.sessionCookie });
         }
         catch (e) {
             throw new common_1.InternalServerErrorException(e);

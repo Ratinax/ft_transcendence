@@ -33,6 +33,6 @@ export class BlockshipGateway {
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
       const res = await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
-      this.server.emit('deleteBlockship', res);
+      this.server.emit('deleteBlockship', {sessionCookie: body.sessionCookie});
     }
 }

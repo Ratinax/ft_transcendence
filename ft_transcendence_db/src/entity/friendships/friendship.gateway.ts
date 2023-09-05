@@ -32,8 +32,8 @@ export class FriendshipGateway {
         return ('not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
-      const res = await this.friendshipService.acceptFriendship(user.id, body.friend_id);
-      this.server.emit('acceptFriendship', res);
+      await this.friendshipService.acceptFriendship(user.id, body.friend_id);
+      this.server.emit('acceptFriendship', {sessionCookie: body.sessionCookie});
     }
     /**
      * makes a request to remove a friendShip (the friendship can be either accepted or pending)
@@ -52,8 +52,8 @@ export class FriendshipGateway {
       const user = await this.sessionService.getUser(body.sessionCookie);
       try
       {
-        const res = await this.friendshipService.deleteFriendship(body.friend_id, user.id);
-        this.server.emit('deleteFriendship', res);
+        await this.friendshipService.deleteFriendship(body.friend_id, user.id);
+        this.server.emit('deleteFriendship', {sessionCookie: body.sessionCookie});
       }
       catch (e)
       {

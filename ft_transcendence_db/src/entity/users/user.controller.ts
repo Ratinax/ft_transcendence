@@ -80,7 +80,7 @@ export class UserController {
 		}
         return (false); // TODO handle le fait que ce soit pas le meme false que plus haut
     }
-    @Post('logout')
+    @Post('logout') // TODO implementer logout
     async logOut(@Body() body)
     {
         return (await this.callFunction(this.userService.logOut, body))

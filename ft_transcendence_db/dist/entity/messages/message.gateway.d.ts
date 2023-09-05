@@ -8,5 +8,5 @@ export declare class MessagesGateway {
     private readonly sessionService;
     server: Server;
     constructor(messagesService: MessageService, channelsUsersService: ChannelsUsersService, sessionService: SessionService);
-    create(body: any): Promise<"not connected" | import("./message.entity").Messages | "user timeout">;
+    create(body: any): Promise<import("./message.entity").Messages | "not connected" | "user timeout">;
 }

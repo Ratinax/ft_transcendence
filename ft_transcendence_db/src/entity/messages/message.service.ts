@@ -45,7 +45,6 @@ export class MessageService {
                 isAGameInvite: message.isAGameInvite,
                 isSender: user_id === message.user.id,
             }));
-        // console.log(messagesMapped)
         return (messagesMapped);
     }
 
@@ -58,6 +57,7 @@ export class MessageService {
     async post(message: Partial<Messages>)
     {
         const newMessage = this.messageRepository.create(message);
-        return (this.messageRepository.save(newMessage));
+        const res =  await this.messageRepository.save(newMessage);
+        return (res);
     }
 }

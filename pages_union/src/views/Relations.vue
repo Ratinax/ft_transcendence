@@ -29,15 +29,18 @@
     async mounted()
     {
       this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
-      this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`); // TODO effectuer l'action que sur l'user concernee pcq la requete sur tt les users
+      this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`);
       this.socket.on('acceptFriendship', (response) => {
-        this.acceptFriendship(response);
+        if (response.sessionCookie === this.sessionCookie)
+          this.acceptFriendship();
       });
       this.socket.on('deleteFriendship', (response) => {
-        this.deleteFriendship(response);
+        if (response.sessionCookie === this.sessionCookie)
+          this.deleteFriendship();
       }); 
       this.socket.on('deleteBlockship', (response) => {
-        this.deleteBlockship(response);
+        if (response.sessionCookie === this.sessionCookie)
+          this.deleteBlockship();
       });
     },
     methods:
