@@ -7,7 +7,6 @@ export declare class ChannelsUsersService {
     findUsersOfChannel(channelName: string): Promise<{
         id: number;
         pseudo: string;
-        password: string;
         profilPic: string;
         isOwner: boolean;
         isAdmin: boolean;
