@@ -154,7 +154,7 @@ export class UserService {
     {
         let extension;
         if (!image)
-            extension = '.jpg'
+            return 'default.png';
         else
             extension = image.substring(11, 15);
         if (extension === 'jpg;' || extension === 'jpeg')
@@ -168,8 +168,6 @@ export class UserService {
             await fs.promises.mkdir(uploadDirectory, {recursive: true}); // create directory, if already exists do nothing 
             const filePath = path.join(__dirname, '../../../', 'images', uniqueFileName);
             // Save image with replacing useles chars and convert it to buffer using base 64 codage
-            if (!image) // TODO : mettre image par defaut
-                return (uniqueFileName);
             const imageBuffer = Buffer.from(image.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''), 'base64'); // remove useless beginning of string
             fs.writeFileSync(filePath, imageBuffer); //create image
             return (uniqueFileName);

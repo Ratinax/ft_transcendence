@@ -16,7 +16,6 @@ exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const path = require("path");
-const fs = require("fs");
 const session_service_1 = require("../sessions/session.service");
 let UserController = exports.UserController = class UserController {
     constructor(userService, sessionService) {
@@ -77,15 +76,7 @@ let UserController = exports.UserController = class UserController {
     }
     async getImage(imageName, res) {
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
-        try {
-            if (!fs.existsSync(imagePath)) {
-                return (null);
-            }
-            return (res.sendFile(imagePath));
-        }
-        catch (e) {
-            console.error('Error while loading image :', e);
-        }
+        return (res.sendFile(imagePath));
     }
     async getUsers(pseudoPart) {
         if (pseudoPart.length < 3)

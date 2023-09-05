@@ -110,17 +110,7 @@ export class UserController {
     async getImage(@Param('imageName') imageName: string, @Res() res: Response) 
     {
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
-        try {
-            if (!fs.existsSync(imagePath)) {
-                // TODO imagePath = quelquechose qui existes pour image par defaut;
-                return (null); 
-              }
-            return (res.sendFile(imagePath));
-        }
-        catch (e)
-        {
-            console.error('Error while loading image :', e);
-        }
+        return (res.sendFile(imagePath));
     }
     @Get(':pseudoPart')
     async getUsers(@Param('pseudoPart') pseudoPart: string)

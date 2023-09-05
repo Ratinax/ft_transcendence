@@ -118,7 +118,7 @@ let UserService = exports.UserService = class UserService {
     async uploadImage(image) {
         let extension;
         if (!image)
-            extension = '.jpg';
+            return 'default.png';
         else
             extension = image.substring(11, 15);
         if (extension === 'jpg;' || extension === 'jpeg')
@@ -130,8 +130,6 @@ let UserService = exports.UserService = class UserService {
             const uploadDirectory = path.join(__dirname, '../../../', 'images');
             await fs.promises.mkdir(uploadDirectory, { recursive: true });
             const filePath = path.join(__dirname, '../../../', 'images', uniqueFileName);
-            if (!image)
-                return (uniqueFileName);
             const imageBuffer = Buffer.from(image.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''), 'base64');
             fs.writeFileSync(filePath, imageBuffer);
             return (uniqueFileName);
