@@ -20,6 +20,13 @@ let SessionService = exports.SessionService = class SessionService {
         this.sessionRepository = sessionRepository;
     }
     async createSession(user_id) {
+        const preSession = await this.sessionRepository.findOne({ where: { user: {
+                    id: user_id,
+                } } });
+        if (preSession) {
+            preSession.expirationDate = new Date(Date.now() + 10000);
+            return (await this.sessionRepository.save(preSession));
+        }
         const sessionKey = this.generateRandomString(42);
         const session = {
             user: {
@@ -29,8 +36,7 @@ let SessionService = exports.SessionService = class SessionService {
             expirationDate: new Date(Date.now() + 10000),
         };
         const newSession = this.sessionRepository.create(session);
-        const res = await this.sessionRepository.save(newSession);
-        return (res);
+        return (await this.sessionRepository.save(newSession));
     }
     async getUser(sessionKey) {
         if (await this.getIsSessionExpired(sessionKey)) {

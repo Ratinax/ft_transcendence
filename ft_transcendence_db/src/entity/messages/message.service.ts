@@ -45,6 +45,7 @@ export class MessageService {
                 isAGameInvite: message.isAGameInvite,
                 isSender: user_id === message.user.id,
             }));
+        // console.log(messagesMapped)
         return (messagesMapped);
     }
 
