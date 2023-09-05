@@ -80,6 +80,24 @@ let ChannelService = exports.ChannelService = class ChannelService {
             category: res.category,
             channel_id: res.channel_id, });
     }
+    async toPublic(channel) {
+        const relation = await this.channelRepository.findOne({ where: { channel_id: channel.channel_id } });
+        relation.category = 'Public';
+        const res = await this.channelRepository.save(relation);
+        return ({ isADm: res.isADm,
+            name: res.name,
+            category: res.category,
+            channel_id: res.channel_id, });
+    }
+    async toPrivate(channel) {
+        const relation = await this.channelRepository.findOne({ where: { channel_id: channel.channel_id } });
+        relation.category = 'Private';
+        const res = await this.channelRepository.save(relation);
+        return ({ isADm: res.isADm,
+            name: res.name,
+            category: res.category,
+            channel_id: res.channel_id, });
+    }
     async comparePasswords(channel, password) {
         return (await bcrypt.compare(password + process.env.PEPPER, channel.password));
     }

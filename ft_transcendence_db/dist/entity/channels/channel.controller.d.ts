@@ -30,4 +30,16 @@ export declare class ChannelController {
         category: string;
         channel_id: number;
     }>;
+    toPublic(body: any, req: any): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
+    toPrivate(body: any, req: any): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
 }

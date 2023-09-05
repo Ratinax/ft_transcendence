@@ -41,13 +41,25 @@ let ChannelController = exports.ChannelController = class ChannelController {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
-        return (await this, this.channelService.removePassword(body.channel));
+        return (await this.channelService.removePassword(body.channel));
     }
     async changePassword(body, req) {
         if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         return (await this.channelService.changePassword(body.channel, body.password));
+    }
+    async toPublic(body, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
+        return (await this.channelService.toPublic(body.channel));
+    }
+    async toPrivate(body, req) {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+            return (null);
+        }
+        return (await this.channelService.toPrivate(body.channel));
     }
 };
 __decorate([
@@ -81,6 +93,22 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelController.prototype, "changePassword", null);
+__decorate([
+    (0, common_1.Post)('toPublic'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelController.prototype, "toPublic", null);
+__decorate([
+    (0, common_1.Post)('toPrivate'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelController.prototype, "toPrivate", null);
 exports.ChannelController = ChannelController = __decorate([
     (0, common_1.Controller)('channels'),
     __metadata("design:paramtypes", [channel_service_1.ChannelService, channels_users_service_1.ChannelsUsersService, session_service_1.SessionService])

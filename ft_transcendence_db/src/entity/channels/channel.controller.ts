@@ -54,7 +54,7 @@ export class ChannelController {
             return (null);
         }
         // TODO check if user can do that
-        return (await this,this.channelService.removePassword(body.channel));
+        return (await this.channelService.removePassword(body.channel));
     }
 
     @Post('changePassword')
@@ -66,5 +66,25 @@ export class ChannelController {
         }
         // TODO check if user can do that
         return (await this.channelService.changePassword(body.channel, body.password));
+    }
+    @Post('toPublic')
+    async toPublic(@Body() body, @Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        // TODO check if user can do that
+        return (await this.channelService.toPublic(body.channel));
+    }
+    @Post('toPrivate')
+    async toPrivate(@Body() body, @Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        // TODO check if user can do that
+        return (await this.channelService.toPrivate(body.channel));
     }
 }

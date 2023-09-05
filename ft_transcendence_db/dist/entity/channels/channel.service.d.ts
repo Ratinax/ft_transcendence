@@ -28,6 +28,18 @@ export declare class ChannelService {
         category: string;
         channel_id: number;
     }>;
+    toPublic(channel: any): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
+    toPrivate(channel: any): Promise<{
+        isADm: boolean;
+        name: string;
+        category: string;
+        channel_id: number;
+    }>;
     comparePasswords(channel: any, password: string): Promise<any>;
     hashedPassword(password: string): Promise<any>;
 }
