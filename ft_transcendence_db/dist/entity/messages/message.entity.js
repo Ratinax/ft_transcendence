@@ -22,7 +22,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.ManyToOne)(() => user_entity_1.Users, { eager: true }),
     (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
-    __metadata("design:type", user_entity_1.Users)
+    __metadata("design:type", Object)
 ], Messages.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => channel_entity_1.Channels, { eager: true }),

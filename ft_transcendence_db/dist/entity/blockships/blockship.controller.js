@@ -31,6 +31,7 @@ let BlockshipController = exports.BlockshipController = class BlockshipControlle
             return (res);
         }
         catch (e) {
+            return (null);
         }
     }
 };

@@ -37,7 +37,6 @@ let BlockshipService = exports.BlockshipService = class BlockshipService {
         const blockship = await this.blockshipRepository.findOne({
             where: { userblocking: { id: user_id }, userblocked: { id: blocked_id } },
         });
-        console.log(user_id, blocked_id);
         const res = await this.blockshipRepository.delete(blockship.id);
         return (res);
     }

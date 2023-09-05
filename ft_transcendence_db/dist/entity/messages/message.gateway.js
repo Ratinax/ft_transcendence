@@ -49,7 +49,6 @@ let MessagesGateway = exports.MessagesGateway = class MessagesGateway {
             channel: body.channel_id,
             user: {
                 ...user,
-                password: 'random useless string',
             },
             isAGameInvite: body.isAGameInvite,
         });

@@ -62,7 +62,6 @@ export class MessagesGateway {
         channel: body.channel_id,
         user: {
           ...user,
-          password: 'random useless string', // TODO seems like we can put a random useless string
         },
         isAGameInvite: body.isAGameInvite,
       });

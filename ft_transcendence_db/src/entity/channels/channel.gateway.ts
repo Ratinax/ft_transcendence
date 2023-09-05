@@ -60,7 +60,7 @@ export class ChannelGateway {
       });
       this.server.emit('createGoodRequest', {sessionCookie: data.sessionCookie});
       return ({response, response2});
-    }
+    } 
     catch (e)
     {
       this.server.emit('createAlreadyExists', {sessionCookie: data.sessionCookie});
