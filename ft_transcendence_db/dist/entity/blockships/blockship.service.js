@@ -33,10 +33,11 @@ let BlockshipService = exports.BlockshipService = class BlockshipService {
         }));
         return (users);
     }
-    async deleteBlockship(blocked_id, user_id) {
+    async deleteBlockship(user_id, blocked_id) {
         const blockship = await this.blockshipRepository.findOne({
             where: { userblocking: { id: user_id }, userblocked: { id: blocked_id } },
         });
+        console.log(user_id, blocked_id);
         const res = await this.blockshipRepository.delete(blockship.id);
         return (res);
     }

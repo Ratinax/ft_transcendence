@@ -17,10 +17,10 @@ export class Blockships {
 
     @ManyToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'userblocking_id' })
-    userblocking: Users;
+    userblocking: Partial<Users>;
 
     @ManyToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'userblocked_id' })
-    userblocked: Users;
+    userblocked: Partial<Users>;
 
 }

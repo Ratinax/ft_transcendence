@@ -8,5 +8,5 @@ export declare class BlockshipService {
         pseudo: string;
         profilPic: string;
     }[]>;
-    deleteBlockship(blocked_id: number, user_id: number): Promise<import("typeorm").DeleteResult>;
+    deleteBlockship(user_id: number, blocked_id: number): Promise<import("typeorm").DeleteResult>;
 }
