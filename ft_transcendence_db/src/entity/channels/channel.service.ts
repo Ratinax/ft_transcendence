@@ -121,6 +121,7 @@ export class ChannelService {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
 
         relation.category = 'Public';
+        relation.password = '';
         const res = await this.channelRepository.save(relation);
         return ({isADm: res.isADm,
             name: res.name,
@@ -132,6 +133,8 @@ export class ChannelService {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
 
         relation.category = 'Private';
+        relation.password = '';
+
         const res = await this.channelRepository.save(relation);
         return ({isADm: res.isADm,
             name: res.name,
