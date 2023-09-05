@@ -28,7 +28,7 @@ let BlockshipGateway = exports.BlockshipGateway = class BlockshipGateway {
             return ('not connected');
         }
         const user = await this.sessionService.getUser(body.sessionCookie);
-        const res = await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
+        await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
         this.server.emit('deleteBlockship', { sessionCookie: body.sessionCookie });
     }
 };
