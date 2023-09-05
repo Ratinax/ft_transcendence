@@ -6,6 +6,14 @@ export declare class MessageController {
     private readonly blockshipService;
     private readonly sessionService;
     constructor(messageService: MessageService, blockshipService: BlockshipService, sessionService: SessionService);
-    find(channelname: string, req: any): Promise<import("./message.entity").Messages[]>;
+    find(channelname: string, req: any): Promise<{
+        id: number;
+        user: {
+            pseudo: string;
+        };
+        content: string;
+        isAGameInvite: Boolean;
+        isSender: boolean;
+    }[]>;
     post(body: any): Promise<import("./message.entity").Messages>;
 }

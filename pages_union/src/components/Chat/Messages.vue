@@ -1,6 +1,6 @@
 <template>
   <div ref="messageContainer" class="messages">
-    <Message v-for="message in messages" :key="message.id" :username="message.user.pseudo" :content="message.content" :isAGameInvite="message.isAGameInvite"/>
+    <Message v-for="message in messages" :key="message.id" :username="message.user.pseudo" :content="message.content" :isAGameInvite="message.isAGameInvite" :isSender="message.isSender"/>
   </div>
 </template>
 
@@ -35,6 +35,7 @@ export default {
         {
           const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}`, {withCredentials: true});
           this.messages = response.data;
+          console.log(this.messages);
         } 
         catch (error) 
         {

@@ -1,8 +1,8 @@
 <template>
   <div class="message">
-    <p v-if="!isAGameInvite">{{ username }} : {{  content }}</p>
-    <div v-else>
-      <span class="user-inviting">{{ username }} &nbsp;</span>
+    <p v-if="!isAGameInvite" :class="{'is-sender': isSender}">{{ username }}: {{  content }}</p>
+    <div :class="{'is-sender': isSender}" v-else>
+      <span class="user-inviting">{{ username }}&nbsp;</span>
       <p class="invitation-game" @click="joinGame">Invited you to do a game to join click here</p>
     </div>
   </div>
@@ -15,6 +15,7 @@ export default {
         username: String,
         content: String,
         isAGameInvite: Boolean,
+        isSender: Boolean,
     },
     methods: 
     {
@@ -52,5 +53,9 @@ export default {
 .message div
 {
   margin-bottom: 0.8em;
+}
+.is-sender
+{
+  color: blue;
 }
 </style>

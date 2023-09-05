@@ -15,7 +15,7 @@ export class MessageService {
      * @param listUserBlocked list of user blocked by user making request
      * @returns result of the request
      */
-    async findMessageFromChannel(channelName, listUserBlocked)
+    async findMessageFromChannel(channelName, listUserBlocked, user_id)
     {
         let removeBlockString = '';
         if (listUserBlocked.length > 0)
@@ -29,12 +29,23 @@ export class MessageService {
             }
             removeBlockString += ')';
         }
-        return this.messageRepository
+        const messages = await this.messageRepository
         .createQueryBuilder('message')
         .leftJoinAndSelect('message.channel', 'channel')
         .leftJoinAndSelect('message.user', 'user')
         .where(`channel.name = :name ${removeBlockString}`, { name: channelName })
         .getMany();
+        const messagesMapped = messages.map((message) => ({
+                id: message.id,
+                user:
+                {
+                    pseudo: message.user.pseudo,
+                },
+                content: message.content,
+                isAGameInvite: message.isAGameInvite,
+                isSender: user_id === message.user.id,
+            }));
+        return (messagesMapped);
     }
 
     /**

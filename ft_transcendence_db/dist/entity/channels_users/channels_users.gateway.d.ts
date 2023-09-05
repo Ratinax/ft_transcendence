@@ -8,8 +8,8 @@ export declare class ChannelsUsersGateway {
     constructor(channelsUsersService: ChannelsUsersService, sessionService: SessionService);
     findUsersOfChannel(body: any): Promise<string>;
     ban(body: any): Promise<import("./channels_users.entity").ChannelsUsers | "not connected">;
-    kick(body: any): Promise<"not connected" | import("./channels_users.entity").ChannelsUsers[]>;
-    leaveChannel(body: any): Promise<"not connected" | import("./channels_users.entity").ChannelsUsers[]>;
+    kick(body: any): Promise<import("./channels_users.entity").ChannelsUsers[] | "not connected">;
+    leaveChannel(body: any): Promise<import("./channels_users.entity").ChannelsUsers[] | "not connected">;
     setAdmin(body: any): Promise<import("./channels_users.entity").ChannelsUsers | "not connected">;
     removeAdmin(body: any): Promise<import("./channels_users.entity").ChannelsUsers | "not connected">;
     timeoutUser(body: any): Promise<string>;
