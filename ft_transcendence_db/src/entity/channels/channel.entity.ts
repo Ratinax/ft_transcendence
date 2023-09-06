@@ -8,7 +8,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
  * - password: string
  * - name: string
  * - isADm: boolean
- * - category: string (Public or Private)
+ * - category: string (Public, Private or Protected by password)
  */
 @Entity()
 export class Channels {
@@ -24,7 +24,7 @@ export class Channels {
     @Column({ type: 'varchar', length: 100, name:'name' })
     name: string;
 
-    @Column({ name: 'category' }) // Public or Private
+    @Column({ name: 'category' }) // Public, Private or Protected by password
     category: string; 
 
 }

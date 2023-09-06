@@ -49,6 +49,7 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('banUser')
   async ban(@MessageBody() body) 
   {
+     // TODO check perms
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       return ('not connected');
@@ -72,6 +73,7 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('kickUser')
   async kick(@MessageBody() body) 
   {
+     // TODO check perms
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       return ('not connected');

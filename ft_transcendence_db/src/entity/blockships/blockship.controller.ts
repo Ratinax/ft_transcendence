@@ -26,6 +26,7 @@ export class BlockshipController {
         }
         catch (e)
         {
+            return (null);
         }
     }
 }

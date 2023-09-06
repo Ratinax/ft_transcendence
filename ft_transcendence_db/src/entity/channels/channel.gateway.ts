@@ -60,7 +60,7 @@ export class ChannelGateway {
       });
       this.server.emit('createGoodRequest', {sessionCookie: data.sessionCookie});
       return ({response, response2});
-    }
+    } 
     catch (e)
     {
       this.server.emit('createAlreadyExists', {sessionCookie: data.sessionCookie});
@@ -156,7 +156,11 @@ export class ChannelGateway {
       isOwner: false,
       isInvited: false,
     });
-    this.server.emit('updateListChannels', {channel: channel, sessionCookie: body.sessionCookie});
-    this.server.emit('joinGoodRequest', {channel: channel, sessionCookie: body.sessionCookie});
+    console.log(channel);
+    const channelToReturn = {
+      channel_id: channel.channel_id,
+    }
+    this.server.emit('updateListChannels', {channel: channelToReturn, sessionCookie: body.sessionCookie});
+    this.server.emit('joinGoodRequest', {sessionCookie: body.sessionCookie});
   }
 }

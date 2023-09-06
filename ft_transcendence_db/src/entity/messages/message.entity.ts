@@ -21,7 +21,7 @@ export class Messages {
 
   @ManyToOne(() => Users, { eager: true })
   @JoinColumn({ name: 'user_id' })
-  user: Users;
+  user: Partial<Users>;
 
   @ManyToOne(() => Channels, { eager: true })
   @JoinColumn({ name: 'channel_id' })

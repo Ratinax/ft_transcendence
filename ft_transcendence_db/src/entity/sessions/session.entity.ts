@@ -16,7 +16,7 @@ export class Sessions {
     id: number;
   
     @OneToOne(() => Users, { eager: true })
-    @JoinColumn({ name: 'user_id' })
+    @JoinColumn({ name: 'user_id'})
     user: Partial<Users>;
     
     @Column({name:'session_key', type: 'varchar', length: 100})

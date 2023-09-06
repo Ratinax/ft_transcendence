@@ -36,7 +36,6 @@ export class ChannelsUsersService {
         const users = usersAndChannels.map((channelsUsers) => ({
             id: channelsUsers.user.id, 
             pseudo: channelsUsers.user.pseudo, 
-            password: channelsUsers.user.password, 
             profilPic: channelsUsers.user.profilPic, 
             isOwner: channelsUsers.isOwner,
             isAdmin: channelsUsers.isAdmin, 

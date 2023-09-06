@@ -26,7 +26,7 @@ export class MessageController {
         {
             listUserBlockedId.push(listUserBlocked[i].id);
         }
-        const res = await this.messageService.findMessageFromChannel(channelname, listUserBlockedId);
+        const res = await this.messageService.findMessageFromChannel(channelname, listUserBlockedId, user.id);
         return (res);
     }
     /**
