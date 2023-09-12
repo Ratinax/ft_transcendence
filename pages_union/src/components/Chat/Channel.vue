@@ -1,36 +1,41 @@
 <template>
-    <div>
-        <div :class="{'selection-color' : isSelected, 'channelname': true, 'inline': true}" @click="handleChannelClicked">
-            <p>{{ channel.name }}</p>
-        </div>
-        <div class="inline">
-            
-            <div v-if="isSelected" class="channel-options" @click="onSelectOption">
-                    <div v-if="optionSelected">
-                        <div class="cross-options"></div>
-                    </div>
-                    <div v-else>
-                        <div class="dot dot1"></div>
-                        <div class="dot dot2"></div>
-                        <div class="dot dot3"></div>
-                    </div>
-                </div>
-        </div>
-        <div class="option-list" v-if="isSelected && optionSelected">
-            <p class="options" @click="leaveChannel">Leave Channel</p>
-            <div v-if="isUserOwner">
-                <div v-if="channel.category === 'Protected by password'">
-                    <p class="options" @click="setShowPasswordPopUp('change')">Change password</p>
-                    <p class="options" @click="removePassword">Remove password</p>
-                </div>
-                <div v-else>
-                    <p class="options" @click="setShowPasswordPopUp('set')">Set password</p>
-                </div>
-            </div>
-        </div>
-        <SetPassword ref="SetPassword" :show="showPasswordPopUp" :isChange="passwordPopUpType === 'change'" :isSet="passwordPopUpType === 'set'" @set-password="setPassword" @change-password="changePassword" @close="closePasswordPopUp"/>
-        <div class="white-space"></div>
-    </div>
+	<div>
+		<div 
+			:class="{'selection-color' : isSelected}"
+			@click="handleChannelClicked"
+			>
+			<div class="row channel">
+				<font-awesome-icon class="icon" icon="fa-regular fa-comments" />
+				<p class="channel-name">
+					{{ channel.name }}
+				</p>
+				<div class="option" v-if="isSelected" @click="onSelectOption">
+					<font-awesome-icon 
+						class="icon setting"
+						v-if="isUserOwner"
+						icon="fa-solid fa-ellipsis-vertical" />
+					<font-awesome-icon
+						class="icon cross"
+						@click="leaveChannel" 
+						icon="fa-solid fa-xmark" />
+				</div>
+			</div>
+		</div>
+		<div class="options-list" v-if="isSelected && optionSelected">
+			<p >Leave Channel</p>
+			<div v-if="isUserOwner">
+				<div v-if="channel.category === 'Protected by password'">
+					<p  @click="setShowPasswordPopUp('change')">Change password</p>
+					<p  @click="removePassword">Remove password</p>
+				</div>
+				<div v-else>
+					<p  @click="setShowPasswordPopUp('set')">Set password</p>
+				</div>
+			</div>
+		</div>
+		<SetPassword ref="SetPassword" :show="showPasswordPopUp" :isChange="passwordPopUpType === 'change'" :isSet="passwordPopUpType === 'set'" @set-password="setPassword" @change-password="changePassword" @close="closePasswordPopUp"/>
+		<div></div>
+	</div>
 </template>
 
 <script>
@@ -38,211 +43,166 @@ import axios from 'axios';
 import SetPassword from './SetPassword.vue';
 
 export default {
-    name: 'Channel-Component',
-    components:
-    {
-        SetPassword,
-    },
-    props: 
-    {
-        channel: Object, 
-        isSelected: Boolean,
-        socket: null,
-    },
-    data()
-    {
-        return {
-            showPasswordPopUp: false,
-            optionSelected: false,
-            isUserOwner: false,
-            passwordPopUpType: '',
-        }
-    },
-    methods: {
-        onSelectOption() 
-        {
-            this.optionSelected = !this.optionSelected;
-            this.$emit('get-is-user-owner', this.channel.channel_id);
-        },
-        setIsUserOwner(result)
-        {
-            this.isUserOwner = result;
-        },
-        handleChannelClicked()
-        {
-            this.$emit('channel-clicked', this.channel);
-        },
-        leaveChannel()
-        {
-            this.$emit('leave-channel', this.channel);
-        },
-        async changePassword(password)
-        {
-            try
-            {
-                await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
-                {
-                    channel: this.channel,
-                    password: password,
-                },
-                {
-                    withCredentials: true,
-                });
-                if (this.$refs.SetPassword)
-                    this.$refs.SetPassword.goodRequest();
-                this.$emit('update-channels');
-            }
-            catch (e)
-            {
-                if (e.response.data.message === 'Password not good length' && this.$refs.SetPassword)
-                    this.$refs.SetPassword.notGoodLength()
-            }
-        },
-        
-        async setPassword(password)
-        {
-            try
-            {
-                await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
-                {
-                    channel: this.channel,
-                    password: password,
-                },
-                {
-                    withCredentials: true,
-                });
-                if (this.$refs.SetPassword)
-                    this.$refs.SetPassword.goodRequest();
-                this.$emit('update-channels');
-            }
-            catch (e)
-            {
-                if (e.response.data.message === 'Password not good length' && this.$refs.SetPassword)
-                    this.$refs.SetPassword.notGoodLength()
-            }
-        },
-        async removePassword()
-        {
-            try
-            {
-                await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
-                {
-                    channel: this.channel
-                },
-                {
-                    withCredentials: true,
-                });
-                this.$emit('update-channels');
-            }
-            catch (e)
-            {
-                console.error(e);
-            }
-        },
-        setShowPasswordPopUp(content)
-        {
-            this.showPasswordPopUp = true;
-            this.passwordPopUpType = content;
-        },
-        closePasswordPopUp()
-        {
-            this.showPasswordPopUp = false;
-        }
-    }
+	name: 'Channel-Component',
+	components:
+	{
+		SetPassword,
+	},
+	props: 
+	{
+		channel: Object, 
+		isSelected: Boolean,
+		socket: null,
+	},
+	data()
+{
+		return {
+			showPasswordPopUp: false,
+			optionSelected: false,
+			isUserOwner: false,
+			passwordPopUpType: '',
+		}
+	},
+	methods: {
+		onSelectOption() 
+		{
+			this.optionSelected = !this.optionSelected;
+			this.$emit('get-is-user-owner', this.channel.channel_id);
+		},
+		setIsUserOwner(result)
+		{
+			this.isUserOwner = result;
+		},
+		handleChannelClicked()
+		{
+			this.$emit('channel-clicked', this.channel);
+		},
+		leaveChannel()
+		{
+			this.$emit('leave-channel', this.channel);
+		},
+		async changePassword(password)
+		{
+			try
+			{
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
+					{
+						channel: this.channel,
+						password: password,
+					},
+					{
+						withCredentials: true,
+				});
+				if (this.$refs.SetPassword)
+				this.$refs.SetPassword.goodRequest();
+				this.$emit('update-channels');
+			}
+			catch (e)
+			{
+				if (e.response.data.message === 'Password not good length' && this.$refs.SetPassword)
+				this.$refs.SetPassword.notGoodLength()
+			}
+		},
+
+		async setPassword(password)
+		{
+			try
+			{
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
+					{
+						channel: this.channel,
+						password: password,
+					},
+					{
+						withCredentials: true,
+				});
+				if (this.$refs.SetPassword)
+				this.$refs.SetPassword.goodRequest();
+				this.$emit('update-channels');
+			}
+			catch (e)
+			{
+				if (e.response.data.message === 'Password not good length' && this.$refs.SetPassword)
+				this.$refs.SetPassword.notGoodLength()
+			}
+		},
+		async removePassword()
+		{
+			try
+			{
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
+					{
+						channel: this.channel
+					},
+					{
+						withCredentials: true,
+				});
+				this.$emit('update-channels');
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
+		},
+		setShowPasswordPopUp(content)
+		{
+			this.showPasswordPopUp = true;
+			this.passwordPopUpType = content;
+		},
+		closePasswordPopUp()
+		{
+			this.showPasswordPopUp = false;
+		}
+	}
 }
 </script>
 
-<style>
+<style scoped>
 
-.channelname p
-{
-    cursor: pointer;
-    border: 5px solid red;
-    margin: 0;
-    transition: 300ms ease;
-	/* --plight: #c5c6c7; */
-    /* color: var(--plight); */
+.icon {
+	padding: .2em;
+	border-radius: .2em;
 }
 
-.inline
+.channel
 {
-    display: inline-block;
-}
-.white-space
-{
-    margin-bottom: 1em;
-}
-.leave-channel
-{
-    cursor: pointer;
+	display: flex;
+	cursor: pointer;
+	color: var(--pblack);
+	padding: .5em;
+	border-radius: .5em;
+	background: white;
+	margin-bottom: .5em;
+	align-items: center;
 }
 
-.channel-options
-{
-    position: relative;
-    width: 1em;
-    height: 1em;
-    margin-left: 1em;
-    border-radius: 50%;
-    background-color: #BEBACE;
-    border: 0.03em solid #fafafa ;
-    cursor: pointer;
+.channel-name {
+	margin-left: .2em;
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-.dot
-{
-    position: absolute;
-    top: 44%;
-    left: 0%;
-    background-color: #E9E6F9;
-    width: 0.15em;
-    height: 0.15em;
-    border-radius: 50%;
+.option {
+	margin-left: .2em;
+	display: flex;
+	justify-content: center;
 }
 
-.dot1
-{
-    transform: translate(+50%, -0%);
-}
-.dot2
-{
-    transform: translate(+262%, -0%);
+.setting {
+	padding: .2em .5em;
 }
 
-.dot3
-{
-    transform: translate(+475%, -0%);
+.cross:hover {
+	color: red;
 }
 
-.cross-options 
-{
-    position: relative;
-    width: 0.5em;
-    height: 0.5em;
-    left: 0.25em;
-    top: 0.25em;
+.setting:hover {
+	color: blue;
 }
 
-.cross-options::before,
-.cross-options::after {
-    content: "";
-    position: absolute;
-    background-color: #E9E6F9;
+.cross:hover, .setting:hover {
+	background: var(--plight);
 }
 
-.cross-options::before {
-  width: 100%;
-  height: 0.1em;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%) rotate(45deg);
-}
-
-.cross-options::after {
-  width: 0.1em;
-  height: 100%;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-}
 </style>

@@ -29,7 +29,6 @@
 <script>
 import { Socket } from 'socket.io-client';
 import TimeOut from './TimeOut.vue';
-import axios from 'axios';
 
 export default {
     name: 'UserChat-Component',
