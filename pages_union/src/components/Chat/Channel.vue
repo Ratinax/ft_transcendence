@@ -4,16 +4,27 @@
 			:class="{'selection-color' : isSelected}"
 			@click="handleChannelClicked"
 			>
-			<div class="row channel">
-				<font-awesome-icon class="icon" icon="fa-regular fa-comments" />
+			<div class="channel">
+				<font-awesome-icon v-if="isUserOwner" class="icon own" icon="fa-solid fa-crown" />
+				<font-awesome-icon v-else class="icon"
+					:class="{own: isUserOwner}"
+					icon="fa-regular fa-comments" />
 				<p class="channel-name">
 					{{ channel.name }}
 				</p>
-				<div class="option" v-if="isSelected" @click="onSelectOption">
-					<font-awesome-icon 
+				<div class="option" v-if="isSelected">
+					<div v-if="isUserOwner"
 						class="icon setting"
-						v-if="isUserOwner"
-						icon="fa-solid fa-ellipsis-vertical" />
+						@click="setShowPasswordPopUp">
+						<font-awesome-icon 
+							v-if="passwordProtected"
+							icon="fa-solid fa-lock"
+							size="xs" />
+						<font-awesome-icon 
+							v-else
+							icon="fa-solid fa-lock-open"
+							size="xs" />
+					</div>
 					<font-awesome-icon
 						class="icon cross"
 						@click="leaveChannel" 
@@ -21,21 +32,15 @@
 				</div>
 			</div>
 		</div>
-		<div class="options-list" v-if="isSelected && optionSelected">
-			<p >Leave Channel</p>
-			<div v-if="isUserOwner">
-				<div v-if="channel.category === 'Protected by password'">
-					<p  @click="setShowPasswordPopUp('change')">Change password</p>
-					<p  @click="removePassword">Remove password</p>
-				</div>
-				<div v-else>
-					<p  @click="setShowPasswordPopUp('set')">Set password</p>
-				</div>
-			</div>
-		</div>
-		<SetPassword ref="SetPassword" :show="showPasswordPopUp" :isChange="passwordPopUpType === 'change'" :isSet="passwordPopUpType === 'set'" @set-password="setPassword" @change-password="changePassword" @close="closePasswordPopUp"/>
-		<div></div>
 	</div>
+	<SetPassword 
+		ref="SetPassword" 
+		:show="showPasswordPopUp" 
+		:isSet="passwordProtected" 
+		@set-password="setPassword" 
+		@change-password="changePassword" 
+		@remove-password="removePassword"
+		@close="closePasswordPopUp"/>
 </template>
 
 <script>
@@ -59,8 +64,8 @@ export default {
 		return {
 			showPasswordPopUp: false,
 			optionSelected: false,
-			isUserOwner: false,
-			passwordPopUpType: '',
+			isUserOwner: true,
+			passwordProtected: false,
 		}
 	},
 	methods: {
@@ -85,6 +90,7 @@ export default {
 		{
 			try
 			{
+				this.passwordProtected = true; // changer
 				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
 					{
 						channel: this.channel,
@@ -93,8 +99,9 @@ export default {
 					{
 						withCredentials: true,
 				});
-				if (this.$refs.SetPassword)
-				this.$refs.SetPassword.goodRequest();
+				if (this.$refs.SetPassword) {
+					this.$refs.SetPassword.goodRequest();
+				}
 				this.$emit('update-channels');
 			}
 			catch (e)
@@ -108,6 +115,7 @@ export default {
 		{
 			try
 			{
+				this.passwordProtected = true; // a changer
 				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
 					{
 						channel: this.channel,
@@ -130,6 +138,7 @@ export default {
 		{
 			try
 			{
+				this.passwordProtected = false;
 				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
 					{
 						channel: this.channel
@@ -144,10 +153,9 @@ export default {
 				console.error(e);
 			}
 		},
-		setShowPasswordPopUp(content)
+		setShowPasswordPopUp()
 		{
 			this.showPasswordPopUp = true;
-			this.passwordPopUpType = content;
 		},
 		closePasswordPopUp()
 		{
@@ -162,6 +170,8 @@ export default {
 .icon {
 	padding: .2em;
 	border-radius: .2em;
+	width: 1em;
+	height: 1em;
 }
 
 .channel
@@ -186,11 +196,7 @@ export default {
 .option {
 	margin-left: .2em;
 	display: flex;
-	justify-content: center;
-}
-
-.setting {
-	padding: .2em .5em;
+	align-items: center;
 }
 
 .cross:hover {
@@ -201,8 +207,18 @@ export default {
 	color: blue;
 }
 
+.setting {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .cross:hover, .setting:hover {
 	background: var(--plight);
+}
+
+.own {
+	color: #bda400;
 }
 
 </style>

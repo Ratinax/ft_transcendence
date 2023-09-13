@@ -12,19 +12,32 @@
 				@get-is-user-owner="onGetIsUserOwner"
 				@update-channels="onUpdateChannels"
 			/>
-			<div :class="{'nochannel': channels.length === 0, 'buttons': true}">
+			<div class="buttons" :class="{'nochannel': channels.length === 0}">
 				<div class="new-channel">
-					<button class="ft-button" @click="showCreateChannel = true">
+					<button 
+						class="ft-button" 
+						@click="showCreateChannel = true">
 						Create Channel
 					</button>
-					<CreateChannel :show="showCreateChannel" :sessionCookie="sessionCookie" :socket="socket" @close="showCreateChannel = false">
+					<CreateChannel 
+						:show="showCreateChannel"
+						:sessionCookie="sessionCookie"
+						:socket="socket"
+						@close="showCreateChannel = false">
 					</CreateChannel>
 				</div>
 				<div class="join-channel">
-					<button class="ft-button green-button" @click="showJoinChannel = true">
+					<button 
+						class="ft-button green-button" 
+						@click="showJoinChannel = true">
 						Join Channel
 					</button>
-					<JoinChannel :show="showJoinChannel" :sessionCookie="sessionCookie" :socket="socket" ref='joinChannel' @close="showJoinChannel = false" >
+					<JoinChannel 
+						:show="showJoinChannel" 
+						:sessionCookie="sessionCookie" 
+						:socket="socket" 
+						ref='joinChannel' 
+						@close="showJoinChannel = false" >
 					</JoinChannel>
 				</div>
 			</div>
@@ -135,7 +148,11 @@ export default {
 	padding: 1em;
 	border-radius: 1em;
 	border: 2px solid var(--pcyan);
-	width: 11em;
+	width: 13em;
+}
+
+.buttons {
+	margin-top: 2em;
 }
 
 button {
@@ -146,6 +163,5 @@ button {
 	text-wrap: nowrap;
 	margin-bottom: 1em;
 }
-
 
 </style>
