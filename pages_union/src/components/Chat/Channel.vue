@@ -12,7 +12,7 @@
 				<p class="channel-name">
 					{{ channel.name }}
 				</p>
-				<div class="option" v-if="isSelected">
+				<div class="option" v-if="isSelected" @click="onSelectOption">
 					<div v-if="isUserOwner"
 						class="icon setting"
 						@click="setShowPasswordPopUp">
@@ -63,15 +63,13 @@ export default {
 {
 		return {
 			showPasswordPopUp: false,
-			optionSelected: false,
-			isUserOwner: true,
+			isUserOwner: false,
 			passwordProtected: false,
 		}
 	},
 	methods: {
 		onSelectOption() 
 		{
-			this.optionSelected = !this.optionSelected;
 			this.$emit('get-is-user-owner', this.channel.channel_id);
 		},
 		setIsUserOwner(result)
@@ -90,7 +88,7 @@ export default {
 		{
 			try
 			{
-				this.passwordProtected = true; // changer
+				// this.passwordProtected = true; // a changer
 				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
 					{
 						channel: this.channel,
@@ -115,7 +113,7 @@ export default {
 		{
 			try
 			{
-				this.passwordProtected = true; // a changer
+				// this.passwordProtected = true; // a changer
 				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
 					{
 						channel: this.channel,
@@ -138,7 +136,7 @@ export default {
 		{
 			try
 			{
-				this.passwordProtected = false;
+				// this.passwordProtected = false; // a changer
 				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
 					{
 						channel: this.channel
