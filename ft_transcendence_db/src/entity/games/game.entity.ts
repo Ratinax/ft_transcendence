@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "ty
 import { Users } from "../users/user.entity";
 
 /**
- * Statistic entity
+ * Games entity
  * 
  * attributs :
  * - id: number
@@ -11,9 +11,15 @@ import { Users } from "../users/user.entity";
  * - scorePOne: number
  * - scorePTwo: number
  * - isGameOver: boolean
+ * - ballSpeed: number
+ * - ballSpeedInc :number
+ * - racketSpeed: number
+ * - racketSize: number
+ * - scoreToWin: number
  */
+
 @Entity()
-export class Statistics {
+export class Games {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -33,5 +39,21 @@ export class Statistics {
 
     @Column({ name: 'is_game_over', default: 0 })
     isGameOver: Boolean;
+
+    @Column({ name: 'ball_speed', default: 0 })
+    ballSpeed: number;
+
+    @Column({ name: 'ball_speed_inc', default: 0 })
+    ballSpeedInc: number;
+
+    @Column({ name: 'racket_speed', default: 0 })
+    racketSpeed: number;
+
+    @Column({ name: 'racket_size', default: 0 })
+    racketSize: number;
+
+    @Column({ name: 'szore_to_win', default: 0 })
+    scoreToWin: number;
+
 
 }

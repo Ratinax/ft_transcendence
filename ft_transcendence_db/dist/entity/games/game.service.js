@@ -25,4 +25,4 @@ exports.GameService = GameService = __decorate([
     __param(0, (0, common_1.Inject)('GAME_REPOSITORY')),
     __metadata("design:paramtypes", [typeorm_1.Repository])
 ], GameService);
-//# sourceMappingURL=statistic.service.js.map
+//# sourceMappingURL=game.service.js.map

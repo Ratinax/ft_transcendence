@@ -13,7 +13,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_config_1 = require("./config/typeorm.config");
 const channel_module_1 = require("./entity/channels/channel.module");
 const message_module_1 = require("./entity/messages/message.module");
-const statistic_module_1 = require("./entity/statistics/statistic.module");
+const game_module_1 = require("./entity/games/game.module");
 const channels_users_module_1 = require("./entity/channels_users/channels_users.module");
 const blockship_module_1 = require("./entity/blockships/blockship.module");
 const friendship_module_1 = require("./entity/friendships/friendship.module");
@@ -29,7 +29,7 @@ exports.AppModule = AppModule = __decorate([
             user_module_1.UserModule,
             channel_module_1.ChannelModule,
             message_module_1.MessageModule,
-            statistic_module_1.StatisticModule,
+            game_module_1.GameModule,
             channels_users_module_1.ChannelsUsersModule,
             blockship_module_1.BlockshipModule,
             friendship_module_1.FriendshipModule,

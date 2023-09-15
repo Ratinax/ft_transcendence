@@ -9,4 +9,4 @@ exports.gameProviders = [
         inject: ['DATA_SOURCE'],
     },
 ];
-//# sourceMappingURL=statistic.providers.js.map
+//# sourceMappingURL=game.providers.js.map

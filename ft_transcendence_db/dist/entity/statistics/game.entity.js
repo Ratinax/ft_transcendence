@@ -63,4 +63,4 @@ __decorate([
 exports.Games = Games = __decorate([
     (0, typeorm_1.Entity)()
 ], Games);
-//# sourceMappingURL=statistic.entity.js.map
+//# sourceMappingURL=game.entity.js.map

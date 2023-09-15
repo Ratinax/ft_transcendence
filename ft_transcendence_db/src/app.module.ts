@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 import { ChannelModule } from './entity/channels/channel.module';
 import { MessageModule } from './entity/messages/message.module';
-import { StatisticModule } from './entity/statistics/statistic.module';
+import { GameModule } from './entity/games/game.module';
 import { ChannelsUsersModule } from './entity/channels_users/channels_users.module';
 import { BlockshipModule } from './entity/blockships/blockship.module';
 import { FriendshipModule } from './entity/friendships/friendship.module';
@@ -19,7 +19,7 @@ import { SessionModule } from './entity/sessions/session.module';
     UserModule, 
     ChannelModule, 
     MessageModule, 
-    StatisticModule, 
+    GameModule, 
     ChannelsUsersModule,
     BlockshipModule,
     FriendshipModule,

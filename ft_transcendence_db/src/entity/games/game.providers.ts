@@ -1,15 +1,15 @@
 
 import { DataSource } from 'typeorm';
-import { Statistics } from './statistic.entity';
+import { Games } from './game.entity';
 
 /**
  * statisticProviders, needs to be injected to create a statistic repository
  * - to use : '@Inject('STATISTIC_REPOSITORY')'
  */
-export const statisticProviders = [
+export const gameProviders = [
   {
-    provide: 'STATISTIC_REPOSITORY',
-    useFactory: (dataSource: DataSource) => dataSource.getRepository(Statistics),
+    provide: 'GAME_REPOSITORY',
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(Games),
     inject: ['DATA_SOURCE'],
   },
 ];
