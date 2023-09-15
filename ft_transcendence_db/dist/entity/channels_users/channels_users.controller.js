@@ -30,7 +30,7 @@ let ChannelsUsersController = exports.ChannelsUsersController = class ChannelsUs
         if (!res || !res[0])
             return (null);
         const userPerms = {
-            id: res[0].id,
+            id: user.id,
             isAdmin: res[0].isAdmin,
             isOwner: res[0].isOwner,
             isInvited: res[0].isInvited,
