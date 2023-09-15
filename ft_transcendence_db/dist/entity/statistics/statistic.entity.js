@@ -20,17 +20,26 @@ __decorate([
 ], Statistics.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => user_entity_1.Users, { eager: true }),
-    (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
+    (0, typeorm_1.JoinColumn)({ name: 'player_one' }),
     __metadata("design:type", user_entity_1.Users)
-], Statistics.prototype, "user", void 0);
+], Statistics.prototype, "playerOne", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'nb_victory', default: 0 }),
-    __metadata("design:type", Number)
-], Statistics.prototype, "nbVictory", void 0);
+    (0, typeorm_1.OneToOne)(() => user_entity_1.Users, { eager: true }),
+    (0, typeorm_1.JoinColumn)({ name: 'player_two' }),
+    __metadata("design:type", user_entity_1.Users)
+], Statistics.prototype, "playerTwo", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'nb_defeat', default: 0 }),
+    (0, typeorm_1.Column)({ name: 'score_p_one', default: 0 }),
     __metadata("design:type", Number)
-], Statistics.prototype, "nbDefeat", void 0);
+], Statistics.prototype, "scorePOne", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'score_p_two', default: 0 }),
+    __metadata("design:type", Number)
+], Statistics.prototype, "scorePTwo", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'is_game_over', default: 0 }),
+    __metadata("design:type", Boolean)
+], Statistics.prototype, "isGameOver", void 0);
 exports.Statistics = Statistics = __decorate([
     (0, typeorm_1.Entity)()
 ], Statistics);

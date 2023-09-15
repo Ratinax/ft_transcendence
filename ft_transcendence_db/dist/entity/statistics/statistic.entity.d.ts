@@ -1,7 +1,9 @@
 import { Users } from "../users/user.entity";
 export declare class Statistics {
     id: number;
-    user: Users;
-    nbVictory: number;
-    nbDefeat: number;
+    playerOne: Users;
+    playerTwo: Users;
+    scorePOne: number;
+    scorePTwo: number;
+    isGameOver: Boolean;
 }

@@ -6,9 +6,11 @@ import { Users } from "../users/user.entity";
  * 
  * attributs :
  * - id: number
- * - user: User
- * - nbVictory: number
- * - nbDefeat: number
+ * - playerOne : User
+ * - playerTwo : User
+ * - scorePOne: number
+ * - scorePTwo: number
+ * - isGameOver: boolean
  */
 @Entity()
 export class Statistics {
@@ -16,13 +18,20 @@ export class Statistics {
     id: number;
 
     @OneToOne(() => Users, { eager: true })
-    @JoinColumn({ name: 'user_id' })
-    user: Users;
+    @JoinColumn({ name: 'player_one' })
+    playerOne: Users;
 
-    @Column({ name: 'nb_victory', default: 0 })
-    nbVictory: number;
+    @OneToOne(() => Users, { eager: true })
+    @JoinColumn({ name: 'player_two' })
+    playerTwo: Users;
 
-    @Column({ name: 'nb_defeat', default: 0 })
-    nbDefeat: number;
+    @Column({ name: 'score_p_one', default: 0 })
+    scorePOne: number;
+
+    @Column({ name: 'score_p_two', default: 0 })
+    scorePTwo: number;
+
+    @Column({ name: 'is_game_over', default: 0 })
+    isGameOver: Boolean;
 
 }
