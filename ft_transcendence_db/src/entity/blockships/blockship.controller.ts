@@ -14,7 +14,7 @@ export class BlockshipController {
     @Get('userblockedby')
     async findUserblockedFromId(@Req() req)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }

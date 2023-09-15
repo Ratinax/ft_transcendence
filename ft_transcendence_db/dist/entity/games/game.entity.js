@@ -21,12 +21,12 @@ __decorate([
 __decorate([
     (0, typeorm_1.OneToOne)(() => user_entity_1.Users, { eager: true }),
     (0, typeorm_1.JoinColumn)({ name: 'player_one' }),
-    __metadata("design:type", user_entity_1.Users)
+    __metadata("design:type", Object)
 ], Games.prototype, "playerOne", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => user_entity_1.Users, { eager: true }),
     (0, typeorm_1.JoinColumn)({ name: 'player_two' }),
-    __metadata("design:type", user_entity_1.Users)
+    __metadata("design:type", Object)
 ], Games.prototype, "playerTwo", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'score_p_one', default: 0 }),

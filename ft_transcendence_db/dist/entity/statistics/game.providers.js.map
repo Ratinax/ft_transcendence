@@ -1,1 +1,0 @@
-{"version":3,"file":"game.providers.js","sourceRoot":"","sources":["../../../src/entity/statistics/game.providers.ts"],"names":[],"mappings":";;;AAEA,+CAAsC;AAMzB,QAAA,aAAa,GAAG;IAC3B;QACE,OAAO,EAAE,iBAAiB;QAC1B,UAAU,EAAE,CAAC,UAAsB,EAAE,EAAE,CAAC,UAAU,CAAC,aAAa,CAAC,mBAAK,CAAC;QACvE,MAAM,EAAE,CAAC,aAAa,CAAC;KACxB;CACF,CAAC"}

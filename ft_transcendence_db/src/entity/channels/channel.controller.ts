@@ -16,7 +16,7 @@ export class ChannelController {
     @Get('')
     async find(@Req() req)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }
@@ -33,7 +33,7 @@ export class ChannelController {
     @Post('setPassword')
     async setPassword(@Body() body, @Req() req)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }
@@ -49,7 +49,7 @@ export class ChannelController {
     @Post('removePassword')
     async removePassword(@Body() body, @Req() req)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }
@@ -60,7 +60,7 @@ export class ChannelController {
     @Post('changePassword')
     async changePassword(@Body() body, @Req() req)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }
@@ -70,7 +70,7 @@ export class ChannelController {
     @Post('toPublic')
     async toPublic(@Body() body, @Req() req)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }
@@ -80,7 +80,7 @@ export class ChannelController {
     @Post('toPrivate')
     async toPrivate(@Body() body, @Req() req)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }

@@ -12,6 +12,8 @@ const game_controller_1 = require("./game.controller");
 const game_service_1 = require("./game.service");
 const game_providers_1 = require("./game.providers");
 const database_module_1 = require("../../database/database.module");
+const session_service_1 = require("../sessions/session.service");
+const session_providers_1 = require("../sessions/session.providers");
 let GameModule = exports.GameModule = class GameModule {
 };
 exports.GameModule = GameModule = __decorate([
@@ -19,7 +21,9 @@ exports.GameModule = GameModule = __decorate([
         imports: [database_module_1.DatabaseModule],
         providers: [
             ...game_providers_1.gameProviders,
+            ...session_providers_1.sessionProviders,
             game_service_1.GameService,
+            session_service_1.SessionService
         ],
         controllers: [game_controller_1.GameController],
     })

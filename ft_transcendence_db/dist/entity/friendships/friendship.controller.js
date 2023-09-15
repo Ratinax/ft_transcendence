@@ -22,14 +22,14 @@ let FriendshipController = exports.FriendshipController = class FriendshipContro
         this.sessionService = sessionService;
     }
     async findFriendOfId(req) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         return (await this.friendshipService.findFriendOfId(user.id));
     }
     async findPending(req) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);

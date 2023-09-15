@@ -66,7 +66,7 @@ let UserController = exports.UserController = class UserController {
         return (await this.callFunction(this.userService.logOut, body));
     }
     async getImageName(req) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);

@@ -24,7 +24,7 @@ let ChannelController = exports.ChannelController = class ChannelController {
         this.sessionService = sessionService;
     }
     async find(req) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
@@ -32,31 +32,31 @@ let ChannelController = exports.ChannelController = class ChannelController {
         return (channels);
     }
     async setPassword(body, req) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         return (await this.channelService.setPassword(body.channel, body.password));
     }
     async removePassword(body, req) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         return (await this.channelService.removePassword(body.channel));
     }
     async changePassword(body, req) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         return (await this.channelService.changePassword(body.channel, body.password));
     }
     async toPublic(body, req) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         return (await this.channelService.toPublic(body.channel));
     }
     async toPrivate(body, req) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         return (await this.channelService.toPrivate(body.channel));

@@ -19,6 +19,11 @@ let GameService = exports.GameService = class GameService {
     constructor(gameRepository) {
         this.gameRepository = gameRepository;
     }
+    async createGame(game) {
+        const newChannel = this.gameRepository.create(game);
+        const res = await this.gameRepository.save(newChannel);
+        return (res);
+    }
 };
 exports.GameService = GameService = __decorate([
     (0, common_1.Injectable)(),

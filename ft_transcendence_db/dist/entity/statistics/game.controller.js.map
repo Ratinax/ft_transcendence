@@ -1,1 +1,0 @@
-{"version":3,"file":"game.controller.js","sourceRoot":"","sources":["../../../src/entity/statistics/game.controller.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,2CAAiD;AACjD,iDAA6C;AAGtC,IAAM,cAAc,4BAApB,MAAM,cAAc;IACvB,YAA8B,YAAyB;QAAzB,iBAAY,GAAZ,YAAY,CAAa;IAAG,CAAC;CAC9D,CAAA;yBAFY,cAAc;IAD1B,IAAA,mBAAU,EAAC,OAAO,CAAC;qCAE4B,0BAAW;GAD9C,cAAc,CAE1B"}

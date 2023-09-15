@@ -8,4 +8,10 @@ export class GameService {
         @Inject('GAME_REPOSITORY')
         private gameRepository: Repository<Games>,
     ) {}
+    async createGame(game: Partial<Games>)
+    {
+        const newChannel = this.gameRepository.create(game);
+        const res = await this.gameRepository.save(newChannel);
+        return (res);
+    }
 }

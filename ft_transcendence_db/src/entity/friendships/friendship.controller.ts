@@ -14,7 +14,7 @@ export class FriendshipController {
     @Get('friendsof/')
     async findFriendOfId(@Req() req)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }
@@ -30,7 +30,7 @@ export class FriendshipController {
     @Get('pending/')
     async findPending(@Req() req)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }

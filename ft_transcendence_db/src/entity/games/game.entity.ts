@@ -25,11 +25,11 @@ export class Games {
 
     @OneToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'player_one' })
-    playerOne: Users;
+    playerOne: Partial<Users>;
 
     @OneToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'player_two' })
-    playerTwo: Users;
+    playerTwo: Partial<Users>;
 
     @Column({ name: 'score_p_one', default: 0 })
     scorePOne: number;

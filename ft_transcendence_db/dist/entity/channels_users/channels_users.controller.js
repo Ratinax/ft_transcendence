@@ -22,7 +22,7 @@ let ChannelsUsersController = exports.ChannelsUsersController = class ChannelsUs
         this.sessionService = sessionService;
     }
     async getUserWithPermissions(req, channelId) {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY'])) {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);

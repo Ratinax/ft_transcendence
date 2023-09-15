@@ -14,7 +14,7 @@ export class ChannelsUsersController {
     @Get('userPerms')
     async getUserWithPermissions(@Req() req, @Query('channelId') channelId)
     {
-        if (!req.cookies['SESSION_KEY'] || !this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }
