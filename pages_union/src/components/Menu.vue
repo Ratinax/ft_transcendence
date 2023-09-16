@@ -234,6 +234,7 @@ export default {
 	z-index: 999;
 	border: 2px solid var(--pcyan);
 	border-radius: .4em;
+	max-width: 150px;
 }
 
 .navigation-option
@@ -302,7 +303,7 @@ export default {
 }
 
 .navigation-option:hover {
-	transform: scale(107%);
+	transform: scale(105%);
 	transition: transform 0.2s ease;
 }
 

@@ -1,24 +1,32 @@
 <template>
 	<div class="row chat-page">
-	<Menu />
+		<Menu />
 		<div class="row chat-container">
 			<div>
-				<ListChannels ref="listChannels" v-if="socket && sessionCookie" :sessionCookie="sessionCookie"
-					:channelSelected="selectedChannel" :socket="socket" @channel-selected="onChannelSelected"
-					@leave-channel="onLeaveChannel" @get-is-user-owner="onGetIsUserOwner" />
+				<ListChannels ref="listChannels" 
+					v-if="socket && sessionCookie" 
+					:sessionCookie="sessionCookie"
+					:channelSelected="selectedChannel" 
+					:socket="socket" 
+					@channel-selected="onChannelSelected"
+					@leave-channel="onLeaveChannel" 
+					@get-is-user-owner="onGetIsUserOwner" />
 			</div>
 			<div class= "messageszone">
 				<Messages ref="messages" />
-				<SendMessage ref="sendMessage"
+				<SendMessage 
+					ref="sendMessage"
 					:showContent="!!selectedChannel.channel_id"
 					:channelId="selectedChannel.channel_id"
 					:socket="socket"
 					@create-message="createMessage" />
 			</div>
-			<div>
-				<ListUsersChat ref="listUsersChat" v-if="socket && sessionCookie" :sessionCookie="sessionCookie"
-					:channel="selectedChannel" :socket="socket" />
-			</div>
+			<ListUsersChat 
+				ref="listUsersChat" 
+				v-if="socket && sessionCookie" 
+				:sessionCookie="sessionCookie"
+				:channel="selectedChannel" 
+				:socket="socket" />
 		</div>
 	</div>
 </template>
@@ -160,42 +168,15 @@ export default {
 
 .chat-container {
 	width: 100%;
-	color: white;
 	margin: 2em 0;
 }
 
 .messageszone {
-	width: 50em; /* a changer */
+	width: 45em; /* a changer */
 	background: white;
 	border-radius: 1em 0 1em 1em;
 	border: 2px solid var(--pblue);
 }
 
-
-.selection-color {
-	color: white;
-	background-color: #e95433;
-}
-
-.option-list {
-	background-color: #f9f9f9;
-	border: 1px solid #ccc;
-	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-	position: absolute;
-	z-index: 2;
-
-}
-
-.options {
-	padding: 0;
-	margin: 0;
-	cursor: pointer;
-	transition: 300ms ease;
-	padding-left: 0.1em
-}
-
-.options:hover {
-	background-color: #c0c0c5;
-}
 </style>
 

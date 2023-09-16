@@ -1,6 +1,15 @@
 <template>
   <div v-if="userInChannel !== null" class="list-users-chat">
-    <UserChat class="user-chat" v-for="userInChat in users" :sessionCookie="sessionCookie" :userInChannel="userInChannel" :key="userInChat.id" :userInChat="userInChat" :isSelected="userSelected && userSelected.id === userInChat.id" :socket="socket" :channel="channel" @user-clicked="handleUserClicked"/>
+    <UserChat class="user-chat" 
+			v-for="userInChat in users" 
+			:sessionCookie="sessionCookie" 
+			:userInChannel="userInChannel" 
+			:key="userInChat.id" 
+			:userInChat="userInChat" 
+			:isSelected="userSelected && userSelected.id === userInChat.id" 
+			:socket="socket" 
+			:channel="channel" 
+			@user-clicked="handleUserClicked"/>
   </div>
 </template>
 
@@ -77,16 +86,8 @@ export default {
 <style>
 .list-users-chat
 {
-    border: 0.1vh solid black;
+	border: 2px solid var(--pcyan);
     max-width: 15%;
-    flex: 1;
-    bottom: 0;
-    top: 0;
-    overflow-y: auto;
-    padding-left: 1%;
 }
-.user-chat
-{
-    padding-top: 4%;
-}
+
 </style>
