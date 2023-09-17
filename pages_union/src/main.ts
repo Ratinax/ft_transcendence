@@ -10,10 +10,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
 import { faComments, } from '@fortawesome/free-regular-svg-icons'
-import { faCrown, faLock, faLockOpen, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCrown, faLock, faLockOpen, faXmark, faCircle } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
-library.add(faComments, faXmark, faLock, faCrown, faLockOpen)
+library.add(faComments, faXmark, faLock, faCrown, faLockOpen, faCircle)
 
 const app = createApp(App);
 app.use(router);

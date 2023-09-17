@@ -1,13 +1,15 @@
 <template>
 	<div v-if="!userInChat.isInvited">
 		<div class="user-in-chat">
+			<font-awesome-icon icon="fa-solid fa-circle" 
+				:class="{'green': userInChat.isConnected, 'red': !userInChat.isConnected}" />
 			<span id="user-pseudo" 
-				:class="{'admin': userInChat.isAdmin, 'owner': userInChat.isOwner, 'selection-color' : isSelected}" 
-				@click="handleUserClicked">{{ userInChat.pseudo }}
+				:class="{'admin': userInChat.isAdmin, 
+					'owner': userInChat.isOwner, 
+					'selection-color' : isSelected}" 
+				@click="handleUserClicked">
+				{{ userInChat.pseudo }}
 			</span>
-			<div 
-				:class="{'circle': true, 'green': userInChat.isConnected, 'red': !userInChat.isConnected}">
-			</div>
 		</div>
 		<div v-if="isSelected" class="option-list">
 			<div v-if="userInChat.id !== userInChannel.id">
@@ -66,14 +68,14 @@ export default {
 {
 		this.socket.on('timeoutGoodRequest', async (response) => {
 			if (response.channel.channel_id === this.channel.channel_id && this.sessionCookie === response.sessionCookie)
-		{
+			{
 				if (this.$refs.timeout)
 				this.$refs.timeout.goodRequest();
 			}
 		});
 		this.socket.on('timeoutWrongAmount', async (response) => {
 			if (response.channel.channel_id === this.channel.channel_id && this.sessionCookie === response.sessionCookie)
-		{
+			{
 				if (this.$refs.timeout)
 				this.$refs.timeout.notGoodAmount();
 			}
@@ -81,31 +83,31 @@ export default {
 	},
 	methods: {
 		handleUserClicked() 
-	{
+		{
 			this.$emit('user-clicked', this.userInChat);
 		},
 		async ban()
-	{
+		{
 			this.socket.emit('banUser', {channel: this.channel, userBanned: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async kick()
-	{
+		{
 			this.socket.emit('kickUser', {channel: this.channel, userKicked: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async setAdmin()
-	{
+		{
 			this.socket.emit('setAdmin', {channel: this.channel, userSetAdmin: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async removeAdmin()
-	{
+		{
 			this.socket.emit('removeAdmin', {channel: this.channel, userRemovedAdmin: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async onTimeoutUser(nbSeconds)
-	{
+		{
 			this.socket.emit('timeoutUser', {userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds, sessionCookie: this.sessionCookie});
 		},
 		closeTimeOut()
-	{
+		{
 			this.showTimeOut = false;
 		},
 	}
@@ -113,24 +115,27 @@ export default {
 </script>
 
 <style>
-#user-pseudo
-{
+
+#user-pseudo {
+	margin-left: .5em;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	cursor: pointer;
-	transition: 300ms ease;
 }
-.admin
-{
+
+.admin {
 	color: purple;
 }
-.owner
-{
+.owner {
 	color: orange;
 }
 
-.user-in-chat
-{
-	display: flex;
-	flex-direction: align;
-	align-items: center;
+.user-in-chat {
+	width: 90%;
+	display: inline-flex;
+}
+
+.option-list {
+	color: white;
 }
 </style>

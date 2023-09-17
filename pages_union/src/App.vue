@@ -54,23 +54,13 @@ export default {
 	z-index: 9999;
 }
 
-.circle 
-{
-	width: 1em;
-	height: 1em;
-	border-radius: 50%;
-	margin-left: 1em;
-	flex-shrink: 0;
-	justify-content: center;
-	text-align: center;
-}
 .green
 {
-	background-color: green;
+	color: green;
 }
 .red
 {
-	background-color: red;
+	color: red;
 }
 
 </style>
