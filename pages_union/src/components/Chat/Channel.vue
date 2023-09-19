@@ -12,7 +12,7 @@
 				<p class="channel-name">
 					{{ channel.name }}
 				</p>
-				<div class="option" v-if="isSelected" @click="onSelectOption">
+				<div class="option" v-if="isSelected">
 					<div v-if="isUserOwner"
 						class="icon setting"
 						@click="setShowPasswordPopUp">
@@ -60,18 +60,15 @@ export default {
 		socket: null,
 	},
 	data()
-{
+	{
 		return {
 			showPasswordPopUp: false,
 			isUserOwner: false,
 			passwordProtected: false,
 		}
 	},
+	emits: ['leave-channel', 'get-is-user-owner', 'channel-clicked', 'update-channels'],
 	methods: {
-		onSelectOption() 
-		{
-			this.$emit('get-is-user-owner', this.channel.channel_id);
-		},
 		setIsUserOwner(result)
 		{
 			this.isUserOwner = result;

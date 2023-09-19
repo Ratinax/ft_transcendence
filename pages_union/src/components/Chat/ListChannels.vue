@@ -9,7 +9,6 @@
 				:isSelected="channelSelected.channel_id === channel.channel_id"
 				@channel-clicked="handleChannelClicked"
 				@leave-channel="onLeaveChannel"
-				@get-is-user-owner="onGetIsUserOwner"
 				@update-channels="onUpdateChannels"
 			/>
 			<div class="buttons" :class="{'nochannel': channels.length === 0}">
@@ -116,12 +115,9 @@ export default {
 		{
 			this.$emit('leave-channel', channel);
 		},
-		onGetIsUserOwner(channel_id)
-		{
-			this.$emit('get-is-user-owner', channel_id);
-		},
 		setIsUserOwner(result, channel_id)
 		{
+			console.log('call')
 			for (let i = 0; i < this.$refs.channelRef.length; i++)
 			{
 				if (this.$refs.channelRef[i] && this.$refs.channelRef[i].channel.channel_id === channel_id)
@@ -130,6 +126,7 @@ export default {
 					break ;
 				}
 			}
+			console.log('result :', result)
 		},
 		onUpdateChannels()
 		{
