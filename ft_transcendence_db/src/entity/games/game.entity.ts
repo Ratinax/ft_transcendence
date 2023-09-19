@@ -52,7 +52,7 @@ export class Games {
     @Column({ name: 'racket_size', default: 0 })
     racketSize: number;
 
-    @Column({ name: 'szore_to_win', default: 0 })
+    @Column({ name: 'score_to_win', default: 0 })
     scoreToWin: number;
 
 
