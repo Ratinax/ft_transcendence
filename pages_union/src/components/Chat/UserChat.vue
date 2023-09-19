@@ -11,26 +11,26 @@
 				{{ userInChat.pseudo }}
 			</span>
 		</div>
-		<div v-if="isSelected" class="option-list">
-			<div v-if="userInChat.id !== userInChannel.id">
-				<div v-if="userInChannel.isAdmin && !userInChat.isOwner">
-					<p class="options" @click="kick">Kick</p> 
-					<p class="options" @click="ban">Ban</p>
-					<p class="options" @click="showTimeOut = true">Time out</p>
-				</div>
-				<div v-if="userInChannel.isOwner">
-					<div v-if="!userInChat.isAdmin">
-						<p class="options" @click="setAdmin">Set Admin</p>
+			<div v-if="isSelected" class="option-list">
+				<div v-if="userInChat.id !== userInChannel.id">
+					<div v-if="userInChannel.isAdmin && !userInChat.isOwner">
+						<p class="options" @click="kick">Kick</p> 
+						<p class="options" @click="ban">Ban</p>
+						<p class="options" @click="showTimeOut = true">Time out</p>
 					</div>
-					<div v-if="userInChat.isAdmin">
-						<p class="options" @click="removeAdmin">Remove Admin</p>
+					<div v-if="userInChannel.isOwner">
+						<div v-if="!userInChat.isAdmin">
+							<p class="options" @click="setAdmin">Set Admin</p>
+						</div>
+						<div v-if="userInChat.isAdmin">
+							<p class="options" @click="removeAdmin">Remove Admin</p>
+						</div>
 					</div>
 				</div>
+				<p class="options">
+					See Profile
+				</p>
 			</div>
-			<p class="options">
-				See Profile
-			</p>
-		</div>
 		<TimeOut 
 			ref="timeout"
 			:show="showTimeOut" 
@@ -82,7 +82,7 @@ export default {
 		});
 	},
 	methods: {
-		handleUserClicked() 
+		handleUserClicked(e) 
 		{
 			this.$emit('user-clicked', this.userInChat);
 		},
@@ -136,6 +136,22 @@ export default {
 }
 
 .option-list {
+	position: absolute;
+	z-index: 999;
+	padding: 1em;
+	background: var(--pdark);
+	border: 1px solid var(--pcyan);
+	border-radius: .6em;
+}
+
+.options {
 	color: white;
+	margin-top: .1em;
+	transition: color 0.2s ease;
+}
+
+.options:hover {
+	cursor: pointer;
+	color: var(--pcyan);
 }
 </style>

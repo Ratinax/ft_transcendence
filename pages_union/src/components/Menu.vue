@@ -248,6 +248,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
+	transition: transform 0.2s ease;
 }
 .profil-pic
 {
@@ -304,7 +305,6 @@ export default {
 
 .navigation-option:hover {
 	transform: scale(105%);
-	transition: transform 0.2s ease;
 }
 
 </style>
