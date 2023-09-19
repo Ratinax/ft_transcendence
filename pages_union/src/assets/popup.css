@@ -1,0 +1,59 @@
+.input-container
+{
+	display: flex;
+	color: white;
+	flex-direction: column;
+	align-items: center;
+}
+
+button {
+	margin-top: .7em;
+	background: var(--pcyan);
+	box-shadow: 0 4px 0 var(--pblue);
+	font-size: .8em;
+	width: 42%;
+}
+
+input {
+	margin-top: .5em;
+	width: 90%;
+	padding: .7em .4em;
+	font-size: .85em;
+	border: none;
+	border-bottom: 0.25em solid grey;
+	border-radius: 0.4em;
+}
+
+input:focus {
+	outline: none;
+	border-color: var(--pblue);
+}
+
+.buttons {
+	margin-top: 1em;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.error {
+	margin-top: .2em;
+	color: #ff483b;
+	font-size: .9em;
+	text-align: center;
+}
+
+.radio-container {
+	margin-top: .5em;
+	display: flex;
+	flex-direction: column;
+}
+
+.radio-item {
+	width: 100%;
+}
+
+.radio-item input {
+	width: 5%;
+}

@@ -1,6 +1,10 @@
 <template>
   <div ref="messageContainer" class="messages">
-    <Message v-for="message in messages" :key="message.id" :username="message.user.pseudo" :content="message.content" :isAGameInvite="message.isAGameInvite" :isSender="message.isSender"/>
+    <Message v-for="message in messages" :key="message.id"
+			:username="message.user.pseudo" 
+			:content="message.content" 
+			:isAGameInvite="message.isAGameInvite"
+			:isSender="false"/>
   </div>
 </template>
 
@@ -35,7 +39,6 @@ export default {
         {
           const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}`, {withCredentials: true});
           this.messages = response.data;
-          console.log(this.messages);
         } 
         catch (error) 
         {
@@ -67,11 +70,21 @@ export default {
 <style>
 .messages
 {
-    border: 0.1vh solid black;
-    flex: 1;
-    position: relative;
-    height: 90%;
-    padding-left: 1%;
-    overflow-y: auto;
+	padding: 2.5% 0;
+	overflow-y: scroll;
+    height: 88%;
 }
+
+::-webkit-scrollbar-track {
+	background: var(--pblue);
+	border-radius: 1em;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--pdark);
+	border: 1px solid var(--pdark);
+	border-radius: 1em;
+}
+
+
 </style>

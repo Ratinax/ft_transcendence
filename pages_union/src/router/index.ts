@@ -19,12 +19,12 @@ const routes = [
         beforeEnter: async (to: any, from: any, next: any) => {
             const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
             if (sessionCookie !== '') {
-              next();
+                next();
             } else {
-              next('/');
+                next('/');
             }
         }
-    },
+        },
     {
         path: '/relations',
         component: Relations,
@@ -34,9 +34,9 @@ const routes = [
         beforeEnter: async (to: any, from: any, next: any) => {
             const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
             if (sessionCookie !== '') {
-              next();
+                next();
             } else {
-              next('/');
+                next('/');
             }
         }
     },

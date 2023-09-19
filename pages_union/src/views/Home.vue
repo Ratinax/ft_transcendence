@@ -50,15 +50,13 @@ export default defineComponent({
 
 <style>
 
-html {
-	background: linear-gradient(45deg, var(--pblack), var(--pdark));
-}
-
 .log-in-page {
+	background: linear-gradient(45deg, var(--pblack), var(--pdark));
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
 	text-align: center;
+	width: 100%;
 }
 
 .log-box {
@@ -113,6 +111,12 @@ html {
 .fadeTitle-enter-from,
 .fadeTitle-leave-to {
 	opacity: 0;
+}
+
+@media screen and (max-width: 550px){
+	.log-box {
+		width: 80%;
+	}
 }
 
 </style>
