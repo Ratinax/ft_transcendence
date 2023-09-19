@@ -9,8 +9,7 @@
 					:channelSelected="selectedChannel" 
 					:socket="socket" 
 					@channel-selected="onChannelSelected"
-					@leave-channel="onLeaveChannel" 
-					@get-is-user-owner="onGetIsUserOwner" />
+					@leave-channel="onLeaveChannel"/>
 			</div>
 			<div class= "messageszone">
 				<Messages ref="messages" />
@@ -117,6 +116,7 @@ export default {
 		onChannelSelected(channel) {
 			this.setSelectedChannel(channel);
 			this.updateMessages();
+			this.setIsUserOwner(channel.channel_id)
 		},
 		setSelectedChannel(channel) {
 			this.selectedChannel = channel;
@@ -139,11 +139,13 @@ export default {
 		async onLeaveChannel(channel) {
 			this.socket.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
 		},
-		onGetIsUserOwner(channel_id) {
+		setIsUserOwner(channel_id) {
 			if (this.$refs.listUsersChat) {
 				const result = this.$refs.listUsersChat.getUserInChannel();
 				if (result)
-				this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
+					this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
+				else
+					console.log(result)
 			}
 		},
 		sendMessageTimeout(duration) {

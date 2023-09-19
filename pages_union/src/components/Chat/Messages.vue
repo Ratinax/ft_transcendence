@@ -4,7 +4,7 @@
 			:username="message.user.pseudo" 
 			:content="message.content" 
 			:isAGameInvite="message.isAGameInvite"
-			:isSender="false"/>
+			:isSender="message.isSender"/>
   </div>
 </template>
 
