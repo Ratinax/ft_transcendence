@@ -1,6 +1,8 @@
 .DS_Store
 **/node_modules/
 **/dist/
+./ft_transcendence_db/
+./user_page/
 
 
 # local env files
