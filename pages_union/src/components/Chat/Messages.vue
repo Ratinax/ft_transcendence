@@ -75,4 +75,16 @@ export default {
     height: 88%;
 }
 
+::-webkit-scrollbar-track {
+	background: var(--pblue);
+	border-radius: 1em;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--pdark);
+	border: 1px solid var(--pdark);
+	border-radius: 1em;
+}
+
+
 </style>

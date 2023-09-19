@@ -1,10 +1,15 @@
 <template>
     <div class="list-users-relations">
         <div class="header">
-            <h1>{{ headerText }}</h1>
+            <h1 class="fade-text">{{ headerText }}</h1>
         </div>
         <div class="users">
-            <User v-for="user in users" :key="user.id" :user="user" :isARequest="isFriendRequestList" @accept-friendship="onAcceptFriendship" @remove-relation="onRemoveRelation"/>
+            <User v-for="user in users" 
+				:key="user.id" 
+				:user="user" 
+				:isARequest="isFriendRequestList" 
+				@accept-friendship="onAcceptFriendship" 
+				@remove-relation="onRemoveRelation"/>
         </div>
     </div>
   
@@ -74,28 +79,32 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
-.header
-{
-    /* border: 0.001em solid black; */
-    text-align: center;
-    border-bottom: 0.2em solid white;
-    background-color: #9A9A9A;
+.header {
+	display: flex;
+	background: var(--pblack);
+	border-radius: 1.5em;
+	align-items: center;
+	justify-content: center;
 }
-.users
-{
-    overflow: auto;
+
+h1 {
+	display: inline;
+	border-bottom: .01em solid var(--plight);
+	padding-bottom: .1em;
+	font-size: 2.2em
 }
+
 .list-users-relations
 {
-    border: 0.2em solid white;
-    background-color: #BABABA;
-    display: flex;
-    flex-direction: column;
+	background: var(--pdark);
+	border-radius: 3em;
+	margin: auto .8em;
+	box-sizing: border-box;
     height: 100%;
     width: calc(100% / 3);
-    white-space: nowrap;
-    border-radius: 3%; 
+	border: 1px solid var(--pcyan);
+	padding: 1em;
 }
 </style>

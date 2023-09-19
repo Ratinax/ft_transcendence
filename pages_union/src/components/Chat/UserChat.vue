@@ -131,6 +131,7 @@ export default {
 }
 
 .user-in-chat {
+	color: white;
 	width: 90%;
 	display: inline-flex;
 }
