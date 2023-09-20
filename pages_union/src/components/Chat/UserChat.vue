@@ -29,9 +29,9 @@
 <script lang="ts">
 import { Socket } from 'socket.io-client';
 import TimeOut from './TimeOut.vue';
-import axios from 'axios';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     name: 'UserChat-Component',
     components:
     {
@@ -49,58 +49,57 @@ export default {
     data()
     {
         return {
-            showTimeOut: false,
+            showTimeOut: false as boolean,
         }
     },
     mounted()
     {
-        (this as any).socket.on('timeoutGoodRequest', async (response: any) => {
-            if (response.channel.channel_id === (this as any).channel.channel_id && (this as any).sessionCookie === response.sessionCookie)
+        this.socket?.on('timeoutGoodRequest', async (response: {channel: {channel_id: number}, sessionCookie: string}) => {
+            if (response.channel.channel_id === this.channel?.channel_id && this.sessionCookie === response.sessionCookie)
             {
-                if ((this as any).$refs.timeout)
-                    (this as any).$refs.timeout.goodRequest();
+                if (this.$refs.timeout)
+                    (this.$refs.timeout as typeof TimeOut).methods?.goodRequest();
             }
         });
-        (this as any).socket.on('timeoutWrongAmount', async (response: any) => {
-            if (response.channel.channel_id === (this as any).channel.channel_id && (this as any).sessionCookie === response.sessionCookie)
+        this.socket?.on('timeoutWrongAmount', async (response: {channel: {channel_id: number}, sessionCookie: string}) => {
+            if (response.channel.channel_id === this.channel?.channel_id && this.sessionCookie === response.sessionCookie)
             {
-                if ((this as any).$refs.timeout)
-                    (this as any).$refs.timeout.notGoodAmount();
+                if (this.$refs.timeout)
+                    (this.$refs.timeout as typeof TimeOut).methods?.notGoodAmount();
             }
         });
     },
     methods: {
         handleUserClicked() 
         {
-            (this as any).$emit('user-clicked', (this as any).userInChat);
+            this.$emit('user-clicked', this.userInChat);
         },
         async ban()
         {
-            (this as any).socket.emit('banUser', {channel: (this as any).channel, userBanned: (this as any).userInChat, sessionCookie: (this as any).sessionCookie});
+            this.socket?.emit('banUser', {channel: this.channel, userBanned: this.userInChat, sessionCookie: this.sessionCookie});
         },
         async kick()
         {
-            (this as any).socket.emit('kickUser', {channel: (this as any).channel, userKicked: (this as any).userInChat, sessionCookie: (this as any).sessionCookie});
+            this.socket?.emit('kickUser', {channel: this.channel, userKicked: this.userInChat, sessionCookie: this.sessionCookie});
         },
         async setAdmin()
         {
-            (this as any).socket.emit('setAdmin', {channel: (this as any).channel, userSetAdmin: (this as any).userInChat, sessionCookie: (this as any).sessionCookie});
+            this.socket?.emit('setAdmin', {channel: this.channel, userSetAdmin: this.userInChat, sessionCookie: this.sessionCookie});
         },
         async removeAdmin()
         {
-            (this as any).socket.emit('removeAdmin', {channel: (this as any).channel, userRemovedAdmin: (this as any).userInChat, sessionCookie: (this as any).sessionCookie});
+            this.socket?.emit('removeAdmin', {channel: this.channel, userRemovedAdmin: this.userInChat, sessionCookie: this.sessionCookie});
         },
         async onTimeoutUser(nbSeconds: number)
         {
-            (this as any).socket.emit('timeoutUser', {userTimeouted: (this as any).userInChat, channel: (this as any).channel, duration_timeout: nbSeconds, sessionCookie: (this as any).sessionCookie});
+            this.socket?.emit('timeoutUser', {userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds, sessionCookie: this.sessionCookie});
         },
         closeTimeOut()
         {
-			// if ((this as any).showTimeOut)
-            (this as any).showTimeOut = false;
+            this.showTimeOut = false;
         },
     }
-}
+})
 </script>
 
 <style>
