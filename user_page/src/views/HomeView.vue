@@ -64,7 +64,7 @@ export default defineComponent({
 });
 </script>
 
-<style src="../../../css/global.css" rel="stylesheet" lang="css"></style>
+<style src="../../../pages_union/src/assets/global.css" rel="stylesheet" lang="css"></style>
 <style>
 /* Page structure */
 p {
