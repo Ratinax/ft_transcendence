@@ -10,11 +10,11 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import { Socket } from 'socket.io-client';
+import { defineComponent } from 'vue';
 
-
-export default {
+export default defineComponent({
 	name: 'SendMessage',
 	props: 
 	{
@@ -23,11 +23,11 @@ export default {
 		channelId: Number,
 	},
 	data()
-{
+	{
 		return {
 			messageText: '',
 			isUserTimeout: false,
-			durationTimeoutString: String,
+			durationTimeoutString: '',
 		}
 	},
 	methods:
@@ -58,7 +58,7 @@ export default {
 			})
 			this.messageText = '';
 		},
-		timeout(duration)
+		timeout(duration: number)
 		{
 			this.isUserTimeout = true;
 			const days = Math.floor(duration / 86400);
@@ -85,8 +85,7 @@ export default {
 			})
 		},
 	}
-
-}
+});
 </script>
 
 <style scoped>

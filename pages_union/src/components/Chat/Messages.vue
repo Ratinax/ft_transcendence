@@ -8,11 +8,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Message from './Message.vue';
 import axios from 'axios';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     name: 'Messages-Component',
     components: 
     {
@@ -20,7 +21,7 @@ export default {
     },
     data() {
       return {
-          messages: [],
+          messages: [] as Array<{id: number, user: {pseudo: string}, content: string, isAGameInvite: boolean, isSender: boolean}>,
       }
     },
     created()
@@ -29,7 +30,7 @@ export default {
     },
     methods: 
     {
-      async fetchMessages(channel)
+      async fetchMessages(channel: {name: string} | null)
       {
         if (!channel)
         {
@@ -46,7 +47,7 @@ export default {
         }
         
       },
-      async updateMessages(channel)
+      async updateMessages(channel: {name: string} | null)
       {
           await this.fetchMessages(channel)
 
@@ -58,13 +59,11 @@ export default {
       {
         if (this.$refs.messageContainer)
         {
-
-          const container = this.$refs.messageContainer; 
-          container.scrollTop = container.scrollHeight;
+          (this.$refs.messageContainer as HTMLElement).scrollTop = (this.$refs.messageContainer as HTMLElement).scrollHeight; 
         }
       }
     }
-}
+});
 </script>
 
 <style>
