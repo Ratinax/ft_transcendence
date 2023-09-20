@@ -48,7 +48,7 @@ export default defineComponent({
 		*/
 		async setAccessWrites()
 		{
-			if (!this.users || !this.channel || !this.channel.channel_id )
+			if (!this.users || !this.channel || !(this.channel as {channel_id: number, name: string}).channel_id )
 			{
 				this.userInChannel = null;
 				return ;
