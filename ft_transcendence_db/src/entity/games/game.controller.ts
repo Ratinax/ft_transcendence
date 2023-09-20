@@ -16,7 +16,17 @@ export class GameController {
         return (await this.gameService.createGame(body))
     }
     @Get('games-wins')
-    async getGamesAndWins(@Body() body, @Req() req)
+    async getGamesAndWins(@Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        return (await this.gameService.getGamesAndWins(user.id))
+    }
+    @Get('match-history')
+    async getGames(@Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -24,6 +34,6 @@ export class GameController {
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         console.log(user);
-        return (await this.gameService.getGamesAndWins(user.id))
+        return (await this.gameService.getGames(user.id))
     }
 }

@@ -32,4 +32,25 @@ export class GameService {
         }
         return ({nb_games: count_games, nb_win: count_win});
     }
+    async getGames(user_id: Number)
+    {
+        const games = await this.gameRepository.createQueryBuilder('games')
+        .innerJoinAndSelect('games.playerOne', 'playerOne')
+        .innerJoinAndSelect('games.playerTwo', 'playerTwo')
+        .where('playerOne.id = :user_id OR playerTwo.id = :user_id', { user_id: user_id })
+        .getMany();
+        const gameHistory = games.map((game) => ({
+            playerOne: {
+                pseudo: game.playerOne.pseudo,
+                profilPic: game.playerOne.profilPic,
+            },
+            playerTwo: {
+                pseudo: game.playerTwo.pseudo,
+                profilPic: game.playerTwo.profilPic,
+            },
+            socrePlayerOne: game.scorePOne,
+            socrePlayerTwo: game.scorePTwo,
+            }));
+        return (gameHistory);
+    }
 }
