@@ -39,7 +39,7 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import { Socket } from 'socket.io-client';
 import TimeOut from './TimeOut.vue';
 
@@ -61,50 +61,59 @@ export default {
 	data()
 {
 		return {
-			showTimeOut: false,
+			showTimeOut: false as boolean,
 		}
 	},
 	mounted()
-{
-		this.socket.on('timeoutGoodRequest', async (response) => {
-			if (response.channel.channel_id === this.channel.channel_id && this.sessionCookie === response.sessionCookie)
+	{
+		if (this.socket)
+		{
+
+			this.socket.on('timeoutGoodRequest', async (response: any) => {
+				if (this.channel && response.channel.channel_id === this.channel.channel_id && this.sessionCookie === response.sessionCookie)
+				{
+					if (this.$refs.timeout)
+						(this.$refs.timeout as any).goodRequest();
+				}
+		});
+		this.socket.on('timeoutWrongAmount', async (response: any) => {
+			if (this.channel && response.channel.channel_id === this.channel.channel_id && this.sessionCookie === response.sessionCookie)
 			{
 				if (this.$refs.timeout)
-				this.$refs.timeout.goodRequest();
+					(this.$refs.timeout as any).notGoodAmount();
 			}
 		});
-		this.socket.on('timeoutWrongAmount', async (response) => {
-			if (response.channel.channel_id === this.channel.channel_id && this.sessionCookie === response.sessionCookie)
-			{
-				if (this.$refs.timeout)
-				this.$refs.timeout.notGoodAmount();
-			}
-		});
+	}
 	},
 	methods: {
-		handleUserClicked(e) 
+		handleUserClicked() 
 		{
 			this.$emit('user-clicked', this.userInChat);
 		},
 		async ban()
 		{
-			this.socket.emit('banUser', {channel: this.channel, userBanned: this.userInChat, sessionCookie: this.sessionCookie});
+			if (this.socket)
+				this.socket.emit('banUser', {channel: this.channel, userBanned: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async kick()
 		{
-			this.socket.emit('kickUser', {channel: this.channel, userKicked: this.userInChat, sessionCookie: this.sessionCookie});
+			if (this.socket)
+				this.socket.emit('kickUser', {channel: this.channel, userKicked: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async setAdmin()
 		{
-			this.socket.emit('setAdmin', {channel: this.channel, userSetAdmin: this.userInChat, sessionCookie: this.sessionCookie});
+			if (this.socket)
+				this.socket.emit('setAdmin', {channel: this.channel, userSetAdmin: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async removeAdmin()
 		{
-			this.socket.emit('removeAdmin', {channel: this.channel, userRemovedAdmin: this.userInChat, sessionCookie: this.sessionCookie});
+			if (this.socket)
+				this.socket.emit('removeAdmin', {channel: this.channel, userRemovedAdmin: this.userInChat, sessionCookie: this.sessionCookie});
 		},
-		async onTimeoutUser(nbSeconds)
+		async onTimeoutUser(nbSeconds: number)
 		{
-			this.socket.emit('timeoutUser', {userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds, sessionCookie: this.sessionCookie});
+			if (this.socket)
+				this.socket.emit('timeoutUser', {userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds, sessionCookie: this.sessionCookie});
 		},
 		closeTimeOut()
 		{
