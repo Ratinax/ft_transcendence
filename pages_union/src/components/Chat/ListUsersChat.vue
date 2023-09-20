@@ -7,7 +7,7 @@
 				:userInChannel="userInChannel" 
 				:key="userInChat.id" 
 				:userInChat="userInChat" 
-				:isSelected="userSelected && userSelected.id === userInChat.id" 
+				:isSelected="userSelected && userSelected?.id === userInChat.id" 
 				:socket="socket" 
 				:channel="channel" 
 				@user-clicked="handleUserClicked"/>
@@ -15,11 +15,13 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import { Socket } from 'socket.io-client';
 import UserChat from './UserChat.vue';
 import axios from 'axios';
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
 	name: 'ListUsersChat',
 	components:
 	{
@@ -34,8 +36,8 @@ export default {
 	data()
 {
 		return {
-			users: [],
-			userSelected: Object,
+			users: [] as Array<{id: number}>,
+			userSelected: {} as ({id: number} | undefined),
 			userInChannel: null, // the user with only id, isAdmin, and isOwner
 		}
 	},
@@ -59,7 +61,7 @@ export default {
 			else
 			this.userInChannel = null;
 		},
-		updateListUsers(users)
+		updateListUsers(users: Array<{id: number}>)
 		{
 			this.users = users;
 			this.setAccessWrites();
@@ -69,10 +71,10 @@ export default {
 		 * 
 		 * @param user - the user clicked in the list
 		*/
-		handleUserClicked(user)
+		handleUserClicked(user: {id: number})
 		{
 			if (this.userSelected === user)
-			this.userSelected = null;
+				this.userSelected = undefined;
 			else
 			this.userSelected = user;
 		},
@@ -80,16 +82,11 @@ export default {
 		{
 			return (this.userInChannel);
 		},
-
 	}
-}
+});
 </script>
 
 <style>
-
-.users-list {
-
-}
 
 .list-users-chat {
 	align-items: center;
