@@ -10,7 +10,7 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import { Socket } from 'socket.io-client';
 
 
@@ -27,7 +27,7 @@ export default {
 		return {
 			messageText: '',
 			isUserTimeout: false,
-			durationTimeoutString: String,
+			durationTimeoutString: '',
 		}
 	},
 	methods:
@@ -58,7 +58,7 @@ export default {
 			})
 			this.messageText = '';
 		},
-		timeout(duration)
+		timeout(duration: number)
 		{
 			this.isUserTimeout = true;
 			const days = Math.floor(duration / 86400);
