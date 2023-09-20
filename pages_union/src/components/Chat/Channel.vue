@@ -155,6 +155,10 @@ export default {
 		closePasswordPopUp()
 		{
 			this.showPasswordPopUp = false;
+		},
+		getChannelId()
+		{
+			return (this.channel.channel_id)
 		}
 	}
 }
