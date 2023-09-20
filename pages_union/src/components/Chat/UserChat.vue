@@ -1,28 +1,28 @@
 <template>
-	<div v-if="!userInChat.isInvited">
+	<div v-if="!userInChat?.isInvited">
 		<div class="user-in-chat">
 			<font-awesome-icon icon="fa-solid fa-circle" 
-				:class="{'green': userInChat.isConnected, 'red': !userInChat.isConnected}" />
+				:class="{'green': userInChat?.isConnected, 'red': !userInChat?.isConnected}" />
 			<span id="user-pseudo" 
-				:class="{'admin': userInChat.isAdmin, 
-					'owner': userInChat.isOwner, 
+				:class="{'admin': userInChat?.isAdmin, 
+					'owner': userInChat?.isOwner, 
 					'selection-color' : isSelected}" 
 				@click="handleUserClicked">
-				{{ userInChat.pseudo }}
+				{{ userInChat?.pseudo }}
 			</span>
 		</div>
 			<div v-if="isSelected" class="option-list">
-				<div v-if="userInChat.id !== userInChannel.id">
-					<div v-if="userInChannel.isAdmin && !userInChat.isOwner">
+				<div v-if="userInChat?.id !== userInChannel?.id">
+					<div v-if="userInChannel?.isAdmin && !userInChat?.isOwner">
 						<p class="options" @click="kick">Kick</p> 
 						<p class="options" @click="ban">Ban</p>
 						<p class="options" @click="showTimeOut = true">Time out</p>
 					</div>
-					<div v-if="userInChannel.isOwner">
-						<div v-if="!userInChat.isAdmin">
+					<div v-if="userInChannel?.isOwner">
+						<div v-if="!userInChat?.isAdmin">
 							<p class="options" @click="setAdmin">Set Admin</p>
 						</div>
-						<div v-if="userInChat.isAdmin">
+						<div v-if="userInChat?.isAdmin">
 							<p class="options" @click="removeAdmin">Remove Admin</p>
 						</div>
 					</div>
