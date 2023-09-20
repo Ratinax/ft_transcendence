@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne } from "typeorm";
 import { Users } from "../users/user.entity";
 
 /**
@@ -23,11 +23,11 @@ export class Games {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => Users, { eager: true })
+    @ManyToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'player_one' })
     playerOne: Partial<Users>;
 
-    @OneToOne(() => Users, { eager: true })
+    @ManyToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'player_two' })
     playerTwo: Partial<Users>;
 
