@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { GameService } from './game.service';
 import { SessionService } from '../sessions/session.service';
 
@@ -33,7 +33,24 @@ export class GameController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        console.log(user);
         return (await this.gameService.getGames(user.id))
+    }
+    @Get('match-history/:id')
+    async getMatchHistory(@Param('id') id, @Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        return (await this.gameService.getGames(id))
+    }
+    @Get('games-wins/:id')
+    async getGamesAndWinsId(@Param('id') id, @Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        return (await this.gameService.getGamesAndWins(id))
     }
 }
