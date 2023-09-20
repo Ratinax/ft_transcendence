@@ -14,4 +14,43 @@ export class GameService {
         const res = await this.gameRepository.save(newChannel);
         return (res);
     }
+    async getGamesAndWins(user_id: Number)
+    {
+        const games = await this.gameRepository.createQueryBuilder('games')
+        .innerJoinAndSelect('games.playerOne', 'playerOne')
+        .innerJoinAndSelect('games.playerTwo', 'playerTwo')
+        .where('playerOne.id = :user_id OR playerTwo.id = :user_id', { user_id: user_id })
+        .getMany();
+        const count_games = games.length;
+        let count_win = 0;
+        for (let i = 0; i < games.length; i++)
+        {
+            if (games[i].playerOne.id === user_id && games[i].scorePOne > games[i].scorePTwo)
+                count_win++;
+            else if (games[i].playerTwo.id === user_id && games[i].scorePOne < games[i].scorePTwo)
+                count_win++;
+        }
+        return ({nb_games: count_games, nb_wins: count_win});
+    }
+    async getGames(user_id: Number)
+    {
+        const games = await this.gameRepository.createQueryBuilder('games')
+        .innerJoinAndSelect('games.playerOne', 'playerOne')
+        .innerJoinAndSelect('games.playerTwo', 'playerTwo')
+        .where('playerOne.id = :user_id OR playerTwo.id = :user_id', { user_id: user_id })
+        .getMany();
+        const gameHistory = games.map((game) => ({
+            playerOne: {
+                pseudo: game.playerOne.pseudo,
+                profilPic: game.playerOne.profilPic,
+            },
+            playerTwo: {
+                pseudo: game.playerTwo.pseudo,
+                profilPic: game.playerTwo.profilPic,
+            },
+            socrePlayerOne: game.scorePOne,
+            socrePlayerTwo: game.scorePTwo,
+            }));
+        return (gameHistory);
+    }
 }
