@@ -30,7 +30,7 @@ export class GameService {
             else if (games[i].playerTwo.id === user_id && games[i].scorePOne < games[i].scorePTwo)
                 count_win++;
         }
-        return ({nb_games: count_games, nb_win: count_win});
+        return ({nb_games: count_games, nb_wins: count_win});
     }
     async getGames(user_id: Number)
     {
