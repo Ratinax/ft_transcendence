@@ -25,7 +25,6 @@
 import { Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
 
-
 export default defineComponent({
 	name: 'CreateChannel',
 	props: {
