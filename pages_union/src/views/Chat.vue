@@ -170,7 +170,7 @@ export default {
 
 .chat-container {
 	width: 100%;
-	margin: 2em 0;
+	margin: 2em 1em;
 }
 
 .messageszone {

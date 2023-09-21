@@ -62,7 +62,7 @@ export default {
 		{
 			this.router.push({path: '/relations'});
 		},
-		goToUserPage() {
+		goToUserPage(){
 			this.router.push({name: 'UserPage', params: {pseudo: this.pseudo}})
 		}
 	}
@@ -72,6 +72,7 @@ export default {
 <style>
 .placeholder {
 	width: 15%;
+	max-width: 150px;
 	visibility: hidden;
 }
 .navigation-option.profil-pic 
