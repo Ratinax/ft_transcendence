@@ -67,23 +67,13 @@ export default defineComponent({
 			if (this.$refs.friendList)
 			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 			if (this.$refs.friendRequest)
-<<<<<<< HEAD
-			(this.$refs.friendList as typeof ListUsers).fetchUsers();
-		},
-		deleteFriendship()
-		{
-			if (this.$refs.friendRequest)
-			(this.$refs.friendList as typeof ListUsers).fetchUsers();
-			if (this.$refs.friendList)
-			(this.$refs.friendList as typeof ListUsers).fetchUsers();
-=======
+
 				(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
 		},
 		deleteFriendship()
 		{
 			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 			(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
->>>>>>> bb3af3f4de43a561c3836729f2070088090a06d0
 		},
 		async onRemoveRelation(body: {friend_id: number, relationType: string} | {userblocked_id: number, relationType: string})
 		{
