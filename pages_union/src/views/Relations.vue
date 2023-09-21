@@ -42,15 +42,18 @@ export default defineComponent({
 	async mounted()
 	{
 		this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
-		this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`); // TODO effectuer l'action que sur l'user concernee pcq la requete sur tt les users
-		this.socket.on('acceptFriendship', (response) => {
-			this.acceptFriendship();
+		this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`);
+		this.socket.on('acceptFriendship', (response: {sessionCookie: string}) => {
+			if (response.sessionCookie === this.sessionCookie)
+				this.acceptFriendship();
 		});
-		this.socket.on('deleteFriendship', (response) => {
-			this.deleteFriendship();
+		this.socket.on('deleteFriendship', (response: {sessionCookie: string}) => {
+			if (response.sessionCookie === this.sessionCookie)
+				this.deleteFriendship();
 		}); 
-		this.socket.on('deleteBlockship', (response) => {
-			this.deleteBlockship();
+		this.socket.on('deleteBlockship', (response: {sessionCookie: string}) => {
+			if (response.sessionCookie === this.sessionCookie)
+				this.deleteBlockship();
 		});
 	},
 	methods:
@@ -64,6 +67,7 @@ export default defineComponent({
 			if (this.$refs.friendList)
 			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 			if (this.$refs.friendRequest)
+<<<<<<< HEAD
 			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 		},
 		deleteFriendship()
@@ -72,6 +76,14 @@ export default defineComponent({
 			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 			if (this.$refs.friendList)
 			(this.$refs.friendList as typeof ListUsers).fetchUsers();
+=======
+				(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
+		},
+		deleteFriendship()
+		{
+			(this.$refs.friendList as typeof ListUsers).fetchUsers();
+			(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
+>>>>>>> bb3af3f4de43a561c3836729f2070088090a06d0
 		},
 		async onRemoveRelation(body: {friend_id: number, relationType: string} | {userblocked_id: number, relationType: string})
 		{

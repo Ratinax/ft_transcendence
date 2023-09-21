@@ -117,19 +117,15 @@ export class UserController {
     @Get('imageNamePseudo/:pseudo')
     async getImageNamePseudo(@Param('pseudo') pseudo, @Req() req)
     {
-        console.log('cest fou');
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
-        console.log('non');
             return (null);
         }
         const user = (await this.userService.getUser(pseudo))[0];
-        console.log('maybe');
         if (user.is42User)
         {
             return (user.profilPic);
         }
-        console.log('non');
         return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
     }
 
@@ -148,21 +144,12 @@ export class UserController {
             return (null);
         }
         const users = await this.userService.getUsers('');
-        console.log('imageName:', imageName)
         for (let i = 0; i < users.length; i++)
         {
             if (users[i].profilPic === imageName)
             {
                 if (users[i].is42User)
-                {
-                    console.log(imageName)
                     return (res.sendFile(imageName));
-                }
-                else
-                {
-                    // console.log()
-                }
-
                 break ;
             }
         }
