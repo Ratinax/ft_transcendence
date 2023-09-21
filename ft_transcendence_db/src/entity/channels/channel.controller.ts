@@ -37,7 +37,11 @@ export class ChannelController {
         {
             return (null);
         }
-        // TODO check if user can do that
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        const relation = (await this.channelsUsersService.findRelation(user.id, body.channel.channel_id))[0];
+        console.log(relation);
+        if (!relation.isOwner)
+            return (false); // user cant do that
         return (await this.channelService.setPassword(body.channel, body.password));
     }
     /**
