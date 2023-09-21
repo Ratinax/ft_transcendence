@@ -144,21 +144,12 @@ export class UserController {
             return (null);
         }
         const users = await this.userService.getUsers('');
-        console.log('imageName:', imageName)
         for (let i = 0; i < users.length; i++)
         {
             if (users[i].profilPic === imageName)
             {
                 if (users[i].is42User)
-                {
-                    console.log(imageName)
                     return (res.sendFile(imageName));
-                }
-                else
-                {
-                    // console.log()
-                }
-
                 break ;
             }
         }
