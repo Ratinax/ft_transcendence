@@ -210,11 +210,11 @@ export class UserService {
         const users = await this.userRepository.createQueryBuilder('users')
         .where('pseudo LIKE :userPart', { userPart: `%${userPart}%` })
             .getMany();
-        console.log(users);
         const usersMapped = users.map((user) => ({
             id: user.id, 
             pseudo: user.pseudo, 
-            profilPic: user.profilPic, 
+            profilPic: user.profilPic,
+            is42User: user.is42User,
             }));
         return (usersMapped);
     }
@@ -224,9 +224,10 @@ export class UserService {
         .where('pseudo = :username', { username: username })
             .getMany();
         const usersMapped = users.map((user) => ({
-            id: user.id, 
-            pseudo: user.pseudo, 
-            profilPic: user.profilPic, 
+            id: user.id,
+            pseudo: user.pseudo,
+            profilPic: user.profilPic,
+            is42User: user.is42User,
             }));
         return (usersMapped);
     }
