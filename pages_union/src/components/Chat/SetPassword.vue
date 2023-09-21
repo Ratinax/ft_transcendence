@@ -83,10 +83,10 @@ export default defineComponent({
 				return ;
 			}
 			if (this.isSet) {
-				this.$emit('set-password', this.password);
+				this.$emit('change-password', this.password);
 			}
 			else {
-				this.$emit('change-password', this.password);
+				this.$emit('set-password', this.password);
 			}
 		},
 		removePassword() {
