@@ -37,11 +37,8 @@ export class ChannelController {
         {
             return (null);
         }
-        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const relation = (await this.channelsUsersService.findRelation(user.id, body.channel.channel_id))[0];
-        console.log(relation);
-        if (!relation.isOwner)
-            return (false); // user cant do that
+        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+            return (false);
         return (await this.channelService.setPassword(body.channel, body.password));
     }
     /**
@@ -57,7 +54,8 @@ export class ChannelController {
         {
             return (null);
         }
-        // TODO check if user can do that
+        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+            return (false);
         return (await this.channelService.removePassword(body.channel));
     }
 
@@ -68,7 +66,8 @@ export class ChannelController {
         {
             return (null);
         }
-        // TODO check if user can do that
+        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+            return (false);
         return (await this.channelService.changePassword(body.channel, body.password));
     }
     @Post('toPublic')
@@ -78,7 +77,8 @@ export class ChannelController {
         {
             return (null);
         }
-        // TODO check if user can do that
+        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+            return (false);
         return (await this.channelService.toPublic(body.channel));
     }
     @Post('toPrivate')
@@ -88,7 +88,16 @@ export class ChannelController {
         {
             return (null);
         }
-        // TODO check if user can do that
+        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+            return (false);
         return (await this.channelService.toPrivate(body.channel));
+    }
+    async checkIfUserOwner(cookie: string, channel_id: number)
+    {
+        const user = await this.sessionService.getUser(cookie);
+        const relation = (await this.channelsUsersService.findRelation(user.id, channel_id))[0];
+        if (!relation.isOwner)
+            return (false);
+        return (true);
     }
 }
