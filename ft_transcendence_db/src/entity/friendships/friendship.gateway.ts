@@ -21,7 +21,7 @@ export class FriendshipGateway {
     /**
      * makes a request to accept a friend request
      * 
-     * @param body - {friend_id}
+     * @param body - {sessionCookie, friend_id}
      * @emits 'acceptFriendship' with the result of the request as content
      */
     @SubscribeMessage('acceptFriendship')

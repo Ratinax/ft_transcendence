@@ -37,16 +37,15 @@ import axios from 'axios';
 export default {
 	name: 'Menu-component',
 	data()
-{
+	{
 		return {
 			router: useRouter(),
 			profilPic: '',
 		}
 	},
 	async mounted()
-{
+	{
 		this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageName`, {withCredentials: true})).data;
-
 	},
 	methods: 
 	{

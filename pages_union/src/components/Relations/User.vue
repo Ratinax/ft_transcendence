@@ -1,10 +1,10 @@
 <template>
     <div class="user">
         <div class="round-image">
-            <img :src="getImageUrl(user.profilPic)" alt="Image"/>
+            <img :src="profilPic" alt="Image"/>
         </div>
-        <span class="pseudo"> {{ user.pseudo }}</span>
-        <div class="green circle" v-if="user.isConnected"></div>
+        <span class="pseudo"> {{ user?.pseudo }}</span>
+        <div class="green circle" v-if="user?.isConnected"></div>
         <div class="red circle" v-else></div>
         <div v-if="isARequest">
             <div class="box arrow" @click="accept"></div>
@@ -13,30 +13,41 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+
+import axios from 'axios';
+import { defineComponent, registerRuntimeCompiler } from 'vue';
+
+
+export default defineComponent({
     name: 'User-Component',
     props: 
     {
         user: Object,
         isARequest: Boolean,
     },
+    data()
+    {
+        return {
+            profilPic: '',
+        }
+    },
+    async mounted()
+	{
+		this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNamePseudo/${this.user?.pseudo}`, {withCredentials: true})).data;
+	},
     methods: 
     {
-        getImageUrl(imageName) 
-        {
-            return `http://${process.env.VUE_APP_IP}:3000/users/images/${imageName}`;
-        },
         accept()
         {
-            this.$emit('accept-friendship', this.user.id);
+            this.$emit('accept-friendship', this.user?.id);
         },
         remove()
         {
-            this.$emit('remove-relation', this.user.id);
+            this.$emit('remove-relation', this.user?.id);
         },
     }
-}
+});
 </script>
 
 <style>
