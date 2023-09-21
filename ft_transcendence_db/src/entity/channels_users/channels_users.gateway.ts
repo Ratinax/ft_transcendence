@@ -189,7 +189,7 @@ export class ChannelsUsersGateway {
     }
 
     if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
-    && (!(await this.checkUserOwnerPerms(body.userTimeouted.id, body.channel.channel_id))))
+    && (!(await this.checkOwnerPerms(body.userTimeouted.id, body.channel.channel_id))))
     {}
     else if (!(await this.checkUserAdminPerms(body.sessionCookie, body.channel.channel_id)))
       return (false);
