@@ -49,12 +49,18 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('banUser')
   async ban(@MessageBody() body) 
   {
-     // TODO check perms
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       return ('not connected');
     }
-    const user = await this.sessionService.getUser(body.sessionCookie);
+    if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
+      && (!(await this.checkUserOwnerPerms(body.userBanned.id, body.channel.channel_id))))
+    {}
+    else if (!(await this.checkUserAdminPerms(body.sessionCookie, body.channel.channel_id)))
+      return (false);
+    else if (await this.checkAdminPerms(body.userBanned.id, body.channel.channel_id))
+      return (false);
+    
     const res = await this.channelsUsersService.ban(body.channel, body.userBanned);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.emit('updateAfterPart', {
@@ -73,12 +79,18 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('kickUser')
   async kick(@MessageBody() body) 
   {
-     // TODO check perms
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       return ('not connected');
     }
-    const user = await this.sessionService.getUser(body.sessionCookie);
+    if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
+      && (!(await this.checkOwnerPerms(body.userKicked.id, body.channel.channel_id))))
+    {}
+    else if (!(await this.checkUserAdminPerms(body.sessionCookie, body.channel.channel_id)))
+      return (false);
+    else if (await this.checkAdminPerms(body.userKicked.id, body.channel.channel_id))
+      return (false);
+
     const res = await this.channelsUsersService.leave(body.channel, body.userKicked);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.emit('updateAfterPart', {
@@ -124,8 +136,8 @@ export class ChannelsUsersGateway {
     {
       return ('not connected');
     }
-    // TODO check perms
-    // const user = await this.sessionService.getUser(body.sessionCookie);
+    if (!await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id))
+      return (false)
     const res = await this.channelsUsersService.setAdmin(body.channel, body.userSetAdmin);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
 
@@ -149,10 +161,13 @@ export class ChannelsUsersGateway {
     {
       return ('not connected');
     }
-    const user = await this.sessionService.getUser(body.sessionCookie);
+    if (!await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id))
+      return (false);
+    else if (await this.checkOwnerPerms(body.userRemovedAdmin.id, body.channel.channel_id))
+      return (false);
+
     const res = await this.channelsUsersService.removeAdmin(body.channel, body.userRemovedAdmin);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-
     this.server.emit('updateListUsers', {
       users: users, 
       channel: body.channel});
@@ -172,7 +187,15 @@ export class ChannelsUsersGateway {
     {
       return ('not connected');
     }
-    const user = await this.sessionService.getUser(body.sessionCookie);
+
+    if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
+    && (!(await this.checkOwnerPerms(body.userTimeouted.id, body.channel.channel_id))))
+    {}
+    else if (!(await this.checkUserAdminPerms(body.sessionCookie, body.channel.channel_id)))
+      return (false);
+    else if (await this.checkAdminPerms(body.userTimeouted.id, body.channel.channel_id))
+      return (false);
+
     if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) // 30 days and 10 seconds
     {
       this.server.emit('timeoutWrongAmount', {channel: body.channel, sessionCookie: body.sessionCookie});
@@ -183,5 +206,35 @@ export class ChannelsUsersGateway {
     
     this.server.emit('updateListUsers', {channel: body.channel, users: users});
     this.server.emit('timeoutGoodRequest', {channel: body.channel, sessionCookie: body.sessionCookie});
+  }
+  async checkUserAdminPerms(sessionCookie: string, channel_id: number)
+  {
+    const user = await this.sessionService.getUser(sessionCookie);
+    const relation = (await this.channelsUsersService.findRelation(user.id, channel_id))[0];
+    if (!relation.isAdmin)
+      return (false);
+    return (true);
+  }
+  async checkUserOwnerPerms(sessionCookie: string, channel_id: number)
+  {
+    const user = await this.sessionService.getUser(sessionCookie);
+    const relation = (await this.channelsUsersService.findRelation(user.id, channel_id))[0];
+    if (!relation.isOwner)
+      return (false);
+    return (true);
+  }
+  async checkAdminPerms(user_id: number, channel_id: number)
+  {
+    const relation = (await this.channelsUsersService.findRelation(user_id, channel_id))[0];
+    if (!relation.isAdmin)
+      return (false);
+    return (true);
+  }
+  async checkOwnerPerms(user_id: number, channel_id: number)
+  {
+    const relation = (await this.channelsUsersService.findRelation(user_id, channel_id))[0];
+    if (!relation.isOwner)
+      return (false);
+    return (true);
   }
 }

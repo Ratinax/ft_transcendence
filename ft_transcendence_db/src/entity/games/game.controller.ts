@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { GameService } from './game.service';
 import { SessionService } from '../sessions/session.service';
+import { UserService } from '../users/user.service';
 
 @Controller('games')
 export class GameController {
-    constructor (private readonly gameService: GameService, private readonly sessionService: SessionService) {}
+    constructor (private readonly gameService: GameService, private readonly sessionService: SessionService, private readonly userService: UserService) {}
 
     @Post()
     async createGame(@Body() body, @Req() req)
@@ -33,7 +34,26 @@ export class GameController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        console.log(user);
         return (await this.gameService.getGames(user.id))
+    }
+    @Get('match-history/:pseudo')
+    async getMatchHistory(@Param('pseudo') pseudo, @Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const user = (await this.userService.getUser(pseudo))[0];
+        return (await this.gameService.getGames(user.id))
+    }
+    @Get('games-wins/:pseudo')
+    async getGamesAndWinsId(@Param('pseudo') pseudo, @Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const user = (await this.userService.getUser(pseudo))[0];
+        return (await this.gameService.getGamesAndWins(user.id))
     }
 }

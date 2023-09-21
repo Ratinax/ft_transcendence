@@ -218,4 +218,16 @@ export class UserService {
             }));
         return (usersMapped);
     }
+    async getUser(username: string)
+    {
+        const users = await this.userRepository.createQueryBuilder('users')
+        .where('pseudo = :username', { username: username })
+            .getMany();
+        const usersMapped = users.map((user) => ({
+            id: user.id, 
+            pseudo: user.pseudo, 
+            profilPic: user.profilPic, 
+            }));
+        return (usersMapped);
+    }
 }
