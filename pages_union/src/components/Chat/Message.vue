@@ -18,8 +18,10 @@
 	</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
 	name: "Message-Component",
 	props: {
 		username: String,
@@ -35,7 +37,7 @@ export default {
 			// TODO faire un emit de demarrage de game pour que le user du message et le user s'affrontent (sauf si c'est la meme personne)
 		}
 	}
-}
+});
 </script>
 
 <style scoped>

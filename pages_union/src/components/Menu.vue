@@ -1,7 +1,7 @@
 <template>
 	<div class="navigation-menu">
 		<div class="navigation-option profil-pic">
-			<img :src="profilPic" alt="Profil"/>
+			<img :src="profilPic" alt="Profil" @click="goToUserPage"/>
 		</div>
 		<div class="navigation-option" @click="goToMessages">
 			<div class="messages-icon">
@@ -51,12 +51,15 @@ export default {
 	methods: 
 	{
 		async goToMessages()
-	{
+		{
 			this.router.push({path: '/chat'});
 		},
 		goToRelations()
-	{
+		{
 			this.router.push({path: '/relations'});
+		},
+		goToUserPage() {
+			this.router.push({name: 'UserPage'})
 		}
 	}
 }

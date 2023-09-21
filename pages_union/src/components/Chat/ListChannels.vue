@@ -3,10 +3,10 @@
 		<div class="channels-buttons">
 			<channel 
 				ref="channelRef"
-				v-for="channel in channels" :key="channel.id" 
+				v-for="channel in channels" :key="channel.channel_id" 
 				:channel="channel"
 				:socket="socket" 
-				:isSelected="channelSelected.channel_id === channel.channel_id"
+				:isSelected="channelSelected?.channel_id === channel.channel_id"
 				@channel-clicked="handleChannelClicked"
 				@leave-channel="onLeaveChannel"
 				@update-channels="onUpdateChannels"
@@ -44,13 +44,14 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import Channel from './Channel.vue';
 import CreateChannel from './CreateChannel.vue';
 import JoinChannel from './JoinChannel.vue';
 import axios from 'axios';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
 	name: 'ListChannels',
 	components: {
 		Channel,
@@ -65,7 +66,7 @@ export default {
 	},
 	data() {
 		return {
-			channels: [],
+			channels: [] as Array<{channel_id: number, name: string}>,
 			showCreateChannel: false,
 			showJoinChannel: false,
 		}
@@ -90,14 +91,14 @@ export default {
 				this.updateScrollPosition();
 			})
 		},
-		addChannel(channel)
+		addChannel(channel: {channel_id: number, name: string})
 		{
 			this.channels.push(channel)
 			this.$nextTick(() => {
 				this.updateScrollPosition()
 			})
 		},
-		handleChannelClicked(channel) 
+		handleChannelClicked(channel: {channel_id: number}) 
 		{
 			this.$emit('channel-selected', channel);
 		},
@@ -105,24 +106,21 @@ export default {
 		{
 			if (this.$refs.channelsButtons)
 			{
-
-				const container = this.$refs.channelsButtons;
-
-				container.scrollTop = container.scrollHeight;
+				(this.$refs.channelsButtons as HTMLElement).scrollTop = (this.$refs.channelsButtons as HTMLElement).scrollHeight;
 			}
 		},
-		onLeaveChannel(channel)
+		onLeaveChannel(channel: {channel_id: number, name: string})
 		{
 			this.$emit('leave-channel', channel);
 		},
-		setIsUserOwner(result, channel_id)
+		setIsUserOwner(result: boolean, channel_id: number)
 		{
 			console.log('call')
-			for (let i = 0; i < this.$refs.channelRef.length; i++)
+			for (let i = 0; i < (this.$refs.channelRef as Array<typeof Channel>).length; i++)
 			{
-				if (this.$refs.channelRef[i] && this.$refs.channelRef[i].channel.channel_id === channel_id)
+				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].methods?.getChannelId() === channel_id)
 				{
-					this.$refs.channelRef[i].setIsUserOwner(result);
+					(this.$refs.channelRef as Array<typeof Channel>)[i].methods?.setIsUserOwner(result);
 					break ;
 				}
 			}
@@ -133,7 +131,7 @@ export default {
 			this.fetchChannels();
 		}
 	},
-}
+});
 </script>
 
 <style scoped>
@@ -157,7 +155,6 @@ button {
 	box-shadow: 0 4px 0 var(--pblue);
 	font-size: .9em;
 	width: 100%;
-	text-wrap: nowrap;
 	margin-bottom: 1em;
 }
 

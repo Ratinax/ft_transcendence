@@ -2,15 +2,14 @@
 	<div>
 		<div 
 			:class="{'selection-color' : isSelected}"
-			@click="handleChannelClicked"
-			>
+			@click="handleChannelClicked">
 			<div class="channel">
 				<font-awesome-icon v-if="isUserOwner" class="icon own" icon="fa-solid fa-crown" />
 				<font-awesome-icon v-else class="icon"
 					:class="{own: isUserOwner}"
 					icon="fa-regular fa-comments" />
 				<p class="channel-name">
-					{{ channel.name }}
+					{{ channel?.name }}
 				</p>
 				<div class="option" v-if="isSelected">
 					<div v-if="isUserOwner"
@@ -43,11 +42,12 @@
 		@close="closePasswordPopUp"/>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
 import SetPassword from './SetPassword.vue';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
 	name: 'Channel-Component',
 	components:
 	{
@@ -69,7 +69,7 @@ export default {
 	},
 	emits: ['leave-channel', 'get-is-user-owner', 'channel-clicked', 'update-channels'],
 	methods: {
-		setIsUserOwner(result)
+		setIsUserOwner(result: boolean)
 		{
 			this.isUserOwner = result;
 		},
@@ -81,7 +81,7 @@ export default {
 		{
 			this.$emit('leave-channel', this.channel);
 		},
-		async changePassword(password)
+		async changePassword(password: string)
 		{
 			try
 			{
@@ -95,18 +95,18 @@ export default {
 						withCredentials: true,
 				});
 				if (this.$refs.SetPassword) {
-					this.$refs.SetPassword.goodRequest();
+					(this.$refs.SetPassword as typeof SetPassword).goodRequest();
 				}
 				this.$emit('update-channels');
 			}
-			catch (e)
+			catch (error: Error | any | undefined)
 			{
-				if (e.response.data.message === 'Password not good length' && this.$refs.SetPassword)
-				this.$refs.SetPassword.notGoodLength()
+				if (error.response.data.message === 'Password not good length' && this.$refs.SetPassword)
+					(this.$refs.SetPassword as typeof SetPassword).notGoodLength()
 			}
 		},
 
-		async setPassword(password)
+		async setPassword(password: string)
 		{
 			try
 			{
@@ -120,27 +120,26 @@ export default {
 						withCredentials: true,
 				});
 				if (this.$refs.SetPassword)
-				this.$refs.SetPassword.goodRequest();
+					(this.$refs.SetPassword as typeof SetPassword).goodRequest();
 				this.$emit('update-channels');
 			}
-			catch (e)
+			catch (error: Error | any | undefined)
 			{
-				if (e.response.data.message === 'Password not good length' && this.$refs.SetPassword)
-				this.$refs.SetPassword.notGoodLength()
+				if (error.response.data.message === 'Password not good length' && this.$refs.SetPassword)
+				(this.$refs.SetPassword as typeof SetPassword).notGoodLength()
 			}
 		},
 		async removePassword()
 		{
 			try
 			{
-				// this.passwordProtected = false; // a changer
 				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
 					{
 						channel: this.channel
 					},
 					{
 						withCredentials: true,
-				});
+					});
 				this.$emit('update-channels');
 			}
 			catch (e)
@@ -155,9 +154,13 @@ export default {
 		closePasswordPopUp()
 		{
 			this.showPasswordPopUp = false;
+		},
+		getChannelId()
+		{
+			return (this.channel?.channel_id)
 		}
 	}
-}
+});
 </script>
 
 <style scoped>

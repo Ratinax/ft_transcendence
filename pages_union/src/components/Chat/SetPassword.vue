@@ -31,9 +31,11 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
 	name: 'SetPassword',
 	props: {
 		show: Boolean,
@@ -81,17 +83,17 @@ export default {
 				return ;
 			}
 			if (this.isSet) {
-				this.$emit('set-password', this.password);
+				this.$emit('change-password', this.password);
 			}
 			else {
-				this.$emit('change-password', this.password);
+				this.$emit('set-password', this.password);
 			}
 		},
 		removePassword() {
 			this.$emit('remove-password');
 		}
 	},
-};
+});
 </script>
 
 <style scoped src="../../assets/popup.css">

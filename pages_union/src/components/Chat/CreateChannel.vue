@@ -6,10 +6,10 @@
 				<div v-for="category in categories" :key="category.id" class="radio-item">
 					<input 
 						type="radio" 
-						:id="category.id" 
+						:id="category.id + ''" 
 						:value="category.id" 
 						v-model="selectedCategory"/>
-					<label :for="category.id">{{ category.name }}</label>
+					<label :for="category.id + ''">{{ category.name }}</label>
 				</div>
 			</div>
 			<input v-if="selectedCategory === 3" v-model="password" placeholder="Password" type="password"/>
@@ -21,10 +21,11 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import { Socket } from 'socket.io-client';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
 	name: 'CreateChannel',
 	props: {
 		show: Boolean,
@@ -32,9 +33,9 @@ export default {
 		sessionCookie: String,
 	},
 	data()
-{
+	{
 		return {
-			selectedCategory: 0,
+			selectedCategory: 0 as number,
 			categories: [
 				{ id: 1, name: 'Public'}, 
 				{ id: 2, name: 'Private'}, 
@@ -52,37 +53,42 @@ export default {
 		}
 	},
 	mounted()
-{
-		this.socket.on('createGoodRequest', async (response) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.goodRequest();
-		});
-		this.socket.on('createAlreadyExists', async (response) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.alreadyExists();
-		});
-		this.socket.on('createPasswordOrNameWrongSize', async (response) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.wrongInputLength();
+	{
+		if (this.socket)
+		{
 
-		});
-		this.socket.on('createWrongCategory', async (response) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.wrongCategory();
+			this.socket.on('createGoodRequest', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+					this.goodRequest();
+			});
+			this.socket.on('createAlreadyExists', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+					this.alreadyExists();
+			});
+			this.socket.on('createPasswordOrNameWrongSize', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+					this.wrongInputLength();
 
-		});
+			});
+			this.socket.on('createWrongCategory', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+					this.wrongCategory();
+
+			});
+		}
 	},
 	methods: 
 	{
 		async createChannel()
 		{
-			this.socket.emit('createChannel', { channel: {
-				name: this.channelName,
-				password: this.password,
-				category: this.categories[this.selectedCategory - 1].name,
-				isADm: false,
-				},
-				sessionCookie: this.sessionCookie});
+			if (this.socket)
+				this.socket.emit('createChannel', { channel: {
+					name: this.channelName,
+					password: this.password,
+					category: this.categories[(this.selectedCategory) - 1].name,
+					isADm: false,
+					},
+					sessionCookie: this.sessionCookie});
 		},
 	close()
 		{
@@ -113,7 +119,7 @@ export default {
 			this.matrixIndex = 3;
 		},
 	}
-};
+});
 </script>
 
 <style scoped src="../../assets/popup.css">

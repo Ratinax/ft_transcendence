@@ -13,10 +13,11 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import { Socket } from 'socket.io-client';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
 	name: 'JoinChannel',
 	props: {
 		show: Boolean,
@@ -24,7 +25,7 @@ export default {
 		sessionCookie: String,
 	},
 	data()
-{
+	{
 		return {
 			channelName: '',
 			password: '',
@@ -41,33 +42,36 @@ export default {
 		}
 	},
 	mounted()
-{
-		this.socket.on('joinNoSuchChannel', async (response) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.noSuchChannel();
+	{
+		if (this.socket)
+		{
+			this.socket.on('joinNoSuchChannel', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.noSuchChannel();
 		});
-		this.socket.on('joinAlreadyIn', async (response) => {
+		this.socket.on('joinAlreadyIn', async (response: {sessionCookie: string}) => {
 			if (response.sessionCookie === this.sessionCookie)
 			this.alreadyIn();
 		});
-		this.socket.on('joinWrongPassword', async (response) => {
+		this.socket.on('joinWrongPassword', async (response: {sessionCookie: string}) => {
 			if (response.sessionCookie === this.sessionCookie)
 			this.wrongPassword();
 		});
-		this.socket.on('joinGoodRequest', async (response) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.goodRequest();
+			this.socket.on('joinGoodRequest', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.goodRequest();
+			});
+			this.socket.on('joinBanned', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.joinBanned();
 		});
-		this.socket.on('joinBanned', async (response) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.joinBanned();
+			this.socket.on('joinPrivateMode', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.privateMode();
 		});
-		this.socket.on('joinPrivateMode', async (response) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.privateMode();
-		});
-	},
-	methods: 
+	}
+},
+methods: 
 	{
 		async joinAChannel()
 		{
@@ -77,7 +81,8 @@ export default {
 				this.matrixIndex = 1;
 				return ;
 			}
-			this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, sessionCookie: this.sessionCookie})
+			if (this.socket)
+				this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, sessionCookie: this.sessionCookie})
 		},
 		close()
 		{
@@ -115,7 +120,7 @@ export default {
 			this.matrixIndex = 6;
 		}
 	},
-};
+});
 </script>
 
 <style scoped src="../../assets/popup.css">

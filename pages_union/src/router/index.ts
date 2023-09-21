@@ -3,6 +3,7 @@ import Home from '../views/Home.vue';
 import Chat from '../views/Chat.vue';
 import Relations from '../views/Relations.vue';
 import Callback42 from '../views/Callback42.vue';
+import UserPage from '../views/UserPage.vue'
 
 import axios from 'axios';
 const routes = [
@@ -46,6 +47,12 @@ const routes = [
         name: 'Callback42',
         props: true,
     },
+	{
+		path: '/user_page',
+		component: UserPage,
+		name: 'UserPage',
+		props: true,
+	}
 ]
 
 const router = createRouter({
