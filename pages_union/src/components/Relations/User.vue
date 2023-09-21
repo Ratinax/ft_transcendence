@@ -29,7 +29,7 @@ export default defineComponent({
     data()
     {
         return {
-            profilPic: null,
+            profilPic: '',
         }
     },
     async mounted()
