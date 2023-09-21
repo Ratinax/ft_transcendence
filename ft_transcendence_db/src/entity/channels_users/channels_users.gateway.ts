@@ -84,11 +84,11 @@ export class ChannelsUsersGateway {
       return ('not connected');
     }
     if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
-      && (!(await this.checkUserOwnerPerms(body.userBanned.id, body.channel.channel_id))))
+      && (!(await this.checkOwnerPerms(body.userKicked.id, body.channel.channel_id))))
     {}
     else if (!(await this.checkUserAdminPerms(body.sessionCookie, body.channel.channel_id)))
       return (false);
-    else if (await this.checkAdminPerms(body.userBanned.id, body.channel.channel_id))
+    else if (await this.checkAdminPerms(body.userKicked.id, body.channel.channel_id))
       return (false);
 
     const res = await this.channelsUsersService.leave(body.channel, body.userKicked);
