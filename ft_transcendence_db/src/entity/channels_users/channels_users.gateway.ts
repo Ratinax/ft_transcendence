@@ -189,11 +189,11 @@ export class ChannelsUsersGateway {
     }
 
     if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
-    && (!(await this.checkUserOwnerPerms(body.userBanned.id, body.channel.channel_id))))
+    && (!(await this.checkUserOwnerPerms(body.userTimeouted.id, body.channel.channel_id))))
     {}
     else if (!(await this.checkUserAdminPerms(body.sessionCookie, body.channel.channel_id)))
       return (false);
-    else if (await this.checkAdminPerms(body.userBanned.id, body.channel.channel_id))
+    else if (await this.checkAdminPerms(body.userTimeouted.id, body.channel.channel_id))
       return (false);
 
     if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) // 30 days and 10 seconds
