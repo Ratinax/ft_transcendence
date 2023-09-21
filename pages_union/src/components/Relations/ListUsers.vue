@@ -15,10 +15,13 @@
   
 </template>
 
-<script>
+<script lang="ts">
+
 import axios from 'axios';
 import User from './User.vue';
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
     name: 'ListUsers',
     components:
     {
@@ -33,7 +36,7 @@ export default {
     data()
     {
         return {
-            users: [],
+            users: [] as Array<{pseudo: string, profilPic: string, isConnected: boolean, id: number}> ,
         }
     },
     async created()
@@ -59,15 +62,15 @@ export default {
                 console.error('Error un fetchUsers:', e);
             }
         },
-        onAcceptFriendship(asking_user_id)
+        onAcceptFriendship(asking_user_id: number)
         {
             this.$emit('accept-friendship', {friend_id : asking_user_id})
         },
-        updateFriendList(users)
+        updateFriendList(users: Array<{pseudo: string, profilPic: string, isConnected: boolean, id: number}> )
         {
             this.users = users;
         },
-        onRemoveRelation(removed_user_id)
+        onRemoveRelation(removed_user_id: number)
         {
             if (this.isFriendList || this.isFriendRequestList)
                 this.$emit('remove-relation', {relationType: 'friend', friend_id : removed_user_id})
@@ -76,7 +79,7 @@ export default {
 
         },
     },
-}
+});
 </script>
 
 <style scoped>

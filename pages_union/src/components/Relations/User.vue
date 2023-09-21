@@ -1,10 +1,10 @@
 <template>
     <div class="user">
         <div class="round-image">
-            <img :src="getImageUrl(user.profilPic)" alt="Image"/>
+            <img :src="getImageUrl(user?.profilPic)" alt="Image"/>
         </div>
-        <span class="pseudo"> {{ user.pseudo }}</span>
-        <div class="green circle" v-if="user.isConnected"></div>
+        <span class="pseudo"> {{ user?.pseudo }}</span>
+        <div class="green circle" v-if="user?.isConnected"></div>
         <div class="red circle" v-else></div>
         <div v-if="isARequest">
             <div class="box arrow" @click="accept"></div>
@@ -13,8 +13,10 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+
+import { defineComponent } from 'vue';
+export default defineComponent({
     name: 'User-Component',
     props: 
     {
@@ -23,20 +25,20 @@ export default {
     },
     methods: 
     {
-        getImageUrl(imageName) 
+        getImageUrl(imageName: string) 
         {
             return `http://${process.env.VUE_APP_IP}:3000/users/images/${imageName}`;
         },
         accept()
         {
-            this.$emit('accept-friendship', this.user.id);
+            this.$emit('accept-friendship', this.user?.id);
         },
         remove()
         {
-            this.$emit('remove-relation', this.user.id);
+            this.$emit('remove-relation', this.user?.id);
         },
     }
-}
+});
 </script>
 
 <style>
