@@ -165,9 +165,9 @@ export class ChannelsUsersGateway {
       return (false);
     else if (await this.checkOwnerPerms(body.userRemovedAdmin.id, body.channel.channel_id))
       return (false);
+
     const res = await this.channelsUsersService.removeAdmin(body.channel, body.userRemovedAdmin);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-    // TODO check perms
     this.server.emit('updateListUsers', {
       users: users, 
       channel: body.channel});
