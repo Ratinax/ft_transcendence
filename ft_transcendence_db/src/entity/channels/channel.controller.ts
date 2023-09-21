@@ -37,7 +37,7 @@ export class ChannelController {
         {
             return (null);
         }
-        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+        if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
         return (await this.channelService.setPassword(body.channel, body.password));
     }
@@ -54,7 +54,7 @@ export class ChannelController {
         {
             return (null);
         }
-        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+        if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
         return (await this.channelService.removePassword(body.channel));
     }
@@ -66,7 +66,7 @@ export class ChannelController {
         {
             return (null);
         }
-        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+        if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
         return (await this.channelService.changePassword(body.channel, body.password));
     }
@@ -77,7 +77,7 @@ export class ChannelController {
         {
             return (null);
         }
-        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+        if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
         return (await this.channelService.toPublic(body.channel));
     }
@@ -88,7 +88,7 @@ export class ChannelController {
         {
             return (null);
         }
-        if (!this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
+        if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
         return (await this.channelService.toPrivate(body.channel));
     }
