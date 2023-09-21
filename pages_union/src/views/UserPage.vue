@@ -5,9 +5,11 @@
 			<div class="col user-box">
 				<div class="row user-profile">
 					<div class="col user-profile-pic-and-name">
-						<img src="../assets/logo.png" alt="User profile picture" class="user-profile-pic">
+						<div class="profile-pic-container">
+							<img :src="profilePic" alt="User profile picture"> 
+						</div>
 						<div class="row user-name-and-status">
-						<div class="connect"></div>
+							<div class="connect"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 					</div>
@@ -17,8 +19,8 @@
 				</div>
 			</div>
 			<div class="row button-zone">
-				<button class="ft-button block-button">BLOCK USER</button>
-				<button class="ft-button add-button">ADD FRIEND</button>
+				<button v-if="showButtons" class="ft-button block-button">BLOCK USER</button>
+				<button v-if="showButtons" class="ft-button add-button">ADD FRIEND</button>
 			</div>
 			<div class="row user-box user-stats">
 				<div class="col user-stat">
@@ -39,14 +41,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, onBeforeMount, ref, computed, onMounted, } from 'vue';
+import { useRoute } from 'vue-router';
 import Menu from "../components/Menu.vue"
+import axios from 'axios';
 
 export default defineComponent({
 	name: 'UserPage',
 	components: { Menu },
 	setup() {
-		const userName = ref("username");
+		const showButtons = ref<boolean>(false);
+		const userName = ref(null);
+		const profilePic = ref(null)
 		const userDescription = ref("userdescription");
 		const userGamesPlayed = ref(23);
 		const userWins = ref(12);
@@ -54,17 +60,32 @@ export default defineComponent({
 			return Math.round(userWins.value / userGamesPlayed.value * 100);
 		})
 
-		return { userName, userDescription, userGamesPlayed, userWins, userWinRate };
-	}
+		onBeforeMount(async () => {
+			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/image-pseudo`, {withCredentials: true});
+			userName.value = response.data.pseudo;
+			profilePic.value = response.data.ProfilPic;
+
+		})
+
+		onMounted(async () => {
+			const route = useRoute();
+			showButtons.value = userName.value === route.params.pseudo;
+		})
+
+
+		return { userName, 
+			profilePic, 
+			userDescription, 
+			userGamesPlayed, 
+			userWins, 
+			userWinRate, 
+			showButtons, };
+	},
 });
 </script>
 
 <style src="../assets/global.css" rel="stylesheet" lang="css"></style>
-<style>
-
-html {
-	background: linear-gradient(45deg, var(--pblack), var(--pdark));
-}
+<style scoped>
 
 .winrate {
 	transform: scale(75%);
@@ -75,6 +96,8 @@ html {
 }
 
 .user-page {
+	background: linear-gradient(45deg, var(--pblack), var(--pdark));
+	box-sizing: content-box;
 	min-width: 450px;
 	height: 100vh;
 }
@@ -83,6 +106,7 @@ html {
 	margin: 2em auto;
 	max-width: 960px;
 	width: 100%;
+	box-sizing: content-box;
 }
 
 /* User profile */
@@ -98,9 +122,18 @@ html {
 	border-right: 1px solid var(--plight);
 }
 
-.user-profile-pic {
-	margin: 1em 0;
-	width: 70%;
+.profile-pic-container {
+	display: flex;
+	justify-content: center;
+	border-radius: 50%;
+	overflow: hidden;
+	width: 15em;
+	height: 15em;
+	margin: 1em 0; 
+}
+
+.profile-pic-container img {
+	height: 100%;
 }
 
 .user-name-and-status {

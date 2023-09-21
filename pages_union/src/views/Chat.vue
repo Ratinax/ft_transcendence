@@ -1,6 +1,6 @@
 <template>
 	<div class="row chat-page">
-		<Menu />
+	<Menu />
 		<div class="row chat-container">
 			<div>
 				<ListChannels ref="listChannels" 

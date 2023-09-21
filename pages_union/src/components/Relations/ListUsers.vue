@@ -105,7 +105,7 @@ h1 {
 	border-radius: 3em;
 	margin: auto .8em;
 	box-sizing: border-box;
-    height: 100%;
+    height: 90%;
     width: calc(100% / 3);
 	border: 1px solid var(--pcyan);
 	padding: 1em;

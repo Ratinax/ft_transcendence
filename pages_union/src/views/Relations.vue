@@ -1,22 +1,20 @@
 <template>
 	<div class="row relations-page">
-		<Menu/>
-		<div class="list-users">
-			<ListUsers :is-friend-list="true" 
-				:headerText="'Friend list'" 
-				ref="friendList" 
-				@remove-relation="onRemoveRelation"/>
-			<ListUsers 
-				:is-friend-request-list="true" 
-				:headerText="'Friend request'" 
-				ref="friendRequest" 
-				@accept-friendship="onAcceptFriendship" 
-				@remove-relation="onRemoveRelation"/>
-			<ListUsers :is-block-list="true" 
-				:headerText="'Block list'" 
-				ref="blockList" 
-				@remove-relation="onRemoveRelation"/>
-		</div>
+	<Menu/>
+		<ListUsers :is-friend-list="true" 
+			:headerText="'Friend list'" 
+			ref="friendList" 
+			@remove-relation="onRemoveRelation"/>
+		<ListUsers 
+			:is-friend-request-list="true" 
+			:headerText="'Friend request'" 
+			ref="friendRequest" 
+			@accept-friendship="onAcceptFriendship" 
+			@remove-relation="onRemoveRelation"/>
+		<ListUsers :is-block-list="true" 
+			:headerText="'Block list'" 
+			ref="blockList" 
+			@remove-relation="onRemoveRelation"/>
 	</div>
 </template>
 
@@ -53,7 +51,7 @@ export default defineComponent({
 		}); 
 		this.socket.on('deleteBlockship', (response) => {
 			this.deleteBlockship();
-			});
+		});
 	},
 	methods:
 	{
@@ -64,16 +62,16 @@ export default defineComponent({
 		acceptFriendship()
 		{
 			if (this.$refs.friendList)
-				(this.$refs.friendList as typeof ListUsers).fetchUsers();
+			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 			if (this.$refs.friendRequest)
-				(this.$refs.friendList as typeof ListUsers).fetchUsers();
+			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 		},
 		deleteFriendship()
 		{
 			if (this.$refs.friendRequest)
-				(this.$refs.friendList as typeof ListUsers).fetchUsers();
+			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 			if (this.$refs.friendList)
-				(this.$refs.friendList as typeof ListUsers).fetchUsers();
+			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 		},
 		async onRemoveRelation(body: {friend_id: number, relationType: string} | {userblocked_id: number, relationType: string})
 		{
@@ -89,7 +87,7 @@ export default defineComponent({
 		deleteBlockship()
 		{
 			if (this.$refs.blockList)
-				(this.$refs.blockList as typeof ListUsers).fetchUsers();
+			(this.$refs.blockList as typeof ListUsers).fetchUsers();
 		},
 	}
 });
@@ -100,11 +98,5 @@ export default defineComponent({
 .relations-page {
 	height: 100vh;
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
-}
-
-.list-users {
-	margin: 3em;
-	display: flex;
-	width: 100%;
 }
 </style>

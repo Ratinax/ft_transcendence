@@ -138,7 +138,6 @@ export default defineComponent({
 
 .channel-list {
 	margin-right: 1em;
-	margin-left: 2em;
 	background: var(--pblack);
 	padding: 1em;
 	border-radius: 1em;
