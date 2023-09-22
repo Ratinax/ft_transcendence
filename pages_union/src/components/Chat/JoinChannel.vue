@@ -57,17 +57,17 @@ export default defineComponent({
 			if (response.sessionCookie === this.sessionCookie)
 			this.wrongPassword();
 		});
-			this.socket.on('joinGoodRequest', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+		this.socket.on('joinGoodRequest', async (response: {sessionCookie: string}) => {
+			if (response.sessionCookie === this.sessionCookie)
 				this.goodRequest();
-			});
-			this.socket.on('joinBanned', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
-				this.joinBanned();
 		});
-			this.socket.on('joinPrivateMode', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
-				this.privateMode();
+		this.socket.on('joinBanned', async (response: {sessionCookie: string}) => {
+			if (response.sessionCookie === this.sessionCookie)
+			this.joinBanned();
+		});
+		this.socket.on('joinPrivateMode', async (response: {sessionCookie: string}) => {
+			if (response.sessionCookie === this.sessionCookie)
+			this.privateMode();
 		});
 	}
 },

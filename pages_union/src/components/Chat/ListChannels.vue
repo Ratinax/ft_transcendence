@@ -35,7 +35,7 @@
 						:show="showJoinChannel" 
 						:sessionCookie="sessionCookie" 
 						:socket="socket" 
-						ref='joinChannel' 
+						ref='joinChannel'
 						@close="showJoinChannel = false" >
 					</JoinChannel>
 				</div>
@@ -72,7 +72,7 @@ export default defineComponent({
 		}
 	},
 	created() 
-{
+	{
 		this.fetchChannels();
 	},
 	methods: {

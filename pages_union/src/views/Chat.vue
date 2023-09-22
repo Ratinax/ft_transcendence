@@ -55,7 +55,7 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			selectedChannel: undefined as {channel_id: number} | undefined,
+			selectedChannel: undefined as {channel_id: number, name: string} | undefined,
 			socket: null as any,
 			sessionCookie: '',
 		}
@@ -67,7 +67,7 @@ export default defineComponent({
 			if (response.channel_id === this.selectedChannel?.channel_id)
 			this.updateMessages();
 		});
-		this.socket.on('updateListChannels', async (response: {sessionCookie: string, channel: {channel_id: number}}) => {
+		this.socket.on('updateListChannels', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}}) => {
 			if (response.sessionCookie === this.sessionCookie)
 				this.updateListChannels(response.channel);
 		});
@@ -77,14 +77,13 @@ export default defineComponent({
 				this.setIsUserOwner(response.channel.channel_id);
 			}
 		});
-		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number}, users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
+		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (this.sessionCookie === response.sessionCookie) {
 				this.updateListChannels(undefined);
-				this.updateMessages();
 				this.updateListUsers(null);
 			}
 			else if (response.channel.channel_id === this.selectedChannel?.channel_id) {
-				this.updateListChannels(response.channel);
+				this.updateListChannels(response.channel); // TODO check if usefull
 				this.updateListUsers(response.users);
 			}
 		});
@@ -103,7 +102,7 @@ export default defineComponent({
 	 * 
 	 * @param {Object} channel - Channel from which a user has entered or left
 		*/
-		updateListChannels(channel: {channel_id: number} | undefined){
+		updateListChannels(channel: {channel_id: number, name: string} | undefined){
 			if (this.$refs.listChannels) {
 				(this.$refs.listChannels as typeof ListChannels).fetchChannels();
 				this.setSelectedChannel(channel);
@@ -114,10 +113,10 @@ export default defineComponent({
 			if (this.$refs.messages)
 				(this.$refs.messages as typeof Messages).updateMessages(this.selectedChannel);
 		},
-		onChannelSelected(channel: {channel_id: number}) {
+		onChannelSelected(channel: {channel_id: number, name: string}) {
 			this.setSelectedChannel(channel);
 		},
-		setSelectedChannel(channel: {channel_id: number} | undefined) {
+		setSelectedChannel(channel: {channel_id: number, name: string} | undefined) {
 			this.selectedChannel = channel;
 			this.findUsersOfChannel();
 			this.updateMessages();
@@ -129,8 +128,8 @@ export default defineComponent({
 			this.socket?.emit('findUsersOfChannel', { channel: this.selectedChannel, sessionCookie: this.sessionCookie });
 		},
 		/**
-	 * 
-	 * @param {List} users - the list of users of the selectedChannel 
+		 * 
+		 * @param {List} users - the list of users of the selectedChannel 
 		*/
 		updateListUsers(users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}> | null) {
 			(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
