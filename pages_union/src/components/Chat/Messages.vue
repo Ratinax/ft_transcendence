@@ -50,7 +50,6 @@ export default defineComponent({
       },
       async updateMessages(channel: {name: string} | null)
       {
-        console.log('called')
           await this.fetchMessages(channel)
 
           this.$nextTick(() => {

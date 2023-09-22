@@ -45,13 +45,11 @@ export default defineComponent({
 			handleInputErrors();
 			if (error.value !== '')
 			{
-				// resetData();
 				return ;
 			}
 			try
 			{
-				console.log(imageDataURL);
-				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/signup`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/signup`, 
 				{ 
 					pseudo: pseudo.value,
 					password: password.value,
@@ -67,7 +65,7 @@ export default defineComponent({
 				error.value = JSON.parse(e.request.response).message;
 				return ;
 			}
-			// resetData();
+			resetData();
 			router.push({path: '/chat'});
 		}
 

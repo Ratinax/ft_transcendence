@@ -65,10 +65,7 @@ export default defineComponent({
 				return ;
 			}
 			if (!res.data)
-			{
-				// TODO handle error not good password nor user
 				return ;
-			}
 			resetData();
 			router.push({path: '/chat'});
 		}
