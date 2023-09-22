@@ -115,14 +115,17 @@ export default defineComponent({
 		},
 		setIsUserOwner(result: boolean, channel_id: number)
 		{
-			console.log('call')
+			console.log('call', channel_id)
 			for (let i = 0; i < (this.$refs.channelRef as Array<typeof Channel>).length; i++)
 			{
-				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].methods?.getChannelId() === channel_id)
+				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].getChannelId() === channel_id)
 				{
-					(this.$refs.channelRef as Array<typeof Channel>)[i].methods?.setIsUserOwner(result);
+					console.log('indeed call');
+					(this.$refs.channelRef as Array<typeof Channel>)[i].setIsUserOwner(result);
 					break ;
 				}
+				else
+					console.log("id :", (this.$refs.channelRef as Array<typeof Channel>)[i]?.getChannelId())
 			}
 			console.log('result :', result)
 		},

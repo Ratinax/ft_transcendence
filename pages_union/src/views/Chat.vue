@@ -143,7 +143,9 @@ export default {
 			if (this.$refs.listUsersChat) {
 				const result = this.$refs.listUsersChat.getUserInChannel();
 				if (result)
+				{
 					this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
+				}
 				else
 					console.log(result)
 			}
