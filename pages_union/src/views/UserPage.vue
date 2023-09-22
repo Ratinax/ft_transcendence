@@ -69,6 +69,7 @@ export default defineComponent({
 			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:3000/games/games-wins/${userName.value}`, {withCredentials: true});
 			userGamesPlayed.value = response2.data.nb_games;
 			userWins.value = response2.data.nb_wins;
+			showButtons.value = userName.value === await (axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo/`, {withCredentials: true})).data;
 		})
 
 
