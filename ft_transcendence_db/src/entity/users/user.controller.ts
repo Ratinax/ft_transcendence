@@ -36,8 +36,11 @@ export class UserController {
     @Post('signup')
     async signUp(@Body() body, @Res({passthrough: true}) res: Response)
     {
-        // TODO check input
-        const user = await this.callFunction(this.userService.signUp, body);
+        if (body.password.length < 8 || body.password.length > 20)
+            throw new InternalServerErrorException('Password should be between 8 and 20 caracteres');
+        if (body.pseudo.length < 3 || body.pseudo.length > 8)
+            throw new InternalServerErrorException('Login should be between 3 and 8 caracteres');
+        const user = await this.userService.signUp(body);
         const session = await this.sessionService.createSession(user.id);
         res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         return (true);
@@ -45,12 +48,10 @@ export class UserController {
     @Post('signin')
     async signIn(@Body() body, @Res({passthrough: true}) res: Response)
     {
-        // TODO check input
         const user = await this.callFunction(this.userService.signIn, body);
         if (!user || user === 'Wrong password')
         {
             throw new InternalServerErrorException('Not good user nor password');
-            return (false); // TODO handle error in front
         }
         if (user.is42User)
             return (false); // TODO handle its a user 42, cannot connect like this

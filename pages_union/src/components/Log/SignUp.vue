@@ -1,11 +1,9 @@
 <template>
 	<form class="col" @submit.prevent="register">
-			<input type="text" placeholder="Username" v-model="pseudo" />
-			<input type="password" placeholder="Password" v-model="password" />
-			<input type="password" placeholder="Repeat Password" v-model="passwordCheck" />
-		<div v-if="matrixIndex > 0">
-			<p class="error">{{ matrixError[matrixIndex] }}</p>
-		</div>
+		<p class="error">{{ error }}</p>
+		<input type="text" placeholder="Username" :class="{'input-error': error === 'Login should be between 3 and 8 caracteres' || (pseudo === '' && error !== '')}" v-model="pseudo" />
+		<input type="password" placeholder="Password" :class="{'input-error': error === 'Password should be between 8 and 20 caracteres' || (password === '' && error !== '')}" v-model="password" />
+		<input type="password" placeholder="Repeat Password" :class="{'input-error': error === 'Passwords do not match' || (passwordCheck === '' && error !== '')}" v-model="passwordCheck" />
 		<div class="row buttonZone">
 			<button class="ft-button" type="button" @click="chooseImage">CHOOSE PROFILE PIC</button>
 			<input type="file" accept="image/*" ref="imageInput" style="display: none" @change="onImageSelect" />
@@ -24,35 +22,16 @@ export default defineComponent({
 		const pseudo = ref("");
 		const passwordCheck = ref("");
 		const password = ref("");
-		let matrixError: Array<string> = [
-			'allright',
-			'Passwords do not match',
-			'Password should be between 8 and 20 caracteres',
-			'Login should be between 3 and 8 caracteres',
-			'You must not have an empty field',
-			'User already exists',
-			'Bad File Format (required .png .jpg)',
-			'File too large, must be 50mb max',
-		];
-		const matrixIndex =  ref(0);
+		const error = ref("");
 		let imageDataURL: any = "";
 		const router = useRouter();
 		const imageInput = ref<HTMLInputElement | null>(null);
 
 		function	handleInputErrors() {
-			matrixIndex.value = 0;
 			if (password.value !== passwordCheck.value)
-			matrixIndex.value = 1;
-			if (password.value.length < 8
-				|| password.value.length > 20)
-			matrixIndex.value = 2;
-			if (pseudo.value.length < 3
-				|| pseudo.value.length > 8)
-			matrixIndex.value = 3;
-			if (pseudo.value === ''
-				|| password.value === ''
-				|| passwordCheck.value === '')
-			matrixIndex.value = 4;
+				error.value = 'Passwords do not match';
+			if (password.value === '' || passwordCheck.value === '' || pseudo.value === '')
+				error.value = 'You must not have an empty field';
 		}
 
 		function	resetData() {
@@ -62,11 +41,16 @@ export default defineComponent({
 		}
 
 		async function	register() {
+			error.value = "";
 			handleInputErrors();
-			if (matrixIndex.value > 0)
+			if (error.value !== '')
+			{
+				// resetData();
 				return ;
+			}
 			try
 			{
+				console.log(imageDataURL);
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/signup`, 
 				{ 
 					pseudo: pseudo.value,
@@ -80,13 +64,10 @@ export default defineComponent({
 			}
 			catch(e: any)
 			{
-				if (e && e.reponse && e.response.status === 413)
-					matrixIndex.value = 7;
-				else
-					matrixIndex.value = 5;
+				error.value = JSON.parse(e.request.response).message;
 				return ;
 			}
-			resetData();
+			// resetData();
 			router.push({path: '/chat'});
 		}
 
@@ -95,16 +76,25 @@ export default defineComponent({
 		}
 
 		function	onImageSelect(event: any) {
+			if (error.value === "Bad File Format (required .png .jpg), will be replaced by a default one"
+				|| error.value === 'File too large, must be 50mb max, will be replaced by a default one')
+				error.value = '';
 			const file = event.target.files[0];
 			if (!(file.type === 'image/png' 
 				|| file.type === 'image/jpeg'
 				|| file.type === 'image/jpg'))
 			{
-				matrixIndex.value = 6;
+				error.value = 'Bad File Format (required .png .jpg), will be replaced by a default one';
 				imageDataURL = null;
 				return ;
 			}
-
+			if (file.size > 50000000)
+			{
+				error.value = 'File too large, must be 50mb max, will be replaced by a default one';
+				imageDataURL = null;
+				return ;
+			}
+			
 			if (file) {
 				const reader = new FileReader();
 				reader.onload = () => {
@@ -118,10 +108,9 @@ export default defineComponent({
 			pseudo,
 			passwordCheck,
 			password,
-			matrixError,
-			matrixIndex,
 			imageDataURL,
 			imageInput,
+			error,
 			handleInputErrors,
 			register,
 			chooseImage,

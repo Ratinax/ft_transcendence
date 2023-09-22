@@ -47,7 +47,7 @@ export class UserService {
         
         if (userFound)
         {
-            throw new InternalServerErrorException('already exists');
+            throw new InternalServerErrorException('User already exists');
         }
         try 
         {
@@ -161,6 +161,8 @@ export class UserService {
             extension = '.jpg';
         else if (extension === 'png;')
             extension = '.png'
+        else
+            throw new InternalServerErrorException('Bad file format, (required .png .jpg)');
         try 
         {
             const uniqueFileName = Date.now() + '_' + this.generateRandomString(42) + extension;

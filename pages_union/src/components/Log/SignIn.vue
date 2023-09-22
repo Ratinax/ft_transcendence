@@ -1,8 +1,6 @@
 <template>
 	<div class="inputZone">
-			<div>
-				<p class="error">{{ error }}</p>
-			</div>
+			<p class="error">{{ error }}</p>
 			<input type="text" placeholder="Username" :class="{'input-error': error !== ''}" v-model="pseudo" />
 			<input type="password" placeholder="Password" :class="{'input-error': error !== ''}" v-model="password"/>
 			<div class="row buttonZone">
