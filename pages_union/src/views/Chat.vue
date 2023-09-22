@@ -25,7 +25,7 @@
 				v-if="socket && sessionCookie" 
 				:sessionCookie="sessionCookie"
 				:channel="selectedChannel" 
-				:socket="socket" 
+				:socket="socket"
 				@set-is-user-owner="setIsUserOwner"/>
 		</div>
 	</div>
@@ -116,7 +116,6 @@ export default defineComponent({
 		},
 		onChannelSelected(channel: {channel_id: number}) {
 			this.setSelectedChannel(channel);
-			this.setIsUserOwner(channel.channel_id)
 		},
 		setSelectedChannel(channel: {channel_id: number} | undefined) {
 			this.selectedChannel = channel;
