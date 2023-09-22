@@ -1,7 +1,10 @@
 <template>
 	<div class="inputZone">
-			<input type="text" placeholder="Username" v-model="pseudo" />
-			<input type="password" placeholder="Password" v-model="password"/>
+			<div>
+				<p class="error">{{ error }}</p>
+			</div>
+			<input type="text" placeholder="Username" :class="{'input-error': error !== ''}" v-model="pseudo" />
+			<input type="password" placeholder="Password" :class="{'input-error': error !== ''}" v-model="password"/>
 			<div class="row buttonZone">
 			<form @submit.prevent="login42">
 				<button class="row ft-button" type="submit">
@@ -30,6 +33,7 @@ export default defineComponent({
 		const pseudo = ref("");
 		const password = ref("");
 		const router = useRouter();
+		const error = ref("");
 		
 		async function login42()
 		{
@@ -37,11 +41,13 @@ export default defineComponent({
 			window.location.href = link;
 		}
 		function	resetData() {
+			error.value = '';
 			pseudo.value = "";
 			password.value = "";
 		}
 		async function login()
 		{
+			error.value = '';
 			let res;
 			try
 			{
@@ -55,9 +61,9 @@ export default defineComponent({
 				},
 				)
 			}
-			catch (e)
+			catch (e: any)
 			{
-				console.error(e);
+				error.value = JSON.parse(e.request.response).message;
 				return ;
 			}
 			if (!res.data)
@@ -68,11 +74,12 @@ export default defineComponent({
 			resetData();
 			router.push({path: '/chat'});
 		}
-		return {login, login42, resetData, pseudo, password};
+		return {login, login42, resetData, pseudo, password, error};
 	}
 });
 </script>
 
 <style scoped src="../../assets/formComponent.css" lang="css">
+
 
 </style>

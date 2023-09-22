@@ -24,6 +24,11 @@ input:focus {
 	border-color: var(--pblue);
 }
 
+.input-error
+{
+	border-color: red;
+}
+
 .buttonZone {
 	padding-top: 2em;
 	justify-content: center;
