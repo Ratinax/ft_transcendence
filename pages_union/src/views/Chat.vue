@@ -131,7 +131,8 @@ export default defineComponent({
 		 * @param {List} users - the list of users of the selectedChannel 
 		*/
 		updateListUsers(users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}> | null) {
-			(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
+			if (this.$refs.listUsersChat)
+				(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
 		},
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })

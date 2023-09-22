@@ -27,7 +27,7 @@
 						</div>
 					</div>
 				</div>
-				<p class="options">
+				<p class="options" @click="seeProfil">
 					See Profile
 				</p>
 			</div>
@@ -43,6 +43,8 @@
 import { Socket } from 'socket.io-client';
 import TimeOut from './TimeOut.vue';
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
+
 
 export default defineComponent({
     name: 'UserChat-Component',
@@ -62,6 +64,7 @@ export default defineComponent({
     data()
     {
         return {
+            router: useRouter(),
             showTimeOut: false as boolean,
         }
     },
@@ -111,6 +114,10 @@ export default defineComponent({
         {
             this.showTimeOut = false;
         },
+        seeProfil()
+        {
+			this.router.push({name: 'UserPage', params: {pseudo: this.userInChat?.pseudo}})
+        }
     }
 })
 </script>

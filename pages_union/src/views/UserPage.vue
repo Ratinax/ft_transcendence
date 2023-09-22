@@ -52,7 +52,7 @@ export default defineComponent({
 	setup() {
 		const showButtons = ref<boolean>(false);
 		const userName = ref(null);
-		const profilePic = ref(null)
+		const profilePic = ref(undefined)
 		const userDescription = ref("userdescription");
 		const userGamesPlayed = ref(23);
 		const userWins = ref(12);
