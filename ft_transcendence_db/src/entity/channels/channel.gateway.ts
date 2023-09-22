@@ -156,7 +156,6 @@ export class ChannelGateway {
       isOwner: false,
       isInvited: false,
     });
-    console.log(channel);
     const channelToReturn = {
       channel_id: channel.channel_id,
       name: channel.name,

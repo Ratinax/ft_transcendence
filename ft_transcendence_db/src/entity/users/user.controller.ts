@@ -48,7 +48,10 @@ export class UserController {
         // TODO check input
         const user = await this.callFunction(this.userService.signIn, body);
         if (!user || user === 'Wrong password')
+        {
+            throw new InternalServerErrorException('Not good user nor password');
             return (false); // TODO handle error in front
+        }
         if (user.is42User)
             return (false); // TODO handle its a user 42, cannot connect like this
         const session = await this.sessionService.createSession(user.id);
@@ -117,19 +120,15 @@ export class UserController {
     @Get('imageNamePseudo/:pseudo')
     async getImageNamePseudo(@Param('pseudo') pseudo, @Req() req)
     {
-        console.log('cest fou');
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
-        console.log('non');
             return (null);
         }
         const user = (await this.userService.getUser(pseudo))[0];
-        console.log('maybe');
         if (user.is42User)
         {
             return (user.profilPic);
         }
-        console.log('non');
         return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
     }
 
@@ -148,21 +147,14 @@ export class UserController {
             return (null);
         }
         const users = await this.userService.getUsers('');
-        console.log('imageName:', imageName)
         for (let i = 0; i < users.length; i++)
         {
             if (users[i].profilPic === imageName)
             {
                 if (users[i].is42User)
                 {
-                    console.log(imageName)
                     return (res.sendFile(imageName));
                 }
-                else
-                {
-                    // console.log()
-                }
-
                 break ;
             }
         }

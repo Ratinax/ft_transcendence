@@ -119,7 +119,7 @@ export class ChannelsUsersGateway {
     this.server.emit('updateAfterPart', {
       users: users, 
       channel: body.channel,
-      body: body.sessionCookie});
+      sessionCookie: body.sessionCookie});
     return (res);
   }
   /**
