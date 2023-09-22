@@ -118,7 +118,7 @@ export class UserController {
             return (user.profilPic);
         return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
     }
-    @Get('imageNamePseudo/:pseudo')
+    @Get('imageNameByPseudo/:pseudo')
     async getImageNamePseudo(@Param('pseudo') pseudo, @Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
