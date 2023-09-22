@@ -119,7 +119,6 @@ export default defineComponent({
 			{
 				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].getChannelId() === channel_id)
 				{
-					console.log('indeed call');
 					(this.$refs.channelRef as Array<typeof Channel>)[i].setIsUserOwner(result);
 					break ;
 				}

@@ -65,7 +65,7 @@ export default defineComponent({
 		this.socket = io(`http://${process.env.VUE_APP_IP}:3001/`);
 		this.socket.on('updateMessage', (response: {channel_id: number}) => {
 			if (response.channel_id === this.selectedChannel?.channel_id)
-			this.updateMessages();
+				this.updateMessages();
 		});
 		this.socket.on('updateListChannels', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}}) => {
 			if (response.sessionCookie === this.sessionCookie)
@@ -106,7 +106,6 @@ export default defineComponent({
 			if (this.$refs.listChannels) {
 				(this.$refs.listChannels as typeof ListChannels).fetchChannels();
 				this.setSelectedChannel(channel);
-				this.updateMessages();
 			}
 		},
 		updateMessages() {
@@ -144,8 +143,6 @@ export default defineComponent({
 				{
 					(this.$refs.listChannels as typeof ListChannels).setIsUserOwner(result.isOwner, channel_id);
 				}
-				else
-					console.log('res :', result)
 			}
 		},
 		sendMessageTimeout(duration: number) {

@@ -55,14 +55,14 @@ export default defineComponent({
 				this.userInChannel = null;
 				return ;
 			}
-			const userPerms = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/userPerms?channelId=${this.channel.channel_id}`,
+			const userPerms = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/userPerms?channelId=${this.channel?.channel_id}`,
 				{ withCredentials: true }, 
 			);
 			if (userPerms.data)
 			this.userInChannel = userPerms.data;
 			else
 			this.userInChannel = null;
-			this.$emit('set-is-user-owner', this.channel.channel_id);
+			this.$emit('set-is-user-owner', this.channel?.channel_id);
 		},
 		updateListUsers(users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>)
 		{
@@ -83,7 +83,6 @@ export default defineComponent({
 		},
 		getUserInChannel()
 		{
-			console.log()
 			return (this.userInChannel);
 		},
 	}

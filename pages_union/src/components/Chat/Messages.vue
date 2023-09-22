@@ -34,12 +34,12 @@ export default defineComponent({
       {
         if (!channel)
         {
+          this.messages = [];
           return ;
         }
         try 
         {
           const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}`, {withCredentials: true});
-          console.log('resp: ', channel.name, response)
           this.messages = response.data;
         } 
         catch (error) 
@@ -50,6 +50,7 @@ export default defineComponent({
       },
       async updateMessages(channel: {name: string} | null)
       {
+        console.log('called')
           await this.fetchMessages(channel)
 
           this.$nextTick(() => {
