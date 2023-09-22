@@ -25,7 +25,8 @@
 				v-if="socket && sessionCookie" 
 				:sessionCookie="sessionCookie"
 				:channel="selectedChannel" 
-				:socket="socket" />
+				:socket="socket" 
+				@set-is-user-owner="setIsUserOwner"/>
 		</div>
 	</div>
 </template>
@@ -115,16 +116,12 @@ export default defineComponent({
 		},
 		onChannelSelected(channel: {channel_id: number}) {
 			this.setSelectedChannel(channel);
-			// this.updateListUsers();
 			this.setIsUserOwner(channel.channel_id)
 		},
 		setSelectedChannel(channel: {channel_id: number} | undefined) {
 			this.selectedChannel = channel;
 			this.findUsersOfChannel();
 			this.updateMessages();
-			// this.$nextTick(() => {
-			// 	this.
-			// })
 		},
 		async createMessage(content: {channel_id: number, message: string, dateSent: Date, isAGameInvite: boolean}) {
 			this.socket?.emit('createMessage', { ...content, sessionCookie: this.sessionCookie });
@@ -137,13 +134,12 @@ export default defineComponent({
 	 * @param {List} users - the list of users of the selectedChannel 
 		*/
 		updateListUsers(users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}> | null) {
-			if (this.$refs.listUsersChat)
-				(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
+			(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
 		},
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
 		},
-		setIsUserOwner(channel_id: number) {
+		setIsUserOwner(channel_id: number ) {
 			if (this.$refs.listUsersChat) {
 				const result = (this.$refs.listUsersChat as typeof ListUsersChat).getUserInChannel();
 				if (result)

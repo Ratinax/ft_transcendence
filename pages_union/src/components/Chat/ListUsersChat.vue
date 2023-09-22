@@ -62,7 +62,7 @@ export default defineComponent({
 			this.userInChannel = userPerms.data;
 			else
 			this.userInChannel = null;
-			console.log('laaaa', this.userInChannel)
+			this.$emit('set-is-user-owner', this.channel.channel_id);
 		},
 		updateListUsers(users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>)
 		{
