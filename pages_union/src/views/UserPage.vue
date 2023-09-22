@@ -51,7 +51,7 @@ export default defineComponent({
 	components: { Menu },
 	setup() {
 		const showButtons = ref<boolean>(false);
-		const userName = ref(null);
+		const userName = ref('');
 		const profilePic = ref(undefined)
 		const userDescription = ref("userdescription");
 		const userGamesPlayed = ref(23);
@@ -60,16 +60,12 @@ export default defineComponent({
 			return Math.round(userWins.value / userGamesPlayed.value * 100);
 		})
 
-		onBeforeMount(async () => {
-			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/image-pseudo`, {withCredentials: true});
-			userName.value = response.data.pseudo;
-			profilePic.value = response.data.ProfilPic;
-
-		})
-
 		onMounted(async () => {
 			const route = useRoute();
-			showButtons.value = userName.value === route.params.pseudo;
+			if (typeof route.params.pseudo === 'string')
+				userName.value = route.params.pseudo;
+			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
+			profilePic.value = response.data;
 		})
 
 
