@@ -16,7 +16,7 @@
 <script lang="ts">
 
 import axios from 'axios';
-import { defineComponent, registerRuntimeCompiler } from 'vue';
+import { defineComponent } from 'vue';
 
 
 export default defineComponent({

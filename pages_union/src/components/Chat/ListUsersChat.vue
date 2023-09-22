@@ -20,6 +20,8 @@ import { Socket } from 'socket.io-client';
 import UserChat from './UserChat.vue';
 import axios from 'axios';
 import { defineComponent } from 'vue';
+import { DefaultEventsMap } from '@socket.io/component-emitter';
+
 
 export default defineComponent({
 	name: 'ListUsersChat',
@@ -30,14 +32,14 @@ export default defineComponent({
 	props:
 	{
 		sessionCookie: String,
-		socket: Socket,
+		socket: Socket || null,
 		channel: Object,
 	},
 	data()
 {
 		return {
-			users: [] as Array<{id: number}>,
-			userSelected: {} as ({id: number} | undefined),
+			users: [] as Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>,
+			userSelected: undefined as {id: number} | undefined,
 			userInChannel: null, // the user with only id, isAdmin, and isOwner
 		}
 	},
@@ -60,8 +62,9 @@ export default defineComponent({
 			this.userInChannel = userPerms.data;
 			else
 			this.userInChannel = null;
+			console.log('laaaa', this.userInChannel)
 		},
-		updateListUsers(users: Array<{id: number}>)
+		updateListUsers(users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>)
 		{
 			this.users = users;
 			this.setAccessWrites();
@@ -76,10 +79,11 @@ export default defineComponent({
 			if (this.userSelected === user)
 				this.userSelected = undefined;
 			else
-			this.userSelected = user;
+				this.userSelected = user;
 		},
 		getUserInChannel()
 		{
+			console.log()
 			return (this.userInChannel);
 		},
 	}

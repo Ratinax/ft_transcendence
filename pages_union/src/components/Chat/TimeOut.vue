@@ -59,6 +59,7 @@ export default defineComponent({
     },
     goodRequest()
     {
+      console.log('heheheha')
         this.close();
     },
     resetData()

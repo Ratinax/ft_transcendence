@@ -54,7 +54,7 @@ export class ChannelsUsersGateway {
       return ('not connected');
     }
     if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
-      && (!(await this.checkUserOwnerPerms(body.userBanned.id, body.channel.channel_id))))
+      && (!(await this.checkOwnerPerms(body.userBanned.id, body.channel.channel_id))))
     {}
     else if (!(await this.checkUserAdminPerms(body.sessionCookie, body.channel.channel_id)))
       return (false);
@@ -187,7 +187,7 @@ export class ChannelsUsersGateway {
     {
       return ('not connected');
     }
-
+    
     if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
     && (!(await this.checkOwnerPerms(body.userTimeouted.id, body.channel.channel_id))))
     {}
@@ -195,7 +195,7 @@ export class ChannelsUsersGateway {
       return (false);
     else if (await this.checkAdminPerms(body.userTimeouted.id, body.channel.channel_id))
       return (false);
-
+    
     if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) // 30 days and 10 seconds
     {
       this.server.emit('timeoutWrongAmount', {channel: body.channel, sessionCookie: body.sessionCookie});
