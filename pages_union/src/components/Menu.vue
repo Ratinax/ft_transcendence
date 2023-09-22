@@ -1,4 +1,5 @@
 <template>
+	<div class="placeholder"></div>
 	<div class="navigation-menu">
 		<div class="navigation-option profil-pic">
 			<img :src="profilPic" alt="Profil" @click="goToUserPage"/>
@@ -41,11 +42,15 @@ export default {
 		return {
 			router: useRouter(),
 			profilPic: '',
+			pseudo: '',
+			
 		}
 	},
-	async mounted()
+	async beforeMount()
 	{
 		this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageName`, {withCredentials: true})).data;
+		const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/image-pseudo`, {withCredentials: true});
+		this.pseudo = response.data.pseudo;
 	},
 	methods: 
 	{
@@ -57,14 +62,19 @@ export default {
 		{
 			this.router.push({path: '/relations'});
 		},
-		goToUserPage() {
-			this.router.push({name: 'UserPage'})
+		goToUserPage(){
+			this.router.push({name: 'UserPage', params: {pseudo: this.pseudo}})
 		}
 	}
 }
 </script>
 
 <style>
+.placeholder {
+	width: 15%;
+	max-width: 150px;
+	visibility: hidden;
+}
 .navigation-option.profil-pic 
 {
 	position: relative;
@@ -76,7 +86,6 @@ export default {
 
 .navigation-option img
 {
-	color: var(--plight);
 	height: 100%;
 	padding-left: 0.7em;
 }
@@ -228,8 +237,10 @@ export default {
 
 .navigation-menu
 {
+	position: fixed;
+	height: 100vh;
 	background-color: var(--pblack);
-	width: 12%;
+	width: 15%;
 	display: flex;
 	flex-direction: column;
 	align-items: center; 

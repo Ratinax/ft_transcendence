@@ -1,6 +1,6 @@
 <template>
 	<div class="row chat-page">
-		<Menu />
+	<Menu />
 		<div class="row chat-container">
 			<div>
 				<ListChannels ref="listChannels" 
@@ -143,7 +143,9 @@ export default {
 			if (this.$refs.listUsersChat) {
 				const result = this.$refs.listUsersChat.getUserInChannel();
 				if (result)
+				{
 					this.$refs.listChannels.setIsUserOwner(result.isOwner, channel_id);
+				}
 				else
 					console.log(result)
 			}
@@ -170,7 +172,7 @@ export default {
 
 .chat-container {
 	width: 100%;
-	margin: 2em 0;
+	margin: 2em 1em;
 }
 
 .messageszone {

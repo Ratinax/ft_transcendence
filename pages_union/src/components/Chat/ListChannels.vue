@@ -115,16 +115,15 @@ export default defineComponent({
 		},
 		setIsUserOwner(result: boolean, channel_id: number)
 		{
-			console.log('call')
 			for (let i = 0; i < (this.$refs.channelRef as Array<typeof Channel>).length; i++)
 			{
-				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].methods?.getChannelId() === channel_id)
+				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].getChannelId() === channel_id)
 				{
-					(this.$refs.channelRef as Array<typeof Channel>)[i].methods?.setIsUserOwner(result);
+					console.log('indeed call');
+					(this.$refs.channelRef as Array<typeof Channel>)[i].setIsUserOwner(result);
 					break ;
 				}
 			}
-			console.log('result :', result)
 		},
 		onUpdateChannels()
 		{
@@ -138,7 +137,6 @@ export default defineComponent({
 
 .channel-list {
 	margin-right: 1em;
-	margin-left: 2em;
 	background: var(--pblack);
 	padding: 1em;
 	border-radius: 1em;

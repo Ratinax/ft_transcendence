@@ -19,10 +19,6 @@ p {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-html {
-	height: 100%;
-}
-
 input {
 	border: none;
 }
