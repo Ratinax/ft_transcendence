@@ -66,6 +66,9 @@ export default defineComponent({
 				userName.value = route.params.pseudo;
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
+			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:3000/games/games-wins/${userName.value}`, {withCredentials: true});
+			userGamesPlayed.value = response2.data.nb_games;
+			userWins.value = response2.data.nb_wins;
 		})
 
 
