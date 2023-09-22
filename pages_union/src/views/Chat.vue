@@ -120,7 +120,8 @@ export default defineComponent({
 		},
 		setSelectedChannel(channel: {channel_id: number} | undefined) {
 			this.selectedChannel = channel;
-			this.findUsersOfChannel()
+			this.findUsersOfChannel();
+			this.updateMessages();
 			// this.$nextTick(() => {
 			// 	this.
 			// })
