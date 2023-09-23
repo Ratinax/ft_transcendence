@@ -71,7 +71,7 @@ export default {
 <style scoped>
 
 .placeholder {
-	width: 9.42em;
+	width: 10.42em;
 	visibility: hidden;
 }
 .navigation-option.profil-pic 

@@ -1,29 +1,29 @@
 <template>
 	<div class="row relations-page">
-	<Menu/>
-	<UsersSearched ref="UsersSearched" 
-	:show="showSearchUsers"
-	:pseudo="pseudo"
-	@close="closeSearchUser"/>
-	<div class="search-bar">
-		<form @submit.prevent="searchUser">
-			<input class="search-input" v-model="pseudo" placeholder="Search User (3 char min)"/>
-		</form>
-	</div>
-	<ListUsers :is-friend-list="true" 
-		:headerText="'Friend list'" 
-		ref="friendList" 
-		@remove-relation="onRemoveRelation"/>
-	<ListUsers 
-		:is-friend-request-list="true" 
-		:headerText="'Friend request'" 
-		ref="friendRequest" 
-		@accept-friendship="onAcceptFriendship" 
-		@remove-relation="onRemoveRelation"/>
-	<ListUsers :is-block-list="true" 
-		:headerText="'Block list'" 
-		ref="blockList" 
-		@remove-relation="onRemoveRelation"/>
+		<Menu/>
+		<UsersSearched ref="UsersSearched" 
+			:show="showSearchUsers"
+			:pseudo="pseudo"
+			@close="closeSearchUser"/>
+		<div class="search-bar">
+			<form @submit.prevent="searchUser">
+				<input class="search-input" v-model="pseudo" placeholder="Search User (3 char min)"/>
+			</form>
+		</div>
+		<ListUsers :is-friend-list="true" 
+			:headerText="'Friend list'" 
+			ref="friendList" 
+			@remove-relation="onRemoveRelation"/>
+		<ListUsers 
+			:is-friend-request-list="true" 
+			:headerText="'Friend request'" 
+			ref="friendRequest" 
+			@accept-friendship="onAcceptFriendship" 
+			@remove-relation="onRemoveRelation"/>
+		<ListUsers :is-block-list="true" 
+			:headerText="'Block list'" 
+			ref="blockList" 
+			@remove-relation="onRemoveRelation"/>
 	</div>
 </template>
 
@@ -58,15 +58,15 @@ export default defineComponent({
 		this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`);
 		this.socket.on('acceptFriendship', (response: {sessionCookie: string}) => {
 			if (response.sessionCookie === this.sessionCookie)
-				this.acceptFriendship();
+			this.acceptFriendship();
 		});
 		this.socket.on('deleteFriendship', (response: {sessionCookie: string}) => {
 			if (response.sessionCookie === this.sessionCookie)
-				this.deleteFriendship();
+			this.deleteFriendship();
 		}); 
 		this.socket.on('deleteBlockship', (response: {sessionCookie: string}) => {
 			if (response.sessionCookie === this.sessionCookie)
-				this.deleteBlockship();
+			this.deleteBlockship();
 		});
 	},
 	methods:
@@ -81,7 +81,7 @@ export default defineComponent({
 			(this.$refs.friendList as typeof ListUsers).fetchUsers();
 			if (this.$refs.friendRequest)
 
-				(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
+			(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
 		},
 		deleteFriendship()
 		{
@@ -102,7 +102,7 @@ export default defineComponent({
 		deleteBlockship()
 		{
 			if (this.$refs.blockList)
-				(this.$refs.blockList as typeof ListUsers).fetchUsers();
+			(this.$refs.blockList as typeof ListUsers).fetchUsers();
 		},
 		searchUser()
 		{

@@ -1,6 +1,6 @@
 <template>
 	<div class="row user-page">
-		<Menu />
+	<Menu />
 		<div class="col user-page-content">
 			<div class="col user-box">
 				<div class="row user-profile">
@@ -9,7 +9,7 @@
 							<img :src="profilePic" alt="User profile picture"> 
 						</div>
 						<div class="row user-name-and-status">
-						<div class="connect"></div>
+							<div class="connect"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 					</div>
@@ -91,7 +91,7 @@ export default defineComponent({
 			{
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/block/`, {pseudo: userName.value}, {withCredentials: true});
 				if (res.data === 'Success')
-					isBlocked.value = true;
+				isBlocked.value = true;
 			}
 			catch (e)
 			{
@@ -104,7 +104,7 @@ export default defineComponent({
 			{
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/unblock/`, {pseudo: userName.value}, {withCredentials: true});
 				if (res.data === 'Success')
-					isBlocked.value = false;
+				isBlocked.value = false;
 			}
 			catch (e)
 			{
@@ -138,8 +138,8 @@ export default defineComponent({
 			}
 		}
 		onBeforeMount(() =>
-		{
-			fecthData()
+			{
+				fecthData()
 		})
 		return { userName, 
 			profilePic, 
@@ -197,6 +197,7 @@ export default defineComponent({
 	align-items: center;
 	justify-content: center;
 	width: 40%;
+	padding: 0 1em;
 	border-right: 1px solid var(--plight);
 }
 
