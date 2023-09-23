@@ -36,8 +36,11 @@ export class UserController {
     @Post('signup')
     async signUp(@Body() body, @Res({passthrough: true}) res: Response)
     {
-        // TODO check input
-        const user = await this.callFunction(this.userService.signUp, body);
+        if (body.password.length < 8 || body.password.length > 20)
+            throw new InternalServerErrorException('Password should be between 8 and 20 caracteres');
+        if (body.pseudo.length < 3 || body.pseudo.length > 8)
+            throw new InternalServerErrorException('Login should be between 3 and 8 caracteres');
+        const user = await this.userService.signUp(body);
         const session = await this.sessionService.createSession(user.id);
         res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         return (true);
@@ -45,10 +48,11 @@ export class UserController {
     @Post('signin')
     async signIn(@Body() body, @Res({passthrough: true}) res: Response)
     {
-        // TODO check input
         const user = await this.callFunction(this.userService.signIn, body);
         if (!user || user === 'Wrong password')
-            return (false); // TODO handle error in front
+        {
+            throw new InternalServerErrorException('Not good user nor password');
+        }
         if (user.is42User)
             return (false); // TODO handle its a user 42, cannot connect like this
         const session = await this.sessionService.createSession(user.id);
@@ -114,13 +118,14 @@ export class UserController {
             return (user.profilPic);
         return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
     }
-    @Get('imageNamePseudo/:pseudo')
+    @Get('imageNameByPseudo/:pseudo')
     async getImageNamePseudo(@Param('pseudo') pseudo, @Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }
+        console.log(pseudo)
         const user = (await this.userService.getUser(pseudo))[0];
         if (user.is42User)
         {
@@ -128,7 +133,16 @@ export class UserController {
         }
         return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
     }
-
+    @Get('pseudo')
+    async getPSeudo(@Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
+        return (user.pseudo);
+    }
     /**
      * get the image according to its name
      * 
@@ -149,7 +163,9 @@ export class UserController {
             if (users[i].profilPic === imageName)
             {
                 if (users[i].is42User)
+                {
                     return (res.sendFile(imageName));
+                }
                 break ;
             }
         }

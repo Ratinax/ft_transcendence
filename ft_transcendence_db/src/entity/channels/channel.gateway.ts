@@ -156,9 +156,9 @@ export class ChannelGateway {
       isOwner: false,
       isInvited: false,
     });
-    console.log(channel);
     const channelToReturn = {
       channel_id: channel.channel_id,
+      name: channel.name,
     }
     this.server.emit('updateListChannels', {channel: channelToReturn, sessionCookie: body.sessionCookie});
     this.server.emit('joinGoodRequest', {sessionCookie: body.sessionCookie});
