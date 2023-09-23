@@ -44,6 +44,8 @@ export class BlockshipController {
             const res = await this.blockshipService.getIsBlocked(user.id, userBlocked.id);
             if (res)
                 return (true);
+            else
+                return (false);
         }
         catch (e)
         {

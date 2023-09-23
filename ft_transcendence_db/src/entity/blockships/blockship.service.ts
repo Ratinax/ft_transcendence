@@ -47,7 +47,8 @@ export class BlockshipService {
     async blockUser(userblocking_id, userblocked_id)
     {
         const blockship = { userblocking: { id: userblocking_id }, userblocked: { id: userblocked_id } };
-        const res = await this.blockshipRepository.save(blockship);
+        const newBlockship = this.blockshipRepository.create(blockship);
+        const res = await this.blockshipRepository.save(newBlockship);
         return (res);
     }
     async getIsBlocked(user_id: number, blocked_id: number)

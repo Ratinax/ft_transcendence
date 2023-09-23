@@ -21,7 +21,9 @@
 			<div class="row button-zone">
 				<button v-if="showButtons && isBlocked" class="ft-button block-button" @click="unblockUser">UNBLOCK USER</button>
 				<button v-if="showButtons && !isBlocked" class="ft-button block-button" @click="blockUser">BLOCK USER</button>
-				<button v-if="showButtons" class="ft-button add-button">ADD FRIEND</button>
+				<button v-if="showButtons && isFriend === 'accepted'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND</button>
+				<button v-if="showButtons && isFriend === 'pending'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND REQUEST</button>
+				<button v-if="showButtons && isFriend === ''" class="ft-button add-button" @click="addFriend">ADD FRIEND</button>
 			</div>
 			<div class="row user-box user-stats">
 				<div class="col user-stat">
@@ -57,6 +59,7 @@ export default defineComponent({
 		const userDescription = ref("userdescription");
 		const userGamesPlayed = ref(23);
 		const isBlocked = ref(false);
+		const isFriend = ref('');
 		const userWins = ref(12);
 		const userWinRate = computed(() => {
 			if (userGamesPlayed.value > 0) {
@@ -78,6 +81,7 @@ export default defineComponent({
 			userWins.value = response2.data.nb_wins;
 			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo/`, {withCredentials: true})).data);
 			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
+			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
 		})
 
 		async function	blockUser()
@@ -106,6 +110,32 @@ export default defineComponent({
 				console.error(e);
 			}
 		}
+		async function	addFriend()
+		{
+			try
+			{
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/friendships/ask/`, {pseudo: userName.value}, {withCredentials: true});
+				isFriend.value = res.data;
+				console.log('value :', isFriend.value);
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
+		}
+		async function	removeFriend()
+		{
+			try
+			{
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/friendships/remove/`, {pseudo: userName.value}, {withCredentials: true});
+				isFriend.value = res.data;
+				console.log('value2 :', isFriend.value);
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
+		}
 		return { userName, 
 			profilePic, 
 			userDescription, 
@@ -114,8 +144,11 @@ export default defineComponent({
 			userWinRate, 
 			showButtons,
 			isBlocked,
+			isFriend,
 			blockUser, 
-			unblockUser, };
+			unblockUser,
+			removeFriend,
+			addFriend };
 	},
 });
 </script>

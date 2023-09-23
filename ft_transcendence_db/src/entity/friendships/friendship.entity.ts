@@ -17,11 +17,11 @@ export class Friendships {
 
     @ManyToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'user_id' })
-    user: Users;
+    user: Partial<Users>;
 
     @ManyToOne(() => Users, { eager: true })
     @JoinColumn({ name: 'friend_id' })
-    friend: Users;
+    friend: Partial<Users>;
 
     @Column({ type: 'varchar', length: 10, nullable: true })
     statu: string;
