@@ -68,10 +68,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 .placeholder {
-	width: 15%;
-	max-width: 150px;
+	width: 9.42em;
 	visibility: hidden;
 }
 .navigation-option.profil-pic 
@@ -236,17 +236,17 @@ export default {
 
 .navigation-menu
 {
+	width: 9.42em;
 	position: fixed;
+	box-sizing: border-box;
 	height: 100vh;
 	background-color: var(--pblack);
-	width: 15%;
 	display: flex;
 	flex-direction: column;
 	align-items: center; 
 	z-index: 999;
 	border: 2px solid var(--pcyan);
 	border-radius: .4em;
-	max-width: 150px;
 }
 
 .navigation-option
@@ -267,6 +267,11 @@ export default {
 	width: 8em;
 	height: 8em;
 	border-radius: 50%;
+	box-sizing: border-box;
+}
+
+.profil-pic img {
+	position: absolute;
 }
 
 .messages-icon

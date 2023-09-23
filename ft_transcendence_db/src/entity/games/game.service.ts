@@ -48,8 +48,8 @@ export class GameService {
                 pseudo: game.playerTwo.pseudo,
                 profilPic: game.playerTwo.profilPic,
             },
-            socrePlayerOne: game.scorePOne,
-            socrePlayerTwo: game.scorePTwo,
+            scorePlayerOne: game.scorePOne,
+            scorePlayerTwo: game.scorePTwo,
             }));
         return (gameHistory);
     }
