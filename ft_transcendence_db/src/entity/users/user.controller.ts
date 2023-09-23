@@ -172,12 +172,13 @@ export class UserController {
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
         return (res.sendFile(imagePath));
     }
-    @Get(':pseudoPart')
+    @Get('users/:pseudoPart')
     async getUsers(@Param('pseudoPart') pseudoPart: string)
     {
         if (pseudoPart.length < 3)
             return ('Not enough chars');
         const res = await this.userService.getUsers(pseudoPart);
+        console.log(pseudoPart, res);
         return (res);
     }
 }

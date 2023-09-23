@@ -1,20 +1,29 @@
 <template>
 	<div class="row relations-page">
 	<Menu/>
-		<ListUsers :is-friend-list="true" 
-			:headerText="'Friend list'" 
-			ref="friendList" 
-			@remove-relation="onRemoveRelation"/>
-		<ListUsers 
-			:is-friend-request-list="true" 
-			:headerText="'Friend request'" 
-			ref="friendRequest" 
-			@accept-friendship="onAcceptFriendship" 
-			@remove-relation="onRemoveRelation"/>
-		<ListUsers :is-block-list="true" 
-			:headerText="'Block list'" 
-			ref="blockList" 
-			@remove-relation="onRemoveRelation"/>
+	<UsersSearched ref="UsersSearched" 
+	:show="showSearchUsers"
+	:pseudo="pseudo"
+	@close="closeSearchUser"/>
+	<div class="search-bar">
+		<form @submit.prevent="searchUser">
+			<input class="message-input" v-model="pseudo" placeholder="Search User"/>
+		</form>
+	</div>
+	<ListUsers :is-friend-list="true" 
+		:headerText="'Friend list'" 
+		ref="friendList" 
+		@remove-relation="onRemoveRelation"/>
+	<ListUsers 
+		:is-friend-request-list="true" 
+		:headerText="'Friend request'" 
+		ref="friendRequest" 
+		@accept-friendship="onAcceptFriendship" 
+		@remove-relation="onRemoveRelation"/>
+	<ListUsers :is-block-list="true" 
+		:headerText="'Block list'" 
+		ref="blockList" 
+		@remove-relation="onRemoveRelation"/>
 	</div>
 </template>
 
@@ -24,6 +33,7 @@ import Menu from '../components/Menu.vue'
 import { io, Socket } from 'socket.io-client';
 import axios from 'axios';
 import { defineComponent } from 'vue';
+import UsersSearched from '../components/Relations/UsersSearched.vue';
 
 export default defineComponent({
 	name: 'Relations-Page',
@@ -31,12 +41,15 @@ export default defineComponent({
 	{
 		ListUsers,
 		Menu,
+		UsersSearched,
 	},
 	data()
 	{
 		return {
 			sessionCookie: '',
 			socket: null as Socket | null,
+			pseudo: '',
+			showSearchUsers: false,
 		}
 	},
 	async mounted()
@@ -89,8 +102,18 @@ export default defineComponent({
 		deleteBlockship()
 		{
 			if (this.$refs.blockList)
-			(this.$refs.blockList as typeof ListUsers).fetchUsers();
+				(this.$refs.blockList as typeof ListUsers).fetchUsers();
 		},
+		searchUser()
+		{
+			console.log(this.pseudo);
+			(this.$refs.UsersSearched as typeof UsersSearched).searchUsers();
+			this.showSearchUsers = true;
+		},
+		closeSearchUser()
+		{
+			this.showSearchUsers = false;
+		}
 	}
 });
 </script>

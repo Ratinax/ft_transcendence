@@ -215,7 +215,7 @@ export class UserService {
         const usersMapped = users.map((user) => ({
             id: user.id, 
             pseudo: user.pseudo, 
-            profilPic: user.profilPic,
+            profilPic: user.is42User ? user.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`,
             is42User: user.is42User,
             }));
         return (usersMapped);
