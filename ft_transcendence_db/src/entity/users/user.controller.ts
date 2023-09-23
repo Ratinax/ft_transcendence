@@ -176,7 +176,7 @@ export class UserController {
     async getUsers(@Param('pseudoPart') pseudoPart: string)
     {
         if (pseudoPart.length < 3)
-            return ('Not enough chars');
+            return ([]);
         const res = await this.userService.getUsers(pseudoPart);
         console.log(pseudoPart, res);
         return (res);

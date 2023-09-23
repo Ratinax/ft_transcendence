@@ -7,7 +7,7 @@
 	@close="closeSearchUser"/>
 	<div class="search-bar">
 		<form @submit.prevent="searchUser">
-			<input class="message-input" v-model="pseudo" placeholder="Search User"/>
+			<input class="search-input" v-model="pseudo" placeholder="Search User (3 char min)"/>
 		</form>
 	</div>
 	<ListUsers :is-friend-list="true" 
@@ -119,6 +119,28 @@ export default defineComponent({
 </script>
 
 <style>
+
+
+.search-input
+{
+	padding-left: 1em;
+	color: var(--pdark);
+	border-radius: 3em;
+	width: 20em;
+	height: 3em;
+}
+.search-input::placeholder
+{
+	color: var(--pdark);
+}
+
+.search-bar
+{
+	position: absolute;
+	left: 45%;
+	/* right: 50%; */
+	/* border-radius: 10em; */
+}
 
 .relations-page {
 	height: 100vh;
