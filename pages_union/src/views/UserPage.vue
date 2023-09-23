@@ -20,10 +20,10 @@
 			</div>
 			<div class="row button-zone">
 				<button v-if="showButtons && isBlocked" class="ft-button block-button" @click="unblockUser">UNBLOCK USER</button>
-				<button v-if="showButtons && !isBlocked" class="ft-button block-button" @click="blockUser">BLOCK USER</button>
-				<button v-if="showButtons && isFriend === 'accepted'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND</button>
-				<button v-if="showButtons && isFriend === 'pending'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND REQUEST</button>
-				<button v-if="showButtons && isFriend === ''" class="ft-button add-button" @click="addFriend">ADD FRIEND</button>
+				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button block-button" @click="blockUser">BLOCK USER</button>
+				<button v-if="showButtons && !isBlocked && isFriend === 'accepted'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND</button>
+				<button v-if="showButtons && !isBlocked && isFriend === 'pending'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND REQUEST</button>
+				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button add-button" @click="addFriend">ADD FRIEND</button>
 			</div>
 			<div class="row user-box user-stats">
 				<div class="col user-stat">
@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, computed, } from 'vue';
-import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useRoute } from 'vue-router';
 import Menu from "../components/Menu.vue"
 import MatchHistory from '../components/UserPage/MatchHistory.vue';
 import axios from 'axios';
@@ -57,7 +57,6 @@ export default defineComponent({
 		const showButtons = ref<boolean>(false);
 		const userName = ref('');
 		const profilePic = ref(undefined)
-		const userDescription = ref("userdescription");
 		const userGamesPlayed = ref(0);
 		const isBlocked = ref(false);
 		const isFriend = ref('');
