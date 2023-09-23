@@ -44,4 +44,10 @@ export class BlockshipService {
         const res = await this.blockshipRepository.delete(blockship.id);
         return (res);
     }
+    async blockUser(userblocking_id, userblocked_id)
+    {
+        const blockship = { userblocking: { id: userblocking_id }, userblocked: { id: userblocked_id } };
+        const res = await this.blockshipRepository.save(blockship);
+        return (res);
+    }
 }

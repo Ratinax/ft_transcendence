@@ -19,7 +19,7 @@
 				</div>
 			</div>
 			<div class="row button-zone">
-				<button v-if="showButtons" class="ft-button block-button">BLOCK USER</button>
+				<button v-if="showButtons" class="ft-button block-button" @click="blockUser">BLOCK USER</button>
 				<button v-if="showButtons" class="ft-button add-button">ADD FRIEND</button>
 			</div>
 			<div class="row user-box user-stats">
@@ -77,6 +77,17 @@ export default defineComponent({
 			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo/`, {withCredentials: true})).data);
 		})
 
+		async function	blockUser()
+		{
+			try
+			{
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/block/`, {pseudo: userName.value}, {withCredentials: true});
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
+		}
 
 		return { userName, 
 			profilePic, 
@@ -84,7 +95,8 @@ export default defineComponent({
 			userGamesPlayed, 
 			userWins, 
 			userWinRate, 
-			showButtons, };
+			showButtons, 
+			blockUser, };
 	},
 });
 </script>
