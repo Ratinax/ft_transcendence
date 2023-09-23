@@ -1,7 +1,7 @@
 <template>
     <div class="user">
         <div class="round-image">
-            <img :src="profilPic" alt="Image"/>
+            <img :src="profilPic" alt="Image" @click="goToProfil"/>
         </div>
         <span class="pseudo"> {{ user?.pseudo }}</span>
         <div class="green circle" v-if="user?.isConnected"></div>
@@ -17,7 +17,7 @@
 
 import axios from 'axios';
 import { defineComponent } from 'vue';
-
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
     name: 'User-Component',
@@ -30,6 +30,7 @@ export default defineComponent({
     {
         return {
             profilPic: '',
+            router: useRouter(),
         }
     },
     async mounted()
@@ -46,6 +47,10 @@ export default defineComponent({
         {
             this.$emit('remove-relation', this.user?.id);
         },
+        goToProfil()
+        {
+            this.router.push({name: 'UserPage', params: {pseudo: this.user?.pseudo}})
+        }
     }
 });
 </script>
@@ -82,7 +87,8 @@ export default defineComponent({
 .round-image img 
 {
   width: 100%;
-  height: auto; 
+  height: auto;
+  cursor: pointer;
 }
 
 .box 
