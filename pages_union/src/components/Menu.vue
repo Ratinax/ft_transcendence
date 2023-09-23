@@ -49,7 +49,7 @@ export default {
 	async beforeMount()
 	{
 		this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageName`, {withCredentials: true})).data;
-		this.pseudo = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/image-pseudo`, {withCredentials: true})).data;
+		this.pseudo = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/image-pseudo`, {withCredentials: true})).data.pseudo;
 	},
 	methods: 
 	{

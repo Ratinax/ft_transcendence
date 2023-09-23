@@ -1,6 +1,6 @@
 <template>
 	<div class="row user-page">
-		<Menu />
+	<Menu />
 		<div class="col user-page-content">
 			<div class="col user-box">
 				<div class="row user-profile">
@@ -9,7 +9,7 @@
 							<img :src="profilePic" alt="User profile picture"> 
 						</div>
 						<div class="row user-name-and-status">
-							<div class="connect"></div>
+						<div class="connect"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 					</div>
@@ -57,13 +57,18 @@ export default defineComponent({
 		const userGamesPlayed = ref(23);
 		const userWins = ref(12);
 		const userWinRate = computed(() => {
-			return Math.round(userWins.value / userGamesPlayed.value * 100);
+			if (userGamesPlayed.value > 0) {
+				return Math.round(userWins.value / userGamesPlayed.value * 100);
+			}
+			else {
+				return 0;
+			}
 		})
 
 		onMounted(async () => {
 			const route = useRoute();
 			if (typeof route.params.pseudo === 'string')
-				userName.value = route.params.pseudo;
+			userName.value = route.params.pseudo;
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
 			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:3000/games/games-wins/${userName.value}`, {withCredentials: true});
