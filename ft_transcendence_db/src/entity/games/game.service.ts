@@ -42,11 +42,12 @@ export class GameService {
         const gameHistory = games.map((game) => ({
             playerOne: {
                 pseudo: game.playerOne.pseudo,
-                profilPic: game.playerOne.profilPic,
+                profilPic: game.playerOne.is42User ? game.playerOne.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${game.playerOne.profilPic}`,
             },
             playerTwo: {
                 pseudo: game.playerTwo.pseudo,
-                profilPic: game.playerTwo.profilPic,
+                profilPic: game.playerTwo.is42User ? game.playerTwo.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${game.playerTwo.profilPic}`,
+
             },
             socrePlayerOne: game.scorePOne,
             socrePlayerTwo: game.scorePTwo,
