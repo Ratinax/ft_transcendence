@@ -16,7 +16,7 @@
 <script lang="ts">
 
 import axios from 'axios';
-import { defineComponent, registerRuntimeCompiler } from 'vue';
+import { defineComponent } from 'vue';
 
 
 export default defineComponent({
@@ -34,7 +34,7 @@ export default defineComponent({
     },
     async mounted()
 	{
-		this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNamePseudo/${this.user?.pseudo}`, {withCredentials: true})).data;
+		this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNameByPseudo/${this.user?.pseudo}`, {withCredentials: true})).data;
 	},
     methods: 
     {

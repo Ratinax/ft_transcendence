@@ -1,6 +1,6 @@
 <template>
 	<div class="row user-page">
-		<Menu />
+	<Menu />
 		<div class="col user-page-content">
 			<div class="col user-box">
 				<div class="row user-profile">
@@ -9,7 +9,7 @@
 							<img :src="profilePic" alt="User profile picture"> 
 						</div>
 						<div class="row user-name-and-status">
-							<div class="connect"></div>
+						<div class="connect"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 					</div>
@@ -51,25 +51,30 @@ export default defineComponent({
 	components: { Menu },
 	setup() {
 		const showButtons = ref<boolean>(false);
-		const userName = ref(null);
-		const profilePic = ref(null)
+		const userName = ref('');
+		const profilePic = ref(undefined)
 		const userDescription = ref("userdescription");
 		const userGamesPlayed = ref(23);
 		const userWins = ref(12);
 		const userWinRate = computed(() => {
-			return Math.round(userWins.value / userGamesPlayed.value * 100);
-		})
-
-		onBeforeMount(async () => {
-			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/image-pseudo`, {withCredentials: true});
-			userName.value = response.data.pseudo;
-			profilePic.value = response.data.ProfilPic;
-
+			if (userGamesPlayed.value > 0) {
+				return Math.round(userWins.value / userGamesPlayed.value * 100);
+			}
+			else {
+				return 0;
+			}
 		})
 
 		onMounted(async () => {
 			const route = useRoute();
-			showButtons.value = userName.value === route.params.pseudo;
+			if (typeof route.params.pseudo === 'string')
+			userName.value = route.params.pseudo;
+			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
+			profilePic.value = response.data;
+			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:3000/games/games-wins/${userName.value}`, {withCredentials: true});
+			userGamesPlayed.value = response2.data.nb_games;
+			userWins.value = response2.data.nb_wins;
+			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo/`, {withCredentials: true})).data);
 		})
 
 

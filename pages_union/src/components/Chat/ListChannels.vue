@@ -35,7 +35,7 @@
 						:show="showJoinChannel" 
 						:sessionCookie="sessionCookie" 
 						:socket="socket" 
-						ref='joinChannel' 
+						ref='joinChannel'
 						@close="showJoinChannel = false" >
 					</JoinChannel>
 				</div>
@@ -72,7 +72,7 @@ export default defineComponent({
 		}
 	},
 	created() 
-{
+	{
 		this.fetchChannels();
 	},
 	methods: {
@@ -119,7 +119,6 @@ export default defineComponent({
 			{
 				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].getChannelId() === channel_id)
 				{
-					console.log('indeed call');
 					(this.$refs.channelRef as Array<typeof Channel>)[i].setIsUserOwner(result);
 					break ;
 				}

@@ -34,6 +34,7 @@ export default defineComponent({
       {
         if (!channel)
         {
+          this.messages = [];
           return ;
         }
         try 

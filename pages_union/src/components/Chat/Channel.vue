@@ -65,6 +65,7 @@ export default defineComponent({
 			showPasswordPopUp: false,
 			isUserOwner: false,
 			passwordProtected: false,
+			leave: false,
 		}
 	},
 	emits: ['leave-channel', 'get-is-user-owner', 'channel-clicked', 'update-channels'],
@@ -75,10 +76,12 @@ export default defineComponent({
 		},
 		handleChannelClicked()
 		{
-			this.$emit('channel-clicked', this.channel);
+			if (!this.leave)
+				this.$emit('channel-clicked', this.channel);
 		},
 		leaveChannel()
 		{
+			this.leave = true;
 			this.$emit('leave-channel', this.channel);
 		},
 		async changePassword(password: string)
