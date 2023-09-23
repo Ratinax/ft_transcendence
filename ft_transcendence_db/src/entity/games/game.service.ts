@@ -49,8 +49,8 @@ export class GameService {
                 profilPic: game.playerTwo.is42User ? game.playerTwo.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${game.playerTwo.profilPic}`,
 
             },
-            socrePlayerOne: game.scorePOne,
-            socrePlayerTwo: game.scorePTwo,
+            scorePlayerOne: game.scorePOne,
+            scorePlayerTwo: game.scorePTwo,
             }));
         return (gameHistory);
     }

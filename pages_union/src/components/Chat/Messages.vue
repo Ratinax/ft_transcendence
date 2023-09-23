@@ -67,7 +67,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .messages
 {
 	padding: 2.5% 0;

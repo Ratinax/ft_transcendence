@@ -1,6 +1,6 @@
 <template>
 	<div class="row user-page">
-	<Menu />
+		<Menu />
 		<div class="col user-page-content">
 			<div class="col user-box">
 				<div class="row user-profile">
@@ -13,8 +13,8 @@
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 					</div>
-					<div class="col user-description">
-						<p class="text">text</p>
+					<div class="col user-match-history">
+						<MatchHistory :pseudo="userName"></MatchHistory>
 					</div>
 				</div>
 			</div>
@@ -30,9 +30,9 @@
 					<h1 class="text">Game(s) played</h1>
 					<p class="text user-score fade-text">{{ userGamesPlayed }}</p>
 				</div>
-				<div class="col user-stat">
+				<div class="col user-stat middle">
 					<h1 class="text">Win rate</h1>
-					<p class="text user-score fade-text winrate">{{userWinRate}}%</p>
+					<p class="text user-score fade-text">{{userWinRate}}%</p>
 				</div>
 				<div class="col user-stat">
 					<h1 class="text">Win(s)</h1>
@@ -44,23 +44,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, computed, onMounted, } from 'vue';
-import { useRoute } from 'vue-router';
+import { defineComponent, onBeforeMount, ref, computed, } from 'vue';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import Menu from "../components/Menu.vue"
+import MatchHistory from '../components/UserPage/MatchHistory.vue';
 import axios from 'axios';
 
 export default defineComponent({
 	name: 'UserPage',
-	components: { Menu },
+	components: { Menu, MatchHistory },
 	setup() {
 		const showButtons = ref<boolean>(false);
 		const userName = ref('');
 		const profilePic = ref(undefined)
 		const userDescription = ref("userdescription");
-		const userGamesPlayed = ref(23);
+		const userGamesPlayed = ref(0);
 		const isBlocked = ref(false);
 		const isFriend = ref('');
-		const userWins = ref(12);
+		const userWins = ref(0);
 		const userWinRate = computed(() => {
 			if (userGamesPlayed.value > 0) {
 				return Math.round(userWins.value / userGamesPlayed.value * 100);
@@ -70,10 +71,11 @@ export default defineComponent({
 			}
 		})
 
-		onMounted(async () => {
+		async function	fecthData() {
 			const route = useRoute();
-			if (typeof route.params.pseudo === 'string')
-			userName.value = route.params.pseudo;
+			if (typeof route.params.pseudo === 'string'){
+				userName.value = route.params.pseudo;
+			}
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
 			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:3000/games/games-wins/${userName.value}`, {withCredentials: true});
@@ -82,7 +84,7 @@ export default defineComponent({
 			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo/`, {withCredentials: true})).data);
 			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
 			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
-		})
+		}
 
 		async function	blockUser()
 		{
@@ -136,9 +138,12 @@ export default defineComponent({
 				console.error(e);
 			}
 		}
+		onBeforeMount(() =>
+		{
+			fecthData()
+		})
 		return { userName, 
 			profilePic, 
-			userDescription, 
 			userGamesPlayed, 
 			userWins, 
 			userWinRate, 
@@ -153,7 +158,6 @@ export default defineComponent({
 });
 </script>
 
-<style src="../assets/global.css" rel="stylesheet" lang="css"></style>
 <style scoped>
 
 .winrate {
@@ -166,16 +170,16 @@ export default defineComponent({
 
 .user-page {
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
-	box-sizing: content-box;
-	min-width: 450px;
+	min-width: 600px;
 	height: 100vh;
 }
 
 .user-page-content {
+	min-width: 450px;
+	justify-content: center;
 	margin: 2em auto;
 	max-width: 960px;
 	width: 100%;
-	box-sizing: content-box;
 }
 
 /* User profile */
@@ -183,10 +187,16 @@ export default defineComponent({
 	box-shadow: var(--pcyan) 0px 0px 0px 2px, var(--pblue) 0px 4px 6px -1px, var(--pblue) 0px 1px 0px inset;
 	background: var(--pdark);
 	width: 100%;
+	border-radius: .742em;
+}
+
+.user-profile {
+	height: 27em;
 }
 
 .user-profile-pic-and-name {
 	align-items: center;
+	justify-content: center;
 	width: 40%;
 	border-right: 1px solid var(--plight);
 }
@@ -198,11 +208,7 @@ export default defineComponent({
 	overflow: hidden;
 	width: 15em;
 	height: 15em;
-	margin: 1em 0; 
-}
-
-.profile-pic-container img {
-	height: 100%;
+	margin: 2em 0; 
 }
 
 .user-name-and-status {
@@ -223,8 +229,10 @@ export default defineComponent({
 	font-size: 2em;
 }
 
-.user-description {
-	padding: 2%;
+.user-match-history {
+	margin: 2%;
+	width: 60%;
+	overflow: auto;
 }
 
 /* Buttons */
@@ -257,6 +265,8 @@ export default defineComponent({
 /* Stats */
 .user-stats {
 	justify-content: center;
+	align-items: center;
+	height: 19em;
 }
 
 .user-stat {
@@ -265,14 +275,9 @@ export default defineComponent({
 	padding-bottom: 1.5em;
 }
 
-
 .user-score {
-	font-size: 9em;
+	font-size: 8em;
 	padding-top: .1em;
-}
-
-.user-win-rate {
-	font-size: 2.5em;
 }
 
 /* Media queries */
@@ -282,16 +287,28 @@ export default defineComponent({
 		flex-direction: column;
 	}
 
+	.user-profile,
+	.user-stats {
+		height: auto;
+	}
+
 	.user-page {
+		height: 100%;
 		flex-direction: row;
 	}
 
 	.user-page-content {
+		justify-content: unset;
 		width: 80%;
 	}
 
-	.user-stat {
-		border-top: 2px solid var(--plight);
+	.user-match-history {
+		width: 95%;
+	}
+
+	.middle {
+		border-top: 1px solid var(--plight);
+		border-bottom: 1px solid var(--plight);
 		width: 100%;
 	}
 
@@ -319,6 +336,12 @@ export default defineComponent({
 
 	.user-profile-pic {
 		width: 30%;
+	}
+}
+
+@media (max-width: 800px) {
+	.user-page-content {
+		margin: 0 1em;
 	}
 }
 </style>
