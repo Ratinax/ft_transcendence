@@ -19,7 +19,8 @@
 				</div>
 			</div>
 			<div class="row button-zone">
-				<button v-if="showButtons" class="ft-button block-button" @click="blockUser">BLOCK USER</button>
+				<button v-if="showButtons && isBlocked" class="ft-button block-button" @click="unblockUser">UNBLOCK USER</button>
+				<button v-if="showButtons && !isBlocked" class="ft-button block-button" @click="blockUser">BLOCK USER</button>
 				<button v-if="showButtons" class="ft-button add-button">ADD FRIEND</button>
 			</div>
 			<div class="row user-box user-stats">
@@ -55,6 +56,7 @@ export default defineComponent({
 		const profilePic = ref(undefined)
 		const userDescription = ref("userdescription");
 		const userGamesPlayed = ref(23);
+		const isBlocked = ref(false);
 		const userWins = ref(12);
 		const userWinRate = computed(() => {
 			if (userGamesPlayed.value > 0) {
@@ -75,28 +77,45 @@ export default defineComponent({
 			userGamesPlayed.value = response2.data.nb_games;
 			userWins.value = response2.data.nb_wins;
 			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo/`, {withCredentials: true})).data);
+			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
 		})
 
 		async function	blockUser()
 		{
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/block/`, {pseudo: userName.value}, {withCredentials: true});
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/block/`, {pseudo: userName.value}, {withCredentials: true});
+				if (res.data === 'Success')
+					isBlocked.value = true;
 			}
 			catch (e)
 			{
 				console.error(e);
 			}
 		}
-
+		async function	unblockUser()
+		{
+			try
+			{
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/unblock/`, {pseudo: userName.value}, {withCredentials: true});
+				if (res.data === 'Success')
+					isBlocked.value = false;
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
+		}
 		return { userName, 
 			profilePic, 
 			userDescription, 
 			userGamesPlayed, 
 			userWins, 
 			userWinRate, 
-			showButtons, 
-			blockUser, };
+			showButtons,
+			isBlocked,
+			blockUser, 
+			unblockUser, };
 	},
 });
 </script>

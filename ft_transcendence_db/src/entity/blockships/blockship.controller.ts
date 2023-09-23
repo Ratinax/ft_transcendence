@@ -30,6 +30,26 @@ export class BlockshipController {
             return (null);
         }
     }
+    @Get('isBlocked/:pseudoBlocked')
+    async getIsBlocked(@Param('pseudoBlocked') pseudoBlocked: string, @Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        const userBlocked = (await this.userService.getUser(pseudoBlocked))[0];
+        try 
+        {
+            const res = await this.blockshipService.getIsBlocked(user.id, userBlocked.id);
+            if (res)
+                return (true);
+        }
+        catch (e)
+        {
+            return (false);
+        }
+    }
     @Post('block')
     async blockUser(@Req() req, @Body() body)
     {
@@ -42,6 +62,25 @@ export class BlockshipController {
         try 
         {
             const res = await this.blockshipService.blockUser(user.id, userBlocked.id);
+            return ('Success');
+        }
+        catch (e)
+        {
+            return (null);
+        }
+    }
+    @Post('unblock')
+    async unblockUser(@Req() req, @Body() body)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        const userBlocked = (await this.userService.getUser(body.pseudo))[0];
+        try 
+        {
+            const res = await this.blockshipService.deleteBlockship(user.id, userBlocked.id);
             return ('Success');
         }
         catch (e)

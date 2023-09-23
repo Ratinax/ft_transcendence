@@ -50,4 +50,11 @@ export class BlockshipService {
         const res = await this.blockshipRepository.save(blockship);
         return (res);
     }
+    async getIsBlocked(user_id: number, blocked_id: number)
+    {
+        const blockship = await this.blockshipRepository.findOne({
+            where: { userblocking: { id: user_id }, userblocked: { id: blocked_id } },
+          });
+        return (blockship);
+    }
 }
