@@ -9,31 +9,31 @@
 			</li>
 			<li class="nav-item">
 				<div class="nav-link clickable" @click="goToUserPage">
-					<font-awesome-icon icon="fa-solid fa-user" size="3x" />
+					<font-awesome-icon icon="fa-solid fa-user" size="2x" />
 					<span class="link-text">Profile</span>
 				</div>
 			</li>
 			<li class="nav-item">
 				<div class="nav-link clickable" @click="goToMessages">
-					<font-awesome-icon icon="fa-solid fa-comments" size="3x" />
+					<font-awesome-icon icon="fa-solid fa-comments" size="2x" />
 					<span class="link-text">Chat</span>
 				</div>
 			</li>
 			<li class="nav-item">
 				<div class="nav-link clickable" @click="goToRelations">
-					<font-awesome-icon icon="fa-solid fa-user-plus" size="3x" />
+					<font-awesome-icon icon="fa-solid fa-user-plus" size="2x" />
 					<span class="link-text">Social</span>
 				</div>
 			</li>
 			<li class="nav-item">
 				<div class="nav-link clickable">
-					<font-awesome-icon icon="fa-solid fa-gamepad" size="3x" />
+					<font-awesome-icon icon="fa-solid fa-gamepad" size="2x" />
 					<span class="link-text">Game</span>
 				</div>
 			</li>
 			<li class="nav-item">
 				<div class="nav-link clickable">
-					<font-awesome-icon icon="fa-solid fa-gear" size="3x" />
+					<font-awesome-icon icon="fa-solid fa-gear" size="2x" />
 					<span class="link-text">Settings</span>
 				</div>
 			</li>
@@ -107,7 +107,7 @@ export default {
 }
 
 .link-text {
-	font-size: 1.5rem;
+	font-size: 1.25rem;
 	display: none;
 }
 
