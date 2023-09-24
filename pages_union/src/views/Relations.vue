@@ -1,29 +1,36 @@
 <template>
 	<Menu/>
-	<div class="row relations-page view">
-		<UsersSearched ref="UsersSearched" 
-			:show="showSearchUsers"
-			:pseudo="pseudo"
-			@close="closeSearchUser"/>
-		<div class="search-bar">
-			<form @submit.prevent="searchUser">
-				<input class="search-input" v-model="pseudo" placeholder="Search User (3 char min)"/>
-			</form>
+	<div class="view">
+		<div class="col search-container">
+			<UsersSearched ref="UsersSearched" 
+				:show="showSearchUsers"
+				:pseudo="pseudo"
+				@close="closeSearchUser"/>
+			<div class="search-bar">
+				<form @submit.prevent="searchUser">
+					<div class="row relations-input-container">
+						<font-awesome-icon class="relations-icon" icon="fa-solid fa-magnifying-glass" size="xl" />
+						<input class="search-input" v-model="pseudo" placeholder="Search User (3 char min)"/>
+					</div>
+				</form>
+			</div>
 		</div>
-		<ListUsers :is-friend-list="true" 
-			:headerText="'Friend list'" 
-			ref="friendList" 
-			@remove-relation="onRemoveRelation"/>
-		<ListUsers 
-			:is-friend-request-list="true" 
-			:headerText="'Friend request'" 
-			ref="friendRequest" 
-			@accept-friendship="onAcceptFriendship" 
-			@remove-relation="onRemoveRelation"/>
-		<ListUsers :is-block-list="true" 
-			:headerText="'Block list'" 
-			ref="blockList" 
-			@remove-relation="onRemoveRelation"/>
+		<div class="row">
+			<ListUsers :is-friend-list="true" 
+				:headerText="'Friend list'" 
+				ref="friendList" 
+				@remove-relation="onRemoveRelation"/>
+			<ListUsers 
+				:is-friend-request-list="true" 
+				:headerText="'Friend request'" 
+				ref="friendRequest" 
+				@accept-friendship="onAcceptFriendship" 
+				@remove-relation="onRemoveRelation"/>
+			<ListUsers :is-block-list="true" 
+				:headerText="'Block list'" 
+				ref="blockList" 
+				@remove-relation="onRemoveRelation"/>
+		</div>
 	</div>
 </template>
 
@@ -120,30 +127,41 @@ export default defineComponent({
 
 <style>
 
+.relations-input-container {
+	background: white;
+	align-items: center;
+	border-radius: 1rem;
+	border: .142rem solid transparent;
+}
+
+.relations-icon{
+	padding-left: 1rem;
+}
+
+.search-container {
+	padding: 3rem;
+	align-items: center;
+}
 
 .search-input
 {
-	padding-left: 1em;
 	color: var(--pdark);
-	border-radius: 3em;
-	width: 20em;
-	height: 3em;
+	font-size: 1rem;
+	padding: 1rem;
+	border-radius: 0 1rem 1rem 0;
 }
+
 .search-input::placeholder
 {
 	color: var(--pdark);
 }
 
-.search-bar
-{
-	position: absolute;
-	left: 45%;
-	/* right: 50%; */
-	/* border-radius: 10em; */
+.relations-input-container:focus-within {
+	border: .142rem solid var(--pcyan);
 }
 
-.relations-page {
-	height: 100vh;
+html {
+	height: 100%;
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
 }
 </style>

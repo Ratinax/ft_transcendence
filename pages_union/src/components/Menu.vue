@@ -166,7 +166,7 @@ export default {
 /* large screens */
 @media only screen and (min-width: 800px) {
 	.navbar {
-		border: .1em solid var(--pcyan);
+		border-right: .05em solid var(--plight);
 		top: 0;
 		width: 7rem;
 		height: 100vh;
