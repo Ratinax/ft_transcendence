@@ -78,12 +78,16 @@ export default defineComponent({
 			}
 		});
 		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
-			if (this.sessionCookie === response.sessionCookie) {
+			console.log(response.channel.channel_id, this.selectedChannel?.channel_id)
+			if (this.sessionCookie === response.sessionCookie && response.channel.channel_id === this.selectedChannel?.channel_id) {
 				this.updateListChannels(undefined);
 				this.updateListUsers(null);
 			}
+			else if (this.sessionCookie === response.sessionCookie)
+			{
+				this.updateListChannels(this.selectedChannel);
+			}
 			else if (response.channel.channel_id === this.selectedChannel?.channel_id) {
-				this.updateListChannels(response.channel); // TODO check if usefull
 				this.updateListUsers(response.users);
 			}
 		});
