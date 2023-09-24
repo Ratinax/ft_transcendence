@@ -184,6 +184,10 @@ export default {
 		margin-top: auto;
 		margin-bottom: 1rem;
 	}
+
+	.view {
+		padding-left: 7rem;
+	}
 }
 
 /* small screens */
@@ -208,7 +212,7 @@ export default {
 	}
 
 	.view {
-		margin: 0;
+		padding-bottom: 5rem;
 	}
 }
 
