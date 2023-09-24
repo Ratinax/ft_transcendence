@@ -118,8 +118,14 @@ export class FriendshipService {
         let friendship = await this.friendshipRepository.findOne({
             where: { user: { id: user_id }, friend: { id: friend_id } },
             });
-        if (!friendship)
+        let friendship2 = await this.friendshipRepository.findOne({
+            where: { user: { id: friend_id }, friend: { id: user_id } },
+            });
+        if (!friendship && !friendship2)
             throw new Error('no such friendship.');
-        return (friendship.statu);
+        if (friendship)
+            return (friendship.statu);
+        if (friendship2)
+            return (friendship2.statu);
     }
 }
