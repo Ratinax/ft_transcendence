@@ -1,6 +1,6 @@
 <template>
-	<div class="row relations-page">
-		<Menu/>
+	<Menu/>
+	<div class="row relations-page view">
 		<UsersSearched ref="UsersSearched" 
 			:show="showSearchUsers"
 			:pseudo="pseudo"

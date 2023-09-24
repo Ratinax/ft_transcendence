@@ -1,4 +1,5 @@
 :root {
+	font-size: 16px;
 	--pblack: #0b0c10;
 	--pdark: #1f2833;
 	--plight: #c5c6c7;
@@ -17,6 +18,10 @@ p {
 	font-family: Avenir, Helvetica, Arial, sans-serif; /* mettre une autre font custom */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+.view {
+	margin-left: 7rem;
 }
 
 input {

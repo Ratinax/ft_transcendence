@@ -1,35 +1,44 @@
 <template>
-	<div class="placeholder"></div>
-	<div class="navigation-menu">
-		<div class="navigation-option profil-pic">
-			<img :src="profilPic" alt="Profil" @click="goToUserPage"/>
-		</div>
-		<div class="navigation-option" @click="goToMessages">
-			<div class="messages-icon">
-				<div class="line"></div>
-				<div class="line"></div>
-				<div class="queue"></div>
-				<div class="line"></div>
-			</div>
-		</div>
-		<div class="navigation-option option-circle" @click="goToRelations">
-			<div class="horizontal-bar bar friend-bar"></div>
-			<div class="vertical-bar bar friend-bar"></div>
-			<div class="round-body head"></div>
-			<div class="round-body body"></div>
-		</div>
-		<div class="navigation-option option-circle">
-			<div class="hand-left"></div>
-			<div class="hand-right"></div>
-			<div class="pad"></div>
-			<div class="horizontal-bar bar controller-bar"></div>
-			<div class="vertical-bar bar controller-bar"></div>
-			<div class="button top"></div>
-			<div class="button left"></div>
-			<div class="button right"></div>
-			<div class="button bottom"></div>
-		</div>
-	</div>
+	<nav class="navbar">
+		<ul class="col navbar-nav">
+			<li class="logo">
+				<div class="nav-link">
+					<span class="link-text">FT_TRANSCENDENCE</span>
+					<font-awesome-icon icon="fa-solid fa-angles-right" size="2x" />
+				</div>
+			</li>
+			<li class="nav-item">
+				<div class="nav-link clickable" @click="goToUserPage">
+					<font-awesome-icon icon="fa-solid fa-user" size="3x" />
+					<span class="link-text">Profile</span>
+				</div>
+			</li>
+			<li class="nav-item">
+				<div class="nav-link clickable" @click="goToMessages">
+					<font-awesome-icon icon="fa-solid fa-comments" size="3x" />
+					<span class="link-text">Chat</span>
+				</div>
+			</li>
+			<li class="nav-item">
+				<div class="nav-link clickable" @click="goToRelations">
+					<font-awesome-icon icon="fa-solid fa-user-plus" size="3x" />
+					<span class="link-text">Social</span>
+				</div>
+			</li>
+			<li class="nav-item">
+				<div class="nav-link clickable">
+					<font-awesome-icon icon="fa-solid fa-gamepad" size="3x" />
+					<span class="link-text">Game</span>
+				</div>
+			</li>
+			<li class="nav-item">
+				<div class="nav-link clickable">
+					<font-awesome-icon icon="fa-solid fa-gear" size="3x" />
+					<span class="link-text">Settings</span>
+				</div>
+			</li>
+		</ul>
+	</nav>
 </template>
 
 <script>
@@ -43,7 +52,7 @@ export default {
 			router: useRouter(),
 			profilPic: '',
 			pseudo: '',
-			
+
 		}
 	},
 	async beforeMount()
@@ -68,260 +77,139 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
-.placeholder {
-	width: 10.42em;
-	visibility: hidden;
-}
-.navigation-option.profil-pic 
-{
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border: 0.1em solid var(--plight);
-}
-
-.navigation-option img
-{
-	height: 100%;
-	padding-left: 0.7em;
-}
-.navigation-option .button.top
-{
-	margin-top: 2.2em;
-	margin-left: 5.3em;
-}
-
-.navigation-option .button.bottom
-{
-	margin-top: 3.2em;
-	margin-left: 5.3em;
-}
-
-.navigation-option .button.left
-{
-	margin-top: 2.7em;
-	margin-left: 4.8em;
-}
-
-.navigation-option .button.right
-{
-	margin-top: 2.7em;
-	margin-left: 5.8em;
-}
-
-.navigation-option .button
-{
-	position: absolute;
-	height: 0.5em;
-	width: 0.5em;
-	border-radius: 50%;
-	background-color: var(--pblack);
-}
-
-.horizontal-bar.controller-bar
-{
-	margin-left: 1.8em;
-	margin-top: 2.7em;
-}
-
-.vertical-bar.controller-bar
-{
-	margin-left: 2.3em;
-	margin-top: 2.2em;
-}
-
-.controller-bar
-{
-	background-color: var(--pblack);
-}
-
-.pad
-{
-	position: absolute;
-	margin-left: 1.9em;
-	width: 4.2em;
-	height: 2.5em;
-	margin-top: 1.8em;
-	border-radius: 1em; 
-	background-color: var(--pblue);
-}
-
-.hand-right
-{
-	position: absolute;
-	margin-left: 5.25em;
-	margin-top: 1.7em; 
-	width: 1.5em;
-	height: 4em;
-	border-radius: 1em;
-	background-color: var(--pblue);
-	transform: rotate(-20deg);
-}
-
-.hand-left
-{
-	position: absolute;
-	margin-left: 1.25em;
-	margin-top: 1.7em; 
-	width: 1.5em;
-	height: 4em;
-	border-radius: 1em;
-	background-color: var(--pblue);
-	transform: rotate(20deg);
-}
-.round-body
-{
-	position: absolute;
-	border-radius: 50%;
-	background-color: transparent;
-	border: 0.4em solid var(--pblack);
-}
-.round-body.body
-{
-	width: 5em;
-	height: 5em;
-	margin-left: 1.1em;
-	margin-top: 5em;
-}
-
-.round-body.head
-{
-	width: 2.5em;
-	height: 2.5em;
-	margin-left: 2.35em;
-	margin-top: 2em;
-}
-.navigation-option.option-circle
-{
-	position: relative;
-	height: 8em;
-	width: 8em;
-	background-color: var(--pdark);
-	border-radius: 50%;
-	overflow: hidden;
-}
-.friend-bar
-{
-	background-color: var(--pblue);
-}
-.bar
-{
-	position: absolute;
-	border-radius: 1.5em;
-	z-index: inf;
-}
-.horizontal-bar.friend-bar
-{
-	margin-left: 1.0em;
-	margin-top: 2.0em;
-}
-.vertical-bar.friend-bar
-{
-	margin-left: 1.5em;
-	margin-top: 1.5em;
-}
-.horizontal-bar
-{
-	height: 0.5em;
-	width: 1.5em;
-}
-.vertical-bar
-{
-	height: 1.5em;
-	width: 0.5em;
-}
-
-.navigation-menu
-{
-	width: 9.42em;
+.navbar {
 	position: fixed;
+	background-color: var(--pdark);
 	box-sizing: border-box;
-	height: 100vh;
-	background-color: var(--pblack);
-	display: flex;
-	flex-direction: column;
-	align-items: center; 
-	z-index: 999;
-	border: 2px solid var(--pcyan);
-	border-radius: .4em;
+	transition: width 200ms ease;
+	--transition-speed: 200ms;
 }
 
-.navigation-option
-{
-	position: relative;
-	margin-top: 2em;
-	margin-bottom: 3.5em;
-	flex-shrink: 0;
-	justify-content: center;
-	overflow: hidden; 
+.navbar-nav {
+	color: var(--plight);
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	height: 100%;
+}
+
+.nav-item {
+	width: 100%;
+}
+
+.nav-link {
+	display: flex;
 	align-items: center;
-	justify-content: center;
+	height: 5rem;
+	transition: var(--transition-speed);
+}
+
+.link-text {
+	font-size: 1.5rem;
+	display: none;
+}
+
+.nav-link svg {
+	min-width: 4rem;
+	margin: 0 1.5rem;
+}
+
+.nav-link.clickable:hover {
+	background-color: var(--pblack);
+	color: var(--pcyan);
+	transition: color var(--transition-speed) ease;
 	cursor: pointer;
-	transition: transform 0.2s ease;
-}
-.profil-pic
-{
-	width: 8em;
-	height: 8em;
-	border-radius: 50%;
-	box-sizing: border-box;
 }
 
-.profil-pic img {
-	position: absolute;
+.nav-link.clickable:hover .link-text {
+	color: white;
+	transition: color var(--transition-speed) ease;
 }
 
-.messages-icon
-{
-	display: flex;
-	flex-direction: column;
-	box-shadow: 0.4em 0.4em 1em var(--pblack);
-	background-color: var(--pblue);
-	height: 5em;
-	width: 6em;
-	border-radius: 1.5em;
-	overflow: visible;
+.logo {
+	width: 100%;
+	margin: 1em auto;
 }
 
-.messages-icon .line
-{
-	width: 4em;
-	height: 0.4em;
-	border-radius: 1.5em;
-	background-color: var(--plight);
-	display: flex;
-	margin-bottom: 0.7em;
-	margin-left: 1em;
-	z-index: 9999;
-}
-.messages-icon .line:first-child
-{
-	margin-top: 1em;
-}
-.messages-icon .line:last-child
-{
-	width: 3em;
+.logo .link-text {
+	font-weight: bold;
+	font-size: .8rem;
 }
 
-.messages-icon .queue
-{
-	position: absolute;
-	background-color: transparent;
-	margin-left: -0.85em;
-	border-left: 1.2em solid transparent;
-	border-right: 1.6em solid transparent;
-	border-top: 2em solid var(--pblue);
-}
-.navigation-option:has(.messages-icon)
-{
-	overflow: visible;
+.logo .nav-link {
+	background-color: var(--pblack);
 }
 
-.navigation-option:hover {
-	transform: scale(105%);
+.logo .nav-link svg {
+	margin: 0 1.5rem;
+}
+
+.logo .nav-link .link-text {
+	padding-left: 1.2rem;
+}
+
+.logo svg {
+	transform: rotate(0);
+	transition: transform 400ms;
+}
+
+.navbar:hover .logo svg {
+	transform: rotate(180deg);
+}
+
+.navbar:hover .logo .nav-link svg {
+	margin: 0;
+}
+
+/* large screens */
+@media only screen and (min-width: 800px) {
+	.navbar {
+		border: .1em solid var(--pcyan);
+		top: 0;
+		width: 7rem;
+		height: 100vh;
+	}
+
+	.navbar:hover {
+		width: 14rem;
+	}
+
+	.navbar:hover .link-text {
+		display: inline;
+	}
+
+	.nav-item:last-child {
+		margin-top: auto;
+		margin-bottom: 1rem;
+	}
+}
+
+/* small screens */
+@media only screen and (max-width: 800px) {
+	.navbar {
+		background-color: var(--pblack);
+		bottom: 0;
+		width: 100vw;
+		height: 5rem;
+	}
+
+	.logo {
+		display: none;
+	}
+
+	.navbar-nav {
+		flex-direction: row;
+	}
+
+	.nav-link {
+		justify-content: center;
+	}
+
+	.view {
+		margin: 0;
+	}
 }
 
 </style>

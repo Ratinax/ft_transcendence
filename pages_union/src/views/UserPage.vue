@@ -1,6 +1,6 @@
 <template>
-	<div class="row user-page">
 	<Menu />
+	<div class="row user-page view">
 		<div class="col user-page-content">
 			<div class="col user-box">
 				<div class="row user-profile">
@@ -333,15 +333,6 @@ export default defineComponent({
 		border: none;
 		border-bottom: 1px solid var(--plight);
 	}
-
-	.user-profile-pic {
-		width: 30%;
-	}
 }
 
-@media (max-width: 800px) {
-	.user-page-content {
-		margin: 0 1em;
-	}
-}
 </style>
