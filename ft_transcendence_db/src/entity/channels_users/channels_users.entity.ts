@@ -49,4 +49,7 @@ export class ChannelsUsers {
 
     @Column({name: 'duration_timeout', type: 'integer', default: 0})
     durationTimeout: Number;
+
+    @Column({ name: 'is_hide', default: false })
+    isHide: boolean;
 }

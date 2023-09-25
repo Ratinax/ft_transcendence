@@ -115,6 +115,7 @@ export class ChannelsUsersGateway {
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
     const res = await this.channelsUsersService.leave(body.channel, user);
+    // TODO check if something to do after hidden
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.emit('updateAfterPart', {
       users: users, 

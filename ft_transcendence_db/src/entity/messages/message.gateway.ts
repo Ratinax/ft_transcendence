@@ -39,21 +39,25 @@ export class MessagesGateway {
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
       
-      const relation = await this.channelsUsersService.findRelation(user.id, body.channel_id);
-      if (!relation || !relation[0])
+      const relation = (await this.channelsUsersService.findRelation(user.id, body.channel_id))[0];
+      if (!relation)
         throw new InternalServerErrorException('no such relation');
-        
-        const timeoutDate = new Date(relation[0].dateTimeout);
-        const currentDate = new Date(body.dateSent);
-        const timeoutDuration = relation[0].durationTimeout;
-        
-        const timeoutSeconds = timeoutDate.getTime() / 1000;
-        const currentSeconds = currentDate.getTime() / 1000;
-        
-        if (timeoutSeconds + +timeoutDuration > currentSeconds)
-        {
-          this.server.emit('sendMessageTimeout', {channel_id: body.channel_id, sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
-          return 'user timeout';
+
+      if (relation.channel.isADm)
+      {
+        this.unHide(user.id, relation.channel);
+      }
+      const timeoutDate = new Date(relation.dateTimeout);
+      const currentDate = new Date(body.dateSent);
+      const timeoutDuration = relation.durationTimeout;
+      
+      const timeoutSeconds = timeoutDate.getTime() / 1000;
+      const currentSeconds = currentDate.getTime() / 1000;
+      
+      if (timeoutSeconds + +timeoutDuration > currentSeconds)
+      {
+        this.server.emit('sendMessageTimeout', {channel_id: body.channel_id, sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
+        return 'user timeout';
       }
 
       const response = await this.messagesService.post({
@@ -70,5 +74,17 @@ export class MessagesGateway {
       this.server.emit('sendMessageGoodRequest', {channel_id: body.channel_id, sessionCookie: body.sessionCookie});
 
       return response;
+  }
+  async unHide(user_id: number, channel)
+  {
+    const users = await this.channelsUsersService.findUsersOfChannel(channel.name);
+      for (let i = 0; i < users.length; i++)
+      {
+        if (users[i].id !== user_id)
+        {
+          await this.channelsUsersService.unHide(users[i].id, channel.channel_id);
+          break ;
+        }
+      }
   }
 }

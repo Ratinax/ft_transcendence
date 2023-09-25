@@ -14,8 +14,11 @@ export class ChannelsUsersService {
      * @param channels_users {user, channel, isAdmin, isOwner, isInvited, isBanned}
      * @returns result of request
      */
-    createNew(channels_users: Partial<ChannelsUsers>)
+    async createNew(channels_users: Partial<ChannelsUsers>)
     {
+        const relation = (await this.findRelation(channels_users.user.id, channels_users.channel.channel_id))[0];
+        if (relation)
+            return (false);
         const newRelation = this.channelsUsersRepository.create(channels_users);
         return (this.channelsUsersRepository.save(newRelation));
     }
@@ -58,7 +61,8 @@ export class ChannelsUsersService {
     {
         const relation = await this.channelsUsersRepository
             .createQueryBuilder('channelsUsers')
-            .where('channel_id = :channel_id AND user_id = :user_id', { channel_id: channel_id, user_id: user_id })
+            .innerJoinAndSelect('channelsUsers.channel', 'channel')
+            .where('channel.channel_id = :channel_id AND user_id = :user_id', { channel_id: channel_id, user_id: user_id })
             .getMany();
         return (relation);
     }
@@ -82,6 +86,7 @@ export class ChannelsUsersService {
                 isADm: channelsUsers.channel.isADm,
                 name: channelsUsers.channel.name,
                 category: channelsUsers.channel.category,
+                isHide: channelsUsers.isHide,
             }
         ));
         return (channels);
@@ -104,15 +109,20 @@ export class ChannelsUsersService {
     /**
      * remove relation
      * 
-     * @param channel channel users leaves
+     * @param channel channel users leaves 
      * @param user user who leaves
      * @returns result of request
      */
     async leave(channel, user)
     {
-        const relation = await this.findRelation(user.id, channel.channel_id);
-        if (relation)
+        const relation = (await this.findRelation(user.id, channel.channel_id))[0];
+        if (relation && !relation.channel.isADm)
             return (await this.channelsUsersRepository.remove(relation));
+        else if (relation)
+        {
+            relation.isHide = true;
+            return (await this.channelsUsersRepository.save(relation));
+        }
     }
     /**
      * set user as admin in channel
@@ -189,5 +199,11 @@ export class ChannelsUsersService {
         relation.dateTimeout = new Date(this.getCurrentDate());
         relation.durationTimeout = duration;
         return (this.channelsUsersRepository.save(relation));
+    }
+    async unHide(user_id: number, channel_id: number)
+    {
+        const relation = (await this.findRelation(user_id, channel_id))[0];
+        relation.isHide = false;
+        return (await this.channelsUsersRepository.save(relation));
     }
 }

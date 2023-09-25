@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="!channel?.isHide">
 		<div 
 			:class="{'selection-color' : isSelected}"
 			@click="handleChannelClicked">
@@ -11,6 +11,7 @@
 				<p class="channel-name">
 					{{ channel?.name }}
 				</p>
+				<div class="notif-circle" v-if="isNotif"></div>
 				<div class="option" v-if="isSelected">
 					<div v-if="isUserOwner"
 						:class="{'icon': true, 'setting': true, 'private': (isPrivate)}"
@@ -73,11 +74,13 @@ export default defineComponent({
 			passwordProtected: false,
 			isPrivate: false,
 			leave: false,
+			isNotif: false,
 		}
 	},
 	emits: ['leave-channel', 'get-is-user-owner', 'channel-clicked', 'update-channels'],
 	async mounted()
 	{
+		// TODO check if ther's notif
 		this.isPrivate = false;
 		this.passwordProtected = false;
 		const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels/category/${this.channel?.name}`, 
@@ -98,6 +101,7 @@ export default defineComponent({
 		},
 		handleChannelClicked()
 		{
+
 			if (!this.leave)
 				this.$emit('channel-clicked', this.channel);
 		},
@@ -211,6 +215,14 @@ export default defineComponent({
 		getChannelId()
 		{
 			return (this.channel?.channel_id)
+		},
+		setNotif()
+		{
+			this.isNotif = true;
+		},
+		unsetNotif()
+		{
+			this.isNotif = false;
 		}
 	}
 });
@@ -276,4 +288,12 @@ export default defineComponent({
 	color: #bda400;
 }
 
+.notif-circle
+{
+	background-color: red;
+	border-radius: 50%;
+	width: .8em;
+	height: .8em;
+	flex-shrink: 0;
+}
 </style>

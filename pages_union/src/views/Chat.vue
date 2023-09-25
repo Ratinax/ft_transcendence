@@ -78,7 +78,8 @@ export default defineComponent({
 			}
 		});
 		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
-			console.log(response.channel.channel_id, this.selectedChannel?.channel_id)
+			if (!response)
+				return ;
 			if (this.sessionCookie === response.sessionCookie && response.channel.channel_id === this.selectedChannel?.channel_id) {
 				this.updateListChannels(undefined);
 				this.updateListUsers(null);
@@ -96,8 +97,10 @@ export default defineComponent({
 			this.sendMessageTimeout(response.duration);
 		});
 		this.socket.on('sendMessageGoodRequest', async (response: {channel_id: number, sessionCookie: string}) => {
-			if (this.selectedChannel?.channel_id === response.channel_id && this.sessionCookie === response.sessionCookie)
 			this.sendMessageGoodRequest();
+			this.updateListChannels(this.selectedChannel); // TODO ca referche a chaque fois que qqun envoie un msg qu'on est pas a check, peut etre discutable
+			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
+				(this.$refs.listChannels as typeof ListChannels).pushNotifs(response.channel_id);
 		});
 	},
 	methods:
@@ -155,6 +158,8 @@ export default defineComponent({
 				(this.$refs.sendMessage as typeof SendMessage).timeout(duration);
 		},
 		sendMessageGoodRequest() {
+			if (this.$refs.listChannels)
+
 			if (this.$refs.sendMessage)
 				(this.$refs.sendMessage as typeof SendMessage).goodRequest();
 		},
