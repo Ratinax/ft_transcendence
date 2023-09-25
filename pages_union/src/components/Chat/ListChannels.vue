@@ -14,7 +14,7 @@
 			<div class="buttons" :class="{'nochannel': channels.length === 0}">
 				<div class="new-channel">
 					<button 
-						class="ft-button" 
+						class="ft-button blue-button" 
 						@click="showCreateChannel = true">
 						Create Channel
 					</button>
@@ -27,7 +27,7 @@
 				</div>
 				<div class="join-channel">
 					<button 
-						class="ft-button green-button" 
+						class="ft-button blue-button" 
 						@click="showJoinChannel = true">
 						Join Channel
 					</button>
@@ -167,8 +167,6 @@ export default defineComponent({
 }
 
 button {
-	background: var(--pcyan);
-	box-shadow: 0 4px 0 var(--pblue);
 	font-size: .9em;
 	width: 100%;
 	margin-bottom: 1em;

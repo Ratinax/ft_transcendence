@@ -19,12 +19,12 @@
 				</div>
 			</div>
 			<div class="row button-zone">
-				<button v-if="showButtons && isBlocked" class="ft-button block-button" @click="unblockUser">UNBLOCK USER</button>
-				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button block-button" @click="blockUser">BLOCK USER</button>
-				<button v-if="showButtons && !isBlocked && isFriend === 'accepted'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND</button>
-				<button v-if="showButtons && !isBlocked && isFriend === 'pending'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND REQUEST</button>
-				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button add-button" @click="addFriend">ADD FRIEND</button>
-				<button v-if="showButtons" class="ft-button send-button" @click="sendMessage">Send  message</button>
+				<button v-if="showButtons && isBlocked" class="ft-button red-button" @click="unblockUser">UNBLOCK USER</button>
+				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button red-button" @click="blockUser">BLOCK USER</button>
+				<button v-if="showButtons && !isBlocked && isFriend === 'accepted'" class="ft-button green-button" @click="removeFriend">REMOVE FRIEND</button>
+				<button v-if="showButtons && !isBlocked && isFriend === 'pending'" class="ft-button green-button" @click="removeFriend">REMOVE FRIEND REQUEST</button>
+				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button green-button" @click="addFriend">ADD FRIEND</button>
+				<button v-if="showButtons" class="ft-button blue-button" @click="sendMessage">Send  message</button>
 			</div>
 			<div class="row user-box user-stats">
 				<div class="col user-stat">
@@ -265,33 +265,6 @@ export default defineComponent({
 	margin-bottom: 4em;
 }
 
-.add-button {
-	background: rgba(0, 255, 0, 0.875);
-	box-shadow: 0 4px 0 green;
-}
-
-.add-button:hover {
-	background: lime;
-}
-
-.block-button {
-	background: rgb(251, 80, 80, 0.875);
-	box-shadow: 0 4px 0 red;
-}
-
-.block-button:hover {
-	background: rgb(251, 80, 80);
-}
-
-.send-button {
-	background: rgb(102, 252, 241, 0.875);
-	box-shadow: 0 4px 0 rgb(22, 172, 161, 0.875);
-}
-
-.send-button:hover {
-	background: rgb(102, 252, 241);
-}
-
 /* Stats */
 .user-stats {
 	justify-content: center;
@@ -342,6 +315,10 @@ export default defineComponent({
 		width: 100%;
 	}
 
+	.user-stat {
+		width: 100%;
+	}
+
 	.button-zone {
 		width: 100%;
 	}
@@ -353,13 +330,14 @@ export default defineComponent({
 	}
 }
 
-@media (max-width: 850px) {
+@media (max-width: 960px) {
 	.user-profile {
 		flex-direction: column;
 	}
 
 	.user-profile-pic-and-name {
 		width: 100%;
+		padding: 0;
 		border: none;
 		border-bottom: 1px solid var(--plight);
 	}
