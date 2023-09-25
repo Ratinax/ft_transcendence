@@ -81,7 +81,6 @@ export default {
 	--transition-speed: 142ms;
 	position: fixed;
 	background-color: var(--pdark);
-	box-sizing: border-box;
 	transition: width 142ms ease;
 }
 
@@ -193,8 +192,7 @@ export default {
 	.navbar {
 		background-color: var(--pblack);
 		bottom: 0;
-		width: 100vw;
-		height: 5rem;
+		width: 100%;
 	}
 
 	.logo {
@@ -206,11 +204,17 @@ export default {
 	}
 
 	.nav-link {
+		display: flex;
 		justify-content: center;
+		font-size: .75em;
 	}
 
 	.view {
 		padding-bottom: 5rem;
+	}
+
+	.nav-link svg {
+		margin: 0;
 	}
 }
 
