@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, computed, } from 'vue';
+import { defineComponent, onMounted, ref, computed, onUpdated, onBeforeMount, } from 'vue';
 import { useRoute } from 'vue-router';
 import Menu from "../components/Menu.vue"
 import MatchHistory from '../components/UserPage/MatchHistory.vue';
@@ -139,6 +139,12 @@ export default defineComponent({
 		}
 		onBeforeMount(() =>
 			{
+				console.log('ca v MOUNT')
+				fecthData()
+		})
+		onUpdated(() =>
+			{
+				console.log('ca v MOUNT')
 				fecthData()
 		})
 		return { userName, 

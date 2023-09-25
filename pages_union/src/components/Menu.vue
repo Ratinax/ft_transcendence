@@ -56,7 +56,7 @@ export default {
 	},
 	async beforeMount()
 	{
-		this.pseudo = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/image-pseudo`, {withCredentials: true})).data.pseudo;
+		this.pseudo = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo`, {withCredentials: true})).data;
 	},
 	methods: 
 	{

@@ -53,9 +53,11 @@ export default defineComponent({
 		const pTwoScore = ref(props.playerTwoScore);
 
 		function	goToUserPage(player: string | undefined) {
-			router.push({ name: "UserPage", params: { pseudo: player } } ).then(() => {
+			router.push({ name: "UserPage", params: { pseudo: player } } )
+			//TODO: check if we want to remove that thing 
+			/*.then(() => {
 				window.location.reload();
-			});
+			});*/
 		}
 
 		return {playerOne, 
