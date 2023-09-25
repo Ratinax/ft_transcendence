@@ -62,8 +62,30 @@ input:focus {
 }
 
 .green-button {
-	background: lime;
+	background: rgba(0, 255, 0, 0.875);
 	box-shadow: 0 4px 0 green; 
+}
+
+.green-button:hover {
+	background: lime;
+}
+
+.blue-button {
+	background: rgb(102, 252, 241, .875);
+	box-shadow: 0 4px 0 var(--pblue);
+}
+
+.blue-button:hover {
+	background: var(--pcyan);
+}
+
+.red-button {
+	background: rgb(251, 80, 80, 0.875);
+	box-shadow: 0 4px 0 red;
+}
+
+.red-button:hover {
+	background: rgb(251, 80, 80);
 }
 
 .fade-text {
