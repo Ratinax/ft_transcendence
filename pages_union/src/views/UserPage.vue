@@ -216,6 +216,7 @@ export default defineComponent({
 
 .user-profile-pic-and-name {
 	align-items: center;
+	justify-content: center;
 	width: 40%;
 	padding: 0 1em;
 	border-right: 1px solid var(--plight);
