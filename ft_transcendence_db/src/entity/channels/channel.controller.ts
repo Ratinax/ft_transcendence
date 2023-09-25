@@ -100,4 +100,15 @@ export class ChannelController {
             return (false);
         return (true);
     }
+    @Get('category/:name')
+    async getState(@Param('name') name: string, @Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        const channel = (await this.channelService.findByName(name))[0];
+        return (channel.category);
+    }
 }

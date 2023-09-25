@@ -2,6 +2,9 @@
 	<div @click.self="close" class="modal-overlay" v-if="show">
 		<div class="modal">
 			<form class="input-container" @submit.prevent="setPassword">
+				<div class="buttons">
+					
+				</div>
 				<input 
 					v-model="password" 
 					placeholder="Password" 
@@ -22,8 +25,11 @@
 							Change
 						</span>
 					</button>
-					<button @click.prevent="removePassword" class="ft-button">
+					<button v-if="isSet" @click.prevent="removePassword" class="ft-button">
 						remove
+					</button>
+					<button id="go-private" class="ft-button">
+							pass to private
 					</button>
 				</div>
 			</form>
@@ -97,6 +103,9 @@ export default defineComponent({
 </script>
 
 <style scoped src="../../assets/popup.css">
-
+#go-private
+{
+	margin-top: 1em;
+}
 </style>
 
