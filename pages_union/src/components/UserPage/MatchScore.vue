@@ -48,9 +48,12 @@ export default defineComponent({
 	},
 	setup(props) {
 		const router = useRouter();
-		const playerOne = ref(props.playerOneData)!;
+		const playerOne = ref(props.playerOneData);
 		const playerTwo = ref(props.playerTwoData);
-		const userOneWin = ref(props.playerOneScore! > props.playerTwoScore!);
+		const userOneWin = ref<boolean>();
+		if (props.playerOneScore && props.playerTwoScore) {
+			userOneWin.value = props.playerOneScore > props.playerTwoScore;
+		}
 		const pOneScore = ref(props.playerOneScore);
 		const pTwoScore = ref(props.playerTwoScore);
 

@@ -129,7 +129,7 @@ export default defineComponent({
 				this.isPrivate = false;
 				this.$emit('update-channels');
 			}
-			catch (error: Error | any | undefined)
+			catch (error: Error | any)
 			{
 				if (error.response.data.message === 'Password not good length' && this.$refs.SetPassword)
 					(this.$refs.SetPassword as typeof SetPassword).notGoodLength()

@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, computed, onUpdated, onBeforeMount, } from 'vue';
+import { defineComponent, ref, computed, onUpdated, onBeforeMount, } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Menu from "../components/Menu.vue"
 import MatchHistory from '../components/UserPage/MatchHistory.vue';

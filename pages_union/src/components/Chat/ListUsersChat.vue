@@ -20,8 +20,15 @@ import { Socket } from 'socket.io-client';
 import UserChat from './UserChat.vue';
 import axios from 'axios';
 import { defineComponent } from 'vue';
-import { DefaultEventsMap } from '@socket.io/component-emitter';
 
+interface UserData {
+	id: number, 
+	isInvited: boolean, 
+	isOwner: boolean, 
+	isAdmin: boolean, 
+	isConnected: boolean, 
+	pseudo: string
+}
 
 export default defineComponent({
 	name: 'ListUsersChat',
@@ -38,7 +45,7 @@ export default defineComponent({
 	data()
 {
 		return {
-			users: [] as Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>,
+			users: [] as Array<UserData>,
 			userSelected: undefined as {id: number} | undefined,
 			userInChannel: null, // the user with only id, isAdmin, and isOwner
 		}

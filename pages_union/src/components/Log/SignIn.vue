@@ -67,7 +67,7 @@ export default defineComponent({
 			if (!res.data)
 				return ;
 			resetData();
-			router.push({path: '/chat'});
+			router.push({name: 'UserPage'});
 		}
 		return {login, login42, resetData, pseudo, password, error};
 	}
@@ -75,6 +75,5 @@ export default defineComponent({
 </script>
 
 <style scoped src="../../assets/formComponent.css" lang="css">
-
 
 </style>
