@@ -9,11 +9,13 @@
 			</div>
 			<font-awesome-icon v-if="userOneWin" class="win right" icon="fa-solid fa-w" size="xl" />
 			<font-awesome-icon v-else class="loss right" icon="fa-solid fa-l" size="xl"/>
-			<span class="text score">{{ pOneScore }}</span>
 		</div>
-		<font-awesome-icon class="score-separator" icon="fa-solid fa-code-commit" size="lg" />
-		<div class="row user-score">
+		<div class="row scores">
+			<span class="text score" style="text-align: right;">{{ pOneScore }}</span>
+			<font-awesome-icon class="score-separator" icon="fa-solid fa-code-commit" size="lg" />
 			<span class="text score">{{ pTwoScore }}</span>
+		</div>
+		<div class="row user-score">
 			<font-awesome-icon v-if="!userOneWin" class="win left" icon="fa-solid fa-w" size="xl" />
 			<font-awesome-icon v-else class="loss left" icon="fa-solid fa-l" size="xl" />
 			<div class="col">
@@ -86,11 +88,6 @@ export default defineComponent({
 .user-score {
 	align-items: center;
 	width: 45%;
-	justify-content: space-around;
-}
-
-.user-score .text.score {
-	font-size: 1.5em;
 }
 
 .profile-pic-container {
@@ -124,17 +121,32 @@ export default defineComponent({
 	color: red;
 }
 
+.win, .loss {
+	width: 2.5em;
+}
+
 .left {
-	margin-left: 1.5em;
+	margin-left: auto;
 }
 
 .right {
-	margin-right: 1.5em;
+	margin-right: auto;
+}
+
+.scores {
+	font-size: 1.4em;
+	align-items: center;
+	justify-content: space-evenly;
+}
+
+.scores .text {
+	width: 1em;
 }
 
 .score-separator {
+	font-size: 1em;
 	color: var(--pcyan);
-	width: 10%;
+	padding: 0 .5em;
 }
 
 </style>

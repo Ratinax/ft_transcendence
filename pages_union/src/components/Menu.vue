@@ -78,11 +78,11 @@ export default {
 <style>
 
 .navbar {
+	--transition-speed: 142ms;
 	position: fixed;
 	background-color: var(--pdark);
 	box-sizing: border-box;
-	transition: width 200ms ease;
-	--transition-speed: 200ms;
+	transition: width 142ms ease;
 }
 
 .navbar-nav {
