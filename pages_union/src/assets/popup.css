@@ -11,7 +11,7 @@ button {
 	background: var(--pcyan);
 	box-shadow: 0 4px 0 var(--pblue);
 	font-size: .8em;
-	width: 42%;
+	width: 30%;
 }
 
 input {

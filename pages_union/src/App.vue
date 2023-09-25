@@ -37,7 +37,7 @@ export default {
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	border: 2px solid var(--pcyan);
 	width: 20%;
-	max-width: 250px;
+	/* max-width: 20%; */
 }
 
 .modal-overlay 

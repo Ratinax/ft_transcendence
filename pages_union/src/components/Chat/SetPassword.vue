@@ -19,17 +19,17 @@
 						class="ft-button" 
 						type="submit">
 						<span v-if="!isSet">
-							Set
+							Set Pw
 						</span>
 						<span v-else>
-							Change
+							Change Pw
 						</span>
 					</button>
 					<button v-if="isSet" @click.prevent="removePassword" class="ft-button">
-						remove
+						Remove Pw
 					</button>
-					<button id="go-private" class="ft-button">
-							pass to private
+					<button v-if="!isPrivate" id="go-private" class="ft-button" @click.prevent="goPrivate">
+							go private
 					</button>
 				</div>
 			</form>
@@ -46,9 +46,10 @@ export default defineComponent({
 	props: {
 		show: Boolean,
 		isSet: Boolean,
+		isPrivate: Boolean,
 	},
 	data()
-{
+	{
 		return {
 			password: '',
 			passwordCheck: '',
@@ -97,6 +98,10 @@ export default defineComponent({
 		},
 		removePassword() {
 			this.$emit('remove-password');
+		},
+		goPrivate()
+		{
+			this.$emit('go-private');
 		}
 	},
 });

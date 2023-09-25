@@ -35,10 +35,12 @@
 	<SetPassword 
 		ref="SetPassword" 
 		:show="showPasswordPopUp" 
-		:isSet="passwordProtected" 
+		:isSet="passwordProtected"
+		:isPrivate="isPrivate"
 		@set-password="setPassword" 
 		@change-password="changePassword" 
 		@remove-password="removePassword"
+		@go-private="goPrivate"
 		@close="closePasswordPopUp"/>
 </template>
 
@@ -65,12 +67,15 @@ export default defineComponent({
 			showPasswordPopUp: false,
 			isUserOwner: false,
 			passwordProtected: false,
+			isPrivate: false,
 			leave: false,
 		}
 	},
 	emits: ['leave-channel', 'get-is-user-owner', 'channel-clicked', 'update-channels'],
 	async mounted()
 	{
+		this.isPrivate = false;
+		this.passwordProtected = false;
 		const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels/category/${this.channel?.name}`, 
 					{
 						withCredentials: true,
@@ -78,9 +83,9 @@ export default defineComponent({
 					)).data;
 		if (res === 'Protected by password')
 			this.passwordProtected = true;
-		else
-			this.passwordProtected = false;
-
+		else if (res === 'Private')
+			this.isPrivate = true;
+		console.log(this.isPrivate);
 	},
 	methods: {
 		setIsUserOwner(result: boolean)
@@ -101,7 +106,6 @@ export default defineComponent({
 		{
 			try
 			{
-				// this.passwordProtected = true; // a changer
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
 					{
 						channel: this.channel,
@@ -113,8 +117,8 @@ export default defineComponent({
 				if (this.$refs.SetPassword) {
 					(this.$refs.SetPassword as typeof SetPassword).goodRequest();
 				}
-				if (res.data.category === 'Protected by password')
-					this.passwordProtected = true;
+				this.passwordProtected = true;
+				this.isPrivate = false;
 				this.$emit('update-channels');
 			}
 			catch (error: Error | any | undefined)
@@ -128,7 +132,7 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
 					{
 						channel: this.channel,
 						password: password,
@@ -136,8 +140,8 @@ export default defineComponent({
 					{
 						withCredentials: true,
 				});
-				if (res.data.category === 'Protected by password')
-					this.passwordProtected = true;
+				this.passwordProtected = true;
+				this.isPrivate = false;
 				if (this.$refs.SetPassword)
 					(this.$refs.SetPassword as typeof SetPassword).goodRequest();
 				this.$emit('update-channels');
@@ -152,15 +156,39 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
 					{
 						channel: this.channel
 					},
 					{
 						withCredentials: true,
 					});
-				if (res.data.category !== 'Protected by password')
-					this.passwordProtected = false;
+				this.passwordProtected = false;
+				this.isPrivate = false;
+				if (this.$refs.SetPassword)
+					(this.$refs.SetPassword as typeof SetPassword).goodRequest();
+				this.$emit('update-channels');
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
+		},
+		async goPrivate()
+		{
+			try
+			{
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/toPrivate`, 
+					{
+						channel: this.channel
+					},
+					{
+						withCredentials: true,
+					});
+				if (this.$refs.SetPassword)
+					(this.$refs.SetPassword as typeof SetPassword).goodRequest();
+				this.passwordProtected = false;
+				this.isPrivate = true;
 				this.$emit('update-channels');
 			}
 			catch (e)
