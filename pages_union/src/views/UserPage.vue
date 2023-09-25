@@ -24,6 +24,7 @@
 				<button v-if="showButtons && !isBlocked && isFriend === 'accepted'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND</button>
 				<button v-if="showButtons && !isBlocked && isFriend === 'pending'" class="ft-button add-button" @click="removeFriend">REMOVE FRIEND REQUEST</button>
 				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button add-button" @click="addFriend">ADD FRIEND</button>
+				<button v-if="showButtons" class="ft-button send-button" @click="sendMessage">Send  message</button>
 			</div>
 			<div class="row user-box user-stats">
 				<div class="col user-stat">
@@ -45,7 +46,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, computed, onUpdated, onBeforeMount, } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Menu from "../components/Menu.vue"
 import MatchHistory from '../components/UserPage/MatchHistory.vue';
 import axios from 'axios';
@@ -54,6 +55,7 @@ export default defineComponent({
 	name: 'UserPage',
 	components: { Menu, MatchHistory },
 	setup() {
+		const router = useRouter();
 		const showButtons = ref<boolean>(false);
 		const userName = ref('');
 		const profilePic = ref(undefined)
@@ -137,14 +139,26 @@ export default defineComponent({
 				console.error(e);
 			}
 		}
+		async function sendMessage()
+		{
+			console.log('vava')
+			try
+			{
+				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/sendDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
+				if (res)
+					router.push({ path: '/chat' } )
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
+		}
 		onBeforeMount(() =>
 			{
-				console.log('ca v MOUNT')
 				fecthData()
 		})
 		onUpdated(() =>
 			{
-				console.log('ca v MOUNT')
 				fecthData()
 		})
 		return { userName, 
@@ -158,7 +172,8 @@ export default defineComponent({
 			blockUser, 
 			unblockUser,
 			removeFriend,
-			addFriend };
+			addFriend,
+			sendMessage };
 	},
 });
 </script>
@@ -266,6 +281,15 @@ export default defineComponent({
 
 .block-button:hover {
 	background: rgb(251, 80, 80);
+}
+
+.send-button {
+	background: rgb(102, 252, 241, 0.875);
+	box-shadow: 0 4px 0 rgb(22, 172, 161, 0.875);
+}
+
+.send-button:hover {
+	background: rgb(102, 252, 241);
 }
 
 /* Stats */

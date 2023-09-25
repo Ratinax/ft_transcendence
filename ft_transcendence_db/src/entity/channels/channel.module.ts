@@ -8,6 +8,8 @@ import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { channelsUsersProviders } from '../channels_users/channels_users.providers';
 import { sessionProviders } from '../sessions/session.providers';
 import { SessionService } from '../sessions/session.service';
+import { UserService } from '../users/user.service';
+import { userProviders } from '../users/user.providers';
 
 
 @Module({
@@ -16,10 +18,12 @@ import { SessionService } from '../sessions/session.service';
     ...channelProviders,
     ...channelsUsersProviders,
     ...sessionProviders,
+    ...userProviders,
     ChannelService,
     ChannelGateway,
     ChannelsUsersService,
     SessionService,
+    UserService,
   ],
     controllers: [ChannelController],
 })

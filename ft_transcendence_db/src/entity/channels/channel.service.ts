@@ -16,9 +16,9 @@ export class ChannelService {
      * @param channelName channel name
      * @returns result of request
      */
-    async findByName(channelName): Promise<Channels[]>
+    async findByName(channelName)
     {
-        return this.channelRepository
+        return await this.channelRepository
         .createQueryBuilder('channel')
         .where('channel.name = :name', { name: channelName })
         .getMany();
@@ -27,7 +27,7 @@ export class ChannelService {
     /**
      * create channel
      * 
-     * @param channel - {channel_id, password, isADm, name, category}
+     * @param channel - {password, isADm, name, category}
      * @returns result of request
      */
     async createChannel(channel: Partial<Channels>)

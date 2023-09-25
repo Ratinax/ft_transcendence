@@ -36,7 +36,7 @@ export class ChannelGateway {
    * @emits createPasswordOrNameWrongSize {user} - in case of failing
    * @emits createWrongCategory {user} - in case of failing
    */
-  @SubscribeMessage('createChannel') // TODO handle no special caractere because errors can happend like in : 'ah ouais ??'
+  @SubscribeMessage('createChannel') // TODO handle no special caractere because errors can happend like in : 'ah ouais ??' and not char ',' because used for dms
   async create(@MessageBody() data)
   {
     if (await this.sessionService.getIsSessionExpired(data.sessionCookie))
