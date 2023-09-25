@@ -13,12 +13,16 @@
 				</p>
 				<div class="option" v-if="isSelected">
 					<div v-if="isUserOwner"
-						class="icon setting"
+						:class="{'icon': true, 'setting': true, 'private': (isPrivate)}"
 						@click="setShowPasswordPopUp">
 						<font-awesome-icon 
 							v-if="passwordProtected"
 							icon="fa-solid fa-lock"
 							size="xs" />
+						<font-awesome-icon 
+							v-else-if="isPrivate"
+							icon="fa-solid fa-lock"
+							size="xs"/>
 						<font-awesome-icon 
 							v-else
 							icon="fa-solid fa-lock-open"
@@ -262,6 +266,10 @@ export default defineComponent({
 
 .cross:hover, .setting:hover {
 	background: var(--plight);
+}
+.private
+{
+	color:red;
 }
 
 .own {
