@@ -101,14 +101,14 @@ export default defineComponent({
 .list-users-chat {
 	align-items: center;
 
-	background: var(--pblack);
+	background: linear-gradient(var(--pblack), var(--pdark));
 
 	padding: 1em;
 	margin-left: .7em;
 
 	width: 7em;
 
-	border: 2px solid var(--pcyan);
+	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
 	border-radius: 1em;
 }
 

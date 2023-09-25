@@ -9,7 +9,7 @@
 							<img :src="profilePic" alt="User profile picture"> 
 						</div>
 						<div class="row user-name-and-status">
-							<div class="connect"></div>
+						<div class="connect"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 					</div>
@@ -146,7 +146,7 @@ export default defineComponent({
 			{
 				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/sendDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
 				if (res)
-					router.push({ path: '/chat' } )
+			router.push({ path: '/chat' } )
 			}
 			catch (e)
 			{
@@ -204,7 +204,7 @@ export default defineComponent({
 
 /* User profile */
 .user-box {
-	box-shadow: var(--pcyan) 0px 0px 0px 2px, var(--pblue) 0px 4px 6px -1px, var(--pblue) 0px 1px 0px inset;
+	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
 	background: var(--pdark);
 	width: 100%;
 	border-radius: .742em;
@@ -230,6 +230,7 @@ export default defineComponent({
 	width: 15em;
 	height: 15em;
 	margin: 2em 0; 
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
 }
 
 .user-name-and-status {
@@ -258,11 +259,17 @@ export default defineComponent({
 
 /* Buttons */
 .button-zone {
+	font-size: .8em;
 	width: 40%;
-	justify-content: space-around;
+	justify-content: space-evenly;
+	flex-wrap: wrap;
 
-	margin-top: 1em;
+	margin-top: .5em;
 	margin-bottom: 4em;
+}
+
+.button-zone .ft-button {
+	margin: .5em;
 }
 
 /* Stats */

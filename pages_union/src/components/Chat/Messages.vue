@@ -76,13 +76,11 @@ export default defineComponent({
 }
 
 ::-webkit-scrollbar-track {
-	background: var(--pblue);
-	border-radius: 1em;
+	background: var(--plight);
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--pdark);
-	border: 1px solid var(--pdark);
+	background: var(--pblack);
 	border-radius: 1em;
 }
 

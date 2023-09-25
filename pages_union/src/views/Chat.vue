@@ -176,12 +176,11 @@ export default defineComponent({
 }
 
 .chat-container {
-	width: 100%;
 	margin: 2em 1em;
 }
 
 .messageszone {
-	width: 45em; /* a changer */
+	width: 40em; /* a changer */
 	background: white;
 	border-radius: 1em 0 1em 1em;
 	border: 2px solid var(--pblue);
