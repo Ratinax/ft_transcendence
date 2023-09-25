@@ -86,8 +86,6 @@ export default defineComponent({
 
 .header {
 	display: flex;
-	background: var(--pblack);
-	border-radius: 1.5em;
 	align-items: center;
 	justify-content: center;
 }
@@ -102,10 +100,8 @@ h1 {
 .list-users-relations
 {
 	background: var(--pdark);
-	border-radius: 3em;
-	margin: auto .8em;
-	box-sizing: border-box;
-    height: 90%;
+	border-radius: 2em;
+	margin: auto 1em;
     width: calc(100% / 3);
 	border: 1px solid var(--pcyan);
 	padding: 1em;

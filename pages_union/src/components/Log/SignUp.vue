@@ -66,7 +66,7 @@ export default defineComponent({
 				return ;
 			}
 			resetData();
-			router.push({path: '/chat'});
+			router.push({name: 'UserPage'});
 		}
 
 		function	chooseImage() {
@@ -117,7 +117,6 @@ export default defineComponent({
 	}
 });
 </script>
-
 
 <style scoped src="../../assets/formComponent.css" lang="css">
 

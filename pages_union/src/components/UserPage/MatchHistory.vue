@@ -14,6 +14,7 @@ import MatchScore from "./MatchScore.vue"
 import axios from 'axios';
 
 interface MatchHistory {
+	id: number,
 	playerOne: {
 		pseudo: string,
 		profilPic: string,
@@ -23,7 +24,7 @@ interface MatchHistory {
 		profilPic: string,
 	},
 	scorePlayerOne: number,
-	scoreplayertwo: number,
+	scorePlayerTwo: number,
 }
 
 export default defineComponent({
@@ -35,7 +36,7 @@ export default defineComponent({
 	setup(props) {
 
 		const userPseudo = ref(props.pseudo);
-		const matchHistory = ref<MatchHistory>();
+		const matchHistory = ref<MatchHistory[]>();
 
 		onBeforeMount(async () => {
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/games/match-history/${props.pseudo}`, {withCredentials: true});
