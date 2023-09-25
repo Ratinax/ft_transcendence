@@ -25,8 +25,8 @@
 							Change Pw
 						</span>
 					</button>
-					<button v-if="isSet" @click.prevent="removePassword" class="ft-button">
-						Remove Pw
+					<button v-if="isSet || isPrivate" @click.prevent="goPublic" class="ft-button">
+						go public
 					</button>
 					<button v-if="!isPrivate" id="go-private" class="ft-button" @click.prevent="goPrivate">
 							go private
@@ -96,8 +96,8 @@ export default defineComponent({
 				this.$emit('set-password', this.password);
 			}
 		},
-		removePassword() {
-			this.$emit('remove-password');
+		goPublic() {
+			this.$emit('go-public');
 		},
 		goPrivate()
 		{

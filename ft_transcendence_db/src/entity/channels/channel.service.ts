@@ -75,25 +75,6 @@ export class ChannelService {
     }
 
     /**
-     * remove password to channel and set Public to category
-     * 
-     * @param channel channel
-     * @returns result of request
-     */
-    async removePassword(channel)
-    {
-        const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
-
-        relation.category = 'Public';
-        relation.password = '';
-        const res = await this.channelRepository.save(relation);
-        return ({isADm: res.isADm,
-                name: res.name,
-                category: res.category,
-                channel_id: res.channel_id,});
-    }
-
-    /**
      * change password of a channel
      * 
      * @param channel channel

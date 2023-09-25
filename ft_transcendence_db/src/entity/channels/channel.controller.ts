@@ -47,8 +47,8 @@ export class ChannelController {
      * @param body {channel}
      * @returns result of request
      */
-    @Post('removePassword')
-    async removePassword(@Body() body, @Req() req)
+    @Post('goPublic')
+    async goPublic(@Body() body, @Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -56,7 +56,7 @@ export class ChannelController {
         }
         if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
-        return (await this.channelService.removePassword(body.channel));
+        return (await this.channelService.toPublic(body.channel));
     }
 
     @Post('changePassword')

@@ -39,7 +39,7 @@
 		:isPrivate="isPrivate"
 		@set-password="setPassword" 
 		@change-password="changePassword" 
-		@remove-password="removePassword"
+		@go-public="goPublic"
 		@go-private="goPrivate"
 		@close="closePasswordPopUp"/>
 </template>
@@ -152,11 +152,11 @@ export default defineComponent({
 				(this.$refs.SetPassword as typeof SetPassword).notGoodLength()
 			}
 		},
-		async removePassword()
+		async goPublic()
 		{
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/removePassword`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/goPublic`, 
 					{
 						channel: this.channel
 					},
