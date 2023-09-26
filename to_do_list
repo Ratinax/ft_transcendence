@@ -1,2 +1,10 @@
 quand user timeout et essaie d'envoyer un message: zone texte disparait jusqu'a refresh la page
 courone pas directement mise
+check toutes les users input avec toutes les requetes
+pouvoir changer la pp
+pouvoir changer de pseudo
+mettre 2Fa
+rajouter statu in game
+detruire channel si plus personne dedans
+remove le system d'invite dans un chat (pas mis en place mais y a bien un booleen)
+
