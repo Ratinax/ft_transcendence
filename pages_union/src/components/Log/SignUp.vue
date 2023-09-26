@@ -65,8 +65,8 @@ export default defineComponent({
 				error.value = JSON.parse(e.request.response).message;
 				return ;
 			}
+			router.push({name: 'UserPage', params: {pseudo: pseudo.value}});
 			resetData();
-			router.push({name: 'UserPage'});
 		}
 
 		function	chooseImage() {

@@ -66,8 +66,8 @@ export default defineComponent({
 			}
 			if (!res.data)
 				return ;
+			router.push({name: 'UserPage', params: {pseudo: pseudo.value}});
 			resetData();
-			router.push({name: 'UserPage'});
 		}
 		return {login, login42, resetData, pseudo, password, error};
 	}

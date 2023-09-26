@@ -86,7 +86,7 @@ export class ChannelsUsersService {
                 isADm: channelsUsers.channel.isADm,
                 name: channelsUsers.channel.name,
                 category: channelsUsers.channel.category,
-                isHide: channelsUsers.isHide,
+                isHide: channelsUsers.isHide, // TODO mettre type laste update
             }
         ));
         return (channels);
@@ -206,4 +206,5 @@ export class ChannelsUsersService {
         relation.isHide = false;
         return (await this.channelsUsersRepository.save(relation));
     }
+    // TODO faire fct pour refresh last update
 }

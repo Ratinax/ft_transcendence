@@ -50,7 +50,7 @@ export class MessagesGateway {
       const timeoutDate = new Date(relation.dateTimeout);
       const currentDate = new Date(body.dateSent);
       const timeoutDuration = relation.durationTimeout;
-      
+      // TODO appeler fct pour update la derniere date d'update
       const timeoutSeconds = timeoutDate.getTime() / 1000;
       const currentSeconds = currentDate.getTime() / 1000;
       
