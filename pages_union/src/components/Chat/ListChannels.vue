@@ -138,6 +138,7 @@ export default defineComponent({
 		},
 		pushNotifs(channel_id: number)
 		{
+			console.log('ca a push les notifs')
 			for (let i = 0; i < (this.$refs.channelRef as Array<typeof Channel>).length; i++)
 			{
 				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].getChannelId() === channel_id)

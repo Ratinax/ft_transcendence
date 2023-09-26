@@ -217,7 +217,7 @@ export default defineComponent({
 		},
 		setNotif()
 		{
-			if (!this.channel?.isHide)
+			// if (!this.channel?.isHide)
 				this.isNotif = true;
 		},
 		unsetNotif()
