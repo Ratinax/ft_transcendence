@@ -5,6 +5,7 @@ import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
+import { BlockshipService } from '../blockships/blockship.service';
 
 @WebSocketGateway(3001, {
   cors: {
@@ -17,7 +18,7 @@ export class MessagesGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly messagesService: MessageService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
+  constructor(private readonly messagesService: MessageService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService, private readonly blockshipService: BlockshipService) {}
 
   /**
    * create a new message
@@ -43,8 +44,10 @@ export class MessagesGateway {
       if (!relation)
         throw new InternalServerErrorException('no such relation');
 
-      if (relation.channel.isADm)
+      console.log('DM :', relation.channel.isADm, !await this.isBlockedRelation(relation) )
+      if (relation.channel.isADm && !(await this.isBlockedRelation(relation)))
       {
+        console.log('unhide')
         this.unHide(user.id, relation.channel);
       }
       const timeoutDate = new Date(relation.dateTimeout);
@@ -86,5 +89,21 @@ export class MessagesGateway {
           break ;
         }
       }
+  }
+  async isBlockedRelation(relation)
+  {
+    const users = await this.channelsUsersService.findUsersOfChannel(relation.channel.name);
+    const result = await this.blockshipService.getIsBlocked(users[0].id, users[1].id);
+    const result2 = await this.blockshipService.getIsBlocked(users[1].id, users[0].id);
+    console.log('res :', result);
+    console.log('res2 :', result2);
+    if (result || result2)
+    {
+      console.log('true')
+      
+      return (true);
+    }
+    console.log('false')
+    return (false);
   }
 }

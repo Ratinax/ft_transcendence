@@ -106,11 +106,11 @@ export class FriendshipService {
     }
     async askFriend(friend_id: number, user_id: number)
     {
-        console.log('ici', friend_id, user_id);
+        // console.log('ici', friend_id, user_id);
         let friendship:Partial<Friendships> = {statu: 'pending', user: {id: user_id}, friend: {id: friend_id}};
         const newFriendship = await this.friendshipRepository.create(friendship);
         const res = await this.friendshipRepository.save(newFriendship);
-        console.log('et la');
+        // console.log('et la');
         return (res);
     }
     async getFriendRelation(friend_id: number, user_id: number)

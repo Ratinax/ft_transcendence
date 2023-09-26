@@ -99,7 +99,7 @@ export default defineComponent({
 		this.socket.on('sendMessageGoodRequest', async (response: {channel_id: number, sessionCookie: string}) => {
 			this.sendMessageGoodRequest();
 			this.updateListChannels(this.selectedChannel); // TODO ca referche a chaque fois que qqun envoie un msg qu'on est pas a check, peut etre discutable
-			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
+			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id && this.$refs.listChannels) // TODO fix error on this.$refs.listChannels might be null
 				(this.$refs.listChannels as typeof ListChannels).pushNotifs(response.channel_id);
 		});
 	},
@@ -147,7 +147,7 @@ export default defineComponent({
 		setIsUserOwner(channel_id: number ) {
 			if (this.$refs.listUsersChat) {
 				const result = (this.$refs.listUsersChat as typeof ListUsersChat).getUserInChannel();
-				if (result)
+				if (result && this.$refs.listChannels)
 				{
 					(this.$refs.listChannels as typeof ListChannels).setIsUserOwner(result.isOwner, channel_id);
 				}
@@ -158,8 +158,6 @@ export default defineComponent({
 				(this.$refs.sendMessage as typeof SendMessage).timeout(duration);
 		},
 		sendMessageGoodRequest() {
-			if (this.$refs.listChannels)
-
 			if (this.$refs.sendMessage)
 				(this.$refs.sendMessage as typeof SendMessage).goodRequest();
 		},
