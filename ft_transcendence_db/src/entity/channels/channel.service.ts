@@ -122,6 +122,13 @@ export class ChannelService {
             category: res.category,
             channel_id: res.channel_id,});
     }
+    async removeChan(channel_id: number)
+    {
+        const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
+
+        const res = await this.channelRepository.remove(relation);
+        return (res);
+    }
     /**
      * compare password given with password hashed of channel
      * 

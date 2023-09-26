@@ -99,30 +99,7 @@ export class ChannelsUsersGateway {
       sessionCookie: await this.sessionService.getSessionKey(body.userKicked.id)});
     return (res);
   }
-  /**
-   * Delete the relation of a user to a channel
-   * 
-   * @param body - {channel, sessionCookie}
-   * @returns result of request leave
-   * @emits updateAfterPart {users, channel, user}
-   */
-  @SubscribeMessage('leaveChannel')
-  async leaveChannel(@MessageBody() body) 
-  {
-    if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
-    {
-      return ('not connected');
-    }
-    const user = await this.sessionService.getUser(body.sessionCookie);
-    const res = await this.channelsUsersService.leave(body.channel, user);
-    // TODO check if something to do after hidden
-    const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-    this.server.emit('updateAfterPart', {
-      users: users, 
-      channel: body.channel,
-      sessionCookie: body.sessionCookie});
-    return (res);
-  }
+  
   /**
    * set user of channel to Admin
    * 

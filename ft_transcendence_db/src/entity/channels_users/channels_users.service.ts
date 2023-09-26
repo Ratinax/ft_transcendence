@@ -125,13 +125,19 @@ export class ChannelsUsersService {
     async leave(channel, user)
     {
         const relation = (await this.findRelation(user.id, channel.channel_id))[0];
+        let res;
         if (relation && !relation.channel.isADm)
-            return (await this.channelsUsersRepository.remove(relation));
+            res = await this.channelsUsersRepository.remove(relation);
         else if (relation)
         {
             relation.isHide = true;
-            return (await this.channelsUsersRepository.save(relation));
+            res = await this.channelsUsersRepository.save(relation);
         }
+        const channels = await this.findUsersOfChannel(relation.channel.name);
+        if (channels.length === 0)
+            return ('Empty');
+        return (res);
+
     }
     /**
      * set user as admin in channel

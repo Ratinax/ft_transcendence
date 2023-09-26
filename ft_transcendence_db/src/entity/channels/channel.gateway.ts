@@ -163,4 +163,31 @@ export class ChannelGateway {
     this.server.emit('updateListChannels', {channel: channelToReturn, sessionCookie: body.sessionCookie});
     this.server.emit('joinGoodRequest', {sessionCookie: body.sessionCookie});
   }
+  /**
+   * Delete the relation of a user to a channel
+   * 
+   * @param body - {channel, sessionCookie}
+   * @returns result of request leave
+   * @emits updateAfterPart {users, channel, user}
+   */
+  @SubscribeMessage('leaveChannel')
+  async leaveChannel(@MessageBody() body) 
+  {
+    if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    {
+      return ('not connected');
+    }
+    const user = await this.sessionService.getUser(body.sessionCookie);
+    const res = await this.channelsUsersService.leave(body.channel, user);
+    if (res === 'Empty')
+    {
+      const result = await this.channelService.removeChan(body.channel.channel_id);
+    }
+    const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
+    this.server.emit('updateAfterPart', {
+      users: users, 
+      channel: body.channel,
+      sessionCookie: body.sessionCookie});
+    return (res);
+  }
 }
