@@ -80,7 +80,6 @@ export default defineComponent({
 	emits: ['leave-channel', 'get-is-user-owner', 'channel-clicked', 'update-channels'],
 	async mounted()
 	{
-		// TODO check if ther's notif
 		this.isPrivate = false;
 		this.passwordProtected = false;
 		const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels/category/${this.channel?.name}`, 

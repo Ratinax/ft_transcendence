@@ -95,7 +95,7 @@ export class ChannelsUsersService {
                 isADm: channelsUsers.channel.isADm,
                 name: channelsUsers.channel.name,
                 category: channelsUsers.channel.category,
-                isHide: channelsUsers.isHide, // TODO mettre type laste update
+                isHide: channelsUsers.isHide,
             }
         ));
         return (channels);
@@ -221,7 +221,7 @@ export class ChannelsUsersService {
         relation.isHide = false;
         return (await this.channelsUsersRepository.save(relation));
     }
-    // TODO faire fct pour refresh last update
+
     async findBannedUsers(channel_id: number)
     {
         const usersAndChannels = await this.channelsUsersRepository

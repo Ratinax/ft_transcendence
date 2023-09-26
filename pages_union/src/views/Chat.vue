@@ -98,7 +98,7 @@ export default defineComponent({
 		});
 		this.socket.on('sendMessageGoodRequest', async (response: {channel_id: number, sessionCookie: string}) => {
 			this.sendMessageGoodRequest();
-			this.updateListChannels(this.selectedChannel); // TODO ca referche a chaque fois que qqun envoie un msg qu'on est pas a check, peut etre discutable
+			this.updateListChannels(this.selectedChannel);
 			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
 				(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
 		});
