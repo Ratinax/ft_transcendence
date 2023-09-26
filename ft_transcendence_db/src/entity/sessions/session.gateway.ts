@@ -34,7 +34,17 @@ export class SessionGateway implements OnModuleInit {
         }, 2500)
         setTimeout(async () => 
         {
-            await this.sessionService.removeNoMoreConnected();
+            const res = await this.sessionService.removeNoMoreConnected();
+            const noMoreConnected = res.noMoreConnected;
+            const connected = res.connected;
+            for (let i = 0; i < noMoreConnected.length; i++)
+            {
+                this.server.emit('noMoreConnected', {pseudo: noMoreConnected[i]});
+            }
+            for (let i = 0; i < connected.length; i++)
+            {
+                this.server.emit('isConnected', {pseudo: connected[i]});
+            }
         }, 5000)
     }
 }

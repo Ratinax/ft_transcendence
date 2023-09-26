@@ -50,11 +50,13 @@ import { useRoute, useRouter } from 'vue-router';
 import Menu from "../components/Menu.vue"
 import MatchHistory from '../components/UserPage/MatchHistory.vue';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 export default defineComponent({
 	name: 'UserPage',
 	components: { Menu, MatchHistory },
 	setup() {
+		let socket;
 		const router = useRouter();
 		const showButtons = ref<boolean>(false);
 		const userName = ref('');
@@ -157,12 +159,21 @@ export default defineComponent({
 			}
 		}
 		onBeforeMount(() =>
-			{
-				fecthData()
+		{
+			socket = io(`http://${process.env.VUE_APP_IP}:3003/`, { withCredentials: true });
+			socket.on('isConnected', (response) => {
+				if (response.pseudo === userName.value)
+					isConnected.value = true;
+			})
+			socket.on('noMoreConnected', (response) => {
+				if (response.pseudo === userName.value)
+					isConnected.value = false;
+			})
+			fecthData()
 		})
 		onUpdated(() =>
-			{
-				fecthData()
+		{
+			fecthData()
 		})
 		return { userName, 
 			profilePic, 

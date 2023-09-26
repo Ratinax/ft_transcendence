@@ -100,14 +100,23 @@ export class SessionService{
     
     async removeNoMoreConnected()
     {
+        let connected = [];
+        let noMoreConnected = [];
         const relations = await this.sessionRepository
         .createQueryBuilder('sessions')
+        .innerJoinAndSelect('sessions.user', 'user')
         .getMany();
         for (let i = 0; i < relations.length; i++)
         {
             if (relations[i].expirationDate < new Date(Date.now()))
+            {
+                noMoreConnected.push(relations[i].user.pseudo);
                 await this.sessionRepository.delete(relations[i].id);
+            }
+            else
+                connected.push(relations[i].user.pseudo);
         }
+        return ({noMoreConnected: noMoreConnected, connected: connected});
     }
     /**
      * generate a random string
