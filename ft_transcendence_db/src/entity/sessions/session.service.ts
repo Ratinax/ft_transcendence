@@ -56,6 +56,8 @@ export class SessionService{
         
         return (relation.sessionKey);
     }
+
+
     async getIsSessionExpired(sessionKey)
     {
         const relation = await this.sessionRepository.findOne({
@@ -66,6 +68,19 @@ export class SessionService{
             return (true);
         }
         if (new Date(Date.now()) > relation.expirationDate)
+        {
+            return (true);
+        }
+        return (false);
+    }
+    async getIsPseudoExpired(pseudo: string)
+    {
+        const relations = await this.sessionRepository
+            .createQueryBuilder('sessions')
+            .innerJoinAndSelect('sessions.user', 'user')
+            .where('user.pseudo = :pseudo', { pseudo: pseudo })
+            .getMany();
+        if (!relations || !relations[0])
         {
             return (true);
         }

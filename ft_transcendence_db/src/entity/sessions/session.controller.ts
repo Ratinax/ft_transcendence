@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req, Res } from '@nestjs/common';
 import { SessionService } from './session.service';
 import { Response } from 'express';
 
@@ -19,5 +19,15 @@ export class SessionController {
     getCookies(@Req() req)
     {
         return (req.cookies['SESSION_KEY']);
+    }
+    @Get('isConnected/:pseudo')
+    async getIsConnected(@Req() req, @Param('pseudo') pseudo: string)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const res = !(await this.sessionService.getIsPseudoExpired(pseudo));
+        return (res);
     }
 }

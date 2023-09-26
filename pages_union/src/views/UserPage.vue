@@ -9,7 +9,7 @@
 							<img :src="profilePic" alt="User profile picture"> 
 						</div>
 						<div class="row user-name-and-status">
-						<div class="connect"></div>
+						<div :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 					</div>
@@ -61,6 +61,7 @@ export default defineComponent({
 		const profilePic = ref(undefined)
 		const userGamesPlayed = ref(0);
 		const isBlocked = ref(false);
+		const isConnected = ref(false);
 		const isFriend = ref('');
 		const userWins = ref(0);
 		const userWinRate = computed(() => {
@@ -85,6 +86,8 @@ export default defineComponent({
 			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo/`, {withCredentials: true})).data);
 			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
 			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
+			isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
+			console.log('isConnected :', isConnected.value);
 		}
 
 		async function	blockUser()
@@ -169,6 +172,7 @@ export default defineComponent({
 			showButtons,
 			isBlocked,
 			isFriend,
+			isConnected,
 			blockUser, 
 			unblockUser,
 			removeFriend,
@@ -243,6 +247,14 @@ export default defineComponent({
 	width: 1em;
 	height: 1em;
 	background: lime;
+	margin-right: .5em;
+	margin-top: 2%;
+}
+.not-connect {
+	border-radius: 50%;
+	width: 1em;
+	height: 1em;
+	background: red;
 	margin-right: .5em;
 	margin-top: 2%;
 }
