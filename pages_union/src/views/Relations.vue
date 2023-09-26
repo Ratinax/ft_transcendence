@@ -113,7 +113,6 @@ export default defineComponent({
 		},
 		searchUser()
 		{
-			console.log(this.pseudo);
 			(this.$refs.UsersSearched as typeof UsersSearched).searchUsers();
 			this.showSearchUsers = true;
 		},

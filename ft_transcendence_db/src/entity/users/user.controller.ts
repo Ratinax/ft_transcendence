@@ -125,7 +125,6 @@ export class UserController {
         {
             return (null);
         }
-        // console.log(pseudo)
         const user = (await this.userService.getUser(pseudo))[0];
         if (user.is42User)
         {
@@ -178,7 +177,6 @@ export class UserController {
         if (pseudoPart.length < 3)
             return ([]);
         const res = await this.userService.getUsers(pseudoPart);
-        // console.log(pseudoPart, res);
         return (res);
     }
 }

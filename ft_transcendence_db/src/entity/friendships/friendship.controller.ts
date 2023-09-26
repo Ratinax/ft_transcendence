@@ -50,7 +50,6 @@ export class FriendshipController {
         try
         {
             const res = await this.friendshipService.askFriend(friend.id, user.id);
-            // console.log('ca va return la', res)
             return ('pending')
         }
         catch (e)

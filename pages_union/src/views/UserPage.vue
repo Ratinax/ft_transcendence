@@ -89,7 +89,6 @@ export default defineComponent({
 			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
 			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
 			isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
-			console.log('isConnected :', isConnected.value);
 		}
 
 		async function	blockUser()
@@ -124,7 +123,6 @@ export default defineComponent({
 			{
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/friendships/ask/`, {pseudo: userName.value}, {withCredentials: true});
 				isFriend.value = res.data;
-				console.log('value :', isFriend.value);
 			}
 			catch (e)
 			{
@@ -137,7 +135,6 @@ export default defineComponent({
 			{
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/friendships/remove/`, {pseudo: userName.value}, {withCredentials: true});
 				isFriend.value = res.data;
-				console.log('value2 :', isFriend.value);
 			}
 			catch (e)
 			{
@@ -146,7 +143,6 @@ export default defineComponent({
 		}
 		async function sendMessage()
 		{
-			console.log('vava')
 			try
 			{
 				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/sendDM/`, {pseudo: userName.value}, {withCredentials: true})).data;

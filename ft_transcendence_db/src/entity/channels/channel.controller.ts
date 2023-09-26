@@ -136,9 +136,7 @@ export class ChannelController {
             result = await this.channelsUsersService.createNew({user: user, channel: channel, isAdmin: false, isOwner: false, isInvited: false, isBanned: false})
             if (!result)
                 await this.channelsUsersService.unHide(user.id, channel.channel_id);
-            // console.log('res :', result)
             result = await this.channelsUsersService.createNew({user: user2, channel: channel, isAdmin: false, isOwner: false, isInvited: false, isBanned: false})
-            // console.log('res :', result)
             return (channel.name);
         }
         catch (e)

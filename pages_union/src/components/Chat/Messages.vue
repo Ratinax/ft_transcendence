@@ -30,7 +30,7 @@ export default defineComponent({
     },
     methods: 
     {
-      async fetchMessages(channel: {name: string} | null)
+      async fetchMessages(channel: {name: string} | null | undefined)
       {
         if (!channel)
         {

@@ -92,7 +92,6 @@ export default defineComponent({
 			this.passwordProtected = true;
 		else if (res === 'Private')
 			this.isPrivate = true;
-		console.log(this.isPrivate);
 	},
 	methods: {
 		setIsUserOwner(result: boolean)
@@ -101,15 +100,14 @@ export default defineComponent({
 		},
 		handleChannelClicked()
 		{
-			console.log(this.leave)	
 			if (!this.leave)
 				this.$emit('channel-clicked', this.channel);
+			this.leave = false;
 		},
 		leaveChannel()
 		{
 			this.leave = true;
 			this.$emit('leave-channel', this.channel);
-			this.leave = false;
 		},
 		async changePassword(password: string)
 		{

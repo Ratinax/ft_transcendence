@@ -34,7 +34,6 @@ export default defineComponent({
     {
         async searchUsers()
         {
-            console.log('da', this.pseudo)
             this.listUsersSearched = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/users/${this.pseudo}`, {withCredentials: true})).data;
         },
         close()
