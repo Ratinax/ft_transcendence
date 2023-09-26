@@ -101,7 +101,7 @@ export default defineComponent({
 		},
 		handleChannelClicked()
 		{
-
+			console.log(this.leave)	
 			if (!this.leave)
 				this.$emit('channel-clicked', this.channel);
 		},
@@ -109,6 +109,7 @@ export default defineComponent({
 		{
 			this.leave = true;
 			this.$emit('leave-channel', this.channel);
+			this.leave = false;
 		},
 		async changePassword(password: string)
 		{
