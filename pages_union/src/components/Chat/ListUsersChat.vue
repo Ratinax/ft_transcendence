@@ -11,7 +11,18 @@
 				:socket="socket" 
 				:channel="channel" 
 				@user-clicked="handleUserClicked"/>
+			<div v-if="userInChannel && userInChannel?.isOwner">
+				<form class="buttons" @submit.prevent="showBannedList">
+					<button class="ft-button blue-button ban-list" type="submit">Ban List</button>
+				</form>
+			</div>
 		</div>
+		<UsersBanned
+		ref="UsersBanned"
+		:channel="channel"
+		:show="showBannedUsers"
+		@close="showBannedUsers = false">
+		</UsersBanned>
 	</div>
 </template>
 
@@ -20,6 +31,7 @@ import { Socket } from 'socket.io-client';
 import UserChat from './UserChat.vue';
 import axios from 'axios';
 import { defineComponent } from 'vue';
+import UsersBanned from './UsersBanned.vue';
 
 interface UserData {
 	id: number, 
@@ -35,6 +47,7 @@ export default defineComponent({
 	components:
 	{
 		UserChat,
+		UsersBanned,
 	},
 	props:
 	{
@@ -43,11 +56,12 @@ export default defineComponent({
 		channel: Object,
 	},
 	data()
-{
+	{
 		return {
 			users: [] as Array<UserData>,
 			userSelected: undefined as {id: number} | undefined,
-			userInChannel: null, // the user with only id, isAdmin, and isOwner
+			userInChannel: null as null | {id: number, isAdmin: boolean, isOwner: boolean, isInvited: boolean, isBanned : boolean},
+			showBannedUsers: false,
 		}
 	},
 	methods:
@@ -92,12 +106,16 @@ export default defineComponent({
 		{
 			return (this.userInChannel);
 		},
+		showBannedList()
+		{
+			this.showBannedUsers = true;
+			(this.$refs?.UsersBanned as typeof UsersBanned)?.getBannedUsers();
+		}
 	}
 });
 </script>
 
 <style>
-
 .list-users-chat {
 	align-items: center;
 
@@ -110,6 +128,11 @@ export default defineComponent({
 
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
 	border-radius: 1em;
+}
+
+.ban-list
+{
+	font-size: 1em;
 }
 
 </style>

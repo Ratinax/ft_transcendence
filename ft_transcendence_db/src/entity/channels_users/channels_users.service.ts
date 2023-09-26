@@ -66,6 +66,15 @@ export class ChannelsUsersService {
             .getMany();
         return (relation);
     }
+    async findRelationByCName(user_id: number, name: string)
+    {
+        const relation = await this.channelsUsersRepository
+            .createQueryBuilder('channelsUsers')
+            .innerJoinAndSelect('channelsUsers.channel', 'channel')
+            .where('channel.name = :name AND user_id = :user_id', { name: name, user_id: user_id })
+            .getMany();
+        return (relation);
+    }
     /**
      * Get the list of channels of a user without passwords
      * 
@@ -207,4 +216,27 @@ export class ChannelsUsersService {
         return (await this.channelsUsersRepository.save(relation));
     }
     // TODO faire fct pour refresh last update
+    async findBannedUsers(channel_id: number)
+    {
+        const usersAndChannels = await this.channelsUsersRepository
+            .createQueryBuilder('channelsUsers')
+            .innerJoinAndSelect('channelsUsers.user', 'user')
+            .innerJoinAndSelect('channelsUsers.channel', 'channel')
+            .where('channel.channel_id = :channel_id AND is_banned = true', { channel_id })
+            .getMany();
+        const users = usersAndChannels.map((channelsUsers) => ({
+            id: channelsUsers.user.id, 
+            pseudo: channelsUsers.user.pseudo, 
+            profilPic: channelsUsers.user.is42User ? channelsUsers.user.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${channelsUsers.user.profilPic}`,
+            isBanned: channelsUsers.isBanned,
+            }));
+        return (users);
+    }
+    async unBan(channel, user)
+    {
+        const relation = (await this.findRelation(user.id, channel.channel_id))[0];
+        if (!relation)
+            return (null);
+        return (await this.channelsUsersRepository.remove(relation));
+    }
 }

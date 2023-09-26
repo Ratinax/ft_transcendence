@@ -15,7 +15,7 @@ p {
 }
 
 #app {
-	font-family: Avenir, Helvetica, Arial, sans-serif; /* mettre une autre font custom */
+	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
