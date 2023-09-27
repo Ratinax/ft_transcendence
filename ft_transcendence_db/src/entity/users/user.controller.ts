@@ -40,6 +40,9 @@ export class UserController {
             throw new InternalServerErrorException('Password should be between 8 and 20 caracteres');
         if (body.pseudo.length < 3 || body.pseudo.length > 8)
             throw new InternalServerErrorException('Login should be between 3 and 8 caracteres');
+        const regex = /^[A-Za-z0-9_.]+$/;
+        if (!regex.test(body.pseudo))
+            throw new InternalServerErrorException('Login should only contains A-Z, a-z, 0-9, and \'._\'');
         const user = await this.userService.signUp(body);
         const session = await this.sessionService.createSession(user.id);
         res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
