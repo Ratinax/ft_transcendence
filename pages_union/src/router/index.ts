@@ -4,6 +4,7 @@ import Chat from '../views/Chat.vue';
 import Relations from '../views/Relations.vue';
 import Callback42 from '../views/Callback42.vue';
 import UserPage from '../views/UserPage.vue'
+import DoubleFa from '../views/DoubleFa.vue'
 
 import axios from 'axios';
 const routes = [
@@ -60,6 +61,19 @@ const routes = [
                 next('/');
             }
         }
+	},
+    {
+		path: '/2fa/:link',
+		component: DoubleFa,
+		name: 'DoubleFaPage',
+        // beforeEnter: async (to: any, from: any, next: any) => {
+        //     const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
+        //     if (sessionCookie !== '') {
+        //         next();
+        //     } else {
+        //         next('/');
+        //     }
+        // }
 	}
 ]
 

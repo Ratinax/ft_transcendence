@@ -64,9 +64,13 @@ export default defineComponent({
 				error.value = JSON.parse(e.request.response).message;
 				return ;
 			}
+			console.log(res.data)
 			if (!res.data)
 				return ;
-			router.push({name: 'UserPage', params: {pseudo: pseudo.value}});
+			if (res.data !== true)
+				router.push({name: 'DoubleFaPage', params: {link: res.data}})
+			else
+				router.push({name: 'UserPage', params: {pseudo: pseudo.value}});
 			resetData();
 		}
 		return {login, login42, resetData, pseudo, password, error};

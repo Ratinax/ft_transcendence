@@ -4,6 +4,7 @@ import { Response } from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import { SessionService } from '../sessions/session.service';
+import * as speakeasy from 'speakeasy';
 
 @Controller('users')
 export class UserController {
@@ -51,18 +52,28 @@ export class UserController {
     @Post('signin')
     async signIn(@Body() body, @Res({passthrough: true}) res: Response)
     {
-        const user = await this.callFunction(this.userService.signIn, body);
-        if (!user || user === 'Wrong password')
+        // TODO ici mettre 2fa
+        // const uri = this.getUri();
+        const result = await this.userService.signIn(body);
+        // if (user.doubleFa)
+        if (!result || result === 'Wrong password')
         {
             throw new InternalServerErrorException('Not good user nor password');
         }
+        const user = result.user;
+        const uri = result.uri;
         if (user.is42User)
         {
             throw new InternalServerErrorException('This is a user registered using login with 42');
         }
-        const session = await this.sessionService.createSession(user.id);
-        res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
-        return (true);
+        if (!uri)
+        {
+            const session = await this.sessionService.createSession(user.id);
+            res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
+            return (true);
+        }
+        res.cookie('2FAKEY', user.pseudo, {httpOnly: true, expires: new Date(Date.now() + 30000)});
+        return (uri);
     }
 
     /**
@@ -207,4 +218,25 @@ export class UserController {
             throw new InternalServerErrorException('Couldn\'t get user');
         return (true);
     }
+    @Get('verify2Fa/:code')
+    async verify2Fa(@Param('code') code: string, @Req() req, @Res({passthrough: true}) res: Response)
+    {
+        console.log('test2233')
+        if (!req.cookies['2FAKEY'])
+            return ('false cause no more cookie'); // TODO informer que trop tard
+        const ascii = await this.userService.getUserAscii2fa(req.cookies['2FAKEY']);
+        const user = (await this.userService.getUser(req.cookies['2FAKEY']))[0];
+        const result = speakeasy.totp.verify({
+            secret: ascii,
+            encoding: 'ascii',
+            token: code,
+        })
+        if (result === true)
+        {
+            const session = await this.sessionService.createSession(user.id);
+            res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
+        }
+        return (result);
+    }
+    
 }

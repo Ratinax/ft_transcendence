@@ -29,4 +29,10 @@ export class Users {
 
     @Column({name: 'double_fa', type: 'boolean', default: false})
     doubleFa: Boolean;
+
+    @Column({name: 'double_fa_ascii', type: 'varchar', default: ''})
+    doubleFaAscii: String;
+
+    @Column({name: 'double_fa_url', type: 'varchar', default: ''})
+    doubleFaURL: String;
 }

@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as bcrypt from 'bcrypt';
 import axios from 'axios';
+import * as speakeasy from 'speakeasy';
 
 @Injectable()
 export class UserService {
@@ -77,7 +78,11 @@ export class UserService {
             return (false);
         if (!this.comparePasswords(userFound, user.password))
             return ('Wrong password');
-        return (userFound);
+        if (userFound.doubleFa)
+        {
+            return ({user: userFound, uri: userFound.doubleFaURL})
+        }
+        return ({user: userFound, uri: false});
     }
     async login42(user: Partial<Users>)
     {
@@ -239,9 +244,29 @@ export class UserService {
         if (user)
         {
             user.doubleFa = !user.doubleFa;
-            console.log(user.doubleFa);
+            if (user.doubleFa)
+            {
+                const secret = this.getUri();
+                user.doubleFaAscii = secret.ascii;
+                user.doubleFaURL = secret.otpauth_url;
+                await this.userRepository.save(user);
+            }
             return (await this.userRepository.save(user));
         }
         return (null);
+    }
+    getUri()
+    {
+        const secret = speakeasy.generateSecret({
+            name: 'ft_transcendence',
+        });
+        return secret;
+    }
+    async getUserAscii2fa(pseudo: string)
+    {
+        const user = await this.userRepository.createQueryBuilder('users')
+        .where('pseudo = :pseudo', { pseudo: pseudo })
+            .getMany();
+        return (user[0].doubleFaAscii);
     }
 }
