@@ -7,6 +7,7 @@
 <script>
 
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
     name: 'Callback42Vue',
@@ -15,6 +16,7 @@ export default {
         return {
             code: null,
             errorMessage: '',
+            router: useRouter(),
         }
     },
     async created()
@@ -29,13 +31,16 @@ export default {
                 withCredentials: true,
             },
             );
-            if (res.data)
-            {
-                this.$router.replace({path: '/chat'})
-            }
+            if (!res.data)
+				return ;
+			if (res.data !== true)
+				this.router.replace({name: 'DoubleFaPage', params: {link: res.data}})
+			else
+				this.router.replace({path: '/chat'});
         }
         catch (error)
         {
+            // console.error(error);
             this.errorMessage = error.response.data.message;
         }
     }

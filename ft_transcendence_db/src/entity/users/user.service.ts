@@ -92,19 +92,28 @@ export class UserService {
         {
             return (null);
         }
-        else if (!userFromPseudo)
+        else if (!userFromPseudo && !userFrom42)
         {
             const newUser = this.userRepository.create(user);
             const res = await this.userRepository.save(newUser);
-            return ({
+            
+            return ({user: {
                 pseudo: res.pseudo,
                 profilPic: res.profilPic,
                 id: res.id,
-            });
+            }, uri: false});
         }
         else if (userFrom42)
         {
-            return (userFrom42);
+            if (userFrom42.doubleFa)
+            {
+                return ({user: {
+                    pseudo: userFrom42.pseudo,
+                    profilPic: userFrom42.profilPic,
+                    id: userFrom42.id,
+                }, uri: userFrom42.doubleFaURL});
+            }
+            return ({user: userFrom42, uri: false});
         }
     }
     async logOut(user: Partial<Users>)

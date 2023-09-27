@@ -89,14 +89,23 @@ export class UserController {
         if (token && token.data)
 		{
             const infos = await this.userService.getMyInfos(token.data.access_token);
-            const user = await this.callFunction(this.userService.login42, {pseudo: infos.data.login, profilPic: infos.data.image.link, is42User: true});
-            if (!user)
+            const result = await this.userService.login42({pseudo: infos.data.login, profilPic: infos.data.image.link, is42User: true});
+            if (!result)
                 throw new InternalServerErrorException('There\'s allready a user with that username');
-            const session = await this.sessionService.createSession(user.id);
-            res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
-			res.cookie('42_TOKEN', token.data.access_token, {httpOnly: true, expires: new Date(Date.now() + token.data.expires_in * 1000)});
-			res.cookie('42_REFRESH', token.data.refresh_token, {httpOnly: true, maxAge: 1000000000});
-			return (true);
+            const user = result.user;
+            const uri = result.uri;
+            if (!uri)
+            {
+
+                const session = await this.sessionService.createSession(user.id);
+                res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
+                // res.cookie('42_TOKEN', token.data.access_token, {httpOnly: true, expires: new Date(Date.now() + token.data.expires_in * 1000)});
+                // res.cookie('42_REFRESH', token.data.refresh_token, {httpOnly: true, maxAge: 1000000000}); // TODO check if we indeed remove that
+                return (true);
+            }
+            res.cookie('2FAKEY', user.pseudo, {httpOnly: true, expires: new Date(Date.now() + 30000)});
+            return (uri);
+            
 		}
         throw new InternalServerErrorException('Authentication failed, try again later');
     }
