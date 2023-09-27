@@ -57,7 +57,9 @@ export class UserController {
             throw new InternalServerErrorException('Not good user nor password');
         }
         if (user.is42User)
-            return (false); // TODO handle its a user 42, cannot connect like this
+        {
+            throw new InternalServerErrorException('This is a user registered using login with 42');
+        }
         const session = await this.sessionService.createSession(user.id);
         res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         return (true);
@@ -77,15 +79,15 @@ export class UserController {
 		{
             const infos = await this.userService.getMyInfos(token.data.access_token);
             const user = await this.callFunction(this.userService.login42, {pseudo: infos.data.login, profilPic: infos.data.image.link, is42User: true});
-            if (!user) // TODO faire quelque chose quand renvoie null
-                return (false);
+            if (!user)
+                throw new InternalServerErrorException('There\'s allready a user with that username');
             const session = await this.sessionService.createSession(user.id);
             res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
 			res.cookie('42_TOKEN', token.data.access_token, {httpOnly: true, expires: new Date(Date.now() + token.data.expires_in * 1000)});
 			res.cookie('42_REFRESH', token.data.refresh_token, {httpOnly: true, maxAge: 1000000000});
 			return (true);
 		}
-        return (false); // TODO handle le fait que ce soit pas le meme false que plus haut
+        throw new InternalServerErrorException('Authentication failed, try again later');
     }
     @Post('logout') // TODO implementer logout
     async logOut(@Body() body)

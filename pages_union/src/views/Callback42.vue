@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div class="reset">
+    <p>{{ errorMessage }}</p>
+  </div>
 </template>
 
 <script>
@@ -12,24 +14,37 @@ export default {
     {
         return {
             code: null,
+            errorMessage: '',
         }
     },
     async created()
     {
         this.code = this.$route.query.code;
-        const res = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/callback42/${this.code}`,
-				{
-					withCredentials: true,
-				},
-				);
-        if (res.data)
+
+        try
         {
-            this.$router.replace({path: '/chat'})
+
+            const res = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/callback42/${this.code}`,
+            {
+                withCredentials: true,
+            },
+            );
+            if (res.data)
+            {
+                this.$router.replace({path: '/chat'})
+            }
+        }
+        catch (error)
+        {
+            this.errorMessage = error.response.data.message;
         }
     }
 }
 </script>
 
-<style>
-
+<style scoped>
+p
+{
+    color: white;
+}
 </style>

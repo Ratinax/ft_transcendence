@@ -85,7 +85,6 @@ export class UserService {
         let userFrom42 = await this.userRepository.findOne({where: {pseudo : user.pseudo, is42User: true}});
         if (userFromPseudo && !userFrom42)
         {
-            // TODO handle le fait que quelqu'un ai deja ce pseudo et ne soit pas de 42
             return (null);
         }
         else if (!userFromPseudo)
