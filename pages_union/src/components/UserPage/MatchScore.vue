@@ -152,4 +152,17 @@ export default defineComponent({
 	padding: 0 .5em;
 }
 
+@media screen and (max-width: 768px) {
+  .profile-pic-container {
+    width: 2.5em;
+    height: 2.5em;
+  }
+}
+
+@media screen and (max-width: 400px) {
+	.win, .loss {
+		width: 1.742em;
+	}
+}
+
 </style>

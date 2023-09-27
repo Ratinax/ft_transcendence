@@ -237,12 +237,11 @@ export default defineComponent({
 
 .user-page {
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
-	min-width: 600px;
+	min-width: 360px;
 	height: 100vh;
 }
 
 .user-page-content {
-	min-width: 450px;
 	justify-content: center;
 	margin: 2em auto;
 	max-width: 960px;
@@ -367,7 +366,6 @@ export default defineComponent({
 
 .slider {
   position: absolute;
-  cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
@@ -427,7 +425,7 @@ export default defineComponent({
 
 	.user-page-content {
 		justify-content: unset;
-		width: 80%;
+		width: 90%;
 	}
 
 	.user-match-history {
@@ -466,6 +464,14 @@ export default defineComponent({
 		border: none;
 		border-bottom: 1px solid var(--plight);
 	}
+}
+
+@media screen and (max-width: 768px) {
+  .profile-pic-container {
+    width: 10em;
+    height: 10em;
+    margin: 1em 0;
+  }
 }
 
 </style>
