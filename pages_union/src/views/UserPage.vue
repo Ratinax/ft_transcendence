@@ -12,6 +12,16 @@
 						<div :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
+						<!-- <p class="user-name text">2FA</p> -->
+						<div id="fa2" v-if="!showButtons">
+							<p class="text">2Fa</p>
+							<div class="switch-choice-container"> <!--trop de trucs-->
+								<label class="switch-choice">
+									<input id="fa2-input" class="input-switch" type="checkbox" @click="switch2fa">
+									<span class="slider round-slider"></span>
+								</label>
+							</div>
+						</div>
 					</div>
 					<div class="col user-match-history">
 						<MatchHistory :pseudo="userName"></MatchHistory>
@@ -57,6 +67,7 @@ export default defineComponent({
 	components: { Menu, MatchHistory },
 	setup() {
 		let socket;
+		const is2faState = ref(false);
 		const router = useRouter();
 		const showButtons = ref<boolean>(false);
 		const userName = ref('');
@@ -89,6 +100,11 @@ export default defineComponent({
 			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
 			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
 			isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
+			const res2fa = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/is2fa/${userName.value}`, {withCredentials: true})).data;
+			const checkbox = document.getElementById("fa2-input") as HTMLInputElement;
+			if (checkbox)
+				checkbox.checked = res2fa;
+			is2faState.value = res2fa;
 		}
 
 		async function	blockUser()
@@ -147,7 +163,20 @@ export default defineComponent({
 			{
 				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/sendDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
 				if (res)
-			router.push({ path: '/chat' } )
+					router.push({ path: '/chat' } )
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
+		}
+		async function switch2fa()
+		{
+			console.log('a ete clicked')
+			is2faState.value = !is2faState.value;
+			try
+			{
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/change2fa/`, {}, {withCredentials: true});
 			}
 			catch (e)
 			{
@@ -184,12 +213,19 @@ export default defineComponent({
 			unblockUser,
 			removeFriend,
 			addFriend,
-			sendMessage };
+			sendMessage,
+			switch2fa };
 	},
 });
 </script>
 
 <style scoped>
+
+#fa2
+{
+	display: flex;
+	align-items: center;
+}
 
 .winrate {
 	transform: scale(75%);
@@ -307,6 +343,69 @@ export default defineComponent({
 .user-score {
 	font-size: 8em;
 	padding-top: .1em;
+}
+
+/* toggle switch */
+
+.switch-choice-container
+{
+	scale: 0.5;
+}
+
+.switch-choice {
+  position: relative;
+  display: inline-block;
+  width: 6em;
+  height: 3.4em;
+}
+
+.switch-choice .input-switch {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ff0900b0;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 2.6em;
+  width: 2.6em;
+  left: 0.4em;
+  bottom: 0.4em;
+  background-color: white;
+  transition: .4s;
+}
+
+.input-switch:checked + .slider {
+  background-color: #09ff00b0;
+}
+
+.input-switch:focus + .slider {
+  box-shadow: 0 0 0 .4em rgba(21, 156, 228, 0.7);
+  outline: none;
+}
+
+.input-switch:checked + .slider:before {
+  transform: translateX(2.6em);
+}
+
+.slider.round-slider {
+  border-radius: 3.4em;
+}
+
+.slider.round-slider:before {
+  border-radius: 50%;
 }
 
 /* Media queries */

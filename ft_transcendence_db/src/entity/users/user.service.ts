@@ -229,7 +229,19 @@ export class UserService {
             pseudo: user.pseudo,
             profilPic: user.profilPic,
             is42User: user.is42User,
+            doubleFa: user.doubleFa,
             }));
         return (usersMapped);
+    }
+    async change2fa(user_id)
+    {
+        let user = await this.userRepository.findOne({where: {id : user_id}});
+        if (user)
+        {
+            user.doubleFa = !user.doubleFa;
+            console.log(user.doubleFa);
+            return (await this.userRepository.save(user));
+        }
+        return (null);
     }
 }

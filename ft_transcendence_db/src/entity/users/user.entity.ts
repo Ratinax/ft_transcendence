@@ -26,4 +26,7 @@ export class Users {
 
     @Column({name: 'is_42_user', type: 'boolean', default: false})
     is42User: Boolean;
+
+    @Column({name: 'double_fa', type: 'boolean', default: false})
+    doubleFa: Boolean;
 }
