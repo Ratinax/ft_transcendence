@@ -1,6 +1,6 @@
 import { Body, Controller, Get, InternalServerErrorException, Param, Post, Query, Req, Res } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import { SessionService } from '../sessions/session.service';
@@ -246,6 +246,14 @@ export class UserController {
             res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         }
         return (result);
+    }
+    @Get('timeLeft2Fa')
+    async getTimeLeft2Fa(@Req() req: Request)
+    {
+        const twoFaCookie = req.cookies['2FAKEY'];
+        if (!twoFaCookie)
+            return (-1);
+        return true;
     }
     
 }

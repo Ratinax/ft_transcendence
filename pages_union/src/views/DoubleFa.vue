@@ -5,6 +5,7 @@
 			<form  @submit.prevent="check2Fa">
         <input v-model="code" placeholder="Verification Code"/>
       </form>
+      <div id="loader"></div>
   </div>
 </template>
 
@@ -27,10 +28,15 @@ export default {
         router: useRouter(),
         qrlink: '',
         code: '',
+        timeLeft: Number,
       }
     },
     mounted()
     {
+      this.timeLeft = 30;
+      const timeLeft = JSON.parse(localStorage.getItem('timeLeft'));
+      if (timeLeft && timeLeft > 0)
+        this.timeLeft = timeLeft;
       qrcode.toDataURL(this.route.params.link, (err, data) =>
       {
         if (err)
@@ -38,12 +44,15 @@ export default {
         else
           this.qrlink = data;
       })
+      
+      setInterval(() => {
+          this.pingTimeLeft();
+      }, 1000);
     },
     methods:
     {
       async check2Fa()
       {
-        // console.log(this.code);
         try
         {
 
@@ -59,17 +68,50 @@ export default {
         {
           console.error('la ya une error :', e);
         }
+      },
+      async pingTimeLeft()
+      {
+        setTimeout(async () => 
+        {
+            try
+            {
+              const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/timeLeft2Fa/`, {withCredentials: true})).data;
+              this.timeLeft--;
+              const loader = document.getElementById('loader');
+              loader?.style.background = `conic-gradient(
+                  transparent 0%,
+                  transparent ${(30 - this.timeLeft) * 3.333}%,
+                  #ffffff ${(30 - this.timeLeft) * 3.333}%,
+                  #ffffff 100%`
+
+              localStorage.setItem('timeLeft', JSON.stringify(this.timeLeft));
+              if (res < 0)
+              {
+                localStorage.setItem('timeLeft', JSON.stringify(0));
+                this.router.replace({path: '/'})
+              }
+            }
+            catch (e)
+            {
+              console.error(e);
+            }
+        }, 1000)
       }
     }
 }
 </script>
 
-<style>
+<style scoped>
 
-.test
+#time-left-2fa
 {
-  margin-left: 30em;
-  margin-top: 30em;
+  color: var(--plight);
+}
+
+#loader {
+  width: 5em;
+  height: 5em;
+  border-radius: 50%;
 }
 </style>
 
