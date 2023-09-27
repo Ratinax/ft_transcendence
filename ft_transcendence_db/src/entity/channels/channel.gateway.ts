@@ -36,7 +36,7 @@ export class ChannelGateway {
    * @emits createPasswordOrNameWrongSize {user} - in case of failing
    * @emits createWrongCategory {user} - in case of failing
    */
-  @SubscribeMessage('createChannel') // TODO handle no special caractere because errors can happend like in : 'ah ouais ??' and not char ',' because used for dms
+  @SubscribeMessage('createChannel')
   async create(@MessageBody() data)
   {
     if (await this.sessionService.getIsSessionExpired(data.sessionCookie))
@@ -88,6 +88,12 @@ export class ChannelGateway {
     && channel.category !== 'Protected by password')
     {
       this.server.emit('createWrongCategory', {sessionCookie: sessionCookie});
+      return (false);
+    }
+    const regex = /^[A-Za-z0-9_.]+$/;
+    if (!regex.test(channel.name))
+    {
+      this.server.emit('createNotAllowedChars', {sessionCookie: sessionCookie});
       return (false);
     }
     return (true);

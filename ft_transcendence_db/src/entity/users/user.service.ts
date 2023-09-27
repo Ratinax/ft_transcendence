@@ -40,7 +40,7 @@ export class UserService {
      * @returns the new user registered with {pseudo, password, image}
      * @throws InternalServerErrorException in case of failing or user already exists
      */
-    async signUp(body: any)
+    async signUp(body: any) // TODO handle special chars
     {
         let imageName;
         let userFound = await this.userRepository.findOne({where: {pseudo : body.pseudo}});

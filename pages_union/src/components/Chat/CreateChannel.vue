@@ -47,6 +47,7 @@ export default defineComponent({
 				'You must not have an empty field',
 				'Channel name and password must be between 3 and 20 caracteres',
 				'Channel already exists',
+				'Channel name must only contain A-Z, a-z, 0-9, and \'._\' ',
 			],
 			password: '',
 			channelName: '',
@@ -73,7 +74,10 @@ export default defineComponent({
 			this.socket.on('createWrongCategory', async (response: {sessionCookie: string}) => {
 				if (response.sessionCookie === this.sessionCookie)
 					this.wrongCategory();
-
+			});
+			this.socket.on('createNotAllowedChars', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+					this.wrongChars();
 			});
 		}
 	},
@@ -117,6 +121,10 @@ export default defineComponent({
 		alreadyExists()
 		{
 			this.matrixIndex = 3;
+		},
+		wrongChars()
+		{
+			this.matrixIndex = 4;
 		},
 	}
 });
