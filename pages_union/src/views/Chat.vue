@@ -13,7 +13,7 @@
 			</div>
 			<div class= "messageszone">
 				<Messages ref="messages" />
-				<SendMessage 
+				<SendMessage
 					ref="sendMessage"
 					:showContent="!!selectedChannel?.channel_id"
 					:channelId="selectedChannel?.channel_id"
@@ -182,6 +182,7 @@ export default defineComponent({
 	background: white;
 	border-radius: 1em 0 1em 1em;
 	border: 2px solid var(--pblue);
+	/* TODO check if we put overflow: auto; */ 
 }
 
 </style>

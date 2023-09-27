@@ -2,7 +2,7 @@
 	<div class="row send-message" v-if="showContent">
 		<form @submit.prevent="sendMessage">
 			<input class="message-input" v-model="messageText" placeholder="Send a message..." v-if="!isUserTimeout"/>
-			<!-- <input v-model="messageText" class="input-error" :placeholder="'You cannot send messages because you are timeout for ' + durationTimeoutString" v-else/> -->
+			<input v-model="messageText" class="timeout-error message-input" :placeholder="'You are timeout for ' + durationTimeoutString" v-else/>
 		</form>
 		<form @submit.prevent="inviteInGame">
 			<button class="ft-button" type="submit">Invite in game</button>
@@ -68,7 +68,7 @@ export default defineComponent({
 			const minutes = Math.floor(duration / 60);
 			duration -= minutes * 60;
 			const seconds = Math.floor(duration);
-			this.durationTimeoutString = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+			this.durationTimeoutString = `${days} d, ${hours} h, ${minutes} min and ${seconds} sec`;
 		},
 		goodRequest()
 		{
@@ -92,10 +92,15 @@ export default defineComponent({
 
 .send-message
 {
+	top: 0;
+	bottom: 0;
 	border-top: 1px solid var(--plight);
 	align-items: center;
 	justify-content: space-evenly;
-	padding-top: 2em;
+	overflow: auto;
+	/* height: 5%; */
+
+	/* padding-top: 2em; */
 }
 
 .message-input {
@@ -104,6 +109,15 @@ export default defineComponent({
 	border-radius: .5em;
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 	width: 24em;
+	top:0;
+	bottom:0;
+	left:0;
+	right: 0;
+	/* top:0; */
+}
+.timeout-error::placeholder
+{
+	color: red;
 }
 
 button {
