@@ -40,7 +40,6 @@ export default {
         }
         catch (error)
         {
-            // console.error(error);
             this.errorMessage = error.response.data.message;
         }
     }

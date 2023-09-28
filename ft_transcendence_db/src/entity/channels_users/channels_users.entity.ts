@@ -17,7 +17,6 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "t
  * - durationTimeout: Number
  */
 
-// TODO faire les invitations
 @Entity()
 export class ChannelsUsers {
     @PrimaryGeneratedColumn()

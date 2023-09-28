@@ -66,14 +66,6 @@ const routes = [
 		path: '/2fa/:link',
 		component: DoubleFa,
 		name: 'DoubleFaPage',
-        // beforeEnter: async (to: any, from: any, next: any) => {
-        //     const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
-        //     if (sessionCookie !== '') {
-        //         next();
-        //     } else {
-        //         next('/');
-        //     }
-        // }
 	}
 ]
 

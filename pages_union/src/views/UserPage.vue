@@ -16,7 +16,7 @@
 
 						<div id="fa2" v-if="!showButtons">
 							<p class="text">2Fa</p>
-							<div class="switch-choice-container"> <!--trop de trucs-->
+							<div class="switch-choice-container">
 								<label class="switch-choice">
 									<input id="fa2-input" class="input-switch" type="checkbox" @click="switch2fa">
 									<span class="slider round-slider"></span>
@@ -85,9 +85,7 @@ export default defineComponent({
 	},
 	setup() {
 		let socket;
-		// const QrcodeRef = ref<typeof Qrcode | null>(null);
-		// const QrcodeRef = ref(null);
-		// const showQrcode = ref(false);
+
 		const is2faState = ref(false);
 		const router = useRouter();
 		const showButtons = ref<boolean>(false);

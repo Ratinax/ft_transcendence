@@ -52,10 +52,7 @@ export class UserController {
     @Post('signin')
     async signIn(@Body() body, @Res({passthrough: true}) res: Response)
     {
-        // TODO ici mettre 2fa
-        // const uri = this.getUri();
         const result = await this.userService.signIn(body);
-        // if (user.doubleFa)
         if (!result || result === 'Wrong password')
         {
             throw new InternalServerErrorException('Not good user nor password');
@@ -231,7 +228,7 @@ export class UserController {
     async verify2Fa(@Param('code') code: string, @Req() req, @Res({passthrough: true}) res: Response)
     {
         if (!req.cookies['2FAKEY'])
-            return ('false cause no more cookie'); // TODO informer que trop tard
+            return ('false cause no more cookie');
         const ascii = await this.userService.getUserAscii2fa(req.cookies['2FAKEY']);
         const user = (await this.userService.getUser(req.cookies['2FAKEY']))[0];
         const result = speakeasy.totp.verify({

@@ -178,7 +178,7 @@ export default defineComponent({
 }
 
 .messageszone {
-	width: 40em; /* a changer */
+	width: 40em;
 	background: white;
 	border-radius: 1em 0 1em 1em;
 	border: 2px solid var(--pblue);

@@ -118,7 +118,6 @@ export class ChannelGateway {
     const user = await this.sessionService.getUser(body.sessionCookie);
     const password = body.password;
     const channelName = body.channelName;
-    // const user = body.user;
     let channel;
 
     try

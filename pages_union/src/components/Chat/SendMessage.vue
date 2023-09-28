@@ -98,9 +98,6 @@ export default defineComponent({
 	align-items: center;
 	justify-content: space-evenly;
 	overflow: auto;
-	/* height: 5%; */
-
-	/* padding-top: 2em; */
 }
 
 .message-input {
@@ -113,7 +110,6 @@ export default defineComponent({
 	bottom:0;
 	left:0;
 	right: 0;
-	/* top:0; */
 }
 .timeout-error::placeholder
 {

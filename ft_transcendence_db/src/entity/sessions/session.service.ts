@@ -44,7 +44,6 @@ export class SessionService{
         const user = relations.map((sessions) => ({
                 id: sessions.user.id,
                 pseudo: sessions.user.pseudo,
-                // password: sessions.user.password,
                 profilPic: sessions.user.profilPic,
                 is42User: sessions.user.is42User,
                 doubleFaURL: sessions.user.doubleFaURL,

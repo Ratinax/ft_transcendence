@@ -38,8 +38,6 @@ export default defineComponent({
     {
         async getBannedUsers()
         {
-            console.log('lala')
-            // this.listUsersBanned = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/users/${this.pseudo}`, {withCredentials: true})).data;
             this.listUsersBanned = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/bannedUsers/${this.channel?.channel_id}`, {withCredentials: true})).data;
         },
         close()

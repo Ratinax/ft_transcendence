@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <QRCode :value="link" :size="128"></qrcode> -->
       <img :src="qrlink"/>
 			<form  @submit.prevent="check2Fa">
         <input v-model="code" placeholder="Verification Code"/>
@@ -11,15 +10,11 @@
 
 <script>
 import { useRoute, useRouter } from 'vue-router';
-// import QRCode from 'qrcode.vue';
 import qrcode from 'qrcode';
 import axios from 'axios';
 
 export default {
     name: "DoubleFa",
-    components: {
-      // QRCode,
-    },
     props: {
     },
     data() {
