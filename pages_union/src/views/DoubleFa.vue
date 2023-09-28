@@ -78,11 +78,12 @@ export default {
               const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/timeLeft2Fa/`, {withCredentials: true})).data;
               this.timeLeft--;
               const loader = document.getElementById('loader');
-              loader?.style.background = `conic-gradient(
-                  transparent 0%,
-                  transparent ${(30 - this.timeLeft) * 3.333}%,
-                  #ffffff ${(30 - this.timeLeft) * 3.333}%,
-                  #ffffff 100%`
+              if (loader)
+                loader.style.background = `conic-gradient(
+                    transparent 0%,
+                    transparent ${(30 - this.timeLeft) * 3.333}%,
+                    #ffffff ${(30 - this.timeLeft) * 3.333}%,
+                    #ffffff 100%`
 
               localStorage.setItem('timeLeft', JSON.stringify(this.timeLeft));
               if (res < 0)
