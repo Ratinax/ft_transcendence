@@ -1,20 +1,25 @@
 <template>
 	<div class="inputZone">
 			<p class="error">{{ error }}</p>
-			<input type="text" placeholder="Username" :class="{'input-error': error !== ''}" v-model="pseudo" />
-			<input type="password" placeholder="Password" :class="{'input-error': error !== ''}" v-model="password"/>
-			<div class="row buttonZone">
-			<form @submit.prevent="login42">
-				<button class="row ft-button" type="submit">
-					<img src="../../assets/42_logo.svg" alt="logo 42">
-						LOGIN
-				</button>
+			<form @submit.prevent="login">
+				<input type="text" placeholder="Username" :class="{'input-error': error !== ''}" v-model="pseudo" />
 			</form>
 			<form @submit.prevent="login">
-				<button class="ft-button" type="submit">
-					LOGIN
-				</button>
+				<input type="password" placeholder="Password" :class="{'input-error': error !== ''}" v-model="password"/>
 			</form>
+			
+			<div class="row buttonZone">
+				<form @submit.prevent="login42">
+					<button class="row ft-button" type="submit">
+						<img src="../../assets/42_logo.svg" alt="logo 42">
+							LOGIN
+					</button>
+				</form>
+				<form @submit.prevent="login">
+					<button class="ft-button" type="submit">
+						LOGIN
+					</button>
+				</form>
 			</div>
 	</div>
 </template>
