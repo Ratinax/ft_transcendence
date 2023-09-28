@@ -34,7 +34,7 @@ export class ChannelsUsersService {
             .createQueryBuilder('channelsUsers')
             .innerJoinAndSelect('channelsUsers.user', 'user')
             .innerJoinAndSelect('channelsUsers.channel', 'channel')
-            .where('channel.name = :channelName AND is_invited = false AND is_banned = false', { channelName })
+            .where('channel.name = :channelName AND is_banned = false', { channelName })
             .getMany();
         const users = usersAndChannels.map((channelsUsers) => ({
             id: channelsUsers.user.id, 
@@ -86,7 +86,7 @@ export class ChannelsUsersService {
             .createQueryBuilder('channelsUsers')
             .innerJoinAndSelect('channelsUsers.user', 'user')
             .innerJoinAndSelect('channelsUsers.channel', 'channel')
-            .where('user.id = :user_id AND is_invited = false AND is_banned = false', { user_id })
+            .where('user.id = :user_id AND  is_banned = false', { user_id })
             .getMany();
         const channels = usersAndChannels.map((channelsUsers) => (
             {
