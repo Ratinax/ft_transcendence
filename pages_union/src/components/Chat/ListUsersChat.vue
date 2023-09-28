@@ -10,7 +10,8 @@
 				:isSelected="userSelected && userSelected?.id === userInChat.id" 
 				:socket="socket" 
 				:channel="channel" 
-				@user-clicked="handleUserClicked"/>
+				@user-clicked="handleUserClicked"
+				@close-options="handleCleanUSerOpt"/>
 			<div v-if="userInChannel && userInChannel?.isOwner">
 				<form class="buttons" @submit.prevent="showBannedList">
 					<button class="ft-button blue-button ban-list" type="submit">Ban List</button>
@@ -94,12 +95,17 @@ export default defineComponent({
 		 * 
 		 * @param user - the user clicked in the list
 		*/
-		handleUserClicked(user: {id: number})
+		handleUserClicked(user: {id: number} | undefined)
 		{
 			if (this.userSelected === user)
 				this.userSelected = undefined;
 			else
 				this.userSelected = user;
+		},
+		handleCleanUSerOpt(user: {id: number} | undefined)
+		{
+			if (user && user.id === this.userSelected?.id)
+				this.userSelected = undefined;
 		},
 		getUserInChannel()
 		{

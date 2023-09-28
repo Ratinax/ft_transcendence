@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div ref="optionsRef">
 		<div class="user-in-chat">
 			<font-awesome-icon icon="fa-solid fa-circle" 
 				:class="{'green': userInChat?.isConnected, 'red': !userInChat?.isConnected}" />
@@ -84,6 +84,10 @@ export default defineComponent({
                     (this.$refs.timeout as typeof TimeOut).notGoodAmount();
             }
         });
+        document.addEventListener("click", this.handleClickOutsideOptions);
+    },
+    beforeUnmount() {
+        document.removeEventListener("click", this.handleClickOutsideOptions);
     },
     methods: {
         handleUserClicked() 
@@ -117,7 +121,14 @@ export default defineComponent({
         seeProfil()
         {
 			this.router.push({name: 'UserPage', params: {pseudo: this.userInChat?.pseudo}})
-        }
+        },
+        handleClickOutsideOptions(event: any) 
+        {
+            if (this.$refs.optionsRef && !(this.$refs.optionsRef as any).contains(event.target)) 
+            {
+                this.$emit('close-options', this.userInChat);
+            }
+        },
     }
 })
 </script>
