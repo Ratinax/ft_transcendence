@@ -33,6 +33,9 @@ export default {
       const timeLeft = JSON.parse(localStorage.getItem('timeLeft'));
       if (timeLeft && timeLeft > 0)
         this.timeLeft = timeLeft;
+      else if (timeLeft !== 0 || timeLeft === -1)
+        localStorage.setItem('timeLeft', JSON.stringify(30));
+
       qrcode.toDataURL(this.route.params.link, (err, data) =>
       {
         if (err)
