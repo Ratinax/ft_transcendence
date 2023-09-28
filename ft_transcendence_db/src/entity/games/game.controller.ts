@@ -44,7 +44,9 @@ export class GameController {
             return (null);
         }
         const user = (await this.userService.getUser(pseudo))[0];
-        return (await this.gameService.getGames(user.id))
+        if (user)
+            return (await this.gameService.getGames(user.id));
+        return (false);
     }
     @Get('games-wins/:pseudo')
     async getGamesAndWinsId(@Param('pseudo') pseudo, @Req() req)

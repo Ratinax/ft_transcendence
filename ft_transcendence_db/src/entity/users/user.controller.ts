@@ -230,7 +230,6 @@ export class UserController {
     @Get('verify2Fa/:code')
     async verify2Fa(@Param('code') code: string, @Req() req, @Res({passthrough: true}) res: Response)
     {
-        console.log('test2233')
         if (!req.cookies['2FAKEY'])
             return ('false cause no more cookie'); // TODO informer que trop tard
         const ascii = await this.userService.getUserAscii2fa(req.cookies['2FAKEY']);
@@ -248,12 +247,22 @@ export class UserController {
         return (result);
     }
     @Get('timeLeft2Fa')
-    async getTimeLeft2Fa(@Req() req: Request)
+    async getTimeLeft2Fa(@Req() req)
     {
         const twoFaCookie = req.cookies['2FAKEY'];
         if (!twoFaCookie)
             return (-1);
         return true;
+    }
+    @Get('link2Fa')
+    async getLink2Fa(@Req() req)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
+        return (user.doubleFaURL); 
     }
     
 }

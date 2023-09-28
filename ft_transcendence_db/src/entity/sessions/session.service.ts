@@ -47,6 +47,8 @@ export class SessionService{
                 // password: sessions.user.password,
                 profilPic: sessions.user.profilPic,
                 is42User: sessions.user.is42User,
+                doubleFaURL: sessions.user.doubleFaURL,
+
             }));
         return (user[0]);
     }

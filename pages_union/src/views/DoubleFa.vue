@@ -29,6 +29,7 @@ export default {
         qrlink: '',
         code: '',
         timeLeft: Number,
+        interValId: null,
       }
     },
     mounted()
@@ -45,7 +46,7 @@ export default {
           this.qrlink = data;
       })
       
-      setInterval(() => {
+      this.interValId = setInterval(() => {
           this.pingTimeLeft();
       }, 1000);
     },
@@ -58,9 +59,15 @@ export default {
 
           const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/verify2Fa/${this.code}`, {withCredentials: true})).data;
           if (res === true)
+          {
+            localStorage.setItem('timeLeft', JSON.stringify(0));
+            clearInterval(this.interValId);
             this.router.replace({path: '/chat'});
+          }
           else
           {
+            localStorage.setItem('timeLeft', JSON.stringify(0));
+            clearInterval(this.interValId);
             this.router.replace({path: '/'})
           }
         }
@@ -89,6 +96,7 @@ export default {
               if (res < 0)
               {
                 localStorage.setItem('timeLeft', JSON.stringify(0));
+                clearInterval(this.interValId);
                 this.router.replace({path: '/'})
               }
             }

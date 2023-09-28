@@ -1,5 +1,6 @@
 <template>
 	<Menu />
+	<Qrcode ref="QrcodeRef" :show="showQrcode" @close="showQrcode = false"/>
 	<div class="row user-page view">
 		<div class="col user-page-content">
 			<div class="col user-box">
@@ -12,7 +13,7 @@
 						<div :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
-						<!-- <p class="user-name text">2FA</p> -->
+
 						<div id="fa2" v-if="!showButtons">
 							<p class="text">2Fa</p>
 							<div class="switch-choice-container"> <!--trop de trucs-->
@@ -21,6 +22,7 @@
 									<span class="slider round-slider"></span>
 								</label>
 							</div>
+							<font-awesome-icon v-if="is2faState" id="see-qrcode" :icon="['fas', 'eye']" @click="seeQrcode"/>
 						</div>
 					</div>
 					<div class="col user-match-history">
@@ -52,6 +54,7 @@
 			</div>
 		</div>
 	</div>
+
 </template>
 
 <script lang="ts">
@@ -59,14 +62,32 @@ import { defineComponent, ref, computed, onUpdated, onBeforeMount, } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Menu from "../components/Menu.vue"
 import MatchHistory from '../components/UserPage/MatchHistory.vue';
+import Qrcode from '../components/UserPage/Qrcode.vue';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 
 export default defineComponent({
 	name: 'UserPage',
-	components: { Menu, MatchHistory },
+	components: { Menu, MatchHistory, Qrcode },
+	data()
+	{
+		return {
+			showQrcode: false,
+		}
+	},
+	methods:
+	{
+		seeQrcode()
+		{
+			this.showQrcode = true;
+			(this.$refs.QrcodeRef as typeof Qrcode).getQrCode();
+		}
+	},
 	setup() {
 		let socket;
+		// const QrcodeRef = ref<typeof Qrcode | null>(null);
+		// const QrcodeRef = ref(null);
+		// const showQrcode = ref(false);
 		const is2faState = ref(false);
 		const router = useRouter();
 		const showButtons = ref<boolean>(false);
@@ -209,17 +230,31 @@ export default defineComponent({
 			isBlocked,
 			isFriend,
 			isConnected,
+			is2faState,
 			blockUser, 
 			unblockUser,
 			removeFriend,
 			addFriend,
 			sendMessage,
-			switch2fa };
+			switch2fa,
+			};
 	},
 });
 </script>
 
 <style scoped>
+
+#see-qrcode
+{
+	color: var(--plight);
+	height: 1.5em;
+	cursor: pointer;
+}
+
+#see-qrcode:hover
+{
+	height: 1.7em;
+}
 
 #fa2
 {
