@@ -91,8 +91,9 @@ export default {
                     transparent ${(30 - this.timeLeft) * 3.333}%,
                     #ffffff ${(30 - this.timeLeft) * 3.333}%,
                     #ffffff 100%`
-
-              localStorage.setItem('timeLeft', JSON.stringify(this.timeLeft));
+              const timeLeft = JSON.parse(localStorage.getItem('timeLeft'));
+              if (timeLeft > 0)
+                localStorage.setItem('timeLeft', JSON.stringify(this.timeLeft));
               if (res < 0)
               {
                 localStorage.setItem('timeLeft', JSON.stringify(0));
