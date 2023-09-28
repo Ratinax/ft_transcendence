@@ -35,7 +35,6 @@ import UsersBanned from './UsersBanned.vue';
 
 interface UserData {
 	id: number, 
-	isInvited: boolean, 
 	isOwner: boolean, 
 	isAdmin: boolean, 
 	isConnected: boolean, 
@@ -60,7 +59,7 @@ export default defineComponent({
 		return {
 			users: [] as Array<UserData>,
 			userSelected: undefined as {id: number} | undefined,
-			userInChannel: null as null | {id: number, isAdmin: boolean, isOwner: boolean, isInvited: boolean, isBanned : boolean},
+			userInChannel: null as null | {id: number, isAdmin: boolean, isOwner: boolean, isBanned : boolean},
 			showBannedUsers: false,
 		}
 	},
@@ -85,7 +84,7 @@ export default defineComponent({
 			this.userInChannel = null;
 			this.$emit('set-is-user-owner', this.channel?.channel_id);
 		},
-		updateListUsers(users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>)
+		updateListUsers(users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>)
 		{
 			this.users = users;
 			this.setAccessWrites();

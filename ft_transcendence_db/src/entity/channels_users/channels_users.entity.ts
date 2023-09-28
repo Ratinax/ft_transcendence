@@ -12,7 +12,6 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "t
  * - channel: Channel
  * - isAdmin: boolean
  * - isOwner: boolean
- * - isInvited: boolean
  * - isBanned: boolean
  * - dateTimeout: Date
  * - durationTimeout: Number
@@ -37,9 +36,6 @@ export class ChannelsUsers {
 
     @Column({ name: 'is_owner', default: false })
     isOwner: boolean;
-
-    @Column({ name: 'is_invited', default: false })
-    isInvited: boolean;
 
     @Column({ name: 'is_banned', default: false })
     isBanned: boolean;

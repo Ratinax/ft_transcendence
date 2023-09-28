@@ -11,7 +11,7 @@ export class ChannelsUsersService {
     /**
      * create a new ChannelsUsers relation
      * 
-     * @param channels_users {user, channel, isAdmin, isOwner, isInvited, isBanned}
+     * @param channels_users {user, channel, isAdmin, isOwner, isBanned}
      * @returns result of request
      */
     async createNew(channels_users: Partial<ChannelsUsers>)
@@ -42,7 +42,6 @@ export class ChannelsUsersService {
             profilPic: channelsUsers.user.profilPic, 
             isOwner: channelsUsers.isOwner,
             isAdmin: channelsUsers.isAdmin, 
-            isInvited: channelsUsers.isInvited,
             isBanned: channelsUsers.isBanned,
             dateTimeout: channelsUsers.dateTimeout,
             durationTimeout: channelsUsers.durationTimeout,

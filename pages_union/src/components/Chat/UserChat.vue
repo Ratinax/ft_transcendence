@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!userInChat?.isInvited">
+	<div>
 		<div class="user-in-chat">
 			<font-awesome-icon icon="fa-solid fa-circle" 
 				:class="{'green': userInChat?.isConnected, 'red': !userInChat?.isConnected}" />

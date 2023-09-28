@@ -71,13 +71,13 @@ export default defineComponent({
 			if (response.sessionCookie === this.sessionCookie)
 				this.updateListChannels(response.channel);
 		});
-		this.socket.on('updateListUsers', (response: {channel: {channel_id: number}, users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
+		this.socket.on('updateListUsers', (response: {channel: {channel_id: number}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (response.channel.channel_id === this.selectedChannel?.channel_id) {
 				this.updateListUsers(response.users);
 				this.setIsUserOwner(response.channel.channel_id);
 			}
 		});
-		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
+		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (!response)
 				return ;
 			if (this.sessionCookie === response.sessionCookie && response.channel.channel_id === this.selectedChannel?.channel_id) {
@@ -137,7 +137,7 @@ export default defineComponent({
 		 * 
 		 * @param {List} users - the list of users of the selectedChannel 
 		*/
-		updateListUsers(users: Array<{id: number, isInvited: boolean, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}> | null) {
+		updateListUsers(users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}> | null) {
 			if (this.$refs.listUsersChat)
 				(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
 		},

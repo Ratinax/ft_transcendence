@@ -26,7 +26,6 @@ export class ChannelsUsersController {
             id: user.id,
             isAdmin: res[0].isAdmin,
             isOwner: res[0].isOwner,
-            isInvited: res[0].isInvited,
             isBanned: res[0].isBanned, 
         }
         return (userPerms);

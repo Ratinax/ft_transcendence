@@ -56,7 +56,6 @@ export class ChannelGateway {
         channel: response,
         isAdmin: true,
         isOwner: true,
-        isInvited: false,
       });
       this.server.emit('createGoodRequest', {sessionCookie: data.sessionCookie});
       return ({response, response2});
@@ -160,7 +159,6 @@ export class ChannelGateway {
       channel: channel,
       isAdmin: false,
       isOwner: false,
-      isInvited: false,
     });
     const channelToReturn = {
       channel_id: channel.channel_id,

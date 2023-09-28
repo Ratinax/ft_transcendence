@@ -133,10 +133,10 @@ export class ChannelController {
                 channel = res2;
             else
                 channel = await this.channelService.createChannel({password: '', isADm: true, name: `${body.pseudo}, ${user.pseudo}`, category: 'Private'});
-            result = await this.channelsUsersService.createNew({user: user, channel: channel, isAdmin: false, isOwner: false, isInvited: false, isBanned: false})
+            result = await this.channelsUsersService.createNew({user: user, channel: channel, isAdmin: false, isOwner: false, isBanned: false})
             if (!result)
                 await this.channelsUsersService.unHide(user.id, channel.channel_id);
-            result = await this.channelsUsersService.createNew({user: user2, channel: channel, isAdmin: false, isOwner: false, isInvited: false, isBanned: false})
+            result = await this.channelsUsersService.createNew({user: user2, channel: channel, isAdmin: false, isOwner: false, isBanned: false})
             return (channel.name);
         }
         catch (e)
