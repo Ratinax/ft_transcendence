@@ -244,4 +244,17 @@ export class ChannelsUsersService {
             return (null);
         return (await this.channelsUsersRepository.remove(relation));
     }
+    async cleanChan(channelName)
+    {
+        const usersAndChannels = await this.channelsUsersRepository
+            .createQueryBuilder('channelsUsers')
+            .innerJoinAndSelect('channelsUsers.channel', 'channel')
+            .where('channel.name = :channel_name', { channel_name: channelName })
+            .getMany();
+        for (let i = 0; i < usersAndChannels.length; i++)
+        {
+            await this.channelsUsersRepository.remove(usersAndChannels[i]);
+        }
+        return (true);
+    }
 }

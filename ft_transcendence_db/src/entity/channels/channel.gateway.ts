@@ -184,7 +184,8 @@ export class ChannelGateway {
     const res = await this.channelsUsersService.leave(body.channel, user);
     if (res === 'Empty')
     {
-      const result = await this.channelService.removeChan(body.channel.channel_id);
+      const resultclean = await this.channelsUsersService.cleanChan(body.channel.name);
+      const resultrm = await this.channelService.removeChan(body.channel.channel_id);
     }
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.emit('updateAfterPart', {
