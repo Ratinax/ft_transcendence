@@ -84,6 +84,8 @@ export class UserService {
         }
         else if (userFrom42)
         {
+            userFrom42.profilPic = user.profilPic;
+            const res = await this.userRepository.save(userFrom42);
             if (userFrom42.doubleFa)
             {
                 return ({user: {
