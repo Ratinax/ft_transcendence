@@ -112,8 +112,8 @@ export class ChannelController {
         const channel = (await this.channelService.findByName(name))[0];
         return (channel.category);
     }
-    @Post('sendDM')
-    async sendDM(@Body() body, @Req() req)
+    @Post('initDM')
+    async initDM(@Body() body, @Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {

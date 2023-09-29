@@ -180,7 +180,7 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/sendDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
+				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/initDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
 				if (res)
 					router.push({ path: '/chat' } )
 			}
