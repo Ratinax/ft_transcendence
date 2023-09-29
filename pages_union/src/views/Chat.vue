@@ -106,8 +106,8 @@ export default defineComponent({
 	methods:
 	{
 		/**
-	 * 
-	 * @param {Object} channel - Channel from which a user has entered or left
+		* 
+		* @param {Object} channel - Channel from which a user has entered or left
 		*/
 		updateListChannels(channel: {channel_id: number, name: string} | undefined){
 			if (this.$refs.listChannels) {
@@ -135,7 +135,7 @@ export default defineComponent({
 		},
 		/**
 		 * 
-		 * @param {List} users - the list of users of the selectedChannel 
+		 * @param {Array} users - the list of users of the selectedChannel 
 		*/
 		updateListUsers(users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}> | null) {
 			if (this.$refs.listUsersChat)

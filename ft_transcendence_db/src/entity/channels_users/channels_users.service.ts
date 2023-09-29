@@ -8,12 +8,7 @@ export class ChannelsUsersService {
         @Inject('CHANNELSUSERS_REPOSITORY')
         private channelsUsersRepository: Repository<ChannelsUsers>,
     ) {}
-    /**
-     * create a new ChannelsUsers relation
-     * 
-     * @param channels_users {user, channel, isAdmin, isOwner, isBanned}
-     * @returns result of request
-     */
+
     async createNew(channels_users: Partial<ChannelsUsers>)
     {
         const relation = (await this.findRelation(channels_users.user.id, channels_users.channel.channel_id))[0];
@@ -22,12 +17,7 @@ export class ChannelsUsersService {
         const newRelation = this.channelsUsersRepository.create(channels_users);
         return (this.channelsUsersRepository.save(newRelation));
     }
-    /**
-     * get list of users in a channel
-     * 
-     * @param channelName name of channel
-     * @returns list of user in channel
-     */
+
     async findUsersOfChannel(channelName: string)
     {
         const usersAndChannels = await this.channelsUsersRepository
@@ -49,13 +39,6 @@ export class ChannelsUsersService {
         return (users);
     }
     
-    /**
-     * get the relation according to parameters
-     * 
-     * @param user_id id of user
-     * @param channel_id id of channel
-     * @returns result of request
-     */
     async findRelation(user_id: number, channel_id: number)
     {
         const relation = await this.channelsUsersRepository
@@ -74,12 +57,7 @@ export class ChannelsUsersService {
             .getMany();
         return (relation);
     }
-    /**
-     * Get the list of channels of a user without passwords
-     * 
-     * @param user_id id of user
-     * @returns result of request
-     */
+
     async findChannelsOfUsers(user_id: number)
     {
         const usersAndChannels = await this.channelsUsersRepository
@@ -99,13 +77,7 @@ export class ChannelsUsersService {
         ));
         return (channels);
     }
-    /**
-     * Modify the relation to set isBanned to true if exists
-     * 
-     * @param channel channel from which user is banned
-     * @param user the user banned
-     * @returns {Object | null} the relation modified
-     */
+    
     async ban(channel, user)
     {
         const relation = await this.findRelation(user.id, channel.channel_id);
@@ -114,13 +86,7 @@ export class ChannelsUsersService {
         relation[0].isBanned = true;
         return (this.channelsUsersRepository.save(relation[0]));
     }
-    /**
-     * remove relation
-     * 
-     * @param channel channel users leaves 
-     * @param user user who leaves
-     * @returns result of request
-     */
+
     async leave(channel, user)
     {
         const relation = (await this.findRelation(user.id, channel.channel_id))[0];
@@ -138,13 +104,7 @@ export class ChannelsUsersService {
         return (res);
 
     }
-    /**
-     * set user as admin in channel
-     * 
-     * @param channel channel to set user admin in
-     * @param user user to be set admin
-     * @returns result of request
-     */
+
     async setAdmin(channel, user)
     {
         const relation = await this.findRelation(user.id, channel.channel_id);
@@ -154,13 +114,6 @@ export class ChannelsUsersService {
         return (this.channelsUsersRepository.save(relation[0]));
     }
 
-    /**
-     * set user as admin in channel
-     * 
-     * @param channel channel to remove admin from user
-     * @param user user to be removed admin
-     * @returns result of request
-     */
     async removeAdmin(channel, user)
     {
         const relation = await this.findRelation(user.id, channel.channel_id);
@@ -170,11 +123,6 @@ export class ChannelsUsersService {
         return (this.channelsUsersRepository.save(relation[0]));
     }
 
-    /**
-     * get the current date
-     * 
-     * @returns the date formatted year-month-day hours:minutes:seconds
-     */
     getCurrentDate()
     {
         const currentDate = new Date();
@@ -190,16 +138,6 @@ export class ChannelsUsersService {
         return formattedDate;
     }
 
-    /**
-     * timeout a user
-     * 
-     * @param channel channel
-     * @param user user
-     * @param duration duration of ban in seconds
-     * @returns result of request
-     * 
-     * Warning: returns password of user and channels
-     */
     async timeoutUser(channel, user, duration)
     {
         const relation = await this.channelsUsersRepository.findOne({where :{

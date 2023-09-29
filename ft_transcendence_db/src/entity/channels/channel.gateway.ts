@@ -26,16 +26,6 @@ export class ChannelGateway {
 
   constructor(private readonly channelService: ChannelService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
 
-  /**
-   * 
-   * @param data - {channel, cookie}
-   * @returns responses of request | 'Error'
-   * @emits updateListChannels {channel, user}
-   * @emits createGoodRequest {user}
-   * @emits createAlreadyExists  {user} - in case of failing
-   * @emits createPasswordOrNameWrongSize {user} - in case of failing
-   * @emits createWrongCategory {user} - in case of failing
-   */
   @SubscribeMessage('createChannel')
   async create(@MessageBody() data)
   {
@@ -65,13 +55,6 @@ export class ChannelGateway {
       this.server.emit('createAlreadyExists', {sessionCookie: data.sessionCookie});
     }
   }
-  /**
-   * check if good args for create
-   * 
-   * @param channel channel
-   * @param user user
-   * @returns true if succeed
-   */
   createGoodInputs(channel, sessionCookie): Boolean
   {
     if (channel.name.length < 3 
@@ -97,17 +80,7 @@ export class ChannelGateway {
     }
     return (true);
   }
-  /**
-   * 
-   * @param body channel to join {password, channelName, sessionCookie}
-   * 
-   * @emits joinNoSuchChannel {user} - in case of failing
-   * @emits joinBanned {user} - in case of failing
-   * @emits joinAlreadyIn {user} - in case of failing
-   * @emits joinWrongPassword {user} - in case of failing
-   * @emits updateListChannels {channel, user}
-   * @emits joinGoodRequest {channel, user}
-   */
+
   @SubscribeMessage('joinChannel')
   async join(@MessageBody() body)
   {
@@ -166,13 +139,6 @@ export class ChannelGateway {
     this.server.emit('updateListChannels', {channel: channelToReturn, sessionCookie: body.sessionCookie});
     this.server.emit('joinGoodRequest', {sessionCookie: body.sessionCookie});
   }
-  /**
-   * Delete the relation of a user to a channel
-   * 
-   * @param body - {channel, sessionCookie}
-   * @returns result of request leave
-   * @emits updateAfterPart {users, channel, user}
-   */
   @SubscribeMessage('leaveChannel')
   async leaveChannel(@MessageBody() body) 
   {

@@ -119,12 +119,7 @@ export class SessionService{
         }
         return ({noMoreConnected: noMoreConnected, connected: connected});
     }
-    /**
-     * generate a random string
-     * 
-     * @param length length of the string to be created
-     * @returns the random string created
-     */
+
     generateRandomString(length: number): string
     {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

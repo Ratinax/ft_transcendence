@@ -9,11 +9,7 @@ import * as speakeasy from 'speakeasy';
 @Controller('users')
 export class UserController {
     constructor (private readonly userService: UserService, private readonly sessionService: SessionService) {}
-    /**
-     * @param body user to be signed up {id, pseudo, password, profilPic, isConencted}
-     * @returns the user created
-     * @throws InternalServerErrorException in case of failing
-     */
+
     @Post('signup')
     async signUp(@Body() body, @Res({passthrough: true}) res: Response)
     {
@@ -53,12 +49,6 @@ export class UserController {
         return (uri);
     }
 
-    /**
-     * 
-     * @param code code sent by 42 when connect
-     * @param res interface already provided without givig it, used to set cookies
-     * @returns result of request
-     */
     @Get('callback42/:code')
     async getToken(@Param('code') code: string, @Res({passthrough: true}) res: Response)
     {
@@ -149,13 +139,7 @@ export class UserController {
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
         return (user.pseudo);
     }
-    /**
-     * get the image according to its name
-     * 
-     * @param imageName name of the image to get
-     * @param res interface already provided without givig it, used to send file to fronted
-     * @returns the data of the image
-     */
+
     @Get('/images/:imageName')
     async getImage(@Param('imageName') imageName: string, @Req() req, @Res() res: Response) 
     {

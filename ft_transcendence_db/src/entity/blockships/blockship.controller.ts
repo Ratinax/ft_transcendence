@@ -6,12 +6,7 @@ import { UserService } from '../users/user.service';
 @Controller('blockships')
 export class BlockshipController {
     constructor (private readonly blockshipService: BlockshipService, private readonly sessionService: SessionService, private readonly userService: UserService) {}
-    /**
-     * get list of users blocked from user
-     * 
-     * @param id id of user
-     * @returns result of request
-     */
+
     @Get('userblockedby')
     async findUserblockedFromId(@Req() req)
     {

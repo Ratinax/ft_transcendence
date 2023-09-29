@@ -8,12 +8,7 @@ export class FriendshipService {
         @Inject('FRIENDSHIP_REPOSITORY')
         private friendshipRepository: Repository<Friendships>,
     ) {}
-    /**
-     * get the friend list of the user
-     * 
-     * @param id id of user
-     * @returns the friend list of the user
-     */
+
     async findFriendOfId(id: number)
     {
         const friendshipsFromFriend = await this.friendshipRepository
@@ -38,12 +33,7 @@ export class FriendshipService {
             profilPic: friendship.user.profilPic}));
         return ([...usersFromFriend, ...usersFromUser]);
     }
-    /**
-     * Get the firend request that a user received
-     * 
-     * @param id id of user
-     * @returns the friend requests of the user
-     */
+
     async findPending(id: number)
     {
         const friensdAsking = await this.friendshipRepository
@@ -59,14 +49,7 @@ export class FriendshipService {
             profilPic: friendship.user.profilPic}));
         return (usersAsking);
     }
-    /**
-     * accept a friendship request
-     * 
-     * @param friend_id id of user accepting the friendship request
-     * @param user_id id of user that sent the request
-     * @returns result of the request
-     * @throws Error('Friendship not found.')
-     */
+
     async acceptFriendship(friend_id: number, user_id: number): Promise<Friendships> 
     {
         const friendship = await this.friendshipRepository.findOne({
@@ -80,14 +63,7 @@ export class FriendshipService {
         friendship.statu = 'accepted';
         return this.friendshipRepository.save(friendship);
     }
-    /**
-     * remove a friendship (that can be either accepted or pending)
-     * 
-     * @param friend_id id of one of the friends
-     * @param user_id id of one of the friends
-     * @returns result of request
-     * @throws Error('no such friendship.')
-     */
+
     async deleteFriendship(friend_id: number, user_id: number)
     {
         let friendship = await this.friendshipRepository.findOne({

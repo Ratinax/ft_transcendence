@@ -18,12 +18,6 @@ export class FriendshipGateway {
 
     constructor(private readonly friendshipService: FriendshipService, private readonly sessionService: SessionService) {}
 
-    /**
-     * makes a request to accept a friend request
-     * 
-     * @param body - {sessionCookie, friend_id}
-     * @emits 'acceptFriendship' with the result of the request as content
-     */
     @SubscribeMessage('acceptFriendship')
     async acceptFriendship(@MessageBody() body) 
     {
@@ -35,13 +29,7 @@ export class FriendshipGateway {
       await this.friendshipService.acceptFriendship(user.id, body.friend_id);
       this.server.emit('acceptFriendship', {sessionCookie: body.sessionCookie});
     }
-    /**
-     * makes a request to remove a friendShip (the friendship can be either accepted or pending)
-     * 
-     * @param body - {friend_id}
-     * @emits 'deleteFriendship' with the result of the request as content
-     * @throws InternalServerErrorException when error in request
-     */
+
     @SubscribeMessage('removeFriendship')
     async removeFriendship(@MessageBody() body) 
     {

@@ -20,16 +20,6 @@ export class MessagesGateway {
 
   constructor(private readonly messagesService: MessageService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService, private readonly blockshipService: BlockshipService) {}
 
-  /**
-   * create a new message
-   * 
-   * @param body - {channel_id, message, dateSent, isAGameInvite, sessionCookie}
-   * @returns response of request
-   * @emits 'updateMessage' {channel_id}
-   * @emits 'sendMessageTimeout' {channel_id, user_id, duration}
-   * @emits 'sendMessageGoodRequest {channel_id, user_id}
-   * @throws new InternalServerErrorException('no such relation')
-   */
   @SubscribeMessage('createMessage')
   async create(
     @MessageBody() body) 

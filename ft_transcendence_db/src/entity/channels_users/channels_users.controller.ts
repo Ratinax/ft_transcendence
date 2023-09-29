@@ -5,12 +5,7 @@ import { SessionService } from '../sessions/session.service';
 @Controller('channels_users')
 export class ChannelsUsersController {
     constructor (private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
-    /**
-     * 
-     * @param req already provided, to have cookies
-     * @param body {channel}
-     * @returns null | user with permissions
-     */
+
     @Get('userPerms')
     async getUserWithPermissions(@Req() req, @Query('channelId') channelId)
     {

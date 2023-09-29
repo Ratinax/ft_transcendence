@@ -8,12 +8,6 @@ export class BlockshipService {
         @Inject('BLOCKSHIP_REPOSITORY')
         private blockshipRepository: Repository<Blockships>,
     ) {}
-    /**
-     * get users blocked from user
-     * 
-     * @param id user id
-     * @returns result of request
-     */
     async findUserblockedFromId(id: number)
     {
         const blockships = await this.blockshipRepository
@@ -29,13 +23,6 @@ export class BlockshipService {
             }));
         return (users);
     }
-    /**
-     * delete blockship
-     * 
-     * @param blocked_id id of user blocked
-     * @param user_id id of user blocking
-     * @returns result of request
-     */
     async deleteBlockship(user_id: number, blocked_id: number)
     {
         const blockship = await this.blockshipRepository.findOne({

@@ -18,12 +18,6 @@ export class BlockshipGateway {
     constructor(private readonly blockshipService: BlockshipService, private readonly sessionService: SessionService) {
     }
 
-    /**
-     * remove blockship
-     * 
-     * @param body blockship to be removed {userblocked_id, sessionCookie}
-     * @emits deleteBlockship result of request
-     */
     @SubscribeMessage('removeBlockship')
     async refuseBlockship(@MessageBody() body) 
     {

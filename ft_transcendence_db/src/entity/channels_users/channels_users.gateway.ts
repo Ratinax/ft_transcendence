@@ -17,12 +17,6 @@ export class ChannelsUsersGateway {
 
   constructor(private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
 
-  /**
-   * Gets the users that are in the channel passed as param
-   * 
-   * @param body - {channel, sessionCookie}
-   * @emits 'updateListUsers' {users, channel}
-   */
   @SubscribeMessage('findUsersOfChannel')
   async findUsersOfChannel(@MessageBody() body)
   {
@@ -39,13 +33,7 @@ export class ChannelsUsersGateway {
     {
     }
   }
-  /**
-   * Modify the relation of a user to a channel to set isBanned = true 
-   * 
-   * @param {Object} body - {channel, userBanned, sessionCookie}
-   * @returns result of request
-   * @emits updateAfterPart {users, channel, user}
-   */
+
   @SubscribeMessage('banUser')
   async ban(@MessageBody() body) 
   {
@@ -69,13 +57,6 @@ export class ChannelsUsersGateway {
       sessionCookie: await this.sessionService.getSessionKey(body.userBanned.id)});
     return (res);
   }
-  /**
-   * Delete the relation of a user to a channel
-   * 
-   * @param body - {channel, userKicked, sessionCookie}
-   * @returns result of request kick
-   * @emits updateAfterPart {users, channel, user}
-   */
   @SubscribeMessage('kickUser')
   async kick(@MessageBody() body) 
   {
@@ -100,13 +81,6 @@ export class ChannelsUsersGateway {
     return (res);
   }
   
-  /**
-   * set user of channel to Admin
-   * 
-   * @param body - {channel, userSetAdmin, sessionCookie}
-   * @returns result of request
-   * @emits updateListUsers {users, channel}
-   */
   @SubscribeMessage('setAdmin')
   async setAdmin(@MessageBody() body) 
   {
@@ -125,13 +99,6 @@ export class ChannelsUsersGateway {
     return (res);
   }
   
-  /**
-   * remove admin rights on a user
-   * 
-   * @param body - {channel, userRemovedAdmin, sessionCookie}
-   * @returns result of request
-   * @emits updateListUsers {users, channel}
-   */
   @SubscribeMessage('removeAdmin')
   async removeAdmin(@MessageBody() body) 
   {
@@ -151,13 +118,7 @@ export class ChannelsUsersGateway {
       channel: body.channel});
     return (res);
   }
-  /**
-   * 
-   * @param body {userTimeouted, duration_timeout, sessionCookie}
-   * @emits timeoutWrongAmount {channel, user}
-   * @emits updateListUsers {channel, users}
-   * @emits timeoutGoodRequest {channel, user}
-   */
+
   @SubscribeMessage('timeoutUser')
   async timeoutUser(@MessageBody() body)
   {

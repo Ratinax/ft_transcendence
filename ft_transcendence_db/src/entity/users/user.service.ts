@@ -13,13 +13,7 @@ export class UserService {
         @Inject('USER_REPOSITORY')
         private userRepository: Repository<Users>,
     ) {}
-    /**
-     * register a new user
-     * 
-     * @param body user to be registered {pseudo, password, image}
-     * @returns the new user registered with {pseudo, password, image}
-     * @throws InternalServerErrorException in case of failing or user already exists
-     */
+
     async signUp(body: any)
     {
         let imageName;
@@ -112,12 +106,7 @@ export class UserService {
             return (null);
         }
     }
-    /**
-     * generate a random string
-     * 
-     * @param length length of the string to be created
-     * @returns the random string created
-     */
+
     generateRandomString(length: number): string
     {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -128,12 +117,7 @@ export class UserService {
         }
         return result;
     }
-    /**
-     * create the image of the user ProfilPic in /images/image_name
-     * 
-     * @param image content of image
-     * @returns the name of the image
-     */
+
     async uploadImage(image: string)
     {
         let extension;
@@ -163,22 +147,12 @@ export class UserService {
             throw new InternalServerErrorException('Failed to save image');
         }
     }
-    /**
-     * compare password given with password hashed of channel
-     * 
-     * @param user user to compare password with
-     * @param password password to be compared
-     * @returns true | false
-     */
+
     async comparePasswords(user, password: string)
     {
         return (await bcrypt.compare(password + process.env.PEPPER, user.password));
     }
-    /**
-     * 
-     * @param password password to be hashed
-     * @returns the hashed version of password
-     */
+
     async hashedPassword(password: string)
     {
         return (await bcrypt.hash(password + process.env.PEPPER, +process.env.SALTROUNDS))

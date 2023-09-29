@@ -10,12 +10,7 @@ export class ChannelService {
         @Inject('CHANNEL_REPOSITORY')
         private channelRepository: Repository<Channels>,
     ) {}
-    /**
-     * find channel by name
-     * 
-     * @param channelName channel name
-     * @returns result of request
-     */
+
     async findByName(channelName)
     {
         return await this.channelRepository
@@ -24,12 +19,6 @@ export class ChannelService {
         .getMany();
     }
 
-    /**
-     * create channel
-     * 
-     * @param channel - {password, isADm, name, category}
-     * @returns result of request
-     */
     async createChannel(channel: Partial<Channels>)
     {
         const channelAllreadyExisting = await this.channelRepository.findOne({where: {name: channel.name}});
@@ -48,14 +37,7 @@ export class ChannelService {
             channel_id: res.channel_id,
         });
     }
-    /**
-     * set password to channel and Protected by password as category
-     * 
-     * @param channel channel
-     * @param password password
-     * @returns result of request
-     * @throws InternalServerErrorException('Password not good length')
-     */
+
     async setPassword(channel, password: string)
     {
         if (password.length > 20 || password.length < 3)
@@ -74,14 +56,6 @@ export class ChannelService {
             });
     }
 
-    /**
-     * change password of a channel
-     * 
-     * @param channel channel
-     * @param password password
-     * @returns result of request
-     * @throws InternalServerErrorException('Password not good length')
-     */
     async changePassword(channel, password: string)
     {
         if (password.length > 20 || password.length < 3)
@@ -129,22 +103,10 @@ export class ChannelService {
         const res = await this.channelRepository.remove(relation);
         return (res);
     }
-    /**
-     * compare password given with password hashed of channel
-     * 
-     * @param channel channel to compare password with
-     * @param password password to be compared
-     * @returns true | false
-     */
     async comparePasswords(channel, password: string)
     {
         return (await bcrypt.compare(password + process.env.PEPPER, channel.password));
     }
-    /**
-     * 
-     * @param password password to be hashed
-     * @returns the hashed version of password
-     */
     async hashedPassword(password: string)
     {
         return (await bcrypt.hash(password + process.env.PEPPER, +process.env.SALTROUNDS))
