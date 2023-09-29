@@ -2,13 +2,20 @@ import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { BlockshipService } from './blockship.service';
 import { SessionService } from '../sessions/session.service';
 import { UserService } from '../users/user.service';
+import { Request } from 'express';
 
 @Controller('blockships')
 export class BlockshipController {
     constructor (private readonly blockshipService: BlockshipService, private readonly sessionService: SessionService, private readonly userService: UserService) {}
 
+    /**
+     * get users blocked by the one making the request
+     * 
+     * @param req already provided, used to manipulate cookies
+     * @returns null | Array<id: number, pseudo: string, profilPic: string>
+     */
     @Get('userblockedby')
-    async findUserblockedFromId(@Req() req)
+    async findUserblockedFromId(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -25,8 +32,15 @@ export class BlockshipController {
             return (null);
         }
     }
+    /**
+     * get if user provided is blocked by user making the request
+     * 
+     * @param pseudoBlocked pseudo of user who's checked blocked
+     * @param req already provided, used to manipulate cookies
+     * @returns true | false | null
+     */
     @Get('isBlocked/:pseudoBlocked')
-    async getIsBlocked(@Param('pseudoBlocked') pseudoBlocked: string, @Req() req)
+    async getIsBlocked(@Param('pseudoBlocked') pseudoBlocked: string, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -47,8 +61,15 @@ export class BlockshipController {
             return (false);
         }
     }
+    /**
+     * block user
+     * 
+     * @param req already provided, used to manipulate cookies
+     * @param body pseudo of user going to be blocked
+     * @returns null | 'Success'
+     */
     @Post('block')
-    async blockUser(@Req() req, @Body() body)
+    async blockUser(@Req() req: Request, @Body() body: {pseudo: string})
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -66,8 +87,14 @@ export class BlockshipController {
             return (null);
         }
     }
+    /**
+     * 
+     * @param req already provided, used to manipulate cookies
+     * @param body pseudo of user going to be unblocked
+     * @returns null | success
+     */
     @Post('unblock')
-    async unblockUser(@Req() req, @Body() body)
+    async unblockUser(@Req() req: Request, @Body() body)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
