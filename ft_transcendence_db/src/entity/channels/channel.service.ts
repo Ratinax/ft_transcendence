@@ -19,6 +19,13 @@ export class ChannelService {
         .getMany();
     }
 
+    /**
+     * Create channel
+     * 
+     * @param channel
+     * @throws 'channel allready exists'
+     * @returns channel created
+     */
     async createChannel(channel: Partial<Channels>)
     {
         const channelAllreadyExisting = await this.channelRepository.findOne({where: {name: channel.name}});
@@ -38,11 +45,19 @@ export class ChannelService {
         });
     }
 
-    async setPassword(channel, password: string)
+    /**
+     * Set password on a channel
+     * 
+     * @param channel_id 
+     * @param password 
+     * @throws 'Password not good length'
+     * @returns channel concerned
+     */
+    async setPassword(channel_id: number, password: string)
     {
         if (password.length > 20 || password.length < 3)
             throw new InternalServerErrorException('Password not good length');
-        const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
+        const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
         const passwordHashed = await this.hashedPassword(password);
 
         relation.category = 'Protected by password';
@@ -56,11 +71,19 @@ export class ChannelService {
             });
     }
 
-    async changePassword(channel, password: string)
+    /**
+     * Change password of a channel
+     * 
+     * @param channel_id 
+     * @param password 
+     * @throws 'Password not good length'
+     * @returns channel concerned
+     */
+    async changePassword(channel_id: number, password: string)
     {
         if (password.length > 20 || password.length < 3)
             throw new InternalServerErrorException('Password not good length');
-        const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
+        const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
         const passwordHashed = await this.hashedPassword(password);
 
         relation.category = 'Protected by password';
@@ -71,9 +94,15 @@ export class ChannelService {
             category: res.category,
             channel_id: res.channel_id,});
     }
-    async toPublic(channel)
+    /**
+     * Make a channel be public
+     * 
+     * @param channel_id 
+     * @returns channel concerned
+     */
+    async toPublic(channel_id: number)
     {
-        const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
+        const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
 
         relation.category = 'Public';
         relation.password = '';
@@ -83,9 +112,15 @@ export class ChannelService {
             category: res.category,
             channel_id: res.channel_id,});
     }
-    async toPrivate(channel)
+    /**
+     * Make a channel be private
+     * 
+     * @param channel_id 
+     * @returns channel concerned
+     */
+    async toPrivate(channel_id: number)
     {
-        const relation = await this.channelRepository.findOne({where: {channel_id: channel.channel_id}});
+        const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
 
         relation.category = 'Private';
         relation.password = '';
@@ -96,6 +131,12 @@ export class ChannelService {
             category: res.category,
             channel_id: res.channel_id,});
     }
+    /**
+     * REmove channel from database
+     * 
+     * @param channel_id 
+     * @returns channel removed
+     */
     async removeChan(channel_id: number)
     {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
@@ -103,10 +144,23 @@ export class ChannelService {
         const res = await this.channelRepository.remove(relation);
         return (res);
     }
-    async comparePasswords(channel, password: string)
+    /**
+     * Return wheter the passwords are similar or not
+     * 
+     * @param channel 
+     * @param password 
+     * @returns result of request
+     */
+    async comparePasswords(channel: {password: string}, password: string)
     {
         return (await bcrypt.compare(password + process.env.PEPPER, channel.password));
     }
+    /**
+     * Return the hashed version of a password
+     * 
+     * @param password 
+     * @returns password hased
+     */
     async hashedPassword(password: string)
     {
         return (await bcrypt.hash(password + process.env.PEPPER, +process.env.SALTROUNDS))

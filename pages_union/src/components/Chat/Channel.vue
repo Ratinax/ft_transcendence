@@ -162,7 +162,7 @@ export default defineComponent({
 		{
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/goPublic`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/toPublic`, 
 					{
 						channel: this.channel
 					},

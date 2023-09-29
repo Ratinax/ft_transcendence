@@ -22,7 +22,8 @@ export class BlockshipGateway {
      * remove blockship
      * 
      * @param body sessionCookie of user making request and user blocked
-     * @returns 
+     * @emits deleteBlockship {sessionCookie}
+     * @returns true || null || 'not connected'
      */
     @SubscribeMessage('removeBlockship')
     async refuseBlockship(@MessageBody() body: {sessionCookie: string, userblocked_id: number}) 
@@ -36,5 +37,6 @@ export class BlockshipGateway {
         return (null);
       await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
       this.server.emit('deleteBlockship', {sessionCookie: body.sessionCookie});
+      return (true);
     }
 }

@@ -90,7 +90,6 @@ export default defineComponent({
 					name: this.channelName,
 					password: this.password,
 					category: this.categories[(this.selectedCategory) - 1].name,
-					isADm: false,
 					},
 					sessionCookie: this.sessionCookie});
 		},
