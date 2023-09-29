@@ -14,27 +14,6 @@ export class UserService {
         private userRepository: Repository<Users>,
     ) {}
     /**
-     * call a function of UserService
-     * 
-     * @param fct the fonction to be calleg
-     * @param body the body of the function to be called
-     * @returns the result of the request
-     * @throws InternalServerErrorException in case of failing
-     */
-    async callFunction(fct, body)
-    {
-        let res;
-        try
-        {
-            res = await fct(body);
-            return (res);
-        }
-        catch (e)
-        {
-            throw new InternalServerErrorException(e);
-        }
-    }
-    /**
      * register a new user
      * 
      * @param body user to be registered {pseudo, password, image}
@@ -115,16 +94,6 @@ export class UserService {
             }
             return ({user: userFrom42, uri: false});
         }
-    }
-    async logOut(user: Partial<Users>)
-    {
-        let userFound = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
-        if (!userFound)
-            return (false);
-        userFound = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
-        if (!userFound)
-            return (false);
-        return (userFound);
     }
     async getToken(code)
     {

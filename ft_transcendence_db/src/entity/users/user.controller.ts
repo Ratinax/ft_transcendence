@@ -10,26 +10,6 @@ import * as speakeasy from 'speakeasy';
 export class UserController {
     constructor (private readonly userService: UserService, private readonly sessionService: SessionService) {}
     /**
-     * call a function of userService
-     * 
-     * @param fct the function of userService to be called
-     * @param body body of the function to be called
-     * @returns result of request
-     * @throws InternalServerErrorException in case of failing
-     */
-    async callFunction(fct, body)
-    {
-        try 
-        {
-            const res = await this.userService.callFunction(fct.bind(this.userService), body);
-            return (res); 
-        }
-        catch (e)
-        {
-            throw new InternalServerErrorException(e);
-        }
-    }
-    /**
      * @param body user to be signed up {id, pseudo, password, profilPic, isConencted}
      * @returns the user created
      * @throws InternalServerErrorException in case of failing
@@ -106,10 +86,15 @@ export class UserController {
 		}
         throw new InternalServerErrorException('Authentication failed, try again later');
     }
-    @Post('logout') // TODO implementer logout
-    async logOut(@Body() body)
+    @Post('logOut') // TODO implementer 4
+    async logOut(@Body() body, @Req() req, @Res({passthrough: true}) res: Response)
     {
-        return (await this.callFunction(this.userService.logOut, body))
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (false);
+        }
+        res.clearCookie('SESSION_KEY');
+        return (true);
     }
 
     @Get('image-pseudo')
@@ -239,6 +224,7 @@ export class UserController {
         if (result === true)
         {
             const session = await this.sessionService.createSession(user.id);
+            res.clearCookie('2FAKEY');
             res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         }
         return (result);

@@ -32,9 +32,9 @@
 				</div>
 			</li>
 			<li class="nav-item">
-				<div class="nav-link clickable">
-					<font-awesome-icon icon="fa-solid fa-gear" size="2x" />
-					<span class="link-text">Settings</span>
+				<div class="nav-link clickable" @click="logOut">
+					<font-awesome-icon icon="fa-solid fa-right-from-bracket" size="2x" />
+					<span class="link-text">Log out</span>
 				</div>
 			</li>
 		</ul>
@@ -68,8 +68,22 @@ export default {
 		{
 			this.router.push({path: '/relations'});
 		},
-		goToUserPage(){
+		goToUserPage()
+		{
 			this.router.push({name: 'UserPage', params: {pseudo: this.pseudo}})
+		},
+		async logOut()
+		{
+			try
+			{
+				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/logOut`, {}, {withCredentials: true})).data;
+				if (res)
+					this.router.push(({path: '/'}))
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
 		}
 	}
 }
