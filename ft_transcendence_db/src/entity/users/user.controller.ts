@@ -86,7 +86,7 @@ export class UserController {
 		}
         throw new InternalServerErrorException('Authentication failed, try again later');
     }
-    @Post('logOut') // TODO implementer 4
+    @Post('logOut')
     async logOut(@Body() body, @Req() req, @Res({passthrough: true}) res: Response)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
