@@ -22,7 +22,7 @@
 				@remove-relation="onRemoveRelation"/>
 			<ListUsers 
 				:is-friend-request-list="true" 
-				:headerText="'Friend request'" 
+				:headerText="'Friend request(s)'" 
 				ref="friendRequest" 
 				@accept-friendship="onAcceptFriendship" 
 				@remove-relation="onRemoveRelation"/>
@@ -114,7 +114,9 @@ export default defineComponent({
 		searchUser()
 		{
 			(this.$refs.UsersSearched as typeof UsersSearched).searchUsers();
-			this.showSearchUsers = true;
+			if (this.pseudo) {
+				this.showSearchUsers = true;
+			}
 		},
 		closeSearchUser()
 		{
@@ -169,7 +171,7 @@ export default defineComponent({
 }
 
 html {
-	height: 100%;
+	height: 100vh;
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
 }
 
@@ -183,6 +185,10 @@ html {
 	.list-users > .list-users-relations {
 		width: 42%;
 		margin-top: .742rem;
+	}
+
+	.search-container {
+		padding: 2em;
 	}
 }
 

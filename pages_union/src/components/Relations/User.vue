@@ -57,7 +57,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 
 .user-container {
 	width: 95%;

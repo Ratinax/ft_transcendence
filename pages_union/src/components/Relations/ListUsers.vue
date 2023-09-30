@@ -108,6 +108,7 @@ h1 {
 
 .list-users-relations
 {
+	overflow: auto;
 	background: rgba(0, 0, 0, 0.4);
 	border-radius: 1em;
 	margin: auto 1em;

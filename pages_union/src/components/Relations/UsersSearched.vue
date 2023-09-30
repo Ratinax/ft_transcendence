@@ -1,14 +1,14 @@
 <template>
-  <div v-if="show" @click.self="close" class="modal-overlay">
-    <div class="modal list-users-searched">
-        <div class="user-searched" v-for="user in listUsersSearched" :key="user.id" @click="goToProfil(user)">
-            <div class="circle">
-                <img :src="user.profilPic">
-            </div>
-            <p class="user-searched-pseudo">{{ user.pseudo }}</p>
-        </div>
-    </div>
-  </div>
+	<div v-if="show" @click.self="close" class="modal-overlay">
+		<div class="modal list-users-searched">
+			<div class="user-searched" v-for="user in listUsersSearched" :key="user.id" @click="goToProfil(user)">
+				<div class="circle">
+					<img :src="user.profilPic">
+				</div>
+				<p class="user-searched-pseudo">{{ user.pseudo }}</p>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script lang="ts">
@@ -17,36 +17,47 @@ import axios from 'axios';
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-    name: 'UsersSearched',
-    props:
-    {
-        pseudo: String,
-        show: Boolean,
-    },
-    data()
-    {
-        return {
-            router: useRouter(),
-            listUsersSearched: [] as Array<{id: number, pseudo: string, profilPic: string, is42User: boolean}>,
-        }
-    },
-    methods:
-    {
-        async searchUsers()
-        {
-            console.log('da', this.pseudo)
+	name: 'UsersSearched',
+	props:
+	{
+		pseudo: String,
+		show: Boolean,
+	},
+	data()
+{
+		return {
+			router: useRouter(),
+			listUsersSearched: [] as Array<{id: number, pseudo: string, profilPic: string, is42User: boolean}>,
+		}
+	},
+	methods:
+	{
+		async searchUsers()
+		{
+			console.log('da', this.pseudo); // to remove
 			if (this.pseudo) {
 				this.listUsersSearched = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/users/${this.pseudo}`, {withCredentials: true})).data;
 			}
 		},
 		close()
-	{
+		{
 			this.$emit('close');
 		},
 		goToProfil(user: {id: number, pseudo: string, profilPic: string, is42User: boolean})
-	{
+		{
 			this.router.push({name: 'UserPage', params: {pseudo: user.pseudo}})
+		},
+		handleKeyDown(event: KeyboardEvent) {
+			if (event.key === 'Escape') {
+				this.$emit('close');
+			}
 		}
+	},
+	mounted() {
+		window.addEventListener('keydown', this.handleKeyDown);
+	},
+	beforeUnmount() {
+		window.removeEventListener('keydown', this.handleKeyDown);
 	}
 });
 </script>
