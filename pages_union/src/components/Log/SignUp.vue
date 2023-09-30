@@ -121,3 +121,13 @@ export default defineComponent({
 <style scoped src="../../assets/formComponent.css" lang="css">
 
 </style>
+
+<style scoped>
+
+@media screen and (max-width: 460px){
+	button {
+		margin: 0 .25em;
+	}
+}
+
+</style>

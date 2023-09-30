@@ -20,6 +20,10 @@ p {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.view {
+	min-width: 360px;
+}
+
 input {
 	border: none;
 }
