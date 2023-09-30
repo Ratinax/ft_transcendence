@@ -207,6 +207,7 @@ export default {
 		background-color: var(--pblack);
 		bottom: 0;
 		width: 100%;
+		min-width: 360px;
 	}
 
 	.logo {

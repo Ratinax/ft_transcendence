@@ -1,16 +1,18 @@
 <template>
-    <div class="user">
-        <div class="round-image">
-            <img :src="profilPic" alt="Image" @click="goToProfil"/>
+    <div class="row user-container">
+        <div class="round-image-container">
+            <img :src="profilPic" alt="Image" @click.prevent="goToProfil"/>
         </div>
-        <span class="pseudo"> {{ user?.pseudo }}</span>
-        <div class="green circle" v-if="user?.isConnected"></div>
-        <div class="red circle" v-else></div>
-        <div v-if="isARequest">
-            <div class="box arrow" @click="accept"></div>
-        </div>
-        <div class="box cross" @click="remove"></div>
-    </div>
+        <span class="user-pseudo text" @click.prevent="goToProfil"> {{ user?.pseudo }}</span>
+		<div class="user-buttons">
+			<button @click.prevent="accept" v-if="isARequest" class="ft-button green-button">
+				<font-awesome-icon icon="fa-solid fa-check" />
+			</button>
+			<button @click.prevent="remove" class="ft-button red-button">
+				<font-awesome-icon icon="fa-solid fa-xmark" />
+			</button>
+		</div>
+	</div>
 </template>
 
 <script lang="ts">
@@ -20,101 +22,81 @@ import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
-    name: 'User-Component',
-    props: 
-    {
-        user: Object,
-        isARequest: Boolean,
-    },
-    data()
-    {
-        return {
-            profilPic: '',
-            router: useRouter(),
-        }
-    },
-    async mounted()
+	name: 'User-Component',
+	props: 
+	{
+		user: Object,
+		isARequest: Boolean,
+	},
+	data()
+{
+		return {
+			profilPic: '',
+			router: useRouter(),
+		}
+	},
+	async mounted()
 	{
 		this.profilPic = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNameByPseudo/${this.user?.pseudo}`, {withCredentials: true})).data;
 	},
-    methods: 
-    {
-        accept()
-        {
-            this.$emit('accept-friendship', this.user?.id);
-        },
-        remove()
-        {
-            this.$emit('remove-relation', this.user?.id);
-        },
-        goToProfil()
-        {
-            this.router.push({name: 'UserPage', params: {pseudo: this.user?.pseudo}})
-        }
-    }
+	methods: 
+	{
+		accept()
+		{
+			this.$emit('accept-friendship', this.user?.id);
+		},
+		remove()
+		{
+			this.$emit('remove-relation', this.user?.id);
+		},
+		goToProfil()
+		{
+			this.router.push({name: 'UserPage', params: {pseudo: this.user?.pseudo}})
+		}
+	}
 });
 </script>
 
 <style>
 
-.pseudo
-{
-    padding-left: 0.4em;
-    font-size: 4em;
+.user-container {
+	width: 90%;
+	align-items: center;
+	transition: background 200ms ease;
+	padding: .5em 1em;
+	border-radius: .5em;
 }
 
-.user
-{
-    padding-left: 0.4em;
-    display: flex;
-    flex-direction: align;
-    align-items: center;
+.user-container:hover {
+	background: var(--pdark);
 }
 
-.round-image 
-{
-    width: 4em; 
-    height: 4em; 
-    border-radius: 50%; 
-    overflow: hidden; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 0.04em solid black;
-    flex-shrink: 0;
+.round-image-container {
+	display: flex;
+	justify-content: center;
+	border-radius: 50%;
+	overflow: hidden;
+	width: 3.5em;
+	height: 3.5em;
 }
 
-.round-image img 
-{
-  width: 100%;
-  height: auto;
-  cursor: pointer;
+.user-pseudo {
+	font-size: 1.3em;
+	margin-left: 1em;
 }
 
-.box 
-{
-    position: relative;
-    width: 2em;
-    height: 2em;
-    background-color: #f0f0f0;
-    border: 0.1em solid #ccc;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5em;
-    color: #333;
-    margin-left: 1em;
-    display: inline-flex;
-    cursor: pointer;
-    flex-shrink: 0;
+.user-pseudo:hover {
+	cursor: pointer;
+	color: var(--pcyan);
 }
 
-.box.arrow::after 
-{
-    content: "\2714";
+.user-buttons {
+	margin-left: auto;
+	display: flex;
 }
 
-.box.cross::after 
-{
-    content: "✖";
+.user-buttons > .ft-button {
+	margin-left: .5em;
 }
+
 </style>
