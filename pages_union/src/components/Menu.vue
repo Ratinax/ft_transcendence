@@ -120,6 +120,7 @@ export default {
 .link-text {
 	font-size: 1.25rem;
 	display: none;
+	text-wrap: nowrap;
 }
 
 .nav-link svg {
