@@ -160,7 +160,7 @@ export default defineComponent({
 }
 
 .relations-input-container:focus-within {
-	border: .142rem solid var(--pcyan);
+	border: .142rem solid var(--pblue);
 }
 
 .list-users {
@@ -182,7 +182,6 @@ html {
 
 	.list-users > .list-users-relations {
 		width: 42%;
-		height: auto;
 		margin-top: .742rem;
 	}
 }

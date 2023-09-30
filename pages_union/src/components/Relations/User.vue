@@ -91,6 +91,7 @@ export default defineComponent({
 	transition: color 150ms ease;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	transition: margin-left 200ms ease;
 }
 
 .user-pseudo:hover {
@@ -105,6 +106,10 @@ export default defineComponent({
 
 .user-buttons > .ft-button {
 	margin-left: .5em;
+}
+
+.ft-button {
+	transition: font-size 200ms ease;
 }
 
 @media screen and (max-width: 500px) {

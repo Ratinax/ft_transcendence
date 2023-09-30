@@ -3,7 +3,7 @@
         <div class="header">
             <h1 class="fade-text">{{ headerText }}</h1>
         </div>
-        <div class="users-relations">
+        <div v-if="users.length" class="users-relations">
             <User v-for="user in users" 
 				:key="user.id" 
 				:user="user" 
@@ -11,6 +11,11 @@
 				@accept-friendship="onAcceptFriendship" 
 				@remove-relation="onRemoveRelation"/>
         </div>
+		<div v-else class="users-relations users-empty">
+			<p v-if="isFriendList" >You have no friends.</p>
+			<p v-else-if="isFriendRequestList">You have no friend request(s).</p>
+			<p v-else>You have no user(s) blocked.</p>
+		</div>
     </div>
   
 </template>
@@ -23,11 +28,10 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
     name: 'ListUsers',
-    components:
-    {
+    components: {
         User,
     },
-    props:{
+    props: {
         isBlockList: Boolean,
         isFriendList: Boolean,
         isFriendRequestList: Boolean,
@@ -109,6 +113,11 @@ h1 {
 	margin: auto 1em;
     width: 33%;
 	padding: 1em;
+}
+
+.users-empty {
+	font-size: 1.25em;
+	color: var(--plight);
 }
 
 </style>
