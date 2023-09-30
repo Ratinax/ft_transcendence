@@ -60,10 +60,10 @@ export default defineComponent({
 <style>
 
 .user-container {
-	width: 90%;
+	width: 95%;
 	align-items: center;
 	transition: background 200ms ease;
-	padding: .5em 1em;
+	padding: .5em .742em;
 	border-radius: .5em;
 }
 
@@ -76,13 +76,21 @@ export default defineComponent({
 	justify-content: center;
 	border-radius: 50%;
 	overflow: hidden;
-	width: 3.5em;
 	height: 3.5em;
+	width: 3.5em;
+}
+
+.round-image-container > img:hover {
+	cursor: pointer;
 }
 
 .user-pseudo {
 	font-size: 1.3em;
 	margin-left: 1em;
+	width: 50%;
+	transition: color 150ms ease;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .user-pseudo:hover {
@@ -97,6 +105,23 @@ export default defineComponent({
 
 .user-buttons > .ft-button {
 	margin-left: .5em;
+}
+
+@media screen and (max-width: 500px) {
+	.user-pseudo {
+		margin-left: 0.442rem;
+		width: 42%;
+	}	
+
+	.user-buttons > .ft-button {
+		font-size: 1rem;
+	}
+}
+
+@media screen and (max-width: 360px) {
+	.user-pseudo {
+		max-width: 110px;
+	}
 }
 
 </style>

@@ -225,6 +225,7 @@ export default {
 	}
 
 	.view {
+		padding-left: 0;
 		padding-bottom: 5rem;
 	}
 

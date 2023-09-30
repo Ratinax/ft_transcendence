@@ -107,7 +107,8 @@ h1 {
 	background: rgba(0, 0, 0, 0.4);
 	border-radius: 1em;
 	margin: auto 1em;
-    width: calc(100% / 3);
+    width: 33%;
 	padding: 1em;
 }
+
 </style>

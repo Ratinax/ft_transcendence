@@ -1,6 +1,6 @@
 <template>
 	<Menu/>
-	<div class="view">
+	<div class="view col relations-page">
 		<div class="col search-container">
 			<UsersSearched ref="UsersSearched" 
 				:show="showSearchUsers"
@@ -15,7 +15,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row list-users">
 			<ListUsers :is-friend-list="true" 
 				:headerText="'Friend list'" 
 				ref="friendList" 
@@ -126,10 +126,14 @@ export default defineComponent({
 
 <style>
 
+.relations-page {
+	align-items: center;
+}
+
 .relations-input-container {
 	background: white;
 	align-items: center;
-	border-radius: 1rem;
+	border-radius: .742rem;
 	border: .142rem solid transparent;
 }
 
@@ -159,8 +163,42 @@ export default defineComponent({
 	border: .142rem solid var(--pcyan);
 }
 
+.list-users {
+	width: 100%;
+	max-width: 1600px;
+}
+
 html {
 	height: 100%;
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
 }
+
+@media screen and (max-width: 1360px) {
+
+	.list-users {
+		justify-content: space-evenly;
+		flex-wrap: wrap;
+	}
+
+	.list-users > .list-users-relations {
+		width: 42%;
+		height: auto;
+		margin-top: .742rem;
+	}
+}
+
+@media screen and (max-width: 1060px) {
+	.list-users {
+		width: 95%;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	.list-users > .list-users-relations {
+		margin: 0;
+		margin-top: 1rem;
+		width: 90%;
+	}
+}
+
 </style>
