@@ -1,19 +1,21 @@
 <template>
 	<Menu/>
-	<div class="view col relations-page">
+	<div class="view col relations-page" @click.self="closeSearchUser">
 		<div class="col search-container">
+			<form @submit.prevent="searchUser">
+				<div class="row relations-input-container">
+					<font-awesome-icon class="relations-icon" icon="fa-solid fa-magnifying-glass" size="xl" />
+					<input name="search_content" class="search-input" v-model="pseudo" placeholder="Search User (3 char min)"/>
+				</div>
+			</form>
 			<UsersSearched ref="UsersSearched" 
 				:show="showSearchUsers"
 				:pseudo="pseudo"
-				@close="closeSearchUser"/>
-			<div class="search-bar">
-				<form @submit.prevent="searchUser">
-					<div class="row relations-input-container">
-						<font-awesome-icon class="relations-icon" icon="fa-solid fa-magnifying-glass" size="xl" />
-						<input class="search-input" v-model="pseudo" placeholder="Search User (3 char min)"/>
-					</div>
-				</form>
-			</div>
+				@displaySearch="displaySearch"
+				@displayError="displayErrorMessage"/>
+			<Transition name="showErrorMessageTransition">
+				<p v-if="showErrorMessage" class="relations-search-error-message">{{ searchErrorMessage }}</p>
+			</Transition>
 		</div>
 		<div class="row list-users">
 			<ListUsers :is-friend-list="true" 
@@ -57,6 +59,8 @@ export default defineComponent({
 			socket: null as Socket | null,
 			pseudo: '',
 			showSearchUsers: false,
+			showErrorMessage: false,
+			searchErrorMessage: '',
 		}
 	},
 	async mounted()
@@ -113,10 +117,26 @@ export default defineComponent({
 		},
 		searchUser()
 		{
-			(this.$refs.UsersSearched as typeof UsersSearched).searchUsers();
-			if (this.pseudo) {
-				this.showSearchUsers = true;
+			console.log(this.showErrorMessage);
+			console.log(this.searchErrorMessage);
+			if (this.pseudo && this.pseudo.length > 2) {
+				if (this.pseudo.length > 2) {
+					(this.$refs.UsersSearched as typeof UsersSearched).searchUsers();
+				}
 			}
+			else {
+				this.displayErrorMessage("Not enough characters (3 min).");
+			}
+
+		},
+		displaySearch() {
+			this.showErrorMessage = false;
+			this.showSearchUsers = true;
+		},
+		displayErrorMessage(errorMessage: string) {
+			this.showSearchUsers = false;
+			this.showErrorMessage = true;
+			this.searchErrorMessage = errorMessage;
 		},
 		closeSearchUser()
 		{
@@ -139,7 +159,7 @@ export default defineComponent({
 	border: .142rem solid transparent;
 }
 
-.relations-icon{
+.relations-icon {
 	padding-left: 1rem;
 }
 
@@ -165,13 +185,30 @@ export default defineComponent({
 	border: .142rem solid var(--pblue);
 }
 
+.relations-search-error-message {
+	position: absolute;
+	color: #ff1f5e;
+	font-size: 1.05em;
+	top: 5.7em;
+}
+
+.showErrorMessageTransition-enter-active,
+.showErrorMessageTransition-leave-active {
+	transition: all 0.5s ease;
+}
+
+.showErrorMessageTransition-enter-from,
+.showErrorMessageTransition-leave-frome {
+	transform: translateY(-15px);
+	opacity: 0;
+}
+
 .list-users {
 	width: 100%;
 	max-width: 1600px;
 }
 
-html {
-	height: 100vh;
+.view {
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
 }
 

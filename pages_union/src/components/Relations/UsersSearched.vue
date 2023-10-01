@@ -1,14 +1,14 @@
 <template>
-	<div v-if="show" @click.self="close" class="modal-overlay">
-		<div class="modal list-users-searched">
-			<div class="user-searched" v-for="user in listUsersSearched" :key="user.id" @click="goToProfil(user)">
-				<div class="circle">
-					<img :src="user.profilPic">
-				</div>
-				<p class="user-searched-pseudo">{{ user.pseudo }}</p>
+	<Transition name="showUserSearchResult">
+		<div v-if="show" class="users-searched-container"> 
+			<div class="row user-searched" v-for="user in listUsersSearched" :key="user.id">
+			<div class="circle" @click="goToProfil(user)">
+				<img :src="user.profilPic" >
+			</div>
+			<p @click="goToProfil(user)" class="text user-searched-pseudo">{{ user.pseudo }}</p>
 			</div>
 		</div>
-	</div>
+	</Transition>
 </template>
 
 <script lang="ts">
@@ -35,13 +35,15 @@ export default defineComponent({
 		async searchUsers()
 		{
 			console.log('da', this.pseudo); // to remove
-			if (this.pseudo) {
-				this.listUsersSearched = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/users/${this.pseudo}`, {withCredentials: true})).data;
+			this.listUsersSearched = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/users/${this.pseudo}`, {withCredentials: true})).data;
+			if (this.listUsersSearched) {
+				if (this.listUsersSearched.length > 0) {
+					this.$emit('displaySearch');
+				}
+				else {
+					this.$emit('displayError', 'No user(s) found.');
+				}
 			}
-		},
-		close()
-		{
-			this.$emit('close');
 		},
 		goToProfil(user: {id: number, pseudo: string, profilPic: string, is42User: boolean})
 		{
@@ -62,58 +64,78 @@ export default defineComponent({
 });
 </script>
 
-<style>
-.circle
-{
-	border-radius: 50%;
-	overflow: hidden;
-	flex-shrink: 0;
-}
-.list-users-searched
-{
-	max-height: 10em;
-	overflow-y: auto;
-	overflow-x: hidden;
-}
-.user-searched-pseudo
-{
-	color: var(--plight);
+<style scoped>
+
+.showUserSearchResult-enter-active,
+.showUserSearchResult-leave-active {
+	transition: all .42s ease;
 }
 
-.user-searched
-{
-	margin-bottom: 1em;
-	display: flex;
+
+.showUserSearchResult-enter-from,
+.showUserSearchResult-leave-to {
+	opacity: 0;
+	transform : translateY(-10px);
+}
+
+.users-searched-container {
+	position: absolute;
+	top: 6em;
+	border-radius: .5em;
+	padding: 1em 0;
+	width: 30em;
+	background: var(--pdark);
+	max-height: 460px;
+	overflow: auto;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.user-searched {
 	align-items: center;
+	padding: 1em;
+}
+
+.user-searched > .user-searched {
+	margin-top: 1em;
+}
+
+.user-searched:hover {
+	cursor: pointer;
+	background: #151d26;
+}
+
+.user-searched-pseudo {
+	margin-left: .9em;
+	font-size: 1.25em;
+	transition: color 0.2s ease;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.user-searched-pseudo:hover {
+	color: var(--pcyan);
 	cursor: pointer;
 }
 
-.user-searched:hover
-{
-	text-decoration: underline var(--plight);
+.circle {
+	border-radius: 50%;
+	display: flex;
+	overflow: hidden;
+	justify-content: center;
+	width: 3em;
+	height: 3em;
+	transition: transform 100ms ease;
 }
 
-.user-searched div
-{
-	display: inline-block;
-	margin-right: 1em;
+.circle:hover {
+	transform: scale(102%);
+	cursor: pointer;
 }
 
-.user-searched div.circle
-{
-	width: 2em;
-	height: 2em;
-	border: 0.05em solid var(--plight);
+@media screen and (max-width: 500px) {
+	.users-searched-container {
+		width: 20em;
+	}
 }
 
-.user-searched .circle img
-{
-	height: 100%;
-}
-
-
-.user-searched p
-{
-	display: inline-block;
-}
 </style>
