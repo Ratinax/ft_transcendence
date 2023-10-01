@@ -12,7 +12,8 @@
 				:show="showSearchUsers"
 				:pseudo="pseudo"
 				@displaySearch="displaySearch"
-				@displayError="displayErrorMessage"/>
+				@displayError="displayErrorMessage"
+				@close="closeSearchUser"/>
 			<Transition name="showErrorMessageTransition">
 				<p v-if="showErrorMessage" class="relations-search-error-message">{{ searchErrorMessage }}</p>
 			</Transition>
@@ -173,6 +174,7 @@ export default defineComponent({
 	color: var(--pdark);
 	font-size: 1rem;
 	padding: 1rem;
+	width: 15.42em;
 	border-radius: 0 1rem 1rem 0;
 }
 
@@ -189,7 +191,10 @@ export default defineComponent({
 	position: absolute;
 	color: #ff1f5e;
 	font-size: 1.05em;
-	top: 5.7em;
+	top: 6.6em;
+	z-index: 2;
+	text-align: center;
+	width: 100%;
 }
 
 .showErrorMessageTransition-enter-active,
@@ -198,7 +203,7 @@ export default defineComponent({
 }
 
 .showErrorMessageTransition-enter-from,
-.showErrorMessageTransition-leave-frome {
+.showErrorMessageTransition-leave-to {
 	transform: translateY(-15px);
 	opacity: 0;
 }
@@ -225,7 +230,11 @@ export default defineComponent({
 	}
 
 	.search-container {
-		padding: 2em;
+		padding: 2em 0;
+	}
+
+	.relations-search-error-message {
+		top: 5.7em;
 	}
 }
 

@@ -78,6 +78,7 @@ export default defineComponent({
 	overflow: hidden;
 	height: 3.5em;
 	width: 3.5em;
+	min-width: 3.5em;
 }
 
 .round-image-container > img:hover {
@@ -87,7 +88,7 @@ export default defineComponent({
 .user-pseudo {
 	font-size: 1.3em;
 	margin-left: 1em;
-	width: 50%;
+	/* width: 50%; */
 	transition: color 150ms ease;
 	overflow: hidden;
 	text-overflow: ellipsis;

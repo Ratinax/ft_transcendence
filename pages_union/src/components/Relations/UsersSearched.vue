@@ -1,11 +1,11 @@
 <template>
 	<Transition name="showUserSearchResult">
 		<div v-if="show" class="users-searched-container"> 
-			<div class="row user-searched" v-for="user in listUsersSearched" :key="user.id">
-			<div class="circle" @click="goToProfil(user)">
-				<img :src="user.profilPic" >
-			</div>
-			<p @click="goToProfil(user)" class="text user-searched-pseudo">{{ user.pseudo }}</p>
+			<div class="row user-searched" v-for="user in listUsersSearched" :key="user.id" @click="goToProfil(user)" >
+				<div class="circle">
+					<img :src="user.profilPic" >
+				</div>
+				<p class="text user-searched-pseudo">{{ user.pseudo }}</p>
 			</div>
 		</div>
 	</Transition>
@@ -68,19 +68,20 @@ export default defineComponent({
 
 .showUserSearchResult-enter-active,
 .showUserSearchResult-leave-active {
-	transition: all .42s ease;
+	transition: all 0.42s ease;
 }
 
 
 .showUserSearchResult-enter-from,
 .showUserSearchResult-leave-to {
+	transform: translateY(-15px);
 	opacity: 0;
-	transform : translateY(-10px);
 }
 
 .users-searched-container {
+	z-index: 3;
 	position: absolute;
-	top: 6em;
+	top: 7.42em;
 	border-radius: .5em;
 	padding: 1em 0;
 	width: 30em;
@@ -93,6 +94,14 @@ export default defineComponent({
 .user-searched {
 	align-items: center;
 	padding: 1em;
+}
+
+.user-searched:hover .user-searched-pseudo {
+	color: var(--pcyan);
+}
+
+.user-searched:hover .circle {
+	transform: scale(103%);
 }
 
 .user-searched > .user-searched {
@@ -112,11 +121,6 @@ export default defineComponent({
 	text-overflow: ellipsis;
 }
 
-.user-searched-pseudo:hover {
-	color: var(--pcyan);
-	cursor: pointer;
-}
-
 .circle {
 	border-radius: 50%;
 	display: flex;
@@ -125,11 +129,6 @@ export default defineComponent({
 	width: 3em;
 	height: 3em;
 	transition: transform 100ms ease;
-}
-
-.circle:hover {
-	transform: scale(102%);
-	cursor: pointer;
 }
 
 @media screen and (max-width: 500px) {

@@ -23,6 +23,7 @@ p {
 .view {
 	min-width: 360px;
 	height: 100vh;
+	box-sizing: border-box;
 }
 
 input {

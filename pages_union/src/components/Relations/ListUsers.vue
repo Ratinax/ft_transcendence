@@ -1,5 +1,5 @@
 <template>
-    <div class="list-users-relations">
+	<div class="list-users-relations">
         <div class="header">
             <h1 class="fade-text">{{ headerText }}</h1>
         </div>
