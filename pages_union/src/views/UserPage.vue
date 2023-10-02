@@ -10,7 +10,7 @@
 							<img :src="profilePic" alt="User profile picture"> 
 						</div>
 						<div class="row user-name-and-status">
-						<div :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
+							<div :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 
@@ -122,7 +122,7 @@ export default defineComponent({
 			const res2fa = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/is2fa/${userName.value}`, {withCredentials: true})).data;
 			const checkbox = document.getElementById("fa2-input") as HTMLInputElement;
 			if (checkbox)
-				checkbox.checked = res2fa;
+			checkbox.checked = res2fa;
 			is2faState.value = res2fa;
 		}
 
@@ -182,7 +182,7 @@ export default defineComponent({
 			{
 				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/initDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
 				if (res)
-					router.push({ path: '/chat' } )
+				router.push({ path: '/chat' } )
 			}
 			catch (e)
 			{
@@ -203,21 +203,21 @@ export default defineComponent({
 			}
 		}
 		onBeforeMount(() =>
-		{
+			{
 			socket = io(`http://${process.env.VUE_APP_IP}:3003/`, { withCredentials: true });
-			socket.on('isConnected', (response) => {
-				if (response.pseudo === userName.value)
+				socket.on('isConnected', (response) => {
+					if (response.pseudo === userName.value)
 					isConnected.value = true;
-			})
-			socket.on('noMoreConnected', (response) => {
-				if (response.pseudo === userName.value)
+				})
+				socket.on('noMoreConnected', (response) => {
+					if (response.pseudo === userName.value)
 					isConnected.value = false;
-			})
-			fecthData()
+				})
+				fecthData()
 		})
 		onUpdated(() =>
-		{
-			fecthData()
+			{
+				fecthData()
 		})
 		return { userName, 
 			profilePic, 
@@ -235,7 +235,7 @@ export default defineComponent({
 			addFriend,
 			sendMessage,
 			switch2fa,
-			};
+		};
 	},
 });
 </script>
@@ -385,58 +385,58 @@ export default defineComponent({
 }
 
 .switch-choice {
-  position: relative;
-  display: inline-block;
-  width: 6em;
-  height: 3.4em;
+	position: relative;
+	display: inline-block;
+	width: 6em;
+	height: 3.4em;
 }
 
 .switch-choice .input-switch {
-  opacity: 0;
-  width: 0;
-  height: 0;
+	opacity: 0;
+	width: 0;
+	height: 0;
 }
 
 .slider {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ff0900b0;
-  transition: .4s;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ff0900b0;
+	transition: .4s;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 2.6em;
-  width: 2.6em;
-  left: 0.4em;
-  bottom: 0.4em;
-  background-color: white;
-  transition: .4s;
+	position: absolute;
+	content: "";
+	height: 2.6em;
+	width: 2.6em;
+	left: 0.4em;
+	bottom: 0.4em;
+	background-color: white;
+	transition: .4s;
 }
 
 .input-switch:checked + .slider {
-  background-color: #09ff00b0;
+	background-color: #09ff00b0;
 }
 
 .input-switch:focus + .slider {
-  box-shadow: 0 0 0 .4em rgba(21, 156, 228, 0.7);
-  outline: none;
+	box-shadow: 0 0 0 .4em rgba(21, 156, 228, 0.7);
+	outline: none;
 }
 
 .input-switch:checked + .slider:before {
-  transform: translateX(2.6em);
+	transform: translateX(2.6em);
 }
 
 .slider.round-slider {
-  border-radius: 3.4em;
+	border-radius: 3.4em;
 }
 
 .slider.round-slider:before {
-  border-radius: 50%;
+	border-radius: 50%;
 }
 
 /* Media queries */
@@ -500,11 +500,11 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 768px) {
-  .profile-pic-container {
-    width: 10em;
-    height: 10em;
-    margin: 1em 0;
-  }
+	.profile-pic-container {
+		width: 10em;
+		height: 10em;
+		margin: 1em 0;
+	}
 }
 
 </style>

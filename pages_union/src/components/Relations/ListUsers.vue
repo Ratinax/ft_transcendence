@@ -1,9 +1,9 @@
 <template>
-    <div class="list-users-relations">
+	<div class="list-users-relations">
         <div class="header">
             <h1 class="fade-text">{{ headerText }}</h1>
         </div>
-        <div class="users">
+        <div v-if="users.length" class="users-relations">
             <User v-for="user in users" 
 				:key="user.id" 
 				:user="user" 
@@ -11,6 +11,11 @@
 				@accept-friendship="onAcceptFriendship" 
 				@remove-relation="onRemoveRelation"/>
         </div>
+		<div v-else class="users-relations users-empty">
+			<p v-if="isFriendList" >You have no friends.</p>
+			<p v-else-if="isFriendRequestList">You have no friend request(s).</p>
+			<p v-else>You have no user(s) blocked.</p>
+		</div>
     </div>
   
 </template>
@@ -23,11 +28,10 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
     name: 'ListUsers',
-    components:
-    {
+    components: {
         User,
     },
-    props:{
+    props: {
         isBlockList: Boolean,
         isFriendList: Boolean,
         isFriendRequestList: Boolean,
@@ -59,7 +63,7 @@ export default defineComponent({
             }
             catch (e)
             {
-                console.error('Error un fetchUsers:', e);
+                console.error('Error on fetchUsers:', e);
             }
         },
         onAcceptFriendship(asking_user_id: number)
@@ -92,18 +96,29 @@ export default defineComponent({
 
 h1 {
 	display: inline;
-	border-bottom: .01em solid var(--plight);
 	padding-bottom: .1em;
 	font-size: 2.2em
 }
 
+.users-relations {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
 .list-users-relations
 {
-	background: var(--pdark);
-	border-radius: 2em;
+	overflow: auto;
+	background: rgba(0, 0, 0, 0.4);
+	border-radius: 1em;
 	margin: auto 1em;
-    width: calc(100% / 3);
-	border: 1px solid var(--pcyan);
+    width: 33%;
 	padding: 1em;
 }
+
+.users-empty {
+	font-size: 1.25em;
+	color: var(--plight);
+}
+
 </style>

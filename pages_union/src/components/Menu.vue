@@ -106,10 +106,6 @@ export default {
 	height: 100%;
 }
 
-.nav-item {
-	width: 100%;
-}
-
 .nav-link {
 	display: flex;
 	align-items: center;
@@ -120,6 +116,7 @@ export default {
 .link-text {
 	font-size: 1.25rem;
 	display: none;
+	text-wrap: nowrap;
 }
 
 .nav-link svg {
@@ -183,6 +180,10 @@ export default {
 		height: 100vh;
 	}
 
+	.nav-item {
+		width: 100%;
+	}
+
 	.navbar:hover {
 		width: 14rem;
 	}
@@ -207,6 +208,11 @@ export default {
 		background-color: var(--pblack);
 		bottom: 0;
 		width: 100%;
+		min-width: 360px;
+	}
+
+	.nav-item {
+		width: 20%;
 	}
 
 	.logo {
@@ -224,6 +230,7 @@ export default {
 	}
 
 	.view {
+		padding-left: 0;
 		padding-bottom: 5rem;
 	}
 
