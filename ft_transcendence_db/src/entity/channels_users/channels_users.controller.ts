@@ -1,13 +1,21 @@
 import { Get, Controller, Req, Body, Query, Param, Post } from '@nestjs/common';
 import { ChannelsUsersService } from './channels_users.service';
 import { SessionService } from '../sessions/session.service';
+import { Request } from 'express';
 
 @Controller('channels_users')
 export class ChannelsUsersController {
     constructor (private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
 
+    /**
+     * Get perms of user making the request on a channel
+     * 
+     * @param req already provided, used to manipulate cookies
+     * @param channelId id of channel
+     * @returns result of request
+     */
     @Get('userPerms')
-    async getUserWithPermissions(@Req() req, @Query('channelId') channelId)
+    async getUserWithPermissions(@Req() req: Request, @Query('channelId') channelId: number)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -25,8 +33,16 @@ export class ChannelsUsersController {
         }
         return (userPerms);
     }
+
+    /**
+     * Get bannedusers from a channel
+     * 
+     * @param channelId id of channel
+     * @param req already provided, used to manipulate cookies
+     * @returns result of request
+     */
     @Get('bannedUsers/:channelId')
-    async getBAnnedUsers(@Param('channelId') channelId: number, @Req() req)
+    async getBAnnedUsers(@Param('channelId') channelId: number, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -39,8 +55,16 @@ export class ChannelsUsersController {
         const users = await this.channelsUsersService.findBannedUsers(channelId);
         return (users);
     }
+
+    /**
+     * Unban user from a channel
+     * 
+     * @param req already provided, used to manipulate cookies
+     * @param body channel and user
+     * @returns result of request
+     */
     @Post('unBan')
-    async unBan(@Req() req, @Body() body)
+    async unBan(@Req() req: Request, @Body() body: {channel: {channel_id: number}, user: {id: number}})
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -51,7 +75,10 @@ export class ChannelsUsersController {
         if (!res.isOwner)
             return (false);
         const result = await this.channelsUsersService.unBan(body.channel, body.user);
-        return (result);
+        // console.log(result);
+        if (result)
+            return (true);
+        return (false);
     }
 
 }

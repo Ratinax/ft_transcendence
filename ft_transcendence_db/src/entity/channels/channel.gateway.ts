@@ -131,7 +131,7 @@ export class ChannelGateway {
     const channel = channels[0];
     const relation = await this.channelsUsersService.findRelation(user.id, channel.channel_id);
 
-    if (!this.checkJoinGoodInput(relation, body.sessionCookie, channel, body.password))
+    if (!await this.checkJoinGoodInput(relation, body.sessionCookie, channel, body.password))
       return ;
 
     await this.channelsUsersService.createNew({
@@ -175,7 +175,7 @@ export class ChannelGateway {
       this.server.emit('joinPrivateMode', {sessionCookie: sessionCookie})
       return (false);
     }
-    if (!await this.channelService.comparePasswords(channel, password))
+    if (channel.category === 'Protected by password' && !await this.channelService.comparePasswords(channel, password))
     {
       this.server.emit('joinWrongPassword', {sessionCookie: sessionCookie})
       return (false);

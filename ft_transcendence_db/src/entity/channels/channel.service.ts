@@ -103,10 +103,11 @@ export class ChannelService {
     async toPublic(channel_id: number)
     {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
-
+        console.log(relation)
         relation.category = 'Public';
         relation.password = '';
         const res = await this.channelRepository.save(relation);
+        console.log(res)
         return ({isADm: res.isADm,
             name: res.name,
             category: res.category,

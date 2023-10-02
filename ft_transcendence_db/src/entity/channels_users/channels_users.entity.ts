@@ -15,6 +15,7 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "t
  * - isBanned: boolean
  * - dateTimeout: Date
  * - durationTimeout: Number
+ * - isHide: boolean
  */
 
 @Entity()
