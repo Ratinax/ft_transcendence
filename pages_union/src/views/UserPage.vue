@@ -144,8 +144,9 @@ export default defineComponent({
 			try
 			{
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/unblock/`, {pseudo: userName.value}, {withCredentials: true});
+				console.log(res.data)
 				if (res.data === 'Success')
-				isBlocked.value = false;
+					isBlocked.value = false;
 			}
 			catch (e)
 			{

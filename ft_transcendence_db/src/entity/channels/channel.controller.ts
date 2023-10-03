@@ -18,6 +18,8 @@ export class ChannelController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        if (!user)
+            return (null);
         const channels = await this.channelsUsersService.findChannelsOfUsers(user.id);
         return (channels);
     }
@@ -73,6 +75,8 @@ export class ChannelController {
     async checkIfUserOwner(cookie: string, channel_id: number)
     {
         const user = await this.sessionService.getUser(cookie);
+        if (!user)
+            return (false);
         const relation = (await this.channelsUsersService.findRelation(user.id, channel_id))[0];
         if (!relation.isOwner)
             return (false);
@@ -86,8 +90,9 @@ export class ChannelController {
         {
             return (null);
         }
-        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const channel = (await this.channelService.findByName(name))[0];
+        if (!channel)
+            return (null);
         return (channel.category);
     }
 
@@ -120,7 +125,6 @@ export class ChannelController {
         }
         catch (e)
         {
-            console.error(e);
             return (false);
         }
     }

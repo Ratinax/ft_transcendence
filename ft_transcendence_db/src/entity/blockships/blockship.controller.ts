@@ -16,6 +16,8 @@ export class BlockshipController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        if (!user)
+            return (null);
         try 
         {
             const res = await this.blockshipService.findUserblockedFromId(user.id);
@@ -23,6 +25,7 @@ export class BlockshipController {
         }
         catch (e)
         {
+            console.log(e)
             return (null);
         }
     }
@@ -36,6 +39,8 @@ export class BlockshipController {
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const userBlocked = (await this.userService.getUser(pseudoBlocked))[0];
+        if (!user || !userBlocked)
+            return (false);
         try 
         {
             const res = await this.blockshipService.getIsBlocked(user.id, userBlocked.id);
@@ -59,6 +64,8 @@ export class BlockshipController {
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const userBlocked = (await this.userService.getUser(body.pseudo))[0];
+        if (!user || !userBlocked)
+            return (null);
         try 
         {
             const res = await this.blockshipService.blockUser(user.id, userBlocked.id);
@@ -79,9 +86,11 @@ export class BlockshipController {
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const userBlocked = (await this.userService.getUser(body.pseudo))[0];
+        if (!user || !userBlocked)
+            return (null);
         try 
         {
-            const res = await this.blockshipService.deleteBlockship(user.id, userBlocked.id);
+            await this.blockshipService.deleteBlockship(user.id, userBlocked.id);
             return ('Success');
         }
         catch (e)

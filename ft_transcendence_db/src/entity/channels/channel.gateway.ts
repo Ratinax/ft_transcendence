@@ -37,6 +37,8 @@ export class ChannelGateway {
       return ('not connected');
     }
     const user = await this.sessionService.getUser(data.sessionCookie);
+    if (!user)
+      return ('not connected')
     if (!this.createGoodInputs(data.channel, data.sessionCookie))
       return ('input error');
     const channel = data.channel;
@@ -93,7 +95,10 @@ export class ChannelGateway {
       return ('not connected');
     const user = await this.sessionService.getUser(body.sessionCookie);
     if (!user)
-      return ('no such user')
+    {
+      this.server.emit('joinNoSuchChannel', {sessionCookie: body.sessionCookie});
+      return ('not connected')
+    }
 
     const channels = await this.channelService.findByName(body.channelName);
     if (!channels || !channels[0])

@@ -3,6 +3,7 @@ import { BlockshipService } from './blockship.service';
 import { Server } from 'socket.io';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @WebSocketGateway(3002, {
   cors: {
@@ -28,6 +29,7 @@ export class BlockshipGateway {
       const user = await this.sessionService.getUser(body.sessionCookie);
       if (!user)
         return (null);
+
       await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
       this.server.emit('deleteBlockship', {sessionCookie: body.sessionCookie});
       return (true);
