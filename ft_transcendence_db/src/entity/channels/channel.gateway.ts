@@ -45,7 +45,7 @@ export class ChannelGateway {
     try 
     {
       const response = await this.channelService.createChannel(channel);
-      this.server.emit('updateListChannels', {channel: response, sessionCookie: data.sessionCookie});
+      this.server.emit('updateListChannels', {channel: {...response, isUserOwner: true}, sessionCookie: data.sessionCookie});
       const response2 = await this.channelsUsersService.createNew({
         user: user,
         channel: response,
@@ -123,7 +123,7 @@ export class ChannelGateway {
       channel_id: channel.channel_id,
       name: channel.name,
     }
-    this.server.emit('updateListChannels', {channel: channelToReturn, sessionCookie: body.sessionCookie});
+    this.server.emit('updateListChannels', {channel: {...channelToReturn, isUserOwner: false}, sessionCookie: body.sessionCookie});
     this.server.emit('joinGoodRequest', {sessionCookie: body.sessionCookie});
   }
 

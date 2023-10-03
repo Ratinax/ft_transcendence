@@ -24,11 +24,7 @@ export class ChannelController {
         let res = [];
         for (let i = 0; i < channels.length; i++)
         {
-            res.push({channel_id: channels[i].channel_id,
-                isADm: channels[i].isADm,
-                name: channels[i].name,
-                category: channels[i].category,
-                isHide: channels[i].isHide,
+            res.push({...channels[i],
                 isUserOwner: await this.channelsUsersService.getIsUserOwner(channels[i].channel_id, user.id)});
         }
         return (res);
