@@ -25,8 +25,7 @@
 				v-if="socket && sessionCookie" 
 				:sessionCookie="sessionCookie"
 				:channel="selectedChannel" 
-				:socket="socket"
-				@set-is-user-owner="setIsUserOwner"/>
+				:socket="socket"/>
 		</div>
 	</div>
 </template>
@@ -55,7 +54,7 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			selectedChannel: undefined as {channel_id: number, name: string} | undefined,
+			selectedChannel: undefined as {channel_id: number, name: string, isUserOwner: boolean} | undefined,
 			socket: null as any,
 			sessionCookie: '',
 		}
@@ -67,14 +66,13 @@ export default defineComponent({
 			if (response.channel_id === this.selectedChannel?.channel_id)
 				this.updateMessages();
 		});
-		this.socket.on('updateListChannels', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}}) => {
+		this.socket.on('updateListChannels', async (response: {sessionCookie: string, channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
 			if (response.sessionCookie === this.sessionCookie)
 				this.updateListChannels(response.channel);
 		});
 		this.socket.on('updateListUsers', (response: {channel: {channel_id: number}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (response.channel.channel_id === this.selectedChannel?.channel_id) {
 				this.updateListUsers(response.users);
-				this.setIsUserOwner(response.channel.channel_id);
 			}
 		});
 		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
@@ -109,7 +107,7 @@ export default defineComponent({
 		* 
 		* @param {Object} channel - Channel from which a user has entered or left
 		*/
-		updateListChannels(channel: {channel_id: number, name: string} | undefined){
+		updateListChannels(channel: {channel_id: number, name: string, isUserOwner: boolean} | undefined){
 			if (this.$refs.listChannels) {
 				(this.$refs.listChannels as typeof ListChannels).fetchChannels();
 				this.setSelectedChannel(channel);
@@ -119,14 +117,13 @@ export default defineComponent({
 			if (this.$refs.messages)
 				(this.$refs.messages as typeof Messages).updateMessages(this.selectedChannel);
 		},
-		onChannelSelected(channel: {channel_id: number, name: string}) {
+		onChannelSelected(channel: {channel_id: number, name: string, isUserOwner: boolean}) {
 			this.setSelectedChannel(channel);
 		},
-		setSelectedChannel(channel: {channel_id: number, name: string} | undefined) {
+		setSelectedChannel(channel: {channel_id: number, name: string, isUserOwner: boolean} | undefined) {
 			this.selectedChannel = channel;
 			this.findUsersOfChannel();
 			this.updateMessages();
-			this.setIsUserOwner(this.selectedChannel?.channel_id);
 		},
 		async createMessage(content: {channel_id: number, message: string, dateSent: Date, isAGameInvite: boolean}) {
 			this.socket?.emit('createMessage', { ...content, sessionCookie: this.sessionCookie });
@@ -144,17 +141,6 @@ export default defineComponent({
 		},
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
-		},
-		setIsUserOwner(channel_id: number | undefined) {
-			if (!channel_id)
-				return ;
-			if (this.$refs.listUsersChat) {
-				const result = (this.$refs.listUsersChat as typeof ListUsersChat).getUserInChannel();
-				if (result && this.$refs.listChannels)
-				{
-					(this.$refs.listChannels as typeof ListChannels).setIsUserOwner(result.isOwner, channel_id);
-				}
-			}
 		},
 		sendMessageTimeout(duration: number) {
 			if (this.$refs.sendMessage)

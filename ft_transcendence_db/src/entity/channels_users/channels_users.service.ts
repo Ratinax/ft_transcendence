@@ -203,4 +203,11 @@ export class ChannelsUsersService {
         }
         return (true);
     }
+    async getIsUserOwner(channel_id: number, user_id: number)
+    {
+        const relation = (await this.findRelation(user_id, channel_id))[0];
+        if (relation)
+            return (relation.isOwner);
+        return (false);
+    }
 }

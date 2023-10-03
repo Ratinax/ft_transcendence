@@ -7,6 +7,7 @@
 				:channel="channel"
 				:socket="socket" 
 				:isSelected="channelSelected?.channel_id === channel.channel_id"
+				:isUserOwner="channel.isUserOwner"
 				@channel-clicked="handleChannelClicked"
 				@leave-channel="onLeaveChannel"
 				@update-channels="onUpdateChannels"
@@ -66,12 +67,12 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			channels: [] as Array<{channel_id: number, name: string}>,
+			channels: [] as Array<{channel_id: number, name: string, isUserOwner: boolean}>,
 			showCreateChannel: false,
 			showJoinChannel: false,
 		}
 	},
-	created() 
+	mounted() 
 	{
 		this.fetchChannels();
 	},
@@ -81,6 +82,7 @@ export default defineComponent({
 			{
 				const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels/`, {withCredentials: true});
 				this.channels = response.data;
+				console.log(this.channels);
 			} 
 			catch (error) 
 			{
@@ -89,13 +91,6 @@ export default defineComponent({
 			}
 			this.$nextTick(() => {
 				this.updateScrollPosition();
-			})
-		},
-		addChannel(channel: {channel_id: number, name: string})
-		{
-			this.channels.push(channel)
-			this.$nextTick(() => {
-				this.updateScrollPosition()
 			})
 		},
 		handleChannelClicked(channel: {channel_id: number}) 
@@ -120,17 +115,6 @@ export default defineComponent({
 		onLeaveChannel(channel: {channel_id: number, name: string})
 		{
 			this.$emit('leave-channel', channel);
-		},
-		setIsUserOwner(result: boolean, channel_id: number)
-		{
-			for (let i = 0; i < (this.$refs.channelRef as Array<typeof Channel>).length; i++)
-			{
-				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].getChannelId() === channel_id)
-				{
-					(this.$refs.channelRef as Array<typeof Channel>)[i].setIsUserOwner(result);
-					break ;
-				}
-			}
 		},
 		onUpdateChannels()
 		{

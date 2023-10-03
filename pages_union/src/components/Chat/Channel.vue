@@ -65,19 +65,19 @@ export default defineComponent({
 		channel: Object, 
 		isSelected: Boolean,
 		socket: null,
+		isUserOwner: Boolean,
 	},
 	data()
 	{
 		return {
 			showPasswordPopUp: false,
-			isUserOwner: false,
 			passwordProtected: false,
 			isPrivate: false,
 			leave: false,
 			isNotif: false,
 		}
 	},
-	emits: ['leave-channel', 'get-is-user-owner', 'channel-clicked', 'update-channels'],
+	emits: ['leave-channel', 'channel-clicked', 'update-channels'],
 	async mounted()
 	{
 		this.isPrivate = false;
@@ -93,10 +93,6 @@ export default defineComponent({
 			this.isPrivate = true;
 	},
 	methods: {
-		setIsUserOwner(result: boolean)
-		{
-			this.isUserOwner = result;
-		},
 		handleChannelClicked()
 		{
 			if (!this.leave)

@@ -21,7 +21,17 @@ export class ChannelController {
         if (!user)
             return (null);
         const channels = await this.channelsUsersService.findChannelsOfUsers(user.id);
-        return (channels);
+        let res = [];
+        for (let i = 0; i < channels.length; i++)
+        {
+            res.push({channel_id: channels[i].channel_id,
+                isADm: channels[i].isADm,
+                name: channels[i].name,
+                category: channels[i].category,
+                isHide: channels[i].isHide,
+                isUserOwner: await this.channelsUsersService.getIsUserOwner(channels[i].channel_id, user.id)});
+        }
+        return (res);
     }
 
     @Post('setPassword')
