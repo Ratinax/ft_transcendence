@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="test">
       <img :src="qrlink"/>
 			<form  @submit.prevent="check2Fa">
         <input v-model="code" placeholder="Verification Code"/>
@@ -87,8 +87,8 @@ export default {
                 loader.style.background = `conic-gradient(
                     transparent 0%,
                     transparent ${(30 - this.timeLeft) * 3.333}%,
-                    #ffffff ${(30 - this.timeLeft) * 3.333}%,
-                    #ffffff 100%`
+                    #000000 ${(30 - this.timeLeft) * 3.333}%,
+                    #000000 100%`
               const timeLeft = JSON.parse(localStorage.getItem('timeLeft'));
               if (timeLeft > 0)
                 localStorage.setItem('timeLeft', JSON.stringify(this.timeLeft));

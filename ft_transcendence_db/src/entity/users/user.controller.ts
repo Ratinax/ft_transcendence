@@ -208,7 +208,6 @@ export class UserController {
         if (result === true)
         {
             const session = await this.sessionService.createSession(user.id);
-            res.clearCookie('2FAKEY');
             res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         }
         return (result);
