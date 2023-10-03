@@ -40,7 +40,10 @@ export default {
         }
         catch (error)
         {
-            this.errorMessage = error.response.data.message;
+			if (error && error.response && error.response.data && error.response.data.message)
+                this.errorMessage = error.response.data.message;
+            else
+                this.errorMessage = 'Internal servor error, try again later';
         }
     }
 }

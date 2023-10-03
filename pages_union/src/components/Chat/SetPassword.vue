@@ -56,7 +56,8 @@ export default defineComponent({
 			matrixError: [
 				'allright',
 				'Passwords do not match',
-				'Password must be between 3 and 20 characters'
+				'Password must be between 3 and 20 characters',
+				'Servor error, try again later',
 			],
 			matrixIndex: 0,
 		}
@@ -71,6 +72,10 @@ export default defineComponent({
 		notGoodLength()
 		{
 			this.matrixIndex = 2;
+		},
+		servorError()
+		{
+			this.matrixIndex = 3;
 		},
 		goodRequest()
 		{

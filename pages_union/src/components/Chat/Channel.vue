@@ -129,8 +129,14 @@ export default defineComponent({
 			}
 			catch (error: Error | any)
 			{
-				if (error.response.data.message === 'Password not good length' && this.$refs.SetPassword)
-					(this.$refs.SetPassword as typeof SetPassword).notGoodLength()
+				if (error && error.response && error.response.data && error.response.data.message)
+				{
+					if (error.response.data.message === 'Password not good length' && this.$refs.SetPassword)
+						(this.$refs.SetPassword as typeof SetPassword).notGoodLength()
+				}
+				else
+					(this.$refs.SetPassword as typeof SetPassword).servorError()
+
 			}
 		},
 
@@ -154,8 +160,14 @@ export default defineComponent({
 			}
 			catch (error: Error | any | undefined)
 			{
-				if (error.response.data.message === 'Password not good length' && this.$refs.SetPassword)
-				(this.$refs.SetPassword as typeof SetPassword).notGoodLength()
+				if (error && error.response && error.response.data && error.response.data.message)
+				{
+
+					if (error.response.data.message === 'Password not good length' && this.$refs.SetPassword)
+						(this.$refs.SetPassword as typeof SetPassword).notGoodLength()
+				}
+				else
+					(this.$refs.SetPassword as typeof SetPassword).servorError()
 			}
 		},
 		async goPublic()

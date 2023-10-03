@@ -71,7 +71,7 @@ export default {
         }
         catch (e)
         {
-          console.error('la ya une error :', e);
+          console.error('Error :', e);
         }
       },
       async pingTimeLeft()

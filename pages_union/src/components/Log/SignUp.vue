@@ -62,7 +62,10 @@ export default defineComponent({
 			}
 			catch(e: any)
 			{
-				error.value = JSON.parse(e.request.response).message;
+				if (e && e.request && e.request.response)
+					error.value = JSON.parse(e.request.response).message;
+				else
+					error.value = 'Internal servor error, try again later';
 				return ;
 			}
 			router.push({name: 'UserPage', params: {pseudo: pseudo.value}});
