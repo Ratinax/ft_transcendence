@@ -80,9 +80,9 @@ export default defineComponent({
 				{ withCredentials: true }, 
 			);
 			if (userPerms.data)
-			this.userInChannel = userPerms.data;
+				this.userInChannel = userPerms.data;
 			else
-			this.userInChannel = null;
+				this.userInChannel = null;
 			this.$emit('set-is-user-owner', this.channel?.channel_id);
 		},
 		updateListUsers(users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>)

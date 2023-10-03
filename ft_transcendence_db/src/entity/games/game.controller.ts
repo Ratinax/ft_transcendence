@@ -30,18 +30,7 @@ export class GameController {
             return (null);
         return (await this.gameService.getGamesAndWins(user.id))
     }
-    @Get('match-history')
-    async getGames(@Req() req: Request)
-    {
-        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
-        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        if (!user)
-            return (null);
-        return (await this.gameService.getGames(user.id))
-    }
+
     @Get('match-history/:pseudo')
     async getMatchHistory(@Param('pseudo') pseudo: string, @Req() req: Request)
     {
@@ -53,17 +42,5 @@ export class GameController {
         if (user)
             return (await this.gameService.getGames(user.id));
         return (false);
-    }
-    @Get('games-wins/:pseudo')
-    async getGamesAndWinsId(@Param('pseudo') pseudo: string, @Req() req: Request)
-    {
-        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
-        const user = (await this.userService.getUser(pseudo))[0];
-        if (!user)
-            return (null);
-        return (await this.gameService.getGamesAndWins(user.id))
     }
 }

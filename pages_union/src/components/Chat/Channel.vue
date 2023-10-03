@@ -112,7 +112,7 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
 					{
 						channel: this.channel,
 						password: password,

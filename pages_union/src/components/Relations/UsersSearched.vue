@@ -34,7 +34,6 @@ export default defineComponent({
 	{
 		async searchUsers()
 		{
-			console.log('da', this.pseudo); // to remove
 			this.listUsersSearched = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/users/${this.pseudo}`, {withCredentials: true})).data;
 			if (this.listUsersSearched) {
 				if (this.listUsersSearched.length > 0) {

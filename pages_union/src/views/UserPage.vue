@@ -122,7 +122,7 @@ export default defineComponent({
 			const res2fa = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/is2fa/${userName.value}`, {withCredentials: true})).data;
 			const checkbox = document.getElementById("fa2-input") as HTMLInputElement;
 			if (checkbox)
-			checkbox.checked = res2fa;
+				checkbox.checked = res2fa;
 			is2faState.value = res2fa;
 		}
 
