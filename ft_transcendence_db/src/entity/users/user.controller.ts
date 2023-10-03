@@ -161,6 +161,28 @@ export class UserController {
             throw new InternalServerErrorException('Couldn\'t get user');
         return (true);
     }
+    @Get('/images/:imageName')
+    async getImage(@Param('imageName') imageName: string, @Req() req: Request, @Res() res: Response) 
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const users = await this.userService.getUsers('');
+        for (let i = 0; i < users.length; i++)
+        {
+            if (users[i].profilPic === imageName)
+            {
+                if (users[i].is42User)
+                {
+                    return (res.sendFile(imageName));
+                }
+                break ;
+            }
+        }
+        let imagePath = path.join(__dirname, '../../../', 'images', imageName);
+        return (res.sendFile(imagePath));
+    }
     @Get('verify2Fa/:code')
     async verify2Fa(@Param('code') code: string, @Req() req: Request, @Res({passthrough: true}) res: Response)
     {

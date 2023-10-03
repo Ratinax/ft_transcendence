@@ -9,7 +9,7 @@ export const typeOrmConfig : TypeOrmModuleOptions = {
     host: 'localhost',
     port: 5432,
     username: 'postgres',
-    password: 'postgres22',
+    password: 'postgres',
     database: 'ft_database',
     synchronize: true,
   };

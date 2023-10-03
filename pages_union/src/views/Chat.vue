@@ -126,6 +126,7 @@ export default defineComponent({
 			this.selectedChannel = channel;
 			this.findUsersOfChannel();
 			this.updateMessages();
+			this.setIsUserOwner(this.selectedChannel?.channel_id);
 		},
 		async createMessage(content: {channel_id: number, message: string, dateSent: Date, isAGameInvite: boolean}) {
 			this.socket?.emit('createMessage', { ...content, sessionCookie: this.sessionCookie });
@@ -144,7 +145,9 @@ export default defineComponent({
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
 		},
-		setIsUserOwner(channel_id: number ) {
+		setIsUserOwner(channel_id: number | undefined) {
+			if (!channel_id)
+				return ;
 			if (this.$refs.listUsersChat) {
 				const result = (this.$refs.listUsersChat as typeof ListUsersChat).getUserInChannel();
 				if (result && this.$refs.listChannels)
