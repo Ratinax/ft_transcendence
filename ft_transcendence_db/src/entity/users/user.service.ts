@@ -14,7 +14,7 @@ export class UserService {
         private userRepository: Repository<Users>,
     ) {}
 
-    async signUp(body: any)
+    async signUp(body: {pseudo: string, image: string, password: string})
     {
         let imageName;
         let userFound = await this.userRepository.findOne({where: {pseudo : body.pseudo}});
@@ -44,7 +44,7 @@ export class UserService {
             id: res.id,
         });
     }
-    async signIn(user: Partial<Users>)
+    async signIn(user: {password: string, pseudo: string})
     {
         let userFound = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
         if (!userFound)
@@ -57,7 +57,7 @@ export class UserService {
         }
         return ({user: userFound, uri: false});
     }
-    async login42(user: Partial<Users>)
+    async login42(user: {pseudo: string, profilPic: string})
     {
         let userFromPseudo = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
         let userFrom42 = await this.userRepository.findOne({where: {pseudo : user.pseudo, is42User: true}});
@@ -91,7 +91,7 @@ export class UserService {
             return ({user: userFrom42, uri: false});
         }
     }
-    async getToken(code)
+    async getToken(code: string)
     {
         try
         {
@@ -148,7 +148,7 @@ export class UserService {
         }
     }
 
-    async comparePasswords(user, password: string)
+    async comparePasswords(user: {password: string}, password: string)
     {
         return (await bcrypt.compare(password + process.env.PEPPER, user.password));
     }
@@ -157,7 +157,8 @@ export class UserService {
     {
         return (await bcrypt.hash(password + process.env.PEPPER, +process.env.SALTROUNDS))
     }
-    async getMyInfos(token) : Promise<any> {
+    async getMyInfos(token: string): Promise<any>
+    {
 		const	userInfos = await axios({
 			method: 'get',
 			url: 'https://api.intra.42.fr/v2/me',
@@ -192,7 +193,7 @@ export class UserService {
             }));
         return (usersMapped);
     }
-    async change2fa(user_id)
+    async change2fa(user_id: number)
     {
         let user = await this.userRepository.findOne({where: {id : user_id}});
         if (user)

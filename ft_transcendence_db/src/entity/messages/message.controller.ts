@@ -2,13 +2,14 @@ import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { BlockshipService } from '../blockships/blockship.service';
 import { SessionService } from '../sessions/session.service';
+import { Request } from 'express';
 
 @Controller('messages')
 export class MessageController {
     constructor (private readonly messageService: MessageService, private readonly blockshipService: BlockshipService, private readonly sessionService: SessionService) {}
 
     @Get(':channelname')
-    async find(@Param('channelname') channelname: string, @Req() req)
+    async find(@Param('channelname') channelname: string, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -23,11 +24,5 @@ export class MessageController {
         }
         const res = await this.messageService.findMessageFromChannel(channelname, listUserBlockedId, user.id);
         return (res);
-    }
-
-    @Post('create')
-    async post(@Body() body)
-    {
-        return (await this.messageService.post(body));
     }
 }

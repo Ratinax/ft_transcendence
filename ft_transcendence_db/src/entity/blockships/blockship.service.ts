@@ -8,12 +8,7 @@ export class BlockshipService {
         @Inject('BLOCKSHIP_REPOSITORY')
         private blockshipRepository: Repository<Blockships>,
     ) {}
-    /**
-     * get blocklist of user
-     * 
-     * @param id id of user
-     * @returns blocklist of user
-     */
+
     async findUserblockedFromId(id: number)
     {
         const blockships = await this.blockshipRepository
@@ -29,13 +24,7 @@ export class BlockshipService {
             }));
         return (users);
     }
-    /**
-     * delete blockship
-     * 
-     * @param user_id user blocking
-     * @param blocked_id user blocked
-     * @returns result of request | null
-     */
+
     async deleteBlockship(user_id: number, blocked_id: number)
     {
         const blockship = await this.blockshipRepository.findOne({
@@ -45,13 +34,7 @@ export class BlockshipService {
             return (await this.blockshipRepository.delete(blockship.id));
         return (null);
     }
-    /**
-     * create blockship
-     * 
-     * @param userblocking_id user blocking
-     * @param userblocked_id user blocked
-     * @returns result of request (Blockship)
-     */
+
     async blockUser(userblocking_id, userblocked_id)
     {
         const blockship = { userblocking: { id: userblocking_id }, userblocked: { id: userblocked_id } };
@@ -59,13 +42,7 @@ export class BlockshipService {
         const res = await this.blockshipRepository.save(newBlockship);
         return (res);
     }
-    /**
-     * get blockship if blockship exists
-     * 
-     * @param user_id user blocking
-     * @param blocked_id user blocked
-     * @returns result of request
-     */
+
     async getIsBlocked(user_id: number, blocked_id: number)
     {
         const blockship = await this.blockshipRepository.findOne({

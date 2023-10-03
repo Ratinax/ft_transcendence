@@ -78,7 +78,7 @@ export class ChannelsUsersService {
         return (channels);
     }
     
-    async ban(channel, user)
+    async ban(channel: {channel_id: number}, user: {id: number})
     {
         const relation = await this.findRelation(user.id, channel.channel_id);
         if (!relation || !relation[0])
@@ -87,7 +87,7 @@ export class ChannelsUsersService {
         return (this.channelsUsersRepository.save(relation[0]));
     }
 
-    async leave(channel, user)
+    async leave(channel: {channel_id: number}, user: {id: number})
     {
         const relation = (await this.findRelation(user.id, channel.channel_id))[0];
         let res;
@@ -105,7 +105,7 @@ export class ChannelsUsersService {
 
     }
 
-    async setAdmin(channel, user)
+    async setAdmin(channel: {channel_id: number}, user: {id: number})
     {
         const relation = await this.findRelation(user.id, channel.channel_id);
         if (!relation || !relation[0])
@@ -114,7 +114,7 @@ export class ChannelsUsersService {
         return (this.channelsUsersRepository.save(relation[0]));
     }
 
-    async removeAdmin(channel, user)
+    async removeAdmin(channel: {channel_id: number}, user: {id: number})
     {
         const relation = await this.findRelation(user.id, channel.channel_id);
         if (!relation || !relation[0])
@@ -138,7 +138,7 @@ export class ChannelsUsersService {
         return formattedDate;
     }
 
-    async timeoutUser(channel, user, duration)
+    async timeoutUser(channel: {channel_id: number}, user: {id: number}, duration: number)
     {
         const relation = await this.channelsUsersRepository.findOne({where :{
             user: {
@@ -175,14 +175,14 @@ export class ChannelsUsersService {
             }));
         return (users);
     }
-    async unBan(channel, user)
+    async unBan(channel: {channel_id: number}, user: {id: number})
     {
         const relation = (await this.findRelation(user.id, channel.channel_id))[0];
         if (!relation)
             return (null);
         return (await this.channelsUsersRepository.remove(relation));
     }
-    async cleanChan(channelName)
+    async cleanChan(channelName: string)
     {
         const usersAndChannels = await this.channelsUsersRepository
             .createQueryBuilder('channelsUsers')

@@ -6,6 +6,7 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 import { BlockshipService } from '../blockships/blockship.service';
+import { Channels } from '../channels/channel.entity';
 
 @WebSocketGateway(3001, {
   cors: {
@@ -22,7 +23,7 @@ export class MessagesGateway {
 
   @SubscribeMessage('createMessage')
   async create(
-    @MessageBody() body) 
+    @MessageBody() body: {sessionCookie: string, channel_id: number, dateSent: Date, message: string, isAGameInvite: boolean}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
@@ -54,7 +55,7 @@ export class MessagesGateway {
       const response = await this.messagesService.post({
         content: body.message,
         dateSent: body.dateSent,
-        channel: body.channel_id,
+        channel: {channel_id: body.channel_id},
         user: {
           ...user,
         },
@@ -66,7 +67,7 @@ export class MessagesGateway {
 
       return response;
   }
-  async unHide(user_id: number, channel)
+  async unHide(user_id: number, channel: Partial<Channels>)
   {
     const users = await this.channelsUsersService.findUsersOfChannel(channel.name);
       for (let i = 0; i < users.length; i++)
@@ -78,7 +79,7 @@ export class MessagesGateway {
         }
       }
   }
-  async isBlockedRelation(relation)
+  async isBlockedRelation(relation: {channel: Partial<Channels>})
   {
     const users = await this.channelsUsersService.findUsersOfChannel(relation.channel.name);
     const result = await this.blockshipService.getIsBlocked(users[0].id, users[1].id);

@@ -11,7 +11,7 @@ export class UserController {
     constructor (private readonly userService: UserService, private readonly sessionService: SessionService) {}
 
     @Post('signup')
-    async signUp(@Body() body, @Res({passthrough: true}) res: Response)
+    async signUp(@Body() body: {password: string, image: string, pseudo: string}, @Res({passthrough: true}) res: Response)
     {
         if (body.password.length < 8 || body.password.length > 20)
             throw new InternalServerErrorException('Password should be between 8 and 20 caracteres');
@@ -26,7 +26,7 @@ export class UserController {
         return (true);
     }
     @Post('signin')
-    async signIn(@Body() body, @Res({passthrough: true}) res: Response)
+    async signIn(@Body() body: {password: string, pseudo: string}, @Res({passthrough: true}) res: Response)
     {
         const result = await this.userService.signIn(body);
         if (!result || result === 'Wrong password')
@@ -56,7 +56,7 @@ export class UserController {
         if (token && token.data)
 		{
             const infos = await this.userService.getMyInfos(token.data.access_token);
-            const result = await this.userService.login42({pseudo: infos.data.login, profilPic: infos.data.image.link, is42User: true});
+            const result = await this.userService.login42({pseudo: infos.data.login, profilPic: infos.data.image.link});
             if (!result)
                 throw new InternalServerErrorException('There\'s allready a user with that username');
             const user = result.user;
@@ -77,7 +77,7 @@ export class UserController {
         throw new InternalServerErrorException('Authentication failed, try again later');
     }
     @Post('logOut')
-    async logOut(@Body() body, @Req() req, @Res({passthrough: true}) res: Response)
+    async logOut(@Req() req: Request, @Res({passthrough: true}) res: Response)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -88,7 +88,7 @@ export class UserController {
     }
 
     @Get('image-pseudo')
-    async getImagePseudo(@Req() req)
+    async getImagePseudo(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -104,7 +104,7 @@ export class UserController {
     }
 
     @Get('imageName')
-    async getImageName(@Req() req)
+    async getImageName(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -116,7 +116,7 @@ export class UserController {
         return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
     }
     @Get('imageNameByPseudo/:pseudo')
-    async getImageNamePseudo(@Param('pseudo') pseudo, @Req() req)
+    async getImageNamePseudo(@Param('pseudo') pseudo, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -130,7 +130,7 @@ export class UserController {
         return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
     }
     @Get('pseudo')
-    async getPSeudo(@Req() req)
+    async getPSeudo(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -141,7 +141,7 @@ export class UserController {
     }
 
     @Get('/images/:imageName')
-    async getImage(@Param('imageName') imageName: string, @Req() req, @Res() res: Response) 
+    async getImage(@Param('imageName') imageName: string, @Req() req: Request, @Res() res: Response) 
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -171,7 +171,7 @@ export class UserController {
         return (res);
     }
     @Get('is2fa/:pseudo')
-    async getIs2fa(@Param('pseudo') pseudo: string, @Req() req)
+    async getIs2fa(@Param('pseudo') pseudo: string, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -181,7 +181,7 @@ export class UserController {
         return (user.doubleFa);
     }
     @Post('change2fa')
-    async change2fa(@Req() req)
+    async change2fa(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -194,7 +194,7 @@ export class UserController {
         return (true);
     }
     @Get('verify2Fa/:code')
-    async verify2Fa(@Param('code') code: string, @Req() req, @Res({passthrough: true}) res: Response)
+    async verify2Fa(@Param('code') code: string, @Req() req: Request, @Res({passthrough: true}) res: Response)
     {
         if (!req.cookies['2FAKEY'])
             return ('false cause no more cookie');
@@ -213,7 +213,7 @@ export class UserController {
         return (result);
     }
     @Get('timeLeft2Fa')
-    async getTimeLeft2Fa(@Req() req)
+    async getTimeLeft2Fa(@Req() req: Request)
     {
         const twoFaCookie = req.cookies['2FAKEY'];
         if (!twoFaCookie)
@@ -221,7 +221,7 @@ export class UserController {
         return true;
     }
     @Get('link2Fa')
-    async getLink2Fa(@Req() req)
+    async getLink2Fa(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {

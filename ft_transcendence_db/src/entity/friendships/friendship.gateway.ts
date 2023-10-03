@@ -19,7 +19,7 @@ export class FriendshipGateway {
     constructor(private readonly friendshipService: FriendshipService, private readonly sessionService: SessionService) {}
 
     @SubscribeMessage('acceptFriendship')
-    async acceptFriendship(@MessageBody() body) 
+    async acceptFriendship(@MessageBody() body: {sessionCookie: string, friend_id: number}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
@@ -31,7 +31,7 @@ export class FriendshipGateway {
     }
 
     @SubscribeMessage('removeFriendship')
-    async removeFriendship(@MessageBody() body) 
+    async removeFriendship(@MessageBody() body: {sessionCookie: string, friend_id: number}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {

@@ -28,15 +28,7 @@ export class ChannelGateway {
 
   constructor(private readonly channelService: ChannelService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
 
-  /**
-   * Create a channel according to the provided params
-   * 
-   * @param data data of request
-   * @emits updateListChannels {channel: {isADm, name, category, channel_id}, sessionCookie}
-   * @emits createGoodRequest {sesssionCookie}
-   * @emits createAlreadyExists {sessionCookie}
-   * @returns result of request
-   */
+
   @SubscribeMessage('createChannel')
   async create(@MessageBody() data: {sessionCookie: string, channel: {name: string, password: string, category: string}})
   {
@@ -67,16 +59,7 @@ export class ChannelGateway {
     }
   }
 
-  /**
-   * check if good inputs on channel creation
-   * 
-   * @param channel channel inputs
-   * @param sessionCookie sessionCookie of the user making the request
-   * @emits createPasswordOrNameWrongSize {sessionCookie}
-   * @emits createWrongCategory {sessionCookie}
-   * @emits createNotAllowedChars {sessionCookie}
-   * @returns result
-   */
+
   createGoodInputs(channel: {name: string, password: string, category: string}, sessionCookie: string): Boolean
   {
     if (channel.name.length < 3 
@@ -103,15 +86,6 @@ export class ChannelGateway {
     return (true);
   }
 
-  /**
-   * join channel
-   * 
-   * @param body channels infos
-   * @emits joinNoSuchChannel {sessionCookie}
-   * @emits updateListChannels {channel: {channel_id, name} sessionCookie}
-   * @emits joinGoodRequest {sessionCookie}
-   * @returns result
-   */
   @SubscribeMessage('joinChannel')
   async join(@MessageBody() body: {sessionCookie: string, password: string, channelName: string})
   {
@@ -147,19 +121,7 @@ export class ChannelGateway {
     this.server.emit('updateListChannels', {channel: channelToReturn, sessionCookie: body.sessionCookie});
     this.server.emit('joinGoodRequest', {sessionCookie: body.sessionCookie});
   }
-  /**
-   * Check the input of join request
-   * 
-   * @param relation relation of channelsUsers
-   * @param sessionCookie 
-   * @param channel 
-   * @param password 
-   * @emits joinBanned {sessionCookie}
-   * @emits joinAlreadyIn {sessionCookie}
-   * @emits joinPrivateMode {sessionCookie}
-   * @emits joinWrongPassword {sessionCookie}
-   * @returns result Boolean
-   */
+
   async checkJoinGoodInput(relation: ChannelsUsers[], sessionCookie: string, channel: Channels, password: string)
   {
     if (relation && relation[0])
@@ -182,13 +144,7 @@ export class ChannelGateway {
     }
     return (true);
   }
-  /**
-   * Make user leave the channel
-   * 
-   * @param body sessionCookie and channel
-   * @emits updateAfterPart {users, channel, sessionCookie}
-   * @returns result
-   */
+
   @SubscribeMessage('leaveChannel')
   async leaveChannel(@MessageBody() body: {sessionCookie: string, channel: {channel_id: number, name: string}}) 
   {

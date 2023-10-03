@@ -59,7 +59,7 @@ export class SessionService{
     }
 
 
-    async getIsSessionExpired(sessionKey)
+    async getIsSessionExpired(sessionKey: string)
     {
         const relation = await this.sessionRepository.findOne({
             where: { sessionKey: sessionKey },
@@ -87,7 +87,7 @@ export class SessionService{
         }
         return (false);
     }
-    async refreshSessionKey(sessionKey)
+    async refreshSessionKey(sessionKey: string)
     {
         const relation = await this.sessionRepository.findOne({
             where: { sessionKey: sessionKey },

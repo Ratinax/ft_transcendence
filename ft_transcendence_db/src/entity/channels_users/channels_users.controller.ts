@@ -7,13 +7,6 @@ import { Request } from 'express';
 export class ChannelsUsersController {
     constructor (private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
 
-    /**
-     * Get perms of user making the request on a channel
-     * 
-     * @param req already provided, used to manipulate cookies
-     * @param channelId id of channel
-     * @returns result of request
-     */
     @Get('userPerms')
     async getUserWithPermissions(@Req() req: Request, @Query('channelId') channelId: number)
     {
@@ -34,13 +27,6 @@ export class ChannelsUsersController {
         return (userPerms);
     }
 
-    /**
-     * Get bannedusers from a channel
-     * 
-     * @param channelId id of channel
-     * @param req already provided, used to manipulate cookies
-     * @returns result of request
-     */
     @Get('bannedUsers/:channelId')
     async getBAnnedUsers(@Param('channelId') channelId: number, @Req() req: Request)
     {
@@ -56,13 +42,6 @@ export class ChannelsUsersController {
         return (users);
     }
 
-    /**
-     * Unban user from a channel
-     * 
-     * @param req already provided, used to manipulate cookies
-     * @param body channel and user
-     * @returns result of request
-     */
     @Post('unBan')
     async unBan(@Req() req: Request, @Body() body: {channel: {channel_id: number}, user: {id: number}})
     {

@@ -25,7 +25,7 @@ export class Messages {
 
   @ManyToOne(() => Channels, { eager: true })
   @JoinColumn({ name: 'channel_id' })
-  channel: Channels;
+  channel: Partial<Channels>;
 
   @Column({ name: 'date_sent', type: 'timestamp' })
   dateSent: Date;

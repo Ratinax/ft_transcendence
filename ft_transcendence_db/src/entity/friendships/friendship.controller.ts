@@ -2,13 +2,14 @@ import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { FriendshipService } from './friendship.service';
 import { SessionService } from '../sessions/session.service';
 import { UserService } from '../users/user.service';
+import { Request } from 'express';
 
 @Controller('friendships')
 export class FriendshipController {
     constructor (private readonly friendshipService: FriendshipService, private readonly sessionService: SessionService, private readonly userService: UserService) {}
 
     @Get('friendsof/')
-    async findFriendOfId(@Req() req)
+    async findFriendOfId(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -19,7 +20,7 @@ export class FriendshipController {
     }
 
     @Get('pending/')
-    async findPending(@Req() req)
+    async findPending(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -29,7 +30,7 @@ export class FriendshipController {
         return (await this.friendshipService.findPending(user.id));
     }
     @Post('ask')
-    async askFriend(@Req() req, @Body() body)
+    async askFriend(@Req() req: Request, @Body() body: {pseudo: string})
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -48,7 +49,7 @@ export class FriendshipController {
         }
     }
     @Post('remove')
-    async removeFriend(@Req() req, @Body() body)
+    async removeFriend(@Req() req: Request, @Body() body: {pseudo: string})
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -67,7 +68,7 @@ export class FriendshipController {
         }
     }
     @Get('friendRelation/:pseudoFriend')
-    async isFriend(@Param('pseudoFriend') pseudoFriend: string, @Req() req)
+    async isFriend(@Param('pseudoFriend') pseudoFriend: string, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {

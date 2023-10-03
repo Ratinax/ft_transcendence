@@ -9,6 +9,9 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
  * - password: string
  * - profilPic: string
  * - is42User : Boolean
+ * - doubleFa: Boolean
+ * - doubleFaAscii: string
+ * - doubleFaURL: string
  */
 @Entity()
 export class Users {
@@ -31,7 +34,7 @@ export class Users {
     doubleFa: Boolean;
 
     @Column({name: 'double_fa_ascii', type: 'varchar', default: ''})
-    doubleFaAscii: String;
+    doubleFaAscii: string;
 
     @Column({name: 'double_fa_url', type: 'varchar', default: ''})
     doubleFaURL: String;

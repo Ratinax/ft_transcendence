@@ -9,7 +9,7 @@ export class MessageService {
         private messageRepository: Repository<Messages>,
     ) {}
 
-    async findMessageFromChannel(channelName, listUserBlocked, user_id)
+    async findMessageFromChannel(channelName: string, listUserBlocked: Array<number>, user_id: number)
     {
         let removeBlockString = '';
         if (listUserBlocked.length > 0)

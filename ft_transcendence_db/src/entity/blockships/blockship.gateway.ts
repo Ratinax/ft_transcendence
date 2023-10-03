@@ -18,13 +18,6 @@ export class BlockshipGateway {
     constructor(private readonly blockshipService: BlockshipService, private readonly sessionService: SessionService) {
     }
 
-    /**
-     * remove blockship
-     * 
-     * @param body sessionCookie of user making request and user blocked
-     * @emits deleteBlockship {sessionCookie}
-     * @returns true || null || 'not connected'
-     */
     @SubscribeMessage('removeBlockship')
     async refuseBlockship(@MessageBody() body: {sessionCookie: string, userblocked_id: number}) 
     {
