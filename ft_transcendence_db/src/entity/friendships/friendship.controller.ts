@@ -16,6 +16,8 @@ export class FriendshipController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        if (!user)
+            return (null);
         return (await this.friendshipService.findFriendOfId(user.id));
     }
 
@@ -27,6 +29,8 @@ export class FriendshipController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        if (!user)
+            return (null);
         return (await this.friendshipService.findPending(user.id));
     }
     @Post('ask')
@@ -45,7 +49,7 @@ export class FriendshipController {
         }
         catch (e)
         {
-            return (e);
+            return (null);
         }
     }
     @Post('remove')

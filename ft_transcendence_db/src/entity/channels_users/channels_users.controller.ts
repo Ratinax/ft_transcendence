@@ -15,6 +15,8 @@ export class ChannelsUsersController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        if (!user)
+            return (null);
         const res = await this.channelsUsersService.findRelation(user.id, channelId);
         if (!res || !res[0])
             return (null);
@@ -35,6 +37,8 @@ export class ChannelsUsersController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        if (!user)
+            return (null);
         const res = (await this.channelsUsersService.findRelation(user.id, channelId))[0];
         if (!res.isOwner)
             return (false);
@@ -50,6 +54,8 @@ export class ChannelsUsersController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        if (!user)
+            return (null);
         const res = (await this.channelsUsersService.findRelation(user.id, body.channel.channel_id))[0];
         if (!res.isOwner)
             return (false);

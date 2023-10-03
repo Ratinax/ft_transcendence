@@ -43,6 +43,9 @@ export class ChannelService {
         if (password.length > 20 || password.length < 3)
             throw new InternalServerErrorException('Password not good length');
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
+        if (!relation)
+            throw new InternalServerErrorException('Mo such channel');
+
         const passwordHashed = await this.hashedPassword(password);
 
         relation.category = 'Protected by password';
@@ -61,6 +64,8 @@ export class ChannelService {
         if (password.length > 20 || password.length < 3)
             throw new InternalServerErrorException('Password not good length');
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
+        if (!relation)
+            throw new InternalServerErrorException('Mo such channel');
         const passwordHashed = await this.hashedPassword(password);
 
         relation.category = 'Protected by password';
@@ -75,11 +80,11 @@ export class ChannelService {
     async toPublic(channel_id: number)
     {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
-        console.log(relation)
+        if (!relation)
+            throw new InternalServerErrorException('Mo such channel');
         relation.category = 'Public';
         relation.password = '';
         const res = await this.channelRepository.save(relation);
-        console.log(res)
         return ({isADm: res.isADm,
             name: res.name,
             category: res.category,
@@ -90,6 +95,8 @@ export class ChannelService {
     {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
 
+        if (!relation)
+            throw new InternalServerErrorException('Mo such channel');
         relation.category = 'Private';
         relation.password = '';
 
@@ -103,7 +110,8 @@ export class ChannelService {
     async removeChan(channel_id: number)
     {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
-
+        if (!relation)
+            throw new InternalServerErrorException('Mo such channel');
         const res = await this.channelRepository.remove(relation);
         return (res);
     }

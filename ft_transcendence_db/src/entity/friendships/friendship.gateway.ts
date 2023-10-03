@@ -26,6 +26,8 @@ export class FriendshipGateway {
         return ('not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
+      if (!user)
+        return (null);
       await this.friendshipService.acceptFriendship(user.id, body.friend_id);
       this.server.emit('acceptFriendship', {sessionCookie: body.sessionCookie});
     }
@@ -38,6 +40,8 @@ export class FriendshipGateway {
         return ('not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
+      if (!user)
+        return (null);
       try
       {
         await this.friendshipService.deleteFriendship(body.friend_id, user.id);

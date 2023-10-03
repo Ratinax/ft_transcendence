@@ -54,7 +54,8 @@ export class SessionService{
     async getSessionKey(user_id: number)
     {
         const relation = await this.sessionRepository.findOne({where: {user: {id: user_id}}})
-        
+        if (!relation)
+            return ('');
         return (relation.sessionKey);
     }
 

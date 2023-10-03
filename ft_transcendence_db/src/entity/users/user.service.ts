@@ -38,6 +38,8 @@ export class UserService {
         };
         const newUser = this.userRepository.create(user);
         const res = await this.userRepository.save(newUser);
+        if (!res)
+            return ({pseudo: '', profilPic: '', id: -1});
         return ({
             pseudo: res.pseudo,
             profilPic: res.profilPic,
@@ -69,7 +71,8 @@ export class UserService {
         {
             const newUser = this.userRepository.create(user);
             const res = await this.userRepository.save(newUser);
-            
+            if (!res)
+                return ({pseudo: '', profilPic: '', id: -1});
             return ({user: {
                 pseudo: res.pseudo,
                 profilPic: res.profilPic,
@@ -79,7 +82,7 @@ export class UserService {
         else if (userFrom42)
         {
             userFrom42.profilPic = user.profilPic;
-            const res = await this.userRepository.save(userFrom42);
+            await this.userRepository.save(userFrom42);
             if (userFrom42.doubleFa)
             {
                 return ({user: {
@@ -95,7 +98,7 @@ export class UserService {
     {
         try
         {
-            const	token = await axios({
+            const token = await axios({
                 method: 'post',
                 url: `https://api.intra.42.fr/oauth/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${process.env.REDIRECT_URI}&grant_type=authorization_code&code=${code}`,
             })
@@ -222,6 +225,8 @@ export class UserService {
         const user = await this.userRepository.createQueryBuilder('users')
         .where('pseudo = :pseudo', { pseudo: pseudo })
             .getMany();
+        if (!user[0])
+            return (null);
         return (user[0].doubleFaAscii);
     }
 }

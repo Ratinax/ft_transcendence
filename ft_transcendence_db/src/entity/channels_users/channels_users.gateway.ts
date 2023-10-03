@@ -151,30 +151,34 @@ export class ChannelsUsersGateway {
   async checkUserAdminPerms(sessionCookie: string, channel_id: number)
   {
     const user = await this.sessionService.getUser(sessionCookie);
+    if (!user)
+      return (false);
     const relation = (await this.channelsUsersService.findRelation(user.id, channel_id))[0];
-    if (!relation.isAdmin)
+    if (!relation || !relation.isAdmin)
       return (false);
     return (true);
   }
   async checkUserOwnerPerms(sessionCookie: string, channel_id: number)
   {
     const user = await this.sessionService.getUser(sessionCookie);
+    if (!user)
+      return (false);
     const relation = (await this.channelsUsersService.findRelation(user.id, channel_id))[0];
-    if (!relation.isOwner)
+    if (!relation || !relation.isOwner)
       return (false);
     return (true);
   }
   async checkAdminPerms(user_id: number, channel_id: number)
   {
     const relation = (await this.channelsUsersService.findRelation(user_id, channel_id))[0];
-    if (!relation.isAdmin)
+    if (!relation || !relation.isAdmin)
       return (false);
     return (true);
   }
   async checkOwnerPerms(user_id: number, channel_id: number)
   {
     const relation = (await this.channelsUsersService.findRelation(user_id, channel_id))[0];
-    if (!relation.isOwner)
+    if (!relation || !relation.isOwner)
       return (false);
     return (true);
   }

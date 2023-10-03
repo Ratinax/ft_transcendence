@@ -30,10 +30,12 @@ export class MessagesGateway {
         return ('not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
-      
+      if (!user)
+        return ('not connected');
+
       const relation = (await this.channelsUsersService.findRelation(user.id, body.channel_id))[0];
       if (!relation)
-        throw new InternalServerErrorException('no such relation');
+        return ('no such relation');
 
       if (relation.channel.isADm && !(await this.isBlockedRelation(relation)))
       {
@@ -52,7 +54,7 @@ export class MessagesGateway {
         return 'user timeout';
       }
 
-      const response = await this.messagesService.post({
+      await this.messagesService.post({
         content: body.message,
         dateSent: body.dateSent,
         channel: {channel_id: body.channel_id},
@@ -64,8 +66,6 @@ export class MessagesGateway {
       
       this.server.emit('updateMessage', {channel_id: body.channel_id});
       this.server.emit('sendMessageGoodRequest', {channel_id: body.channel_id, sessionCookie: body.sessionCookie});
-
-      return response;
   }
   async unHide(user_id: number, channel: Partial<Channels>)
   {
@@ -82,6 +82,8 @@ export class MessagesGateway {
   async isBlockedRelation(relation: {channel: Partial<Channels>})
   {
     const users = await this.channelsUsersService.findUsersOfChannel(relation.channel.name);
+    if (!users)
+      return (false);
     const result = await this.blockshipService.getIsBlocked(users[0].id, users[1].id);
     const result2 = await this.blockshipService.getIsBlocked(users[1].id, users[0].id);
     if (result || result2)

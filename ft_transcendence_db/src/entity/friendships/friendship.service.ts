@@ -82,7 +82,7 @@ export class FriendshipService {
     }
     async askFriend(friend_id: number, user_id: number)
     {
-        let friendship:Partial<Friendships> = {statu: 'pending', user: {id: user_id}, friend: {id: friend_id}};
+        let friendship = {statu: 'pending', user: {id: user_id}, friend: {id: friend_id}};
         const newFriendship = await this.friendshipRepository.create(friendship);
         const res = await this.friendshipRepository.save(newFriendship);
         return (res);

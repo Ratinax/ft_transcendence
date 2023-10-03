@@ -23,7 +23,7 @@ export class GameService {
         .getMany();
         const count_games = games.length;
         let count_win = 0;
-        for (let i = 0; i < games.length; i++)
+        for (let i = 0; i < count_games; i++)
         {
             if (games[i].playerOne.id === user_id && games[i].scorePOne > games[i].scorePTwo)
                 count_win++;

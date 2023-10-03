@@ -26,6 +26,8 @@ export class GameController {
             return (null);
         }
         const user = (await this.userService.getUser(pseudo))[0];
+        if (!user)
+            return (null);
         return (await this.gameService.getGamesAndWins(user.id))
     }
     @Get('match-history')
@@ -36,6 +38,8 @@ export class GameController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        if (!user)
+            return (null);
         return (await this.gameService.getGames(user.id))
     }
     @Get('match-history/:pseudo')
@@ -58,6 +62,8 @@ export class GameController {
             return (null);
         }
         const user = (await this.userService.getUser(pseudo))[0];
+        if (!user)
+            return (null);
         return (await this.gameService.getGamesAndWins(user.id))
     }
 }

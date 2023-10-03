@@ -21,7 +21,11 @@ export class UserController {
         if (!regex.test(body.pseudo))
             throw new InternalServerErrorException('Login should only contains A-Z, a-z, 0-9, and \'._\'');
         const user = await this.userService.signUp(body);
+        if (!user)
+            throw new InternalServerErrorException('Couldn\'t register you');
         const session = await this.sessionService.createSession(user.id);
+        if (!session)
+            throw new InternalServerErrorException('User created but could\'nt sign you in');
         res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         return (true);
     }
@@ -42,6 +46,8 @@ export class UserController {
         if (!uri)
         {
             const session = await this.sessionService.createSession(user.id);
+            if (!session)
+                throw new InternalServerErrorException('Couldn\'t sign you in');
             res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
             return (true);
         }
@@ -56,6 +62,8 @@ export class UserController {
         if (token && token.data)
 		{
             const infos = await this.userService.getMyInfos(token.data.access_token);
+            if (!infos)
+                throw new InternalServerErrorException('Couldn\'t log you in');
             const result = await this.userService.login42({pseudo: infos.data.login, profilPic: infos.data.image.link});
             if (!result)
                 throw new InternalServerErrorException('There\'s allready a user with that username');
@@ -65,6 +73,8 @@ export class UserController {
             {
 
                 const session = await this.sessionService.createSession(user.id);
+                if (!infos)
+                    throw new InternalServerErrorException('Couldn\'t log you in');
                 res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
                 // res.cookie('42_TOKEN', token.data.access_token, {httpOnly: true, expires: new Date(Date.now() + token.data.expires_in * 1000)});
                 // res.cookie('42_REFRESH', token.data.refresh_token, {httpOnly: true, maxAge: 1000000000}); // TODO check if we indeed remove that
@@ -87,34 +97,6 @@ export class UserController {
         return (true);
     }
 
-    @Get('image-pseudo')
-    async getImagePseudo(@Req() req: Request)
-    {
-        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
-        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        let pp;
-        if (user.is42User)
-            pp = user.profilPic;
-        else
-            pp = `http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`;
-        return ({ProfilPic: pp, pseudo: user.pseudo});
-    }
-
-    @Get('imageName')
-    async getImageName(@Req() req: Request)
-    {
-        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
-        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        if (user.is42User)
-            return (user.profilPic);
-        return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
-    }
     @Get('imageNameByPseudo/:pseudo')
     async getImageNamePseudo(@Param('pseudo') pseudo, @Req() req: Request)
     {
@@ -123,6 +105,8 @@ export class UserController {
             return (null);
         }
         const user = (await this.userService.getUser(pseudo))[0];
+        if (!user)
+            return ('');
         if (user.is42User)
         {
             return (user.profilPic);
@@ -137,31 +121,11 @@ export class UserController {
             return (null);
         }
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
+        if (!user)
+            return ('');
         return (user.pseudo);
     }
 
-    @Get('/images/:imageName')
-    async getImage(@Param('imageName') imageName: string, @Req() req: Request, @Res() res: Response) 
-    {
-        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
-        const users = await this.userService.getUsers('');
-        for (let i = 0; i < users.length; i++)
-        {
-            if (users[i].profilPic === imageName)
-            {
-                if (users[i].is42User)
-                {
-                    return (res.sendFile(imageName));
-                }
-                break ;
-            }
-        }
-        let imagePath = path.join(__dirname, '../../../', 'images', imageName);
-        return (res.sendFile(imagePath));
-    }
     @Get('users/:pseudoPart')
     async getUsers(@Param('pseudoPart') pseudoPart: string)
     {
@@ -178,6 +142,8 @@ export class UserController {
             return (null);
         }
         const user = (await this.userService.getUser(pseudo))[0];
+        if (!user)
+            return (false);
         return (user.doubleFa);
     }
     @Post('change2fa')
@@ -188,6 +154,8 @@ export class UserController {
             return (null);
         }
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
+        if (!user)
+            throw new InternalServerErrorException('Couldn\'t get user');
         const res = await this.userService.change2fa(user.id);
         if (!res)
             throw new InternalServerErrorException('Couldn\'t get user');
@@ -200,6 +168,8 @@ export class UserController {
             return ('false cause no more cookie');
         const ascii = await this.userService.getUserAscii2fa(req.cookies['2FAKEY']);
         const user = (await this.userService.getUser(req.cookies['2FAKEY']))[0];
+        if (!user)
+            return ('false cause no more cookie');
         const result = speakeasy.totp.verify({
             secret: ascii,
             encoding: 'ascii',
@@ -208,6 +178,8 @@ export class UserController {
         if (result === true)
         {
             const session = await this.sessionService.createSession(user.id);
+            if (!session)
+                return ('false cause no more cookie');
             res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
         }
         return (result);
@@ -228,6 +200,8 @@ export class UserController {
             return (null);
         }
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
+        if (!user)
+            return (null);
         return (user.doubleFaURL); 
     }
     

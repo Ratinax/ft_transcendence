@@ -16,6 +16,8 @@ export class MessageController {
             return (null);
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        if (!user)
+            return (null);
         const listUserBlocked = await this.blockshipService.findUserblockedFromId(user.id);
         let listUserBlockedId = [];
         for (let i = 0; i < listUserBlocked.length; i++)

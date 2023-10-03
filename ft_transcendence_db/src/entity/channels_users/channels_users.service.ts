@@ -98,6 +98,10 @@ export class ChannelsUsersService {
             relation.isHide = true;
             res = await this.channelsUsersRepository.save(relation);
         }
+        else if (!relation)
+        {
+            return (null);
+        }
         const channels = await this.findUsersOfChannel(relation.channel.name);
         if (channels.length === 0)
             return ('Empty');
@@ -148,6 +152,8 @@ export class ChannelsUsersService {
                 channel_id: channel.channel_id,
             }
             }});
+        if (!relation)
+            return (null);
         relation.dateTimeout = new Date(this.getCurrentDate());
         relation.durationTimeout = duration;
         return (this.channelsUsersRepository.save(relation));
@@ -155,6 +161,8 @@ export class ChannelsUsersService {
     async unHide(user_id: number, channel_id: number)
     {
         const relation = (await this.findRelation(user_id, channel_id))[0];
+        if (!relation)
+            return (null);
         relation.isHide = false;
         return (await this.channelsUsersRepository.save(relation));
     }
