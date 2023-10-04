@@ -1,4 +1,5 @@
 <template>
+	<div class="page-background"></div>
 	<Menu/>
 	<div class="view col relations-page" @click.self="closeSearchUser">
 		<div class="col search-container">
@@ -18,7 +19,7 @@
 				<p v-if="showErrorMessage" class="relations-search-error-message">{{ searchErrorMessage }}</p>
 			</Transition>
 		</div>
-		<div class="row list-users">
+		<div class="list-users">
 			<ListUsers :is-friend-list="true" 
 				:headerText="'Friend list'" 
 				ref="friendList" 
@@ -209,11 +210,13 @@ export default defineComponent({
 }
 
 .list-users {
+	display: flex;
 	width: 100%;
 	max-width: 1600px;
+	margin: 2em auto;
 }
 
-.view {
+.page-background {
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
 }
 

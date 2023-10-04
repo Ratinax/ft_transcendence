@@ -96,6 +96,7 @@ export default {
 	position: fixed;
 	background-color: var(--pdark);
 	transition: width 142ms ease;
+	z-index: 999;
 }
 
 .navbar-nav {

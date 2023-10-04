@@ -20,10 +20,17 @@ p {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.view {
-	min-width: 360px;
+.page-background {
+	position: fixed;
 	height: 100vh;
-	box-sizing: border-box;
+	width: 100%;
+	z-index: 1;
+}
+
+.view {
+	position: relative;
+	min-width: 360px;
+	z-index: 2;
 }
 
 input {
@@ -102,6 +109,6 @@ input:focus {
 }
 
 ::-webkit-scrollbar {
-	width: .3em;
+	width: 0;
 }
 

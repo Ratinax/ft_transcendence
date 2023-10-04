@@ -63,7 +63,7 @@ export default defineComponent({
 	width: 95%;
 	align-items: center;
 	transition: background 200ms ease;
-	padding: .5em .742em;
+	padding: .42em;
 	border-radius: .5em;
 }
 
@@ -88,7 +88,6 @@ export default defineComponent({
 .user-pseudo {
 	font-size: 1.3em;
 	margin-left: 1em;
-	/* width: 50%; */
 	transition: color 150ms ease;
 	overflow: hidden;
 	text-overflow: ellipsis;
