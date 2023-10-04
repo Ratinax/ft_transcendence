@@ -2,7 +2,7 @@
 	<div class="row match-score">
 		<div class="row user-score">
 			<div class="col">
-				<div class="profile-pic-container">
+				<div class="profile-pic-container" @click="goToUserPage(playerOne?.pseudo)">
 					<img :src="playerOne?.profilPic" :alt="playerOne?.pseudo">
 				</div>
 				<span class="text user-pseudo" @click="goToUserPage(playerOne?.pseudo)">{{ playerOne?.pseudo }}</span>
@@ -19,7 +19,7 @@
 			<font-awesome-icon v-if="!userOneWin" class="win left" icon="fa-solid fa-w" size="xl" />
 			<font-awesome-icon v-else class="loss left" icon="fa-solid fa-l" size="xl" />
 			<div class="col">
-				<div class="profile-pic-container">
+				<div class="profile-pic-container" @click="goToUserPage(playerTwo?.pseudo)">
 					<img :src="playerTwo?.profilPic" :alt="playerTwo?.pseudo">
 				</div>
 				<span class="text user-pseudo" @click="goToUserPage(playerTwo?.pseudo)">{{ playerTwo?.pseudo }}</span>
@@ -77,6 +77,15 @@ export default defineComponent({
 
 <style scoped>
 
+.profile-pic-container
+{
+	cursor: pointer;
+}
+
+.profile-pic-container:hover + .user-pseudo
+{
+	color: var(--pcyan);
+}
 .match-score {
 	padding: .742em;
 	border-radius: .5em;
@@ -109,11 +118,11 @@ export default defineComponent({
 .user-pseudo {
 	margin-top: .25em;
 	transition: color .1s ease;
+	cursor: pointer;
 }
 
 .user-pseudo:hover {
 	color: var(--pcyan);
-	cursor: pointer;
 }
 
 .win {
