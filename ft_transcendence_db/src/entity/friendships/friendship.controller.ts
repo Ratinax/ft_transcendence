@@ -45,7 +45,7 @@ export class FriendshipController {
         try
         {
             const res = await this.friendshipService.askFriend(friend.id, user.id);
-            return ('pending')
+            return (res.statu);
         }
         catch (e)
         {

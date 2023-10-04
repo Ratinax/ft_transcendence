@@ -82,9 +82,29 @@ export class FriendshipService {
     }
     async askFriend(friend_id: number, user_id: number)
     {
-        let friendship = {statu: 'pending', user: {id: user_id}, friend: {id: friend_id}};
-        const newFriendship = await this.friendshipRepository.create(friendship);
-        const res = await this.friendshipRepository.save(newFriendship);
+        let friendshipAllready = await this.friendshipRepository.findOne({
+            where: { user: { id: user_id }, friend: { id: friend_id } },
+            });
+        let friendshipAllready2 = await this.friendshipRepository.findOne({
+            where: { user: { id: friend_id }, friend: { id: user_id } },
+            });
+        let res;
+        if (friendshipAllready)
+        {
+            friendshipAllready.statu = 'accepted';
+            res = await this.friendshipRepository.save(friendshipAllready);
+        }
+        else if (friendshipAllready2)
+        {
+            friendshipAllready2.statu = 'accepted';
+            res = await this.friendshipRepository.save(friendshipAllready2);
+        }
+        else
+        {
+            let friendship = {statu: 'pending', user: {id: user_id}, friend: {id: friend_id}};
+            const newFriendship = await this.friendshipRepository.create(friendship);
+            res = await this.friendshipRepository.save(newFriendship);
+        }
         return (res);
     }
     async getFriendRelation(friend_id: number, user_id: number)
