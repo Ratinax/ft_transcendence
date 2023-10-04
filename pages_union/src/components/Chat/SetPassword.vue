@@ -1,6 +1,6 @@
 <template>
-	<div @click.self="close" class="modal-overlay" v-if="show">
-		<div class="modal">
+	<div @click.self="close" class="pop-up-overlay" v-if="show">
+		<div class="pop-up">
 			<form class="input-container" @submit.prevent="setPassword">
 				<div class="buttons">
 					

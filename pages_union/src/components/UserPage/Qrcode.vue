@@ -1,6 +1,6 @@
 <template>
-    <div v-if="show" @click.self="close" class="modal-overlay">
-        <div class="modal">
+    <div v-if="show" @click.self="close" class="pop-up-overlay">
+        <div class="pop-up">
             <img :src="qrlink"/>
         </div>
     </div>
@@ -46,7 +46,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.modal
+.pop-up
 {
     display: flex;
     justify-content: center;

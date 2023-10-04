@@ -1,6 +1,6 @@
 <template>
-	<div @click.self="close" class="modal-overlay" v-if="show">
-		<div class="modal input-container">
+	<div @click.self="close" class="pop-up-overlay" v-if="show">
+		<div class="pop-up input-container">
 			<input v-model="channelName" placeholder="Channel name"/>
 			<div class="radio-container">
 				<div v-for="category in categories" :key="category.id" class="radio-item">
