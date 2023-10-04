@@ -90,6 +90,7 @@ export default defineComponent({
 
 .list-users-relations {
 	background: rgba(0, 0, 0, 0.4);
+	box-shadow: rgba(50, 50, 50, 0.25) 0px 13px 27px -5px, rgba(50, 50, 50, 0.3) 0px 8px 16px -8px;
 
 	border-radius: 1em;
 	margin: 1em;
