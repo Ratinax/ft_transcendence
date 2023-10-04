@@ -51,7 +51,7 @@ export class UserService {
         let userFound = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
         if (!userFound)
             return (false);
-        if (!this.comparePasswords(userFound, user.password))
+        if (!await this.comparePasswords(userFound, user.password))
             return ('Wrong password');
         if (userFound.doubleFa)
         {
