@@ -29,7 +29,7 @@ export default {
 <style src="./assets/global.css" rel="stylesheet" lang="css"></style>
 
 <style>
-.modal
+.pop-up
 {
 	background-color: var(--pdark);
 	padding: 1.5em;
@@ -39,7 +39,7 @@ export default {
 	/* max-width: 20%; */
 }
 
-.modal-overlay 
+.pop-up-overlay 
 {
 	position: fixed;
 	top: 0;

@@ -83,7 +83,8 @@ export default defineComponent({
 		seeQrcode()
 		{
 			this.showQrcode = true;
-			(this.$refs.QrcodeRef as typeof Qrcode).getQrCode();
+			if (this.$refs.QrcodeRef as typeof Qrcode)
+				(this.$refs.QrcodeRef as typeof Qrcode).getQrCode();
 		}
 	},
 	setup() {

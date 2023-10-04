@@ -119,8 +119,9 @@ export class FriendshipService {
             throw new Error('no such friendship.');
         if (friendship)
             return (friendship.statu);
-        if (friendship2)
+        if (friendship2 && friendship2.statu !== 'pending')
             return (friendship2.statu);
+        return ('');
     }
     async clearFriendship(user_id: number, friend_id: number)
     {

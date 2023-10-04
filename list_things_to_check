@@ -23,7 +23,10 @@ Chat :
 			- 3 categories
 		- Modifier:
 			- Passer de chaque category a chaque
-		- Quitter
+		- Quitter:
+			- En etant owner
+			- Classique
+			- Puis revenir alors que channel etait vide
 		- Join:
 			- Bon channel bon mdp
 			- Channel private

@@ -1,6 +1,6 @@
 <template>
-	<div @click.self="close" class="modal-overlay" v-if="show">
-		<div class="modal">
+	<div @click.self="close" class="pop-up-overlay" v-if="show">
+		<div class="pop-up">
 			<form class="input-container" @submit.prevent="joinAChannel">
 				<input v-model="channelName" placeholder="Channel name"/>
 				<input v-model="password" placeholder="Password (Optionnal)" type="password"/>

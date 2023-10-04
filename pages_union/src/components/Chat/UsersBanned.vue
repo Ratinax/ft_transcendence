@@ -1,6 +1,6 @@
 <template>
-    <div v-if="show" @click.self="close" class="modal-overlay">
-      <div class="modal list-users-banned">
+    <div v-if="show" @click.self="close" class="pop-up-overlay">
+      <div class="pop-up list-users-banned">
           <div class="all-user" v-for="user in listUsersBanned" :key="user.id">
             <div class="user-banned" @click="goToProfil(user)">
                 <div class="circle">
