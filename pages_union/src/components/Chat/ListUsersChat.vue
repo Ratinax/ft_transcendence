@@ -12,7 +12,7 @@
 				:channel="channel" 
 				@user-clicked="handleUserClicked"
 				@close-options="handleCleanUSerOpt"/>
-			<div v-if="userInChannel && userInChannel?.isOwner">
+			<div v-if="userInChannel && userInChannel?.isOwner" class="chat-ban-button-zone">
 				<form class="buttons" @submit.prevent="showBannedList">
 					<button class="ft-button blue-button ban-list" type="submit">Ban List</button>
 				</form>
@@ -123,7 +123,7 @@ export default defineComponent({
 .list-users-chat {
 	align-items: center;
 
-	background: linear-gradient(var(--pblack), var(--pdark));
+	background: var(--pdark);
 
 	padding: 1em;
 	margin-left: .7em;
@@ -137,6 +137,10 @@ export default defineComponent({
 .ban-list
 {
 	font-size: 1em;
+}
+
+.chat-ban-button-zone {
+	margin-top: 1em;
 }
 
 </style>

@@ -139,7 +139,7 @@ export default defineComponent({
 
 .channel-list {
 	margin-right: 1em;
-	background: linear-gradient(var(--pblack), var(--pdark));
+	background: var(--pdark);
 	padding: 1em;
 	border-radius: 1em;
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;

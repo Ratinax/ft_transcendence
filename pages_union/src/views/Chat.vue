@@ -1,5 +1,6 @@
 <template>
 	<Menu />
+	<div class="page-background"></div>
 	<div class="row chat-page view">
 		<div class="row chat-container">
 			<div>
@@ -149,13 +150,17 @@ export default defineComponent({
 
 <style>
 
-.chat-page {
-	background: var(--pdark);
-	height: 100vh;
+
+.page-background {
+	background: linear-gradient(45deg, var(--pblack), var(--pdark));
 }
 
 .chat-container {
 	margin: 2em 1em;
+}
+
+.chat-page {
+	height: 100vh;
 }
 
 .messageszone {

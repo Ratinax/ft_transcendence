@@ -31,6 +31,11 @@
 						@click="leaveChannel" 
 						icon="fa-solid fa-xmark" />
 				</div>
+					<font-awesome-icon
+						v-if="!isSelected"
+						class="icon cross crosshover"
+						@click="leaveChannel" 
+						icon="fa-solid fa-xmark" />
 			</div>
 		</div>
 	</div>
@@ -255,19 +260,27 @@ export default defineComponent({
 
 .channel-name {
 	margin-left: .2em;
-	width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
 .option {
-	margin-left: .2em;
+	margin-left: auto;
 	display: flex;
 	align-items: center;
 }
 
 .cross:hover {
 	color: red;
+}
+
+.channel:hover .crosshover {
+	display: block;
+}
+
+.crosshover {
+	margin-left: auto;
+	display: none;
 }
 
 .setting.is-owner:hover {
