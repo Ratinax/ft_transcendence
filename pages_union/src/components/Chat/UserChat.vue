@@ -5,8 +5,7 @@
 				:class="{'green': userInChat?.isConnected, 'red': !userInChat?.isConnected}" />
 			<span id="user-pseudo" 
 				:class="{'admin': userInChat?.isAdmin, 
-					'owner': userInChat?.isOwner, 
-					'selection-color' : isSelected}" 
+					'owner': userInChat?.isOwner}" 
 				@click="handleUserClicked">
 				{{ userInChat?.pseudo }}
 			</span>

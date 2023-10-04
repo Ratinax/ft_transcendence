@@ -1,8 +1,6 @@
 <template>
 	<div v-if="!channel?.isHide">
-		<div 
-			:class="{'selection-color' : isSelected}"
-			@click="handleChannelClicked">
+		<div @click="handleChannelClicked">
 			<div class="channel">
 				<font-awesome-icon v-if="isUserOwner" class="icon own" icon="fa-solid fa-crown" />
 				<font-awesome-icon v-else class="icon"
@@ -13,8 +11,7 @@
 				</p>
 				<div class="notif-circle" v-if="isNotif"></div>
 				<div class="option" v-if="isSelected">
-					<div v-if="isUserOwner"
-						:class="{'icon': true, 'setting': true, 'private': (isPrivate)}"
+					<div :class="{'icon': true, 'setting': true, 'private': (isPrivate), 'is-owner': isUserOwner}"
 						@click="setShowPasswordPopUp">
 						<font-awesome-icon 
 							v-if="passwordProtected"
@@ -212,7 +209,8 @@ export default defineComponent({
 		},
 		setShowPasswordPopUp()
 		{
-			this.showPasswordPopUp = true;
+			if (this.isUserOwner)
+				this.showPasswordPopUp = true;
 		},
 		closePasswordPopUp()
 		{
@@ -272,7 +270,7 @@ export default defineComponent({
 	color: red;
 }
 
-.setting:hover {
+.setting.is-owner:hover {
 	color: blue;
 }
 
@@ -282,7 +280,7 @@ export default defineComponent({
 	align-items: center;
 }
 
-.cross:hover, .setting:hover {
+.cross:hover, .setting.is-owner:hover {
 	background: var(--plight);
 }
 .private
