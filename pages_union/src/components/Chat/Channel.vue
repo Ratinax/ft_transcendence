@@ -127,7 +127,7 @@ export default defineComponent({
 					if (error.response.data.message === 'Password not good length' && this.$refs.SetPassword)
 						(this.$refs.SetPassword as typeof SetPassword).notGoodLength()
 				}
-				else
+				else if (this.$refs.SetPassword)
 					(this.$refs.SetPassword as typeof SetPassword).servorError()
 
 			}
@@ -159,7 +159,7 @@ export default defineComponent({
 					if (error.response.data.message === 'Password not good length' && this.$refs.SetPassword)
 						(this.$refs.SetPassword as typeof SetPassword).notGoodLength()
 				}
-				else
+				else if (this.$refs.SetPassword)
 					(this.$refs.SetPassword as typeof SetPassword).servorError()
 			}
 		},

@@ -90,15 +90,16 @@ export default defineComponent({
 		acceptFriendship()
 		{
 			if (this.$refs.friendList)
-			(this.$refs.friendList as typeof ListUsers).fetchUsers();
+				(this.$refs.friendList as typeof ListUsers).fetchUsers();
 			if (this.$refs.friendRequest)
-
-			(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
+				(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
 		},
 		deleteFriendship()
 		{
-			(this.$refs.friendList as typeof ListUsers).fetchUsers();
-			(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
+			if (this.$refs.friendList)
+				(this.$refs.friendList as typeof ListUsers).fetchUsers();
+			if (this.$refs.friendRequest)
+				(this.$refs.friendRequest as typeof ListUsers).fetchUsers();
 		},
 		async onRemoveRelation(body: {friend_id: number, relationType: string} | {userblocked_id: number, relationType: string})
 		{
@@ -114,14 +115,14 @@ export default defineComponent({
 		deleteBlockship()
 		{
 			if (this.$refs.blockList)
-			(this.$refs.blockList as typeof ListUsers).fetchUsers();
+				(this.$refs.blockList as typeof ListUsers).fetchUsers();
 		},
 		searchUser()
 		{
 			console.log(this.showErrorMessage);
 			console.log(this.searchErrorMessage);
 			if (this.pseudo && this.pseudo.length > 2) {
-				if (this.pseudo.length > 2) {
+				if (this.pseudo.length > 2 && this.$refs.UsersSearched) {
 					(this.$refs.UsersSearched as typeof UsersSearched).searchUsers();
 				}
 			}
