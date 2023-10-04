@@ -132,7 +132,8 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
+
 #user-pseudo {
 	margin-left: .5em;
 	overflow: hidden;
@@ -149,8 +150,8 @@ export default defineComponent({
 
 .user-in-chat {
 	color: white;
-	width: 90%;
-	display: inline-flex;
+	width: 100%;
+	margin-bottom: .25em;
 }
 
 .option-list {

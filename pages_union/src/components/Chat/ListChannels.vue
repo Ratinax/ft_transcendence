@@ -1,6 +1,6 @@
 <template>
-	<div class="channel-list" ref="channelsButtons">
-		<div class="channels-buttons">
+	<div class="list-channels-container" ref="channelsButtons">
+		<div class="list-channels">
 			<channel 
 				ref="channelRef"
 				v-for="channel in channels" :key="channel.channel_id" 
@@ -12,35 +12,31 @@
 				@leave-channel="onLeaveChannel"
 				@update-channels="onUpdateChannels"
 			/>
-			<div class="buttons" :class="{'nochannel': channels.length === 0}">
-				<div class="new-channel">
-					<button 
-						class="ft-button blue-button" 
-						@click="showCreateChannel = true">
-						Create Channel
-					</button>
-					<CreateChannel 
-						:show="showCreateChannel"
-						:sessionCookie="sessionCookie"
-						:socket="socket"
-						@close="showCreateChannel = false">
-					</CreateChannel>
-				</div>
-				<div class="join-channel">
-					<button 
-						class="ft-button blue-button" 
-						@click="showJoinChannel = true">
-						Join Channel
-					</button>
-					<JoinChannel 
-						:show="showJoinChannel" 
-						:sessionCookie="sessionCookie" 
-						:socket="socket" 
-						ref='joinChannel'
-						@close="showJoinChannel = false" >
-					</JoinChannel>
-				</div>
-			</div>
+		</div>
+		<div class="buttons" :class="{'nochannel': channels.length === 0}">
+			<button 
+				class="ft-button blue-button" 
+				@click="showCreateChannel = true">
+				Create Channel
+			</button>
+			<CreateChannel 
+				:show="showCreateChannel"
+				:sessionCookie="sessionCookie"
+				:socket="socket"
+				@close="showCreateChannel = false">
+			</CreateChannel>
+			<button 
+				class="ft-button blue-button" 
+				@click="showJoinChannel = true">
+				Join Channel
+			</button>
+			<JoinChannel 
+				:show="showJoinChannel" 
+				:sessionCookie="sessionCookie" 
+				:socket="socket" 
+				ref='joinChannel'
+				@close="showJoinChannel = false" >
+			</JoinChannel>
 		</div>
 	</div>
 </template>
@@ -137,19 +133,26 @@ export default defineComponent({
 
 <style scoped>
 
-.channel-list {
+.list-channels-container {
 	margin-right: 1em;
 	background: var(--pdark);
 	padding: 1em;
 	border-radius: 1em;
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
-	width: 13em;
 	max-height: 97%;
+	width: 15em;
 	overflow: auto;
 }
 
+.list-channels {
+	width: 100%;
+	max-height: 80vh;
+	overflow-y: auto;
+	border-bottom: 1px solid var(--plight);
+}
+
 .buttons {
-	margin-top: 2em;
+	margin-top: 1.42em;
 }
 
 button {

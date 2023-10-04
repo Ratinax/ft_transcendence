@@ -1,30 +1,26 @@
 <template>
-	<div class="users-list">
-		<div v-if="userInChannel !== null" class="list-users-chat">
-			<UserChat class="user-chat" 
-				v-for="userInChat in users" 
-				:sessionCookie="sessionCookie" 
-				:userInChannel="userInChannel" 
-				:key="userInChat.id" 
-				:userInChat="userInChat" 
-				:isSelected="userSelected && userSelected?.id === userInChat.id" 
-				:socket="socket" 
-				:channel="channel" 
-				@user-clicked="handleUserClicked"
-				@close-options="handleCleanUSerOpt"/>
-			<div v-if="userInChannel && userInChannel?.isOwner" class="chat-ban-button-zone">
-				<form class="buttons" @submit.prevent="showBannedList">
-					<button class="ft-button blue-button ban-list" type="submit">Ban List</button>
-				</form>
-			</div>
-		</div>
-		<UsersBanned
+	<div v-if="userInChannel !== null" class="list-users-chat">
+		<UserChat class="chat-users-chat"
+			v-for="userInChat in users" 
+			:sessionCookie="sessionCookie" 
+			:userInChannel="userInChannel" 
+			:key="userInChat.id" 
+			:userInChat="userInChat" 
+			:isSelected="userSelected && userSelected?.id === userInChat.id" 
+			:socket="socket" 
+			:channel="channel" 
+			@user-clicked="handleUserClicked"
+			@close-options="handleCleanUSerOpt"/>
+		<form v-if="userInChannel && userInChannel?.isOwner" class="buttons" @submit.prevent="showBannedList">
+			<button class="ft-button blue-button ban-list" type="submit">Ban List</button>
+		</form>
+	</div>
+	<UsersBanned
 		ref="UsersBanned"
 		:channel="channel"
 		:show="showBannedUsers"
 		@close="showBannedUsers = false">
-		</UsersBanned>
-	</div>
+	</UsersBanned>
 </template>
 
 <script lang="ts">
@@ -80,9 +76,9 @@ export default defineComponent({
 				{ withCredentials: true }, 
 			);
 			if (userPerms.data)
-				this.userInChannel = userPerms.data;
+			this.userInChannel = userPerms.data;
 			else
-				this.userInChannel = null;
+			this.userInChannel = null;
 		},
 		updateListUsers(users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>)
 		{
@@ -97,14 +93,14 @@ export default defineComponent({
 		handleUserClicked(user: {id: number} | undefined)
 		{
 			if (this.userSelected === user)
-				this.userSelected = undefined;
+			this.userSelected = undefined;
 			else
-				this.userSelected = user;
+			this.userSelected = user;
 		},
 		handleCleanUSerOpt(user: {id: number} | undefined)
 		{
 			if (user && user.id === this.userSelected?.id)
-				this.userSelected = undefined;
+			this.userSelected = undefined;
 		},
 		getUserInChannel()
 		{
@@ -119,16 +115,25 @@ export default defineComponent({
 });
 </script>
 
-<style>
-.list-users-chat {
-	align-items: center;
+<style scoped>
 
+.chat-users-chat {
+	width: 100%;
+	text-align: left;
+	max-height: 85vh;
+	overflow-y: auto;
+
+	border-bottom: 1px solid var(--plight);
+}
+
+.list-users-chat {
 	background: var(--pdark);
 
 	padding: 1em;
+	height: fit-content;
 	margin-left: .7em;
 
-	width: 7em;
+	width: 10em;
 
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
 	border-radius: 1em;
@@ -139,8 +144,13 @@ export default defineComponent({
 	font-size: 1em;
 }
 
-.chat-ban-button-zone {
-	margin-top: 1em;
+.buttons {
+	margin-top: 1.42em;
+	width: 100%;
+}
+
+.ft-button {
+	width: 100%;
 }
 
 </style>

@@ -156,6 +156,8 @@ export default defineComponent({
 }
 
 .chat-container {
+	width: 100%;
+	justify-content: center;
 	margin: 2em 1em;
 }
 
