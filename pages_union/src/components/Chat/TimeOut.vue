@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-overlay" v-if="show">
+    <div class="modal-overlay" v-if="show" @click.self="close">
       <div class="modal">
         <div v-if="matrixIndex > 0">
             <p class="error">{{ matrixError[matrixIndex] }}</p>
