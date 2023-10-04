@@ -1,8 +1,9 @@
 <template>
 	<div class="row send-message" v-if="showContent">
 		<form @submit.prevent="sendMessage">
-			<input class="message-input" v-model="messageText" placeholder="Send a message..." v-if="!isUserTimeout"/>
-			<input v-model="messageText" class="timeout-error message-input" :placeholder="'You are timeout for ' + durationTimeoutString" v-else/>
+			<input v-model="messageText" class="message-input-error message-input" :placeholder="'You are timeout for ' + durationTimeoutString" v-if="isUserTimeout"/>
+			<input class="message-input-error message-input" v-model="messageText" placeholder="One of you block this other user" v-else-if="isBlockedBy"/>
+			<input class="message-input" v-model="messageText" placeholder="Send a message..." v-else/>
 		</form>
 		<form @submit.prevent="inviteInGame">
 			<button class="ft-button" type="submit">Invite in game</button>
@@ -21,6 +22,7 @@ export default defineComponent({
 		showContent: Boolean,
 		socket: Socket,
 		channelId: Number,
+		sessionCookie: String,
 	},
 	data()
 	{
@@ -28,7 +30,21 @@ export default defineComponent({
 			messageText: '',
 			isUserTimeout: false,
 			durationTimeoutString: '',
+			isBlockedBy: false,
 		}
+	},
+	mounted()
+	{
+		console.log(this.socket)
+		this.socket?.on('sendMessageBlocked', (response: any) => {
+			if (this.sessionCookie === response.sessionCookie)
+				this.isBlockedBy = true;
+			console.log('lala la', this.isBlockedBy);
+		})
+		this.socket?.on('sendMessageTimeout', async (response: {duration: number, sessionCookie: string}) => {
+			if (this.sessionCookie === response.sessionCookie)
+				this.timeout(response.duration);
+		});
 	},
 	methods:
 	{
@@ -50,12 +66,10 @@ export default defineComponent({
 		{
 			if (this.messageText === '')
 			return ;
-			this.$emit('create-message', {
-				channel_id: this.channelId,
+			this.socket?.emit('createMessage', { channel_id: this.channelId,
 				message: this.messageText,
 				dateSent: this.getCurrentDate(),
-				isAGameInvite: false,
-			})
+				isAGameInvite: false, sessionCookie: this.sessionCookie });
 			this.messageText = '';
 		},
 		timeout(duration: number)
@@ -74,6 +88,7 @@ export default defineComponent({
 		{
 			this.durationTimeoutString = '';
 			this.isUserTimeout = false;
+			this.isBlockedBy = false;
 		},
 		inviteInGame()
 		{
@@ -111,7 +126,7 @@ export default defineComponent({
 	left:0;
 	right: 0;
 }
-.timeout-error::placeholder
+.message-input-error::placeholder
 {
 	color: red;
 }

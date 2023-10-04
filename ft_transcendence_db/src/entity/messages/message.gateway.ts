@@ -37,7 +37,12 @@ export class MessagesGateway {
       if (!relation)
         return ('no such relation');
 
-      if (relation.channel.isADm && !(await this.isBlockedRelation(relation)))
+      if (relation.channel.isADm && await this.isBlockedRelation(relation))
+      {
+        this.server.emit('sendMessageBlocked', {sessionCookie: body.sessionCookie})
+        return ;
+      }
+      else if (relation.channel.isADm && !(await this.isBlockedRelation(relation)))
       {
         this.unHide(user.id, relation.channel);
       }
@@ -50,7 +55,7 @@ export class MessagesGateway {
       
       if (timeoutSeconds + +timeoutDuration > currentSeconds)
       {
-        this.server.emit('sendMessageTimeout', {channel_id: body.channel_id, sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
+        this.server.emit('sendMessageTimeout', {sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
         return 'user timeout';
       }
 

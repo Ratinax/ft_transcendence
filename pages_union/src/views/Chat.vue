@@ -14,11 +14,12 @@
 			<div class= "messageszone">
 				<Messages ref="messages" />
 				<SendMessage
+					v-if="socket && sessionCookie"
 					ref="sendMessage"
 					:showContent="!!selectedChannel?.channel_id"
 					:channelId="selectedChannel?.channel_id"
 					:socket="socket"
-					@create-message="createMessage" />
+					:sessionCookie="sessionCookie"/>
 			</div>
 			<ListUsersChat 
 				ref="listUsersChat" 
@@ -90,13 +91,9 @@ export default defineComponent({
 				this.updateListUsers(response.users);
 			}
 		});
-		this.socket.on('sendMessageTimeout', async (response: {channel_id: number, duration: number, sessionCookie: string}) => {
-			if (this.selectedChannel?.channel_id === response.channel_id && this.sessionCookie === response.sessionCookie)
-			this.sendMessageTimeout(response.duration);
-		});
 		this.socket.on('sendMessageGoodRequest', async (response: {channel_id: number, sessionCookie: string}) => {
 			this.sendMessageGoodRequest();
-			this.updateListChannels(this.selectedChannel);
+			this.updateMessages();
 			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
 				(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
 		});
@@ -125,9 +122,7 @@ export default defineComponent({
 			this.findUsersOfChannel();
 			this.updateMessages();
 		},
-		async createMessage(content: {channel_id: number, message: string, dateSent: Date, isAGameInvite: boolean}) {
-			this.socket?.emit('createMessage', { ...content, sessionCookie: this.sessionCookie });
-		},
+
 		async findUsersOfChannel() {
 			this.socket?.emit('findUsersOfChannel', { channel: this.selectedChannel, sessionCookie: this.sessionCookie });
 		},
@@ -141,10 +136,6 @@ export default defineComponent({
 		},
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
-		},
-		sendMessageTimeout(duration: number) {
-			if (this.$refs.sendMessage)
-				(this.$refs.sendMessage as typeof SendMessage).timeout(duration);
 		},
 		sendMessageGoodRequest() {
 			if (this.$refs.sendMessage)
