@@ -2,7 +2,7 @@
 	<div class="row send-message" v-if="showContent">
 		<form @submit.prevent="sendMessage">
 			<input v-model="messageText" class="message-input-error message-input" :placeholder="'You are timeout for ' + durationTimeoutString" v-if="isUserTimeout"/>
-			<input class="message-input-error message-input" v-model="messageText" placeholder="One of you block this other user" v-else-if="isBlockedBy"/>
+			<input class="message-input-error message-input" v-model="messageText" placeholder="One of you block the other one" v-else-if="isBlockedBy"/>
 			<input class="message-input" v-model="messageText" placeholder="Send a message..." v-else/>
 		</form>
 		<form @submit.prevent="inviteInGame">
@@ -84,7 +84,7 @@ export default defineComponent({
 			const seconds = Math.floor(duration);
 			this.durationTimeoutString = `${days} d, ${hours} h, ${minutes} min and ${seconds} sec`;
 		},
-		goodRequest()
+		refreshBar()
 		{
 			this.durationTimeoutString = '';
 			this.isUserTimeout = false;

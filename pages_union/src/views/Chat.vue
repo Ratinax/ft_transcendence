@@ -92,7 +92,7 @@ export default defineComponent({
 			}
 		});
 		this.socket.on('sendMessageGoodRequest', async (response: {channel_id: number, sessionCookie: string}) => {
-			this.sendMessageGoodRequest();
+			this.refreshSendMessageBar();
 			this.updateMessages();
 			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
 				(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
@@ -121,6 +121,7 @@ export default defineComponent({
 			this.selectedChannel = channel;
 			this.findUsersOfChannel();
 			this.updateMessages();
+			this.refreshSendMessageBar();
 		},
 
 		async findUsersOfChannel() {
@@ -137,9 +138,9 @@ export default defineComponent({
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
 		},
-		sendMessageGoodRequest() {
+		refreshSendMessageBar() {
 			if (this.$refs.sendMessage)
-				(this.$refs.sendMessage as typeof SendMessage).goodRequest();
+				(this.$refs.sendMessage as typeof SendMessage).refreshBar();
 		},
 	}
 });
