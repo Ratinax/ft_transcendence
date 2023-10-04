@@ -3,6 +3,9 @@
 	<Qrcode ref="QrcodeRef" :show="showQrcode" @close="showQrcode = false"/>
 	<div class="row user-page view">
 		<div class="col user-page-content">
+			<div v-if="isBlockedBy" id="blocked-from-message">
+				<p> <font-awesome-icon :icon="['fas', 'triangle-exclamation']" /> You are Blocked By that user </p>
+			</div>
 			<div class="col user-box">
 				<div class="row user-profile">
 					<div class="col user-profile-pic-and-name">
@@ -35,8 +38,8 @@
 				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button red-button" @click="blockUser">BLOCK USER</button>
 				<button v-if="showButtons && !isBlocked && isFriend === 'accepted'" class="ft-button green-button" @click="removeFriend">REMOVE FRIEND</button>
 				<button v-if="showButtons && !isBlocked && isFriend === 'pending'" class="ft-button green-button" @click="removeFriend">REMOVE FRIEND REQUEST</button>
-				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button green-button" @click="addFriend">ADD FRIEND</button>
-				<button v-if="showButtons" class="ft-button blue-button" @click="sendMessage">Send  message</button>
+				<button v-if="showButtons && !isBlocked && isFriend === '' && !isBlockedBy" class="ft-button green-button" @click="addFriend">ADD FRIEND</button>
+				<button v-if="showButtons && !isBlockedBy" class="ft-button blue-button" @click="sendMessage">Send  message</button>
 			</div>
 			<div class="row user-box user-stats">
 				<div class="col user-stat">
@@ -86,6 +89,7 @@ export default defineComponent({
 	setup() {
 		let socket;
 
+		const isBlockedBy = ref(false);
 		const is2faState = ref(false);
 		const router = useRouter();
 		const showButtons = ref<boolean>(false);
@@ -119,6 +123,7 @@ export default defineComponent({
 			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
 			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
 			isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
+			isBlockedBy.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlockedBy/${userName.value}`, {withCredentials: true})).data;
 			const res2fa = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/is2fa/${userName.value}`, {withCredentials: true})).data;
 			const checkbox = document.getElementById("fa2-input") as HTMLInputElement;
 			if (checkbox)
@@ -230,6 +235,7 @@ export default defineComponent({
 			isFriend,
 			isConnected,
 			is2faState,
+			isBlockedBy,
 			blockUser, 
 			unblockUser,
 			removeFriend,
@@ -242,6 +248,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+#blocked-from-message
+{
+	text-align: center;
+	/* color: var(--plight); */
+	color: red;
+	margin-bottom: 1em;
+}
 
 #see-qrcode
 {

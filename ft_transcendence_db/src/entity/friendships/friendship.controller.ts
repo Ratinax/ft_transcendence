@@ -3,10 +3,11 @@ import { FriendshipService } from './friendship.service';
 import { SessionService } from '../sessions/session.service';
 import { UserService } from '../users/user.service';
 import { Request } from 'express';
+import { BlockshipService } from '../blockships/blockship.service';
 
 @Controller('friendships')
 export class FriendshipController {
-    constructor (private readonly friendshipService: FriendshipService, private readonly sessionService: SessionService, private readonly userService: UserService) {}
+    constructor (private readonly friendshipService: FriendshipService, private readonly sessionService: SessionService, private readonly userService: UserService, private readonly blockshipService: BlockshipService) {}
 
     @Get('friendsof/')
     async findFriendOfId(@Req() req: Request)
@@ -42,8 +43,13 @@ export class FriendshipController {
         }
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const friend = (await this.userService.getUser(body.pseudo))[0];
+        
         try
         {
+            if (await this.blockshipService.getIsBlocked(user.id, friend.id))
+                return (null);
+            if (await this.blockshipService.getIsBlocked(friend.id, user.id))
+                return (null);
             const res = await this.friendshipService.askFriend(friend.id, user.id);
             return (res.statu);
         }

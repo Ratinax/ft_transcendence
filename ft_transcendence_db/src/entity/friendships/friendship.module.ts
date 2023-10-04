@@ -8,6 +8,8 @@ import { sessionProviders } from '../sessions/session.providers';
 import { SessionService } from '../sessions/session.service';
 import { userProviders } from '../users/user.providers';
 import { UserService } from '../users/user.service';
+import { BlockshipService } from '../blockships/blockship.service';
+import { blockshipProviders } from '../blockships/blockship.providers';
 
 @Module({
   imports: [DatabaseModule],
@@ -15,10 +17,12 @@ import { UserService } from '../users/user.service';
     ...friendshipProviders,
     ...sessionProviders,
     ...userProviders,
+    ...blockshipProviders,
     FriendshipService,
     FriendshipGateway,
     SessionService,
     UserService,
+    BlockshipService,
   ],
     controllers: [FriendshipController],
 })

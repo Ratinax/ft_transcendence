@@ -122,4 +122,17 @@ export class FriendshipService {
         if (friendship2)
             return (friendship2.statu);
     }
+    async clearFriendship(user_id: number, friend_id: number)
+    {
+        let friendship = await this.friendshipRepository.findOne({
+            where: { user: { id: user_id }, friend: { id: friend_id } },
+            });
+        let friendship2 = await this.friendshipRepository.findOne({
+            where: { user: { id: friend_id }, friend: { id: user_id } },
+            });
+        if (friendship)
+            return (await this.friendshipRepository.remove(friendship));
+        if (friendship2)
+            return (await this.friendshipRepository.remove(friendship2));
+    }
 }

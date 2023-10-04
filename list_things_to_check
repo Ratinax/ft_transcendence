@@ -58,7 +58,15 @@ Chat :
 	- Accepter friend request
 
 - User:
-	- Faire demande ami alors qu'il nous a deja demande
+	- Remove demande d'ami:
+		- Alors que l'autre a deja refuser demande
+		- Classique
+	- Remove amitie
+		- Alors que l'autre a deja remove
+		- Classique
+	- Faire demande ami:
+		- alors qu'il nous a deja demande
+		- alors que on est blocke de lui
 	- Blocke User
 	- Envoyer DM:
 		- Alors que deja dm mais enlever

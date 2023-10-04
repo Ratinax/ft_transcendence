@@ -27,7 +27,8 @@ import { faCrown,
     faMagnifyingGlass,
     faCheck,
 	faEye,
-	faRightFromBracket} from '@fortawesome/free-solid-svg-icons'
+	faRightFromBracket,
+	faTriangleExclamation} from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
 library.add(faComments, 
@@ -48,7 +49,8 @@ library.add(faComments,
 	faMagnifyingGlass,
 	faCheck,
 	faEye,
-	faRightFromBracket)
+	faRightFromBracket,
+	faTriangleExclamation)
 
 const app = createApp(App);
 app.use(router);
