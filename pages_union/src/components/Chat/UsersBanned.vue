@@ -56,7 +56,6 @@ export default defineComponent({
             try
             {
                 const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels_users/unBan/`, {user: user, channel: this.channel}, {withCredentials: true})).data;
-                console.log(res);
             }
             catch (e)
             {

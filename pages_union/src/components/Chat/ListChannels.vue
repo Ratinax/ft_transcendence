@@ -78,7 +78,6 @@ export default defineComponent({
 			{
 				const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels/`, {withCredentials: true});
 				this.channels = response.data;
-				console.log(this.channels);
 			} 
 			catch (error) 
 			{

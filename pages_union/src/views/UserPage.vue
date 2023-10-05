@@ -150,7 +150,6 @@ export default defineComponent({
 			try
 			{
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/unblock/`, {pseudo: userName.value}, {withCredentials: true});
-				console.log(res.data)
 				if (res.data === 'Success')
 					isBlocked.value = false;
 			}
@@ -198,7 +197,6 @@ export default defineComponent({
 		}
 		async function switch2fa()
 		{
-			console.log('a ete clicked')
 			is2faState.value = !is2faState.value;
 			try
 			{
@@ -401,6 +399,7 @@ export default defineComponent({
 }
 
 .switch-choice {
+	cursor: pointer;
 	position: relative;
 	display: inline-block;
 	width: 6em;

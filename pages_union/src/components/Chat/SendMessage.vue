@@ -35,11 +35,9 @@ export default defineComponent({
 	},
 	mounted()
 	{
-		console.log(this.socket)
 		this.socket?.on('sendMessageBlocked', (response: any) => {
 			if (this.sessionCookie === response.sessionCookie)
 				this.isBlockedBy = true;
-			console.log('lala la', this.isBlockedBy);
 		})
 		this.socket?.on('sendMessageTimeout', async (response: {duration: number, sessionCookie: string}) => {
 			if (this.sessionCookie === response.sessionCookie)

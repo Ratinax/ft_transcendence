@@ -72,7 +72,6 @@ export default defineComponent({
 					error.value = 'Internal servor error, try again later';
 				return ;
 			}
-			console.log(res.data)
 			if (!res.data)
 				return ;
 			if (res.data !== true)

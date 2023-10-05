@@ -120,8 +120,6 @@ export default defineComponent({
 		},
 		searchUser()
 		{
-			console.log(this.showErrorMessage);
-			console.log(this.searchErrorMessage);
 			if (this.pseudo && this.pseudo.length > 2) {
 				if (this.pseudo.length > 2 && this.$refs.UsersSearched) {
 					(this.$refs.UsersSearched as typeof UsersSearched).searchUsers();

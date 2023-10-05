@@ -6,18 +6,12 @@
         </div>
         <form @submit.prevent="timeoutUser">
           <div class="input-time">
-            <input v-model="days" placeholder="00" type="text"/>
-            <label>:</label>
-            <input v-model="hours" placeholder="00" type="text"/>
-            <label>:</label>
-            <input v-model="minutes" placeholder="00" type="text"/>
-            <label>:</label>
-              <input v-model="seconds" placeholder="00" type="text"/>
+            <input v-model="days" placeholder="0d" type="text"/>
+            <input v-model="hours" placeholder="0h" type="text"/>
+            <input v-model="minutes" placeholder="0m" type="text"/>
+              <input v-model="seconds" placeholder="0s" type="text"/>
           </div>
-          <button type="submit">Time Out</button>
-        </form>
-        <form @submit.prevent="close">
-          <button>Close</button>
+          <button class="timeout-button" type="submit"></button>
         </form>
       </div>
     </div>
@@ -85,16 +79,39 @@ export default defineComponent({
 });
 </script>
   
-<style>
+<style scoped>
+
+.error
+{
+  color: red;
+}
+.pop-up
+{
+  width: 15%;
+}
+.timeout-button
+{
+  display: none;
+}
 
 .input-time
 {
   display: flex;
-  flex-direction: inline;
+  justify-content: center;
 }
 .input-time input
 {
-    width: 1.2em;
+    box-shadow: 0 4px 0 grey;
+    width: 2em;
+    height: 2em;
+    font-size: 1.5em;
+    border-radius: 10%;
+    text-align: center;
+    margin: 0.25em;
+}
+.input-time input:focus
+{
+    box-shadow: 0 4px 0 var(--pblue);
 }
 </style>
   
