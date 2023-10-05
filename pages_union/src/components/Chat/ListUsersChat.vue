@@ -11,9 +11,11 @@
 			:channel="channel" 
 			@user-clicked="handleUserClicked"
 			@close-options="handleCleanUSerOpt"/>
-		<form v-if="userInChannel && userInChannel?.isOwner" class="buttons" @submit.prevent="showBannedList">
-			<button class="ft-button blue-button ban-list" type="submit">Ban List</button>
-		</form>
+		<div class="form-ban-list-container">
+			<form v-if="userInChannel && userInChannel?.isOwner" class="buttons" @submit.prevent="showBannedList">
+				<button class="ft-button blue-button ban-list" type="submit">Ban List</button>
+			</form>
+		</div>
 	</div>
 	<UsersBanned
 		ref="UsersBanned"
@@ -122,8 +124,6 @@ export default defineComponent({
 	text-align: left;
 	max-height: 85vh;
 	overflow-y: auto;
-
-	border-bottom: 1px solid var(--plight);
 }
 
 .list-users-chat {
@@ -132,8 +132,9 @@ export default defineComponent({
 	padding: 1em;
 	height: fit-content;
 	margin-left: .7em;
-
 	width: 10em;
+	max-height: 20em;
+	overflow-y: auto;
 
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
 	border-radius: 1em;

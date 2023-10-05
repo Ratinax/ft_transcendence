@@ -22,7 +22,7 @@
 					:socket="socket"
 					:sessionCookie="sessionCookie"/>
 			</div>
-			<ListUsersChat 
+			<ListUsersChat
 				ref="listUsersChat" 
 				v-if="socket && sessionCookie" 
 				:sessionCookie="sessionCookie"
@@ -149,7 +149,6 @@ export default defineComponent({
 </script>
 
 <style>
-
 
 .page-background {
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
