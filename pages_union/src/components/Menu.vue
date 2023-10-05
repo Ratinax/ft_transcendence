@@ -26,7 +26,7 @@
 				</div>
 			</li>
 			<li class="nav-item">
-				<div class="nav-link clickable">
+				<div class="nav-link clickable" @click="goChooseAGame">
 					<font-awesome-icon icon="fa-solid fa-gamepad" size="2x" />
 					<span class="link-text">Game</span>
 				</div>
@@ -84,6 +84,10 @@ export default {
 			{
 				console.error(e);
 			}
+		},
+		goChooseAGame()
+		{
+			this.router.push({path: '/choose_game'});
 		}
 	}
 }
