@@ -48,6 +48,12 @@ import JoinChannel from './JoinChannel.vue';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 
+interface ChannelData {
+	channel_id: number,
+	name: string,
+	isUserOwner: boolean
+}
+
 export default defineComponent({
 	name: 'ListChannels',
 	components: {
@@ -63,7 +69,7 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			channels: [] as Array<{channel_id: number, name: string, isUserOwner: boolean}>,
+			channels: [] as Array<ChannelData>,
 			showCreateChannel: false,
 			showJoinChannel: false,
 		}
@@ -138,14 +144,13 @@ export default defineComponent({
 	padding: 1em;
 	border-radius: 1em;
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
-	max-height: 97%;
 	width: 15em;
 	overflow: auto;
 }
 
 .list-channels {
 	width: 100%;
-	max-height: 80vh;
+	max-height: 82.5vh;
 	overflow-y: auto;
 	border-bottom: 1px solid var(--plight);
 }

@@ -1,6 +1,6 @@
 <template>
 	<div ref="optionsRef">
-		<div class="user-in-chat">
+		<div class="row user-in-chat">
 			<font-awesome-icon icon="fa-solid fa-circle" 
 				:class="{'green': userInChat?.isConnected, 'red': !userInChat?.isConnected}" />
 			<span id="user-pseudo" 
@@ -150,7 +150,7 @@ export default defineComponent({
 
 .user-in-chat {
 	color: white;
-	width: 100%;
+
 	margin-bottom: .25em;
 }
 
