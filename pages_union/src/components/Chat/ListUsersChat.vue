@@ -134,7 +134,6 @@ export default defineComponent({
 .list-users-chat {
 	overflow-y: auto;
 	max-height: 87.5vh;
-	border-bottom: 1px solid var(--plight);
 }
 
 .ban-list
@@ -143,8 +142,9 @@ export default defineComponent({
 }
 
 .buttons {
-	margin-top: 1.42em;
-	width: 100%;
+	margin-top: 1em;
+	padding-top: .42em;
+	border-top: 1px solid var(--plight);
 }
 
 .ft-button {

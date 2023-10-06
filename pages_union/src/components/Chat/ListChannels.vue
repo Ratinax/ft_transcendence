@@ -152,11 +152,12 @@ export default defineComponent({
 	width: 100%;
 	max-height: 82.5vh;
 	overflow-y: auto;
-	border-bottom: 1px solid var(--plight);
 }
 
 .buttons {
-	margin-top: 1.42em;
+	margin-top: 1em;
+	padding-top: .42em;
+	border-top: 1px solid var(--plight);
 }
 
 button {
