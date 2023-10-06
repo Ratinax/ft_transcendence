@@ -5,7 +5,10 @@
 			:content="message.content" 
 			:isAGameInvite="message.isAGameInvite"
 			:isSender="message.isSender"
-      :game="message.game"/>
+      :id="message.id"
+      :game="message.game"
+      :socket="socket"
+      :sessionCookie="sessionCookie"/>
   </div>
 </template>
 
@@ -13,12 +16,18 @@
 import Message from './Message.vue';
 import axios from 'axios';
 import { defineComponent } from 'vue';
+import { Socket } from 'socket.io-client';
 
 export default defineComponent({
     name: 'Messages-Component',
     components: 
     {
       Message,
+    },
+    props:
+    {
+      socket: Socket,
+      sessionCookie: String,
     },
     data() {
       return {

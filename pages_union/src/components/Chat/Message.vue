@@ -13,12 +13,13 @@
 			<button class="ft-button green-button" @click="joinGame">ACCEPT</button>
 		</div>
 		<p class="invite-text invite" v-else>
-			You sent a Pong game invite, waiting for a player to join.
+			You sent a Pong game invite, waiting for a player to join. <font-awesome-icon id="cancel-game-invite" icon="fa-solid fa-xmark" @click="removeGameInvite"/>
 		</p>
 	</div>
 </template>
 
 <script lang="ts">
+import { Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -28,7 +29,10 @@ export default defineComponent({
 		content: String,
 		isAGameInvite: Boolean,
 		isSender: Boolean,
+		id: Number,
 		game: Object,
+		socket: Socket,
+		sessionCookie: String,
 	},
 	methods: 
 	{
@@ -36,7 +40,12 @@ export default defineComponent({
 		{
 			console.log('Feature incoming');
 			console.log(this.game);
-			// TODO faire un emit de demarrage de game pour que le user du message et le user s'affrontent (sauf si c'est la meme personne)
+		},
+		removeGameInvite()
+		{
+			console.log(this.id);
+			this.socket?.emit('removeGameInvite', {id: this.id, sessionCookie: this.sessionCookie})
+			console.log(this.game);
 		}
 	}
 });
@@ -44,6 +53,15 @@ export default defineComponent({
 
 <style scoped>
 
+#cancel-game-invite
+{
+	cursor: pointer;
+}
+
+#cancel-game-invite:hover
+{
+	border-bottom: 0.1em solid var(--pdark);
+}
 .message-container {
 	color: black;
 	margin-bottom: .6em;

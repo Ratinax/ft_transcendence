@@ -58,4 +58,21 @@ export class MessageService {
             console.log('error :', e)
         }
     }
+    async removeMessage(message_id: number)
+    {
+        const messageToRemove = await this.messageRepository.findOne({where: {id: message_id}});
+        if (!messageToRemove)
+            return (null);
+        const res = await this.messageRepository.remove(messageToRemove);
+        return (res);
+    }
+    async getIsUserSenderOfMessage(user_id: number, message_id: number)
+    {
+        const messageToCheck = await this.messageRepository.findOne({where: {id: message_id}});
+        if (!messageToCheck)
+            return (false);
+        if (messageToCheck.user.id === user_id)
+            return (true);
+        return (false);
+    }
 }

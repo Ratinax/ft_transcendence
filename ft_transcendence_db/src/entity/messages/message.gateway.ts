@@ -94,6 +94,26 @@ export class MessagesGateway {
       this.server.emit('updateMessage', {channel_id: body.channel_id});
       this.server.emit('sendMessageGoodRequest', {channel_id: body.channel_id, sessionCookie: body.sessionCookie});
   }
+  @SubscribeMessage('removeGameInvite')
+  async removeGameInvite(@MessageBody() body: {id: number, sessionCookie: string})
+  {
+    if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+      {
+        return ('not connected');
+      }
+      const user = await this.sessionService.getUser(body.sessionCookie);
+      if (!user)
+        return ('not connected');
+    const isGoodUser = await this.messagesService.getIsUserSenderOfMessage(user.id, body.id);
+    if (!isGoodUser)
+      return ('Not the user that sent the game invite')
+    const res = await this.messagesService.removeMessage(body.id);
+    if (res)
+    {
+      this.server.emit('updateMessage', {channel_id: res.channel.channel_id});
+    }
+  }
+
   toGoodInputGame(game: Partial<Games>)
   {
     if (Number.isNaN(game.ballAccel - 0) || game.ballAccel > 500 || game.ballAccel < 5)
