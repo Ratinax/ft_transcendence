@@ -11,7 +11,7 @@
 				@channel-selected="onChannelSelected"
 				@leave-channel="onLeaveChannel"/>
 			<div class= "messageszone">
-				<Messages ref="messages" />
+				<Messages v-if="socket && sessionCookie" ref="messages" :socket="socket" :sessionCookie="sessionCookie" />
 				<SendMessage
 					v-if="socket && sessionCookie"
 					ref="sendMessage"
@@ -98,7 +98,6 @@ export default defineComponent({
 		});
 		this.socket.on('sendMessageGoodRequest', async (response: {channel_id: number, sessionCookie: string}) => {
 			this.refreshSendMessageBar();
-			this.updateMessages();
 			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
 			(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
 		});

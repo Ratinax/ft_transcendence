@@ -27,6 +27,7 @@ export class MessageService {
         .createQueryBuilder('message')
         .leftJoinAndSelect('message.channel', 'channel')
         .leftJoinAndSelect('message.user', 'user')
+        .leftJoinAndSelect('message.game', 'game')
         .where(`channel.name = :name ${removeBlockString}`, { name: channelName })
         .getMany();
         const messagesMapped = messages.map((message) => ({
@@ -38,14 +39,40 @@ export class MessageService {
                 content: message.content,
                 isAGameInvite: message.isAGameInvite,
                 isSender: user_id === message.user.id,
+                game: message.game,
             }));
         return (messagesMapped);
     }
 
     async post(message: Partial<Messages>)
     {
-        const newMessage = this.messageRepository.create(message);
-        const res =  await this.messageRepository.save(newMessage);
+        try
+        {
+
+            const newMessage = this.messageRepository.create(message);
+            const res =  await this.messageRepository.save(newMessage);
+            return (res);
+        }
+        catch (e)
+        {
+            console.log('error :', e)
+        }
+    }
+    async removeMessage(message_id: number)
+    {
+        const messageToRemove = await this.messageRepository.findOne({where: {id: message_id}});
+        if (!messageToRemove)
+            return (null);
+        const res = await this.messageRepository.remove(messageToRemove);
         return (res);
+    }
+    async getIsUserSenderOfMessage(user_id: number, message_id: number)
+    {
+        const messageToCheck = await this.messageRepository.findOne({where: {id: message_id}});
+        if (!messageToCheck)
+            return (false);
+        if (messageToCheck.user.id === user_id)
+            return (true);
+        return (false);
     }
 }

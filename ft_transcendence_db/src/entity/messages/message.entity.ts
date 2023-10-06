@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { Users } from "../users/user.entity";
 import { Channels } from "../channels/channel.entity";
+import { Games } from "../games/game.entity";
 
 /**
  * Messsage entity
@@ -35,4 +36,8 @@ export class Messages {
 
   @Column({default: false})
   isAGameInvite: Boolean;
+
+  @ManyToOne(() => Games, { eager: true, nullable: true})
+  @JoinColumn({ name: 'game' })
+  game: Partial<Games>;
 }

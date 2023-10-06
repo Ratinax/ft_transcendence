@@ -4,7 +4,11 @@
 			:username="message.user.pseudo" 
 			:content="message.content" 
 			:isAGameInvite="message.isAGameInvite"
-			:isSender="message.isSender"/>
+			:isSender="message.isSender"
+      :id="message.id"
+      :game="message.game"
+      :socket="socket"
+      :sessionCookie="sessionCookie"/>
   </div>
 </template>
 
@@ -12,6 +16,7 @@
 import Message from './Message.vue';
 import axios from 'axios';
 import { defineComponent } from 'vue';
+import { Socket } from 'socket.io-client';
 
 export default defineComponent({
     name: 'Messages-Component',
@@ -19,10 +24,25 @@ export default defineComponent({
     {
       Message,
     },
+    props:
+    {
+      socket: Socket,
+      sessionCookie: String,
+    },
     data() {
       return {
-          messages: [] as Array<{id: number, user: {pseudo: string}, content: string, isAGameInvite: boolean, isSender: boolean}>,
-      }
+          messages: [] as Array<{id: number,
+            user: {pseudo: string},
+            content: string,
+            isAGameInvite: boolean,
+            isSender: boolean,
+            game: {ballAccel: number,
+                ballSize: number, 
+                ballSpeed: number,
+                maxAngle: number,
+                playerSize: number,
+                playerSpeed: number,
+                winScore: number}}>}
     },
     created()
     {

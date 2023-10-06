@@ -13,12 +13,13 @@
 			<button class="ft-button green-button" @click="joinGame">ACCEPT</button>
 		</div>
 		<p class="invite-text invite" v-else>
-			You sent a Pong game invite, waiting for a player to join.
+			You sent a Pong game invite, waiting for a player to join. <font-awesome-icon id="cancel-game-invite" icon="fa-solid fa-xmark" @click="removeGameInvite"/>
 		</p>
 	</div>
 </template>
 
 <script lang="ts">
+import { Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -27,20 +28,41 @@ export default defineComponent({
 		username: String,
 		content: String,
 		isAGameInvite: Boolean,
-		isSender: Boolean
+		isSender: Boolean,
+		id: Number,
+		game: Object,
+		socket: Socket,
+		sessionCookie: String,
 	},
 	methods: 
 	{
 		joinGame()
 		{
-			console.log('Feature incoming')
-			// TODO faire un emit de demarrage de game pour que le user du message et le user s'affrontent (sauf si c'est la meme personne)
+			console.log('Feature incoming');
+			console.log(this.game);
+		},
+		removeGameInvite()
+		{
+			console.log(this.id);
+			this.socket?.emit('removeGameInvite', {id: this.id, sessionCookie: this.sessionCookie})
+			console.log(this.game);
 		}
 	}
 });
 </script>
 
 <style scoped>
+
+#cancel-game-invite
+{
+	cursor: pointer;
+	padding: 0 .5em;
+}
+
+#cancel-game-invite:hover
+{
+	color: red;
+}
 
 .message-container {
 	color: black;
@@ -87,6 +109,9 @@ export default defineComponent({
 }
 
 .invite-text {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	color: grey;
 	text-align: center;
 }
