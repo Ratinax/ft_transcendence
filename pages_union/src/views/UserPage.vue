@@ -1,6 +1,7 @@
 <template>
 	<Menu />
 	<Qrcode ref="QrcodeRef" :show="showQrcode" @close="showQrcode = false"/>
+	<div class="page-background"></div>
 	<div class="row user-page view">
 		<div class="col user-page-content">
 			<div v-if="isBlockedBy" id="blocked-from-message">
@@ -283,7 +284,6 @@ export default defineComponent({
 }
 
 .user-page {
-	background: linear-gradient(45deg, var(--pblack), var(--pdark));
 	min-width: 360px;
 	height: 100vh;
 }
