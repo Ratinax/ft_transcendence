@@ -7,6 +7,8 @@ import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 import { BlockshipService } from '../blockships/blockship.service';
 import { Channels } from '../channels/channel.entity';
+import { Games } from '../games/game.entity';
+import { GameService } from '../games/game.service';
 
 @WebSocketGateway(3001, {
   cors: {
@@ -19,11 +21,11 @@ export class MessagesGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly messagesService: MessageService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService, private readonly blockshipService: BlockshipService) {}
+  constructor(private readonly messagesService: MessageService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService, private readonly blockshipService: BlockshipService, private readonly gameService: GameService) {}
 
   @SubscribeMessage('createMessage')
   async create(
-    @MessageBody() body: {sessionCookie: string, channel_id: number, dateSent: Date, message: string, isAGameInvite: boolean}) 
+    @MessageBody() body: {sessionCookie: string, channel_id: number, dateSent: Date, message: string, isAGameInvite: boolean, game: Partial<Games> | undefined}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
@@ -59,18 +61,56 @@ export class MessagesGateway {
         return 'user timeout';
       }
 
-      await this.messagesService.post({
-        content: body.message,
-        dateSent: body.dateSent,
-        channel: {channel_id: body.channel_id},
-        user: {
-          ...user,
-        },
-        isAGameInvite: body.isAGameInvite,
-      });
+      if (body.game)
+      {
+        const reelGame = await this.gameService.createGame(this.toGoodInputGame(body.game));
+        await this.messagesService.post({
+          content: body.message,
+          dateSent: body.dateSent,
+          channel: {channel_id: body.channel_id},
+          user: {
+            ...user,
+          },
+          isAGameInvite: body.isAGameInvite,
+          game: {
+            id: reelGame.id,
+          },
+        });
+      }
+      else
+      {
+
+        await this.messagesService.post({
+          content: body.message,
+          dateSent: body.dateSent,
+          channel: {channel_id: body.channel_id},
+          user: {
+            ...user,
+          },
+          isAGameInvite: body.isAGameInvite,
+        });
+      }
       
       this.server.emit('updateMessage', {channel_id: body.channel_id});
       this.server.emit('sendMessageGoodRequest', {channel_id: body.channel_id, sessionCookie: body.sessionCookie});
+  }
+  toGoodInputGame(game: Partial<Games>)
+  {
+    if (Number.isNaN(game.ballAccel - 0) || game.ballAccel > 500 || game.ballAccel < 5)
+      game.ballAccel = 50;
+    if (Number.isNaN(game.ballSize - 0) || game.ballSize > 50 || game.ballSize < 15)
+      game.ballSize = 30;
+    if (Number.isNaN(game.ballSpeed - 0) || game.ballSpeed > 1500 || game.ballSpeed < 600)
+      game.ballSpeed = 1200;
+    if (Number.isNaN(game.maxAngle - 0) || game.maxAngle > 80 || game.maxAngle < 50)
+      game.maxAngle = 45;
+    if (Number.isNaN(game.playerSize - 0) || game.playerSize > 500 || game.playerSize < 100)
+      game.playerSize = 300;
+    if (Number.isNaN(game.playerSpeed - 0) || game.playerSpeed > 3700 || game.playerSpeed < 600)
+      game.playerSpeed = 1300;
+    if (Number.isNaN(game.winScore - 0) || game.winScore > 21 || game.winScore < 1)
+      game.winScore = 5;
+    return (game);
   }
   async unHide(user_id: number, channel: Partial<Channels>)
   {

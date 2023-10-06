@@ -5,18 +5,24 @@
 			<input class="message-input-error message-input" v-model="messageText" placeholder="One of you block the other one" v-else-if="isBlockedBy"/>
 			<input class="message-input" v-model="messageText" placeholder="Send a message..." v-else/>
 		</form>
-		<form @submit.prevent="inviteInGame">
+		<form @submit.prevent="showGameOptions = true">
 			<button class="ft-button" type="submit">Invite in game</button>
 		</form>
+		<GameOptions :show="showGameOptions" @close="showGameOptions = false" @invite-in-game="inviteInGame"></GameOptions>
 	</div>
 </template>
 
 <script lang="ts">
 import { Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
+import GameOptions from './GameOptions.vue';
 
 export default defineComponent({
 	name: 'SendMessage',
+	components:
+	{
+		GameOptions
+	},
 	props: 
 	{
 		showContent: Boolean,
@@ -31,6 +37,7 @@ export default defineComponent({
 			isUserTimeout: false,
 			durationTimeoutString: '',
 			isBlockedBy: false,
+			showGameOptions: false,
 		}
 	},
 	mounted()
@@ -88,14 +95,21 @@ export default defineComponent({
 			this.isUserTimeout = false;
 			this.isBlockedBy = false;
 		},
-		inviteInGame()
+		inviteInGame(gameSettings: {ballAccel: number,
+			ballSize: number, ballSpeed: number,
+			maxAngle: number,
+			playerSize: number,
+			playerSpeed: number,
+			winScore: number})
 		{
-			this.$emit('create-message', {
+			this.socket?.emit('createMessage', { 
 				channel_id: this.channelId,
 				message: '',
 				dateSent: this.getCurrentDate(),
 				isAGameInvite: true,
-			})
+				sessionCookie: this.sessionCookie,
+				game: gameSettings });
+			this.showGameOptions = false;
 		},
 	}
 });

@@ -27,13 +27,15 @@ export default defineComponent({
 		username: String,
 		content: String,
 		isAGameInvite: Boolean,
-		isSender: Boolean
+		isSender: Boolean,
+		game: Object,
 	},
 	methods: 
 	{
 		joinGame()
 		{
-			console.log('Feature incoming')
+			console.log('Feature incoming');
+			console.log(this.game);
 			// TODO faire un emit de demarrage de game pour que le user du message et le user s'affrontent (sauf si c'est la meme personne)
 		}
 	}

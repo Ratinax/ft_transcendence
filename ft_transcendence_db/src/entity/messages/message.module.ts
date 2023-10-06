@@ -10,6 +10,8 @@ import { blockshipProviders } from '../blockships/blockship.providers';
 import { BlockshipService } from '../blockships/blockship.service';
 import { sessionProviders } from '../sessions/session.providers';
 import { SessionService } from '../sessions/session.service';
+import { GameService } from '../games/game.service';
+import { gameProviders } from '../games/game.providers';
 
 @Module({
   imports: [DatabaseModule],
@@ -18,11 +20,13 @@ import { SessionService } from '../sessions/session.service';
     ...channelsUsersProviders,
     ...blockshipProviders,
     ...sessionProviders,
+    ...gameProviders,
     MessageService,
     MessagesGateway,
     ChannelsUsersService,
     BlockshipService,
     SessionService,
+    GameService,
   ],
     controllers: [MessageController],
 })

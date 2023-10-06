@@ -40,20 +40,26 @@ export class Games {
     @Column({ name: 'is_game_over', default: 0 })
     isGameOver: Boolean;
 
+    @Column({ name: 'ball_accel', default: 0 })
+    ballAccel: number;
+    
+    @Column({ name: 'ball_size', default: 0 })
+    ballSize: number;
+    
     @Column({ name: 'ball_speed', default: 0 })
     ballSpeed: number;
 
-    @Column({ name: 'ball_speed_inc', default: 0 })
-    ballSpeedInc: number;
+    @Column({ name: 'max_angle', default: 0 })
+    maxAngle: number;
 
-    @Column({ name: 'racket_speed', default: 0 })
-    racketSpeed: number;
+    @Column({ name: 'player_speed', default: 0 })
+    playerSpeed: number;
 
-    @Column({ name: 'racket_size', default: 0 })
-    racketSize: number;
+    @Column({ name: 'player_size', default: 0 })
+    playerSize: number;
 
-    @Column({ name: 'score_to_win', default: 0 })
-    scoreToWin: number;
+    @Column({ name: 'win_score', default: 0 })
+    winScore: number;
 
 
 }

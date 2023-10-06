@@ -28,7 +28,7 @@ export default defineComponent({
 		return {
             sessionCookie: '',
 			socket: null as Socket | null,
-            gameModes: [{name: 'Long ring long land', ballAccel: 5, ballSize: 50, ballSpeed: 700, maxAngle: 20, playerSize: 400, playerSpeed: 1700, winScore: 5, img: 'sleep.png'},
+            gameModes: [{name: 'Long ring long land', ballAccel: 5, ballSize: 50, ballSpeed: 700, maxAngle: 20, playerSize: 400, playerSpeed: 700, winScore: 5, img: 'sleep.png'},
                         {name: 'INCREASE', ballAccel: 500, ballSize: 50, ballSpeed: 1200, maxAngle: 45, playerSize: 400, playerSpeed: 1700, winScore: 5, img: 'increase.png'},
                         {name: 'Classic', ballAccel: 50, ballSize: 30, ballSpeed: 1200, maxAngle: 45, playerSize: 300, playerSpeed: 1700, winScore: 7, img: 'classic.png'},
                         {name: 'Too fast for y\'all', ballAccel: 50, ballSize: 15, ballSpeed: 600, maxAngle: 45, playerSize: 200, playerSpeed: 3700, winScore: 5, img: 'fast.png'},

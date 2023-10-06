@@ -4,7 +4,8 @@
 			:username="message.user.pseudo" 
 			:content="message.content" 
 			:isAGameInvite="message.isAGameInvite"
-			:isSender="message.isSender"/>
+			:isSender="message.isSender"
+      :game="message.game"/>
   </div>
 </template>
 
@@ -21,8 +22,18 @@ export default defineComponent({
     },
     data() {
       return {
-          messages: [] as Array<{id: number, user: {pseudo: string}, content: string, isAGameInvite: boolean, isSender: boolean}>,
-      }
+          messages: [] as Array<{id: number,
+            user: {pseudo: string},
+            content: string,
+            isAGameInvite: boolean,
+            isSender: boolean,
+            game: {ballAccel: number,
+                ballSize: number, 
+                ballSpeed: number,
+                maxAngle: number,
+                playerSize: number,
+                playerSpeed: number,
+                winScore: number}}>}
     },
     created()
     {
