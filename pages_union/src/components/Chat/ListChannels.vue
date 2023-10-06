@@ -131,6 +131,18 @@ export default defineComponent({
 					break ;
 				}
 			}
+		},
+		displayChannels() {
+			const channelElement = document.querySelector('.list-channels-container') as HTMLDivElement;
+
+			if (channelElement) {
+				if (channelElement.style.display === 'block') {
+					channelElement.style.display = 'none';
+				}
+				else {
+					channelElement.style.display = 'block';
+				}
+			}
 		}
 	},
 });
@@ -139,18 +151,32 @@ export default defineComponent({
 <style scoped>
 
 .list-channels-container {
+	height: fit-content;
 	margin-right: 1em;
 	background: var(--pdark);
 	padding: 1em;
 	border-radius: 1em;
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
-	width: 15em;
+	width: 25%;
+	max-width: 15em;
 	overflow: auto;
+	animation: fadein .2s;
+}
+
+@keyframes fadein {
+	from { 
+		transform: translateX(-20px);
+		opacity: 0;
+	}
+	to {
+	transform: translateX(0px);
+	opacity: 1;
+	}
 }
 
 .list-channels {
 	width: 100%;
-	max-height: 82.5vh;
+	max-height: 42em;
 	overflow-y: auto;
 }
 
@@ -164,6 +190,15 @@ button {
 	font-size: .9em;
 	width: 100%;
 	margin-bottom: 1em;
+}
+
+@media screen and (max-width: 700px) {
+	.list-channels-container {
+		display: none;
+		position: absolute;
+		width: 42%;
+		left: .5em;
+	}
 }
 
 </style>

@@ -3,15 +3,13 @@
 	<div class="page-background"></div>
 	<div class="row chat-page view">
 		<div class="row chat-container">
-			<div>
-				<ListChannels ref="listChannels" 
-					v-if="socket && sessionCookie" 
-					:sessionCookie="sessionCookie"
-					:channelSelected="selectedChannel" 
-					:socket="socket" 
-					@channel-selected="onChannelSelected"
-					@leave-channel="onLeaveChannel"/>
-			</div>
+			<ListChannels ref="listChannels" 
+				v-if="socket && sessionCookie" 
+				:sessionCookie="sessionCookie"
+				:channelSelected="selectedChannel" 
+				:socket="socket" 
+				@channel-selected="onChannelSelected"
+				@leave-channel="onLeaveChannel"/>
 			<div class= "messageszone">
 				<Messages ref="messages" />
 				<SendMessage
@@ -28,6 +26,10 @@
 				:sessionCookie="sessionCookie"
 				:channel="selectedChannel" 
 				:socket="socket"/>
+		</div>
+		<div class="chat-button-container">
+			<button class="ft-button blue-button button-left" @click.prevent="toggleChannels">channels</button>
+			<button class="ft-button blue-button button-right" @click.prevent="toggleUsers">users</button>
 		</div>
 	</div>
 </template>
@@ -59,6 +61,8 @@ export default defineComponent({
 			selectedChannel: undefined as {channel_id: number, name: string, isUserOwner: boolean} | undefined,
 			socket: null as any,
 			sessionCookie: '',
+			showChannels: false,
+			showUsers: false
 		}
 	},
 	async mounted() {
@@ -66,11 +70,11 @@ export default defineComponent({
 		this.socket = io(`http://${process.env.VUE_APP_IP}:3001/`);
 		this.socket.on('updateMessage', (response: {channel_id: number}) => {
 			if (response.channel_id === this.selectedChannel?.channel_id)
-				this.updateMessages();
+			this.updateMessages();
 		});
 		this.socket.on('updateListChannels', async (response: {sessionCookie: string, channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
 			if (response.sessionCookie === this.sessionCookie)
-				this.updateListChannels(response.channel);
+			this.updateListChannels(response.channel);
 		});
 		this.socket.on('updateListUsers', (response: {channel: {channel_id: number}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (response.channel.channel_id === this.selectedChannel?.channel_id) {
@@ -79,7 +83,7 @@ export default defineComponent({
 		});
 		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (!response)
-				return ;
+			return ;
 			if (this.sessionCookie === response.sessionCookie && response.channel.channel_id === this.selectedChannel?.channel_id) {
 				this.updateListChannels(undefined);
 				this.updateListUsers(null);
@@ -96,7 +100,7 @@ export default defineComponent({
 			this.refreshSendMessageBar();
 			this.updateMessages();
 			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
-				(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
+			(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
 		});
 	},
 	methods:
@@ -113,7 +117,7 @@ export default defineComponent({
 		},
 		updateMessages() {
 			if (this.$refs.messages)
-				(this.$refs.messages as typeof Messages).updateMessages(this.selectedChannel);
+			(this.$refs.messages as typeof Messages).updateMessages(this.selectedChannel);
 		},
 		onChannelSelected(channel: {channel_id: number, name: string, isUserOwner: boolean}) {
 			this.setSelectedChannel(channel);
@@ -134,15 +138,25 @@ export default defineComponent({
 		*/
 		updateListUsers(users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}> | null) {
 			if (this.$refs.listUsersChat)
-				(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
+			(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
 		},
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
 		},
 		refreshSendMessageBar() {
 			if (this.$refs.sendMessage)
-				(this.$refs.sendMessage as typeof SendMessage).refreshBar();
+			(this.$refs.sendMessage as typeof SendMessage).refreshBar();
 		},
+		toggleUsers() {
+			if (this.$refs.listUsersChat) {
+				(this.$refs.listUsersChat as typeof ListUsersChat).displayUsers();
+			}
+		},
+		toggleChannels() {
+			if (this.$refs.listChannels) {
+				(this.$refs.listChannels as typeof ListChannels).displayChannels();
+			}
+		}
 	}
 });
 
@@ -157,19 +171,48 @@ export default defineComponent({
 .chat-container {
 	width: 100%;
 	justify-content: center;
-	margin: 2em 1em;
+	margin: 2em 1em 0 1em;
 }
 
 .chat-page {
-	height: 100vh;
+	height: 100%;
 }
 
 .messageszone {
-	width: 40em;
+	width: 50%;
+	transition: width 200ms ease;
+	max-width: 42em;
+	min-width: 340px;
 	padding: .1em;
 	background: white;
 	border-radius: 1em 0 1em 1em;
 	border: 2px solid var(--pblack);
+	height: 85vh;
+}
+
+.chat-button-container {
+	display: none;
+	font-size: .7em;
+	margin-top: 1em;
+	justify-content: space-around;
+}
+
+@media screen and (max-width: 700px) {
+	.chat-container {
+		margin: 2em 0 0 0;
+	}
+
+	.chat-page {
+		flex-direction: column;
+	}
+
+	.messageszone {
+		width: 90%;
+	}
+
+	.chat-button-container {
+		display: flex;
+	}
 }
 
 </style>

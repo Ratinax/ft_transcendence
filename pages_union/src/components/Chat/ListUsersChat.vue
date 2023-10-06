@@ -113,6 +113,18 @@ export default defineComponent({
 		{
 			this.showBannedUsers = true;
 			(this.$refs?.UsersBanned as typeof UsersBanned)?.getBannedUsers();
+		},
+		displayUsers() {
+			const userElement = document.querySelector('.list-users-chat-container') as HTMLDivElement;
+
+			if (userElement) {
+				if (userElement.style.display === 'block') {
+					userElement.style.display = 'none';
+				}
+				else {
+					userElement.style.display = 'block';
+				}
+			}
 		}
 	}
 });
@@ -123,17 +135,30 @@ export default defineComponent({
 .list-users-chat-container {
 	background: var(--pdark);
 
+	animation: fadein .2s;
 	padding: 1em;
 	height: fit-content;
 	margin-left: .7em;
-	width: 10em;
+	width: 25%;
+	max-width: 10em;
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
 	border-radius: 1em;
 }
 
+@keyframes fadein {
+	from { 
+		transform: translateX(20px);
+		opacity: 0;
+	}
+	to {
+	transform: translateX(0px);
+	opacity: 1;
+	}
+}
+
 .list-users-chat {
 	overflow-y: auto;
-	max-height: 87.5vh;
+	max-height: 42em;
 }
 
 .ban-list
@@ -149,6 +174,16 @@ export default defineComponent({
 
 .ft-button {
 	width: 100%;
+}
+
+@media screen and (max-width: 700px) {
+
+	.list-users-chat-container {
+		display: none;
+		position: absolute;
+		right: .5em;
+		width: 30%;
+	}
 }
 
 </style>

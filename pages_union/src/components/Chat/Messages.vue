@@ -68,11 +68,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
 .messages
 {
-	padding: 2.5% 0;
+	padding-top: .5em;
 	overflow-y: scroll;
-    height: 88%;
+    height: 94%;
 }
 
 ::-webkit-scrollbar-track {
@@ -87,6 +88,5 @@ export default defineComponent({
 ::-webkit-scrollbar {
 	width: .25em;
 }
-
 
 </style>
