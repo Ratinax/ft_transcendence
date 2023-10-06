@@ -91,8 +91,12 @@ export default defineComponent({
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--pblack);
+	background: var(--pdark);
 	border-radius: 1em;
+}
+
+::-webkit-scrollbar {
+	width: .25em;
 }
 
 

@@ -166,10 +166,10 @@ export default defineComponent({
 
 .messageszone {
 	width: 40em;
+	padding: .1em;
 	background: white;
 	border-radius: 1em 0 1em 1em;
-	border: 2px solid var(--pblue);
-		/* TODO check if we put overflow: auto; */ 
+	border: 2px solid var(--pblack);
 }
 
 </style>

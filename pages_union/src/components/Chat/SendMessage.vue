@@ -1,5 +1,5 @@
 <template>
-	<div class="row send-message" v-if="showContent">
+	<div class="send-message-container" v-if="showContent">
 		<form @submit.prevent="sendMessage">
 			<input v-model="messageText" class="message-input-error message-input" :placeholder="'You are timeout for ' + durationTimeoutString" v-if="isUserTimeout"/>
 			<input class="message-input-error message-input" v-model="messageText" placeholder="One of you block the other one" v-else-if="isBlockedBy"/>
@@ -117,14 +117,13 @@ export default defineComponent({
 
 <style scoped>
 
-.send-message
+.send-message-container
 {
-	top: 0;
-	bottom: 0;
-	border-top: 1px solid var(--plight);
+	display: flex;
+	height: 8%;
 	align-items: center;
 	justify-content: space-evenly;
-	overflow: auto;
+	border-top: 1px solid var(--plight);
 }
 
 .message-input {
@@ -132,11 +131,7 @@ export default defineComponent({
 	padding: .8em;
 	border-radius: .5em;
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-	width: 24em;
-	top:0;
-	bottom:0;
-	left:0;
-	right: 0;
+	width: 21em;
 }
 .message-input-error::placeholder
 {
