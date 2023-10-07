@@ -3,13 +3,15 @@
 	<div class="page-background"></div>
 	<div class="row chat-page view">
 		<div class="row chat-container">
-			<ListChannels ref="listChannels" 
-				v-if="socket && sessionCookie" 
+			<ListChannels 
+				ref="listChannels" 
+				v-if="socket && sessionCookie && displayListChannels" 
 				:sessionCookie="sessionCookie"
 				:channelSelected="selectedChannel" 
 				:socket="socket" 
 				@channel-selected="onChannelSelected"
-				@leave-channel="onLeaveChannel"/>
+				@leave-channel="onLeaveChannel"
+				:display="displayListChannels"/>
 			<div class= "messageszone">
 				<Messages v-if="socket && sessionCookie" ref="messages" :socket="socket" :sessionCookie="sessionCookie" />
 				<SendMessage
@@ -25,7 +27,9 @@
 				v-if="socket && sessionCookie" 
 				:sessionCookie="sessionCookie"
 				:channel="selectedChannel" 
-				:socket="socket"/>
+				:socket="socket"
+				:display="displayUsersChat"
+			/>
 		</div>
 		<div class="chat-button-container">
 			<button class="ft-button blue-button button-left" @click.prevent="toggleChannels">channels</button>
@@ -62,10 +66,14 @@ export default defineComponent({
 			socket: null as any,
 			sessionCookie: '',
 			showChannels: false,
-			showUsers: false
+			showUsers: false,
+			windowWidth: window.innerWidth,
+			displayUsersChat: true,
+			displayListChannels: true,
 		}
 	},
 	async mounted() {
+		window.addEventListener('resize', this.handleResize);
 		this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
 		this.socket = io(`http://${process.env.VUE_APP_IP}:3001/`);
 		this.socket.on('updateMessage', (response: {channel_id: number}) => {
@@ -104,6 +112,9 @@ export default defineComponent({
 	},
 	methods:
 	{
+		handleResize() {
+			this.windowWidth = window.innerWidth;
+		},
 		/**
 		* 
 		* @param {Object} channel - Channel from which a user has entered or left
@@ -146,16 +157,18 @@ export default defineComponent({
 			if (this.$refs.sendMessage)
 			(this.$refs.sendMessage as typeof SendMessage).refreshBar();
 		},
+
 		toggleUsers() {
-			if (this.$refs.listUsersChat) {
-				(this.$refs.listUsersChat as typeof ListUsersChat).displayUsers();
-			}
+			this.displayUsersChat = !this.displayUsersChat;
 		},
 		toggleChannels() {
-			if (this.$refs.listChannels) {
-				(this.$refs.listChannels as typeof ListChannels).displayChannels();
-			}
+			this.displayListChannels = !this.displayListChannels;
 		}
+	},
+	watch: {
+		windowWidth(newWidth) {
+			this.displayListChannels = this.displayUsersChat = newWidth > 700;
+		},
 	}
 });
 

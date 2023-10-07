@@ -1,5 +1,5 @@
 <template>
-	<div v-if="userInChannel !== null" class="list-users-chat-container">
+	<div v-if="userInChannel !== null && display" class="list-users-chat-container">
 		<div class="list-users-chat">
 			<UserChat v-for="userInChat in users" 
 				:sessionCookie="sessionCookie" 
@@ -53,6 +53,7 @@ export default defineComponent({
 		sessionCookie: String,
 		socket: Socket || null,
 		channel: Object,
+		display: Boolean,
 	},
 	data()
 	{
@@ -113,18 +114,6 @@ export default defineComponent({
 		{
 			this.showBannedUsers = true;
 			(this.$refs?.UsersBanned as typeof UsersBanned)?.getBannedUsers();
-		},
-		displayUsers() {
-			const userElement = document.querySelector('.list-users-chat-container') as HTMLDivElement;
-
-			if (userElement) {
-				if (userElement.style.display === 'block') {
-					userElement.style.display = 'none';
-				}
-				else {
-					userElement.style.display = 'block';
-				}
-			}
 		}
 	}
 });
@@ -177,9 +166,7 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 700px) {
-
 	.list-users-chat-container {
-		display: none;
 		position: absolute;
 		right: .5em;
 		width: 30%;

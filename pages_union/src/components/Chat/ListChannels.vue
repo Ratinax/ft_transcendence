@@ -1,5 +1,5 @@
 <template>
-	<div class="list-channels-container" ref="channelsButtons">
+	<div v-if="display" class="list-channels-container" ref="channelsButtons">
 		<div class="list-channels">
 			<channel 
 				ref="channelRef"
@@ -66,6 +66,7 @@ export default defineComponent({
 		sessionCookie: String,
 		channelSelected: Object,
 		socket: null,
+		display: Boolean,
 	},
 	data() {
 		return {
@@ -131,18 +132,6 @@ export default defineComponent({
 					break ;
 				}
 			}
-		},
-		displayChannels() {
-			const channelElement = document.querySelector('.list-channels-container') as HTMLDivElement;
-
-			if (channelElement) {
-				if (channelElement.style.display === 'block') {
-					channelElement.style.display = 'none';
-				}
-				else {
-					channelElement.style.display = 'block';
-				}
-			}
 		}
 	},
 });
@@ -192,9 +181,14 @@ button {
 	margin-bottom: 1em;
 }
 
-@media screen and (max-width: 700px) {
+@media only screen and (min-width: 700px) {
 	.list-channels-container {
-		display: none;
+		display: block;
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	.list-channels-container {
 		position: absolute;
 		width: 42%;
 		left: .5em;
