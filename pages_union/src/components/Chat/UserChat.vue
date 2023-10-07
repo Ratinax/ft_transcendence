@@ -4,7 +4,7 @@
 			<span id="user-pseudo" 
 				:class="{'admin': userInChat?.isAdmin, 'owner': userInChat?.isOwner}" 
 				@click="handleUserClicked">
-				<font-awesome-icon v-if="userInChat?.isAdmin" icon="fa-solid fa-crown" size="xs" />
+				<font-awesome-icon v-if="userInChat?.isAdmin || userInChat?.isOwner" icon="fa-solid fa-crown" size="xs" />
 				<font-awesome-icon v-else icon="fa-solid fa-user" size="xs" />
 				{{ userInChat?.pseudo }}
 			</span>
