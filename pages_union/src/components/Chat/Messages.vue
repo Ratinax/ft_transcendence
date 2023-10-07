@@ -93,7 +93,7 @@ export default defineComponent({
 {
 	padding-top: .5em;
 	overflow-y: scroll;
-    height: 94%;
+    height: 90%;
 }
 
 ::-webkit-scrollbar-track {
@@ -107,6 +107,12 @@ export default defineComponent({
 
 ::-webkit-scrollbar {
 	width: .25em;
+}
+
+@media screen and (max-height: 800px) {
+	.messages {
+		height: 85%;
+	}
 }
 
 </style>

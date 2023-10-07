@@ -123,8 +123,7 @@ export default defineComponent({
 .send-message-container {
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	padding-top: .42em;
+	height: 8%;
 	border-top: 1px solid var(--plight);
 }
 
@@ -135,13 +134,14 @@ export default defineComponent({
 }
 
 .message-input {
-	transition: width 200ms ease;
 	height: 100%;
+	transition: width 200ms ease;
 	border-radius: .5em;
 	padding-left: .42em;
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 	width: 27em;
 }
+
 .message-input-error::placeholder
 {
 	color: red;
@@ -152,9 +152,9 @@ export default defineComponent({
 }
 
 button {
+	height: 100%;
 	transition: font-size 200ms ease;
 	font-size: 1.1em;
-	height: 100%;
 	background: var(--pcyan);
 	box-shadow: 0 4px 0 var(--pblue);
 	margin-bottom: 2px;
@@ -177,6 +177,12 @@ button {
 @media screen and (max-width: 1000px) {
 	.message-input {
 		width: 18em;
+	}
+}
+
+@media screen and (max-height: 800px) {
+	.send-message-container {
+		height: 13%;
 	}
 }
 

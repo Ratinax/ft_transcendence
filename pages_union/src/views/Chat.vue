@@ -207,6 +207,7 @@ export default defineComponent({
 
 	.messageszone {
 		width: 90%;
+		height: 65vh;
 	}
 
 	.chat-button-container {
