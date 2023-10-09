@@ -1,7 +1,8 @@
 <template>
-	<div class="page-background"></div>
-  <div class="test">
-      <img :src="qrlink"/>
+  <div class="page-background"></div>
+  <div class="double-fa-page">
+    <div>
+      <img :src="qrlink" id="qrcode-doublefa"/>
 			<form  @submit.prevent="check2Fa">
         <div class="input-numbers">
             <input ref="digit1" v-model="digit1" placeholder="0" type="text" @keypress="handleKeyPressed(1)"/>
@@ -10,19 +11,21 @@
             <input ref="digit4" v-model="digit4" placeholder="0" type="text" @keypress="handleKeyPressed(4)"/>
             <input ref="digit5" v-model="digit5" placeholder="0" type="text" @keypress="handleKeyPressed(5)"/>
             <input ref="digit6" v-model="digit6" placeholder="0" type="text" @keypress="handleKeyPressed(6)"/>
-        </div>
-        <button class="invisible" type="submit"></button>
-      </form>
-      <div id="loader"></div>
-  </div>
+          </div>
+          <button class="invisible" type="submit"></button>
+        </form>
+        <div id="loader"></div>
+      </div>
+    </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import qrcode from 'qrcode';
 import axios from 'axios';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     name: "DoubleFa",
     props: {
     },
@@ -31,8 +34,8 @@ export default {
         route: useRoute(),
         router: useRouter(),
         qrlink: '',
-        timeLeft: Number,
-        interValId: null,
+        timeLeft: 30,
+        interValId: null as any,
         digit1: '',
         digit2: '',
         digit3: '',
@@ -44,13 +47,17 @@ export default {
     mounted()
     {
       this.timeLeft = 30;
-      const timeLeft = JSON.parse(localStorage.getItem('timeLeft'));
+      let timeLeftString = localStorage.getItem('timeLeft');
+      if (!timeLeftString)
+        timeLeftString = '';
+      const timeLeft = JSON.parse(timeLeftString);
       if (timeLeft && timeLeft > 0)
         this.timeLeft = timeLeft;
       else if (timeLeft !== 0 || timeLeft === -1)
         localStorage.setItem('timeLeft', JSON.stringify(30));
 
-      qrcode.toDataURL(this.route.params.link, (err, data) =>
+      const route = this.route as any;
+      qrcode.toDataURL(route.params.link, (err, data) =>
       {
         if (err)
           console.error(err)
@@ -64,37 +71,36 @@ export default {
     },
     methods:
     {
-      handleKeyPressed(nb)
+      handleKeyPressed(nb: number)
       {
         if (nb === 1 && this.$refs.digit1 && this.$refs.digit2)
         {
-          this.$refs.digit1.select();
-          this.$refs.digit2.select();
+          (this.$refs.digit1 as HTMLInputElement).select();
+          (this.$refs.digit2 as HTMLInputElement).select();
         }
         else if (nb === 2 && this.$refs.digit2 && this.$refs.digit3)
         {
-          this.$refs.digit2.select();
-          this.$refs.digit3.select();
+          (this.$refs.digit2 as HTMLInputElement).select();
+          (this.$refs.digit3 as HTMLInputElement).select();
         }
         else if (nb === 3 && this.$refs.digit4 && this.$refs.digit3)
         {
-          this.$refs.digit3.select();
-          this.$refs.digit4.select();
+          (this.$refs.digit3 as HTMLInputElement).select();
+          (this.$refs.digit4 as HTMLInputElement).select();
         }
         else if (nb === 4 && this.$refs.digit4 && this.$refs.digit5)
         {
-          this.$refs.digit4.select();
-          this.$refs.digit5.select();
+          (this.$refs.digit4 as HTMLInputElement).select();
+          (this.$refs.digit5 as HTMLInputElement).select();
         }
         else if (nb === 5 && this.$refs.digit6 && this.$refs.digit5)
         {
-          this.$refs.digit5.select();
-          this.$refs.digit6.select();
+          (this.$refs.digit5 as HTMLInputElement).select();
+          (this.$refs.digit6 as HTMLInputElement).select();
         }
         else if (nb === 6 && this.$refs.digit6)
         {
-          this.$refs.digit6.select();
-          this.$refs.digit6.blur();
+          (this.$refs.digit6 as HTMLInputElement).select();
         }
       },
       async check2Fa()
@@ -137,8 +143,10 @@ export default {
                     transparent ${(30 - this.timeLeft) * 3.333}%,
                     #c5c6c7 ${(30 - this.timeLeft) * 3.333}%,
                     #c5c6c7 100%`
-              const timeLeft = JSON.parse(localStorage.getItem('timeLeft'));
-              if (timeLeft > 0)
+              let timeLeft = (localStorage.getItem('timeLeft'));
+              if (!timeLeft)
+                timeLeft = '0';
+              if (timeLeft !== '0' && timeLeft !== '-1')
                 localStorage.setItem('timeLeft', JSON.stringify(this.timeLeft));
               if (res < 0)
               {
@@ -183,10 +191,22 @@ export default {
         return (res);
       }
     }
-}
+})
 </script>
 
 <style scoped>
+
+.double-fa-page
+{
+  display: flex;
+  justify-content: center;
+  padding-top: 10em;
+}
+
+#qrcode-doublefa
+{
+  margin-left: 6.5em;
+}
 .invisible
 {
   display: none;
@@ -195,7 +215,7 @@ export default {
 {
   display: flex;
   justify-content: center;
-  margin-top: 20em;
+  margin-top: 5em;
 }
 .input-numbers input
 {
@@ -226,6 +246,8 @@ export default {
   width: 5em;
   height: 5em;
   border-radius: 50%;
+  margin-left: 9.5em;
+  margin-top: 4em;
 }
 </style>
 
