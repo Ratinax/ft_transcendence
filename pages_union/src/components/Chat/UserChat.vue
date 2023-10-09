@@ -60,14 +60,14 @@ export default defineComponent({
 		sessionCookie: String,
 	},
 	data()
-{
+	{
 		return {
 			router: useRouter(),
 			showTimeOut: false as boolean,
 		}
 	},
 	mounted()
-{
+	{
 		this.socket?.on('timeoutGoodRequest', async (response: {channel: {channel_id: number}, sessionCookie: string}) => {
 			if (response.channel.channel_id === this.channel?.channel_id && this.sessionCookie === response.sessionCookie)
 		{
@@ -89,41 +89,41 @@ export default defineComponent({
 	},
 	methods: {
 		handleUserClicked() 
-	{
+		{
 			this.$emit('user-clicked', this.userInChat);
 		},
 		async ban()
-	{
+		{
 			this.socket?.emit('banUser', {channel: this.channel, userBanned: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async kick()
-	{
+		{
 			this.socket?.emit('kickUser', {channel: this.channel, userKicked: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async setAdmin()
-	{
+		{
 			this.socket?.emit('setAdmin', {channel: this.channel, userSetAdmin: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async removeAdmin()
-	{
+		{
 			this.socket?.emit('removeAdmin', {channel: this.channel, userRemovedAdmin: this.userInChat, sessionCookie: this.sessionCookie});
 		},
 		async onTimeoutUser(nbSeconds: number)
-	{
+		{
 			this.socket?.emit('timeoutUser', {userTimeouted: this.userInChat, channel: this.channel, duration_timeout: nbSeconds, sessionCookie: this.sessionCookie});
 		},
 		closeTimeOut()
-	{
+		{
 			this.showTimeOut = false;
 		},
 		seeProfil()
-	{
+		{
 			this.router.push({name: 'UserPage', params: {pseudo: this.userInChat?.pseudo}})
 		},
 		handleClickOutsideOptions(event: any) 
-	{
-			if (this.$refs.optionsRef && !(this.$refs.optionsRef as any).contains(event.target)) 
 		{
+			if (this.$refs.optionsRef && !(this.$refs.optionsRef as HTMLDivElement).contains(event.target)) 
+			{
 				this.$emit('close-options', this.userInChat);
 			}
 		},
