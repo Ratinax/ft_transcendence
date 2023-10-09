@@ -2,28 +2,29 @@
 	<router-view></router-view>
 </template>
 
-<script>
+<script lang="ts">
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import { defineComponent } from 'vue';
 
 
-export default {
+export default defineComponent({
 	name: 'App',
 	components: {
 	},
 	data()
-{
+	{
 		return {
 			socket: io(`http://${process.env.VUE_APP_IP}:3003/`, { withCredentials: true }),
 		}
 	},
 	mounted()
-{
+	{
 		this.socket.on('pingAlive', async () => {
 			await axios.post(`http://${process.env.VUE_APP_IP}:3000/sessions/pingBack`, {}, { withCredentials: true });
 		})
 	}
-}
+})
 </script>
 
 <style src="./assets/global.css" rel="stylesheet" lang="css"></style>

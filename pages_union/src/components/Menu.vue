@@ -41,10 +41,11 @@
 	</nav>
 </template>
 
-<script>
+<script lang="ts">
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-export default {
+import { defineComponent } from 'vue';
+export default defineComponent({
 	name: 'Menu-component',
 	data()
 	{
@@ -90,7 +91,7 @@ export default {
 			this.router.push({path: '/choose_game'});
 		}
 	}
-}
+})
 </script>
 
 <style>

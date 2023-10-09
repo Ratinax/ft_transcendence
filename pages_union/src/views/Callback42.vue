@@ -4,17 +4,18 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { defineComponent } from 'vue';
+import { LocationQueryValue, useRouter } from 'vue-router';
 
-export default {
+export default defineComponent({
     name: 'Callback42Vue',
     data()
     {
         return {
-            code: null,
+            code: '' as LocationQueryValue | LocationQueryValue[] | string,
             errorMessage: '',
             router: useRouter(),
         }
@@ -38,7 +39,7 @@ export default {
 			else
 				this.router.replace({path: '/chat'});
         }
-        catch (error)
+        catch (error: any)
         {
 			if (error && error.response && error.response.data && error.response.data.message)
                 this.errorMessage = error.response.data.message;
@@ -46,7 +47,7 @@ export default {
                 this.errorMessage = 'Internal servor error, try again later';
         }
     }
-}
+})
 </script>
 
 <style scoped>
