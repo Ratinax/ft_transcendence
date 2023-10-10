@@ -13,31 +13,19 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, ref } from 'vue';
-import { Ball } from "./game/ball";
-import { Game, gameOptions } from "./game/game";
-import { Player } from "./game/player";
-import { Racket } from "./game/racket";
+import { onBeforeMount, ref } from 'vue';
+import { Ball } from "../assets/game/ball";
+import { Game, gameOptions } from "../assets/game/game";
+import { Player } from "../assets/game/player";
+import { Racket } from "../assets/game/racket";
 import { io } from 'socket.io-client';
 
-const	socket = io("http://10.19.250.41:3000");
+const	socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}`);
 
 const	start = ref(false);
 const	name = ref('hit');
 
 const	game = new Game();
-
-const	options: gameOptions = {
-		ballAccel: 50,
-		ballSize: 30,
-		ballSpeed: 1200,
-		maxAngle: 45,
-		playerSize: 300,
-		playerSpeed: 1700,
-		winScore: 5,
-	}
-
-game.options = options;
 
 game.player = new Player();
 game.opponent = new Player();
@@ -100,21 +88,21 @@ function quickPlay(mode: number) {
 	socket.emit('quickPlay', {name: name.value, mode: mode});
 }
 
-function joinGame() {
-	socket.emit('joinGame', {name: name, creatorId: 1});
-}
+// function joinGame() {
+// 	socket.emit('joinGame', {name: name, creatorId: 1});
+// }
 
-function update() {
-	socket.emit('update', {y: game.player?.racket?.y})
-}
+// function update() {
+// 	socket.emit('update', {y: game.player?.racket?.y})
+// }
 
-function createGame() {
-	socket.emit('createGame', {options: 1, name: name});
-}
+// function createGame() {
+// 	socket.emit('createGame', {options: 1, name: name});
+// }
 
-function deleteGame() {
-	socket.emit('deleteGame');
-}
+// function deleteGame() {
+// 	socket.emit('deleteGame');
+// }
 
 onBeforeMount(() => {
 	socket.on('join', (infos: any) => {

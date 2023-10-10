@@ -150,7 +150,7 @@ export default defineComponent({
               let timeLeft = (localStorage.getItem('timeLeft'));
               if (!timeLeft)
                 timeLeft = '0';
-              if (timeLeft !== '0' && timeLeft !== '-1')
+              if (+timeLeft > 0)
                 localStorage.setItem('timeLeft', JSON.stringify(this.timeLeft));
               if (res < 0)
               {

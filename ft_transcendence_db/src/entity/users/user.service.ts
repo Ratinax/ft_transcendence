@@ -69,7 +69,8 @@ export class UserService {
         }
         else if (!userFromPseudo && !userFrom42)
         {
-            const newUser = this.userRepository.create(user);
+            const userToCreate = {pseudo: user.pseudo, profilPic: user.profilPic, is42User: true};
+            const newUser = this.userRepository.create(userToCreate);
             const res = await this.userRepository.save(newUser);
             if (!res)
                 return ({pseudo: '', profilPic: '', id: -1});
