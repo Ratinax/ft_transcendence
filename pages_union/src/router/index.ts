@@ -6,6 +6,7 @@ import Callback42 from '../views/Callback42.vue';
 import UserPage from '../views/UserPage.vue'
 import DoubleFa from '../views/DoubleFa.vue'
 import ChooseGame from '../views/ChooseGame.vue'
+import GameView from '../views/GameView.vue'
 
 import axios from 'axios';
 const routes = [
@@ -72,6 +73,19 @@ const routes = [
 		path: '/choose_game',
 		component: ChooseGame,
 		name: 'ChooseGamePage',
+        beforeEnter: async (to: any, from: any, next: any) => {
+            const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
+            if (sessionCookie !== '') {
+                next();
+            } else {
+                next('/');
+            }
+        }
+	},
+    {
+		path: '/game',
+		component: GameView,
+		name: 'GameView',
         beforeEnter: async (to: any, from: any, next: any) => {
             const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
             if (sessionCookie !== '') {

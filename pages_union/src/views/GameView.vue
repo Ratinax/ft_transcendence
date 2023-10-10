@@ -1,26 +1,24 @@
 <template>
-	<div>
-		<div v-if="start">
-			<canvas></canvas>
-		</div>
-		<div v-else>
-			<button @click="startGame">start</button>
-			<button @click="quickPlay(1)">slow</button>
-			<button @click="quickPlay(2)">classic</button>
-			<button @click="quickPlay(3)">fast</button>
+	<div class="page-background"></div>
+	<div class="container">
+		<div>
+			<div>
+				<canvas></canvas>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import { Ball } from "../assets/game/ball";
 import { Game, gameOptions } from "../assets/game/game";
 import { Player } from "../assets/game/player";
 import { Racket } from "../assets/game/racket";
 import { io } from 'socket.io-client';
 
-const	socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}`);
+const	socket = io(`http://${process.env.VUE_APP_IP}:3004/`)
+console.log(socket)
 
 const	start = ref(false);
 const	name = ref('hit');
@@ -52,6 +50,7 @@ async function initGame() {
 
 function launch() {
 
+	console.log('je vais dans launch');
 	const	canvas = document.querySelector('canvas');
 	const	ctx = canvas?.getContext("2d");
 	if (!canvas || !ctx)
@@ -69,64 +68,30 @@ function launch() {
 	requestAnimationFrame(loop);
 }
 
-function startGame() {
-	initGame().then(
-		() => {
-			launch();
-		}
-	)
-}
-
 function loop() {
 	game.update();
 	socket.emit('state', {pos: game.player.racket?.y})
 	requestAnimationFrame(loop);
 }
 
-function quickPlay(mode: number) {
-	console.log(mode);
-	socket.emit('quickPlay', {name: name.value, mode: mode});
-}
-
-// function joinGame() {
-// 	socket.emit('joinGame', {name: name, creatorId: 1});
-// }
-
-// function update() {
-// 	socket.emit('update', {y: game.player?.racket?.y})
-// }
-
-// function createGame() {
-// 	socket.emit('createGame', {options: 1, name: name});
-// }
-
-// function deleteGame() {
-// 	socket.emit('deleteGame');
-// }
-
 onBeforeMount(() => {
-	socket.on('join', (infos: any) => {
-		game.options = infos.options;
-		game.player.side = infos.side;
-		game.player.name = name.value;
-		if (game.player.side !== null)
-			game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
-	});
+	let options = localStorage.getItem('gameInfos');
+	if (!options)
+		options = '';
+	const optionsParsed = JSON.parse(options);
+	game.options = optionsParsed.options;
+	game.player.side = optionsParsed.side;
+	if (game.player.side !== null)
+		game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
+	
+	let opponent = localStorage.getItem('opponentInfos');
+	const opponentParsed = JSON.parse(options);
 
-	socket.on('full', (infos: any) => {
-		game.opponent.name = infos.opponentName;
-		game.opponent.side = infos.opponentSide;
-
-		console.log(infos);
-
-		if (game.opponent.side !== null)
-			game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
-
-		initGame().then(
-		() => {
-			launch();
-		})
-	});
+	if (!opponent)
+		opponent = '';
+	game.opponent.side = opponentParsed.side;
+	if (game.opponent.side !== null)
+		game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
 
 	socket.on('update', (updateInfos: any) => {
 		game.ball.currentSpeed = updateInfos.update.ballSpeed;
@@ -152,14 +117,28 @@ onBeforeMount(() => {
 				game.opponent.racket.y = updateInfos.update.player1Pos;
 		}
 	});
+
+	onMounted(() => {
+		launch();
+	})
 })
 
 
 </script>
 
-<style>
-canvas {
-	background-color: black;
-	width: 60%;
+<style scoped>
+
+#waiting-text
+{
+	font-size: 4em;
+	color: var(--plight);
+	margin-top: 1em;
 }
+.page-background
+{
+	z-index: -1;
+}
+
+
+
 </style>

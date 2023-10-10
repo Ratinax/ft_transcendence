@@ -7,6 +7,7 @@ import { SessionService } from '../sessions/session.service';
 import { sessionProviders } from '../sessions/session.providers';
 import { userProviders } from '../users/user.providers';
 import { UserService } from '../users/user.service';
+import { GamesGateway } from './games.gateway';
 
 @Module({
   imports: [DatabaseModule],
@@ -14,6 +15,7 @@ import { UserService } from '../users/user.service';
     ...gameProviders,
     ...sessionProviders,
     ...userProviders,
+    GamesGateway,
     GameService,
     SessionService,
     UserService,

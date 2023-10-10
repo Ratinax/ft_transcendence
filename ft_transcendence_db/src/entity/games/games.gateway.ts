@@ -1,10 +1,12 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { GameService } from './game.service';
 import { Server, Socket } from 'socket.io';
+import { ConfigIp } from 'src/config-ip';
 
-@WebSocketGateway({
+@WebSocketGateway(3004, {
 	cors: {
-		origin: '*'
+    origin: `http://${ConfigIp.IP}:8080`,
+    credentials: true,
 	}
 })
 export class GamesGateway {
@@ -23,10 +25,11 @@ export class GamesGateway {
 
 	@SubscribeMessage('quickPlay')
 	quickPlay(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		console.log('join queue')
 		if (this.gameService.getGameIndex(client.id) === -1)
 		{
 			const	options = this.gameService.joinQuickPlay(client.id, body.name, body.mode);
-			this.server.to(client.id).emit('join', options);
+			this.server.to(client.id).emit('joinGame', options);
 		}
 		const	gameIndex = this.gameService.getGameIndex(client.id);
 		if (this.gameService.games[gameIndex].isFull)
@@ -36,24 +39,15 @@ export class GamesGateway {
 		}
 	}
 	
-	@SubscribeMessage('')
-	joinGame() {
-		
-	}
 
-	@SubscribeMessage('ready')
-	ready() {
-
-	}
-
-	@SubscribeMessage('startGame')
-	startGame() {
-
-	}
 
 	@SubscribeMessage('state')
 	async updateGame(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		console.log(body);
+		console.log('update');
+		console.log(client.id);
 		const	gameIndex = this.gameService.getGameIndex(client.id);
+		console.log(gameIndex);
 		if (this.gameService.games[gameIndex].player.id === client.id)
 			this.gameService.games[gameIndex].player.racket.y = body.pos;
 		else
@@ -61,8 +55,4 @@ export class GamesGateway {
 		this.updateGameFromIndex(gameIndex);
 	}
 
-	@SubscribeMessage('endGame')
-	endGame(@ConnectedSocket() client: Socket) {
-		
-	}
 }
