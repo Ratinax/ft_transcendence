@@ -27,7 +27,7 @@ export default defineComponent({
     {
         async getQrCode()
         {
-            const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/link2Fa`, {withCredentials: true})).data;
+            const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/link2Fa`, {withCredentials: true})).data;
             qrcode.toDataURL(res, (err: any, data: string) =>
             {
                 if (err)

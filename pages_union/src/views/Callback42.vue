@@ -27,7 +27,7 @@ export default defineComponent({
         try
         {
 
-            const res = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/callback42/${this.code}`,
+            const res = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/callback42/${this.code}`,
             {
                 withCredentials: true,
             },

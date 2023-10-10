@@ -20,7 +20,7 @@ const routes = [
         props: true,
         // Check if session cookie, if not, redirect to logpage
         beforeEnter: async (to: any, from: any, next: any) => {
-            const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
+            const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
             if (sessionCookie !== '') {
                 next();
             } else {
@@ -35,7 +35,7 @@ const routes = [
         props: true,
         // Check if session cookie, if not, redirect to logpage
         beforeEnter: async (to: any, from: any, next: any) => {
-            const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
+            const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
             if (sessionCookie !== '') {
                 next();
             } else {
@@ -55,7 +55,7 @@ const routes = [
 		name: 'UserPage',
 		//props: true, // TODO surement a tej, ca fait de la merde dans les logs je crois quand on va sur userpage (quand on est deja dessus)
         beforeEnter: async (to: any, from: any, next: any) => {
-            const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
+            const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
             if (sessionCookie !== '') {
                 next();
             } else {
@@ -73,7 +73,7 @@ const routes = [
 		component: ChooseGame,
 		name: 'ChooseGamePage',
         beforeEnter: async (to: any, from: any, next: any) => {
-            const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
+            const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
             if (sessionCookie !== '') {
                 next();
             } else {

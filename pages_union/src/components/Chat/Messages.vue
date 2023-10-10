@@ -59,7 +59,7 @@ export default defineComponent({
         }
         try 
         {
-          const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/messages/${channel.name}`, {withCredentials: true});
+          const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/messages/${channel.name}`, {withCredentials: true});
           this.messages = response.data;
         } 
         catch (error) 

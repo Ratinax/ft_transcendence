@@ -57,7 +57,7 @@ export default defineComponent({
 	},
 	async beforeMount()
 	{
-		this.pseudo = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo`, {withCredentials: true})).data;
+		this.pseudo = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, {withCredentials: true})).data;
 	},
 	methods: 
 	{
@@ -77,7 +77,7 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/logOut`, {}, {withCredentials: true})).data;
+				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/logOut`, {}, {withCredentials: true})).data;
 				if (res)
 					this.router.push(({path: '/'}))
 			}

@@ -15,13 +15,13 @@ export default defineComponent({
 	data()
 	{
 		return {
-			socket: io(`http://${process.env.VUE_APP_IP}:3003/`, { withCredentials: true }),
+			socket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_CONNECTION_SOCKET_PORT}/`, { withCredentials: true }),
 		}
 	},
 	mounted()
 	{
 		this.socket.on('pingAlive', async () => {
-			await axios.post(`http://${process.env.VUE_APP_IP}:3000/sessions/pingBack`, {}, { withCredentials: true });
+			await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/pingBack`, {}, { withCredentials: true });
 		})
 	}
 })

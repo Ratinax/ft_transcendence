@@ -116,17 +116,17 @@ export default defineComponent({
 			if (typeof route.params.pseudo === 'string'){
 				userName.value = route.params.pseudo;
 			}
-			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
+			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
-			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:3000/games/games-wins/${userName.value}`, {withCredentials: true});
+			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/games-wins/${userName.value}`, {withCredentials: true});
 			userGamesPlayed.value = response2.data.nb_games;
 			userWins.value = response2.data.nb_wins;
-			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/pseudo/`, {withCredentials: true})).data);
-			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
-			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
-			isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
-			isBlockedBy.value = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/blockships/isBlockedBy/${userName.value}`, {withCredentials: true})).data;
-			const res2fa = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/is2fa/${userName.value}`, {withCredentials: true})).data;
+			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo/`, {withCredentials: true})).data);
+			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
+			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
+			isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
+			isBlockedBy.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/isBlockedBy/${userName.value}`, {withCredentials: true})).data;
+			const res2fa = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/is2fa/${userName.value}`, {withCredentials: true})).data;
 			const checkbox = document.getElementById("fa2-input") as HTMLInputElement;
 			if (checkbox)
 				checkbox.checked = res2fa;
@@ -137,7 +137,7 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/block/`, {pseudo: userName.value}, {withCredentials: true});
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/block/`, {pseudo: userName.value}, {withCredentials: true});
 				if (res.data === 'Success')
 				isBlocked.value = true;
 			}
@@ -150,7 +150,7 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/blockships/unblock/`, {pseudo: userName.value}, {withCredentials: true});
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/unblock/`, {pseudo: userName.value}, {withCredentials: true});
 				if (res.data === 'Success')
 					isBlocked.value = false;
 			}
@@ -163,7 +163,7 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/friendships/ask/`, {pseudo: userName.value}, {withCredentials: true});
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/friendships/ask/`, {pseudo: userName.value}, {withCredentials: true});
 				isFriend.value = res.data;
 			}
 			catch (e)
@@ -175,7 +175,7 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/friendships/remove/`, {pseudo: userName.value}, {withCredentials: true});
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/friendships/remove/`, {pseudo: userName.value}, {withCredentials: true});
 				isFriend.value = res.data;
 			}
 			catch (e)
@@ -187,7 +187,7 @@ export default defineComponent({
 		{
 			try
 			{
-				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/initDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
+				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels/initDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
 				if (res)
 				router.push({ path: '/chat' } )
 			}
@@ -201,7 +201,7 @@ export default defineComponent({
 			is2faState.value = !is2faState.value;
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/change2fa/`, {}, {withCredentials: true});
+				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/change2fa/`, {}, {withCredentials: true});
 			}
 			catch (e)
 			{
@@ -210,7 +210,7 @@ export default defineComponent({
 		}
 		onBeforeMount(() =>
 			{
-			socket = io(`http://${process.env.VUE_APP_IP}:3003/`, { withCredentials: true });
+			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_CONNECTION_SOCKET_PORT}/`, { withCredentials: true });
 				socket.on('isConnected', (response) => {
 					if (response.pseudo === userName.value)
 					isConnected.value = true;

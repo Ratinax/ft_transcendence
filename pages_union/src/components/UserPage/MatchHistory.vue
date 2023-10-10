@@ -39,7 +39,7 @@ export default defineComponent({
 		const matchHistory = ref<MatchHistory[]>();
 
 		onBeforeMount(async () => {
-			const response = await axios.get(`http://${process.env.VUE_APP_IP}:3000/games/match-history/${props.pseudo}`, {withCredentials: true});
+			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/match-history/${props.pseudo}`, {withCredentials: true});
 
 			matchHistory.value = response.data;
 		})

@@ -50,7 +50,11 @@ export default defineComponent({
       let timeLeftString = localStorage.getItem('timeLeft');
       if (!timeLeftString)
         timeLeftString = '';
-      const timeLeft = JSON.parse(timeLeftString);
+      let timeLeft;
+      if (timeLeftString === '')
+        timeLeft = -1;
+      else
+        timeLeft = JSON.parse(timeLeftString);
       if (timeLeft && timeLeft > 0)
         this.timeLeft = timeLeft;
       else if (timeLeft !== 0 || timeLeft === -1)
@@ -109,7 +113,7 @@ export default defineComponent({
         try
         {
 
-          const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/verify2Fa/${code}`, {withCredentials: true})).data;
+          const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/verify2Fa/${code}`, {withCredentials: true})).data;
           if (res === true)
           {
             localStorage.setItem('timeLeft', JSON.stringify(0));
@@ -134,7 +138,7 @@ export default defineComponent({
         {
             try
             {
-              const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/users/timeLeft2Fa/`, {withCredentials: true})).data;
+              const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/timeLeft2Fa/`, {withCredentials: true})).data;
               this.timeLeft--;
               const loader = document.getElementById('loader');
               if (loader)

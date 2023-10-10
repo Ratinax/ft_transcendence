@@ -54,7 +54,7 @@ export default defineComponent({
 			let res;
 			try
 			{
-				res = await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/signin`, 
+				res = await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/signin`, 
 				{ 
 					pseudo: pseudo.value,
 					password: password.value,

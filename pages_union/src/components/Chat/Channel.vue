@@ -84,7 +84,7 @@ export default defineComponent({
 	{
 		this.isPrivate = false;
 		this.passwordProtected = false;
-		const res = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels/category/${this.channel?.name}`, 
+		const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels/category/${this.channel?.name}`, 
 					{
 						withCredentials: true,
 					}
@@ -110,7 +110,7 @@ export default defineComponent({
 		{
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/changePassword`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels/changePassword`, 
 					{
 						channel: this.channel,
 						password: password,
@@ -142,7 +142,7 @@ export default defineComponent({
 		{
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/setPassword`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels/setPassword`, 
 					{
 						channel: this.channel,
 						password: password,
@@ -172,7 +172,7 @@ export default defineComponent({
 		{
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/toPublic`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels/toPublic`, 
 					{
 						channel: this.channel
 					},
@@ -194,7 +194,7 @@ export default defineComponent({
 		{
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels/toPrivate`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels/toPrivate`, 
 					{
 						channel: this.channel
 					},

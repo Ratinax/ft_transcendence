@@ -49,7 +49,7 @@ export default defineComponent({
 			}
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:3000/users/signup`, 
+				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/signup`, 
 				{ 
 					pseudo: pseudo.value,
 					password: password.value,

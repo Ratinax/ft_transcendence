@@ -14,7 +14,6 @@
 
 import Menu from '@/components/Menu.vue';
 import axios from 'axios';
-import { io, Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
 
 
@@ -27,7 +26,6 @@ export default defineComponent({
 	data() {
 		return {
             sessionCookie: '',
-			socket: null as Socket | null,
             gameModes: [{name: 'Long ring long land', ballAccel: 5, ballSize: 50, ballSpeed: 700, maxAngle: 20, playerSize: 400, playerSpeed: 700, winScore: 5, img: 'sleep.png'},
                         {name: 'INCREASE', ballAccel: 500, ballSize: 50, ballSpeed: 1200, maxAngle: 45, playerSize: 400, playerSpeed: 1700, winScore: 5, img: 'increase.png'},
                         {name: 'Classic', ballAccel: 50, ballSize: 30, ballSpeed: 1200, maxAngle: 45, playerSize: 300, playerSpeed: 1700, winScore: 7, img: 'classic.png'},
@@ -36,14 +34,13 @@ export default defineComponent({
 		}
 	},
 	async mounted() {
-        this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
-		this.socket = io(`http://${process.env.VUE_APP_IP}:3002/`);
+        this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
 	},
 	methods:
 	{
 		getImageURL(img: string)
         {
-            return (`http://${process.env.VUE_APP_IP}:3000/users/images/${img}`);
+            return (`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/images/${img}`);
         },
         launchGame(gameMode: {name: string, ballAccel: number, ballSize: number, ballSpeed: number, maxAngle: number, playerSize: number, playerSpeed: number, winScore: number })
         {

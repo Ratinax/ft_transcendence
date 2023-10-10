@@ -76,7 +76,7 @@ export default defineComponent({
 				this.userInChannel = null;
 				return ;
 			}
-			const userPerms = await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/userPerms?channelId=${this.channel?.channel_id}`,
+			const userPerms = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels_users/userPerms?channelId=${this.channel?.channel_id}`,
 				{ withCredentials: true }, 
 			);
 			if (userPerms.data)

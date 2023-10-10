@@ -38,7 +38,7 @@ export default defineComponent({
     {
         async getBannedUsers()
         {
-            this.listUsersBanned = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/channels_users/bannedUsers/${this.channel?.channel_id}`, {withCredentials: true})).data;
+            this.listUsersBanned = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels_users/bannedUsers/${this.channel?.channel_id}`, {withCredentials: true})).data;
         },
         close()
         {
@@ -55,7 +55,7 @@ export default defineComponent({
             this.isClickREmoveFromBan = true;
             try
             {
-                const res = (await axios.post(`http://${process.env.VUE_APP_IP}:3000/channels_users/unBan/`, {user: user, channel: this.channel}, {withCredentials: true})).data;
+                const res = (await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels_users/unBan/`, {user: user, channel: this.channel}, {withCredentials: true})).data;
             }
             catch (e)
             {

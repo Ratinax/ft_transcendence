@@ -74,8 +74,8 @@ export default defineComponent({
 	},
 	async mounted() {
 		window.addEventListener('resize', this.handleResize);
-		this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:3000/sessions/cookies`, { withCredentials: true })).data;
-		this.socket = io(`http://${process.env.VUE_APP_IP}:3001/`);
+		this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
+		this.socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_CHAT_SOCKET_PORT}/`);
 		this.socket.on('updateMessage', (response: {channel_id: number}) => {
 			if (response.channel_id === this.selectedChannel?.channel_id)
 			this.updateMessages();

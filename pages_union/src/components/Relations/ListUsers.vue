@@ -58,7 +58,7 @@ export default defineComponent({
 			getText = 'friendships/pending';
 			try
 			{
-				const res = await axios.get(`http://${process.env.VUE_APP_IP}:3000/${getText}`, {withCredentials: true});
+				const res = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/${getText}`, {withCredentials: true});
 				this.users = res.data;
 			}
 			catch (e)
