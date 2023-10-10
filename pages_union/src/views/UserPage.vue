@@ -189,7 +189,7 @@ export default defineComponent({
 			{
 				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels/initDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
 				if (res)
-				router.push({ path: '/chat' } )
+					router.push({ path: '/chat' } )
 			}
 			catch (e)
 			{

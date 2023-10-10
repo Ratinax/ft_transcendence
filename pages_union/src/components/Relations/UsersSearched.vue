@@ -34,6 +34,13 @@ export default defineComponent({
 	{
 		async searchUsers()
 		{
+			const regex = /^[A-Za-z0-9_.-]+$/;
+			if (!regex.test(this.pseudo ? this.pseudo : ''))
+			{
+				this.$emit('displayError', 'Should only contains A-Z, a-z, 0-9, and \'._-\'');
+				return ;
+			}
+				
 			this.listUsersSearched = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/users/${this.pseudo}`, {withCredentials: true})).data;
 			if (this.listUsersSearched) {
 				if (this.listUsersSearched.length > 0) {

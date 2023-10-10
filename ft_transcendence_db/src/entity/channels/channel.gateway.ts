@@ -79,7 +79,7 @@ export class ChannelGateway {
       this.server.emit('createWrongCategory', {sessionCookie: sessionCookie});
       return (false);
     }
-    const regex = /^[A-Za-z0-9_.]+$/;
+    const regex = /^[A-Za-z0-9_.-]+$/;
     if (!regex.test(channel.name))
     {
       this.server.emit('createNotAllowedChars', {sessionCookie: sessionCookie});
