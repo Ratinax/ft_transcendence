@@ -5,12 +5,14 @@ export class Player {
 	name: string | null;
 	side: boolean | null;
 	score = 0;
-	id: string | null;
+	socket: string | null;
+	id: number | null;
 
 	constructor() {
 		this.racket = null;
 		this.name = null;
 		this.side = null;
+		this.socket = null;
 		this.id = null;
 	}
 }

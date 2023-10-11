@@ -43,12 +43,13 @@ export class GameService {
 		winScore: 7,
 	}
 
-	addToGame(playerId: string, name: string, mode: number, isCustom: boolean) {
+	addToGame(playerId: number, name: string, mode: number, isCustom: boolean, playerSocket: string) {
 		for (let i = 0; i < this.games.length; i++) {
 			if (this.games[i].mode === mode && !this.games[i].isFull)
 			{
 				this.games[i].opponent = new Player();
 				this.games[i].opponent.id = playerId;
+				this.games[i].opponent.socket = playerSocket;
 				this.games[i].opponent.name = name;
 				this.games[i].opponent.side = !this.games[i].player.side;
 				this.games[i].opponent.racket = new Racket(this.games[i].opponent.side, this.games[i].width, this.games[i].height);
@@ -71,6 +72,7 @@ export class GameService {
 		}
 		newGame.player = new Player();
 		newGame.player.id = playerId;
+		newGame.player.socket = playerSocket;
 		newGame.player.name = name;
 		newGame.player.side = true;
 		newGame.player.racket = new Racket(newGame.player.side, newGame.width, newGame.height);
@@ -82,16 +84,24 @@ export class GameService {
 		return newGame.player.side;
 	}
 
-	getGameIndex(playerId: string) {
+	getGameIndexFromSocket(playerSocket: string) {
 		for (let i = 0; i < this.games.length; i++) {
-			if ((this.games[i].player && this.games[i].player.id && this.games[i].player.id === playerId) || ( this.games[i].opponent && this.games[i].opponent.id && this.games[i].opponent.id === playerId))
+			if ((this.games[i].player && this.games[i].player.socket && this.games[i].player.socket === playerSocket) || ( this.games[i].opponent && this.games[i].opponent.socket && this.games[i].opponent.socket === playerSocket))
 				return i;
 		}
 		return -1;
 	}
 
-	joinQuickPlay(playerId: string, name: string, mode: number) {
-		const	side = this.addToGame(playerId, name, mode, false);
+	getGameIndexFromId(playerId: number) {
+		for (let i = 0; i < this.games.length; i++) {
+			if ((this.games[i].player && this.games[i].player.socket && this.games[i].player.id === playerId) || ( this.games[i].opponent && this.games[i].opponent.socket && this.games[i].opponent.id === playerId))
+				return i;
+		}
+		return -1;
+	}
+
+	joinQuickPlay(playerId: number, name: string, mode: number, playerSocket: string) {
+		const	side = this.addToGame(playerId, name, mode, false, playerSocket);
 		console.log(this.games);
 		switch(mode) {
 			case 1:

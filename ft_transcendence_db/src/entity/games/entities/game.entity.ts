@@ -27,7 +27,7 @@ export class Game {
 
 	mode: number | null;
 	isCustom: boolean | null;
-	creatorId: string | null;
+	creatorId: number | null;
 	isFull = false;
 
 	constructor() {

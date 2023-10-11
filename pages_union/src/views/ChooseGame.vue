@@ -73,7 +73,9 @@ export default defineComponent({
         launchGame(gameMode: {name: string, ballAccel: number, ballSize: number, ballSpeed: number, maxAngle: number, playerSize: number, playerSpeed: number, winScore: number })
         {
             this.isSearching = true;
-            this.socket.emit('quickPlay', {mode: 1, name: 'onsenfou'});
+			axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true }).then(res => {
+				this.socket.emit('quickPlay', {mode: 1, name: 'onsenfou', sessionKey: res.data});
+			})
         },
         cancel()
         {

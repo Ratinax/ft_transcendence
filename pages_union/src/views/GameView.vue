@@ -1,9 +1,11 @@
 <template>
-	<div class="page-background"></div>
-	<div class="container">
-		<div>
+	<div>
+		<div class="page-background"></div>
+		<div class="container">
 			<div>
-				<canvas></canvas>
+				<div>
+					<canvas></canvas>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -16,9 +18,13 @@ import { Game, gameOptions } from "../assets/game/game";
 import { Player } from "../assets/game/player";
 import { Racket } from "../assets/game/racket";
 import { io } from 'socket.io-client';
+import axios from 'axios';
 
-const	socket = io(`http://${process.env.VUE_APP_IP}:3004/`)
-console.log(socket)
+const	socket = io(`http://${process.env.VUE_APP_IP}:3004/`);
+
+axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true }).then(res => {
+				socket.emit('updateSocket', {sessionKey: res.data});
+			})
 
 const	start = ref(false);
 const	name = ref('hit');
@@ -44,13 +50,8 @@ window.addEventListener('keydown', e => {
 			game.down = false;
 	});
 
-async function initGame() {
-	start.value = true;
-}
-
 function launch() {
 
-	console.log('je vais dans launch');
 	const	canvas = document.querySelector('canvas');
 	const	ctx = canvas?.getContext("2d");
 	if (!canvas || !ctx)
@@ -75,20 +76,17 @@ function loop() {
 }
 
 onBeforeMount(() => {
-	let options = localStorage.getItem('gameInfos');
-	if (!options)
-		options = '';
+	const options = localStorage.getItem('gameInfos');
 	const optionsParsed = JSON.parse(options);
+
 	game.options = optionsParsed.options;
 	game.player.side = optionsParsed.side;
 	if (game.player.side !== null)
 		game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
 	
-	let opponent = localStorage.getItem('opponentInfos');
-	const opponentParsed = JSON.parse(options);
+	const opponent = localStorage.getItem('opponentInfos');
+	const opponentParsed = JSON.parse(opponent);
 
-	if (!opponent)
-		opponent = '';
 	game.opponent.side = opponentParsed.side;
 	if (game.opponent.side !== null)
 		game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
@@ -118,10 +116,11 @@ onBeforeMount(() => {
 		}
 	});
 
-	onMounted(() => {
-		launch();
-	})
 })
+
+onMounted(() => {
+		launch();
+	});
 
 
 </script>
@@ -139,6 +138,9 @@ onBeforeMount(() => {
 	z-index: -1;
 }
 
-
+canvas {
+	background-color: black;
+	width: 60%;
+}
 
 </style>
