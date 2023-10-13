@@ -30,7 +30,6 @@ export class SessionGateway implements OnModuleInit {
     {
         setTimeout(async () =>
         {
-            console.log('ping alive');
             this.server.emit('pingAlive');
         }, 2500)
 	setTimeout(async () =>

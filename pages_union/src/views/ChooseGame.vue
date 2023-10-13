@@ -54,11 +54,9 @@ export default defineComponent({
 	async mounted() {
         this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
         this.socket.on('joinGame', (infos: any) => {
-            console.log('ca a join', infos);
             localStorage.setItem('gameInfos', JSON.stringify({options: infos.options, side: infos.side}));
         });
         this.socket.on('full', (infos: any) => {
-            console.log('c est full');
             this.router.push('/game');
             localStorage.setItem('opponentInfos', JSON.stringify({side: infos.opponentSide}));
 

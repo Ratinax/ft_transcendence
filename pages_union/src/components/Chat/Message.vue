@@ -38,15 +38,10 @@ export default defineComponent({
 	{
 		joinGame()
 		{
-			console.log('Feature incoming');
-			console.log(this.game);
-		},
+			console.log('Feature incoming');		},
 		removeGameInvite()
 		{
-			console.log(this.id);
-			this.socket?.emit('removeGameInvite', {id: this.id, sessionCookie: this.sessionCookie})
-			console.log(this.game);
-		}
+			this.socket?.emit('removeGameInvite', {id: this.id, sessionCookie: this.sessionCookie})		}
 	}
 });
 </script>

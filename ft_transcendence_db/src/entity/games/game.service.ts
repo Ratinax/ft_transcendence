@@ -102,7 +102,6 @@ export class GameService {
 
 	joinQuickPlay(playerId: number, name: string, mode: number, playerSocket: string) {
 		const	side = this.addToGame(playerId, name, mode, false, playerSocket);
-		console.log(this.games);
 		switch(mode) {
 			case 1:
 				return {options: this.slowOptions, side: side};

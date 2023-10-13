@@ -60,7 +60,6 @@ export class ChannelsUsersController {
         if (!res.isOwner)
             return (false);
         const result = await this.channelsUsersService.unBan(body.channel, body.user);
-        // console.log(result);
         if (result)
             return (true);
         return (false);
