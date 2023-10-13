@@ -124,6 +124,5 @@ methods:
 </script>
 
 <style scoped src="../../assets/popup.css">
-
 </style>
 

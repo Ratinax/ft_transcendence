@@ -4,7 +4,8 @@
 			<input v-model="channelName" placeholder="Channel name"/>
 			<div class="radio-container">
 				<div v-for="category in categories" :key="category.id" class="radio-item">
-					<input 
+					<input
+					class="radio-button"
 						type="radio" 
 						:id="category.id + ''" 
 						:value="category.id" 
@@ -130,5 +131,4 @@ export default defineComponent({
 </script>
 
 <style scoped src="../../assets/popup.css">
-
 </style>

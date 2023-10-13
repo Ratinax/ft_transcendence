@@ -50,10 +50,25 @@ input:focus {
 	flex-direction: column;
 }
 
-.radio-item {
-	width: 100%;
+.radio-button {
+	-webkit-appearance: none;
+	margin: 0.6em;
+	width: 1.5em;
+	height: 1em;
+	border-radius: 50%;
+	cursor: pointer;
+	vertical-align: middle;
+	background-color: hsla(0,0%,0%,.2);
+	background-image: -webkit-radial-gradient( hsla(200,100%,90%,1) 0%, hsla(200,100%,70%,1) 15%, hsla(200,100%,60%,.3) 28%, hsla(200,100%,30%,0) 70% );
+	background-repeat: no-repeat;
 }
 
-.radio-item input {
-	width: 5%;
+.radio-button:checked {
+-webkit-transition: background-position .2s .15s cubic-bezier(0, 0, .2, 1),
+	-webkit-transform .25s cubic-bezier(0, 0, .2, 1);
+	background-position: 0 0;
+}
+
+.radio-button{
+	background-position: 0 2.5em;
 }
