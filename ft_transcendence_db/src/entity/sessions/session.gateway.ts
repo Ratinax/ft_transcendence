@@ -20,19 +20,24 @@ export class SessionGateway implements OnModuleInit {
     onModuleInit() {
         this.pingUsersThread();
     }
-    
+
     pingUsersThread() {
         setInterval(() => {
             this.pingUsers();
-        }, 5000);
+        }, 7500);
     }
     async pingUsers()
     {
-        setTimeout(async () => 
+        setTimeout(async () =>
         {
+            console.log('ping alive');
             this.server.emit('pingAlive');
         }, 2500)
-        setTimeout(async () => 
+	setTimeout(async () =>
+	{
+		this.server.emit('pingAlive');
+	}, 5000)
+        setTimeout(async () =>
         {
             const res = await this.sessionService.removeNoMoreConnected();
 
@@ -46,6 +51,6 @@ export class SessionGateway implements OnModuleInit {
             {
                 this.server.emit('isConnected', {pseudo: connected[i]});
             }
-        }, 5000)
+        }, 7500)
     }
 }
