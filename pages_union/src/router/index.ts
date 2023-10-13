@@ -7,6 +7,7 @@ import UserPage from '../views/UserPage.vue'
 import DoubleFa from '../views/DoubleFa.vue'
 import ChooseGame from '../views/ChooseGame.vue'
 import GameView from '../views/GameView.vue'
+import PageNotFound from '../views/PageNotFound.vue'
 
 import axios from 'axios';
 const routes = [
@@ -94,7 +95,17 @@ const routes = [
                 next('/');
             }
         }
-	}
+	},
+    {
+        path: '/:catchAll(.*)',
+        redirect: '/pagenotfound',
+    },
+    {
+        path: '/pagenotfound',
+        component: PageNotFound,
+        name: 'PageNotFound',
+
+    },
 ]
 
 const router = createRouter({
