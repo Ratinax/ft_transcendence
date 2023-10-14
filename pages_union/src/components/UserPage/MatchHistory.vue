@@ -6,6 +6,9 @@
 		:playerTwoData="match.playerTwo"
 		:playerOneScore="match.scorePlayerOne"
 		:playerTwoScore="match.scorePlayerTwo"></MatchScore>
+	<div v-if="matchHistory?.length === 0">
+		<p class="user-no-match-text">No recent matches.</p>
+	</div>
 </template>
 
 <script lang="ts">
@@ -50,5 +53,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+.user-no-match-text {
+	color: var(--plight);
+	text-align: center;
+}
 
 </style>
