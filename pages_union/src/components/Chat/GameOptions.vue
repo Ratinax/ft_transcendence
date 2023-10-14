@@ -1,7 +1,7 @@
 <template>
 	<div class="pop-up-overlay" v-if="show" @click.self="close">
 		<div class="pop-up">
-			<div class="range-slider-div">
+			<div class="row range-slider-div">
 				<label>Ball acceleration</label>
 				<input type="range" min="5" max="500" class="range-slider" v-model="ballAccel">
 				<input type="text" v-model="ballAccel">
@@ -113,6 +113,10 @@ export default defineComponent({
 
 <style scoped>
 
+label {
+	font-size: .9em;
+}
+
 .pop-up {
 	max-width: none;
 }
@@ -127,9 +131,9 @@ export default defineComponent({
 
 input[type="text"]
 {
+	margin-left: 1em;
 	text-align: center;
-	position: absolute;
-	left: 22.5em;
+	left: 21em;
 	width: 3em;
 	color: var(--plight);
 	border-radius: .5em;
@@ -138,12 +142,13 @@ input[type="text"]
 }
 .range-slider
 {
-	position: absolute;
-	left: 11em;
+	margin-left: auto;
 }
 
 .range-slider-div
 {
+	display: flex;
+	align-items: center;
 	margin-bottom: 1em;
 }
 
