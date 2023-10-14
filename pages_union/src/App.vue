@@ -37,6 +37,8 @@ export default defineComponent({
 	border-radius: .5em;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	width: 30%;
+	max-width: 360px;
+	transition: width 200ms ease;
 }
 
 .pop-up-overlay 
@@ -60,6 +62,12 @@ export default defineComponent({
 .red
 {
 	color: red;
+}
+
+@media only screen and (max-width: 800px) {
+	.pop-up {
+		width: 70%;
+	}
 }
 
 </style>

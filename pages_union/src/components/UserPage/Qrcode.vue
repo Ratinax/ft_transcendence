@@ -41,18 +41,29 @@ export default defineComponent({
         {
             this.$emit('close');
         },
-    }
+		handleKeyDown(event: KeyboardEvent) {
+			if (event.key === 'Escape') {
+				this.$emit('close');
+			}
+		}
+	},
+	mounted() {
+		window.addEventListener('keydown', this.handleKeyDown);
+	},
+	beforeUnmount() {
+		window.removeEventListener('keydown', this.handleKeyDown);
+	}
 });
 </script>
 
 <style scoped>
 .pop-up
 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    width: 11em;
-    height: 11em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	width: 11em;
+	height: 11em;
 }
 </style>

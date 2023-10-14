@@ -51,6 +51,7 @@ input:focus {
 }
 
 .radio-button {
+	appearance: none;
 	-webkit-appearance: none;
 	margin: 0.6em;
 	width: 1.5em;
@@ -64,8 +65,10 @@ input:focus {
 }
 
 .radio-button:checked {
--webkit-transition: background-position .2s .15s cubic-bezier(0, 0, .2, 1),
-	-webkit-transform .25s cubic-bezier(0, 0, .2, 1);
+	transition: background-position .2s .15s cubic-bezier(0, 0, .2, 1),
+		transform .25s cubic-bezier(0, 0, .2, 1);
+	-webkit-transition: background-position .2s .15s cubic-bezier(0, 0, .2, 1),
+		-webkit-transform .25s cubic-bezier(0, 0, .2, 1);
 	background-position: 0 0;
 }
 

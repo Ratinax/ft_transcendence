@@ -56,6 +56,7 @@ export default defineComponent({
 	},
 	mounted()
 	{
+		window.addEventListener('keydown', this.handleKeyDown);
 		if (this.socket)
 		{
 
@@ -126,6 +127,14 @@ export default defineComponent({
 		{
 			this.matrixIndex = 4;
 		},
+		handleKeyDown(event: KeyboardEvent) {
+			if (event.key === 'Escape') {
+				this.$emit('close');
+			}
+		}
+	},
+	beforeUnmount() {
+		window.removeEventListener('keydown', this.handleKeyDown);
 	}
 });
 </script>

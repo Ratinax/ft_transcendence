@@ -262,11 +262,11 @@ export default defineComponent({
 	color: var(--plight);
 	height: 1.5em;
 	cursor: pointer;
+	transition: color 400ms ease;
 }
 
-#see-qrcode:hover
-{
-	height: 1.7em;
+#see-qrcode:hover {
+	color: var(--pcyan);
 }
 
 #fa2
