@@ -33,7 +33,7 @@ export default defineComponent({
 .pop-up
 {
 	background-color: var(--pdark);
-	padding: 1.5em;
+	padding: 1em;
 	border-radius: .5em;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	width: 30%;
