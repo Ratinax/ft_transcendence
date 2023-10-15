@@ -4,7 +4,8 @@
 			<input v-model="channelName" placeholder="Channel name"/>
 			<div class="radio-container">
 				<div v-for="category in categories" :key="category.id" class="radio-item">
-					<input 
+					<input
+					class="radio-button"
 						type="radio" 
 						:id="category.id + ''" 
 						:value="category.id" 
@@ -55,6 +56,7 @@ export default defineComponent({
 	},
 	mounted()
 	{
+		window.addEventListener('keydown', this.handleKeyDown);
 		if (this.socket)
 		{
 
@@ -125,10 +127,17 @@ export default defineComponent({
 		{
 			this.matrixIndex = 4;
 		},
+		handleKeyDown(event: KeyboardEvent) {
+			if (event.key === 'Escape') {
+				this.$emit('close');
+			}
+		}
+	},
+	beforeUnmount() {
+		window.removeEventListener('keydown', this.handleKeyDown);
 	}
 });
 </script>
 
 <style scoped src="../../assets/popup.css">
-
 </style>

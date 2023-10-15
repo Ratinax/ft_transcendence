@@ -43,35 +43,36 @@ export default defineComponent({
 	},
 	mounted()
 	{
+		window.addEventListener('keydown', this.handleKeyDown);
 		if (this.socket)
 		{
 			this.socket.on('joinNoSuchChannel', async (response: {sessionCookie: string}) => {
 				if (response.sessionCookie === this.sessionCookie)
 				this.noSuchChannel();
-		});
-		this.socket.on('joinAlreadyIn', async (response: {sessionCookie: string}) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.alreadyIn();
-		});
-		this.socket.on('joinWrongPassword', async (response: {sessionCookie: string}) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.wrongPassword();
-		});
-		this.socket.on('joinGoodRequest', async (response: {sessionCookie: string}) => {
-			if (response.sessionCookie === this.sessionCookie)
+			});
+			this.socket.on('joinAlreadyIn', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.alreadyIn();
+			});
+			this.socket.on('joinWrongPassword', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.wrongPassword();
+			});
+			this.socket.on('joinGoodRequest', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
 				this.goodRequest();
-		});
-		this.socket.on('joinBanned', async (response: {sessionCookie: string}) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.joinBanned();
-		});
-		this.socket.on('joinPrivateMode', async (response: {sessionCookie: string}) => {
-			if (response.sessionCookie === this.sessionCookie)
-			this.privateMode();
-		});
-	}
-},
-methods: 
+			});
+			this.socket.on('joinBanned', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.joinBanned();
+			});
+			this.socket.on('joinPrivateMode', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.privateMode();
+			});
+		}
+	},
+	methods: 
 	{
 		async joinAChannel()
 		{
@@ -82,7 +83,7 @@ methods:
 				return ;
 			}
 			if (this.socket)
-				this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, sessionCookie: this.sessionCookie})
+			this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, sessionCookie: this.sessionCookie})
 		},
 		close()
 		{
@@ -118,12 +119,19 @@ methods:
 		privateMode()
 		{
 			this.matrixIndex = 6;
-		}
+		},
+		handleKeyDown(event: KeyboardEvent) {
+			if (event.key === 'Escape') {
+				this.$emit('close');
+			}
+		},
 	},
+	beforeUnmount() {
+		window.removeEventListener('keydown', this.handleKeyDown);
+	}
 });
 </script>
 
 <style scoped src="../../assets/popup.css">
-
 </style>
 

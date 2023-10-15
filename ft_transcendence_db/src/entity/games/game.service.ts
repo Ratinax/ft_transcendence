@@ -156,6 +156,28 @@ export class GameService {
 		// }
 	// }
 
+<<<<<<< HEAD
+=======
+	getGameIndexFromId(playerId: number) {
+		for (let i = 0; i < this.games.length; i++) {
+			if ((this.games[i].player && this.games[i].player.socket && this.games[i].player.id === playerId) || ( this.games[i].opponent && this.games[i].opponent.socket && this.games[i].opponent.id === playerId))
+				return i;
+		}
+		return -1;
+	}
+
+	joinQuickPlay(playerId: number, name: string, mode: number, playerSocket: string) {
+		const	side = this.addToGame(playerId, name, mode, false, playerSocket);
+		switch(mode) {
+			case 1:
+				return {options: this.slowOptions, side: side};
+			case 2:
+				return {options: this.classicOptions, side: side};
+			case 3:
+				return {options: this.fastOptions, side: side};
+		}
+	}
+>>>>>>> e6ba6ecddb1cfcda1944e64f726d4f792249bd14
     async createGame(game: Partial<Games>)
     {
         const newChannel = this.gameRepository.create(game);

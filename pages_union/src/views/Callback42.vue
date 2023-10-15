@@ -53,6 +53,6 @@ export default defineComponent({
 <style scoped>
 p
 {
-    color: white;
+    color: red;
 }
 </style>

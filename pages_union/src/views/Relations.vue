@@ -147,7 +147,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 
 .relations-page {
 	align-items: center;

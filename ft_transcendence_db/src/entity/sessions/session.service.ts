@@ -24,7 +24,7 @@ export class SessionService{
                 id: user_id,
             },
             sessionKey: sessionKey,
-            expirationDate: new Date(Date.now() + 10000),
+            expirationDate: new Date(Date.now() + 11000),
         }
         const newSession = this.sessionRepository.create(session);
         return (await this.sessionRepository.save(newSession));
@@ -95,11 +95,11 @@ export class SessionService{
           });
         if (!relation)
             return (null);
-        relation.expirationDate = new Date(Date.now() + 10000);
+        relation.expirationDate = new Date(Date.now() + 11000);
         const res = this.sessionRepository.save(relation);
         return (res);
     }
-    
+
     async removeNoMoreConnected()
     {
         let connected = [];
