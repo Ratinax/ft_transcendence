@@ -1,31 +1,33 @@
 <template>
-    <div class="page-background"></div>
-    <div v-if="!isSearching">
-        <Menu />
-        <div class="choose-game-container view">
-            <div class="game-mode" v-for="gameMode in gameModes" :key="gameMode.name" @click="launchGame(gameMode)">
-                <img :src="getImageURL(gameMode .img)"/>
-                <p>{{gameMode.name}}</p>
-            </div>
-        </div>
-    </div>
-    <div v-else class="load-container">
-        <div class="loader">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50" class="svg-wrap">
-                <circle r="15" cx="50" cy="25" class="svg-stroke" stroke-linecap="round"></circle>
-            </svg>
-        </div>
-        <p id="waiting-text">Waiting for players</p>
-        <form class="buttons" @submit.prevent="cancel">
-            <button class="ft-button red-button" type="submit">Cancel</button>
-        </form>
-    </div>
+	<div>
+      <div class="page-background"></div>
+      <div v-if="!isSearching">
+          <Menu />
+          <div class="choose-game-container view">
+              <div class="game-mode" v-for="gameMode in gameModes" :key="gameMode.name" @click="launchGame(gameMode)">
+                  <img :src="getImageURL(gameMode .img)"/>
+                  <p>{{gameMode.name}}</p>
+              </div>
+          </div>
+      </div>
+      <div v-else class="load-container">
+          <div class="loader">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50" class="svg-wrap">
+                  <circle r="15" cx="50" cy="25" class="svg-stroke" stroke-linecap="round"></circle>
+              </svg>
+          </div>
+          <p id="waiting-text">Waiting for players</p>
+          <form class="buttons" @submit.prevent="cancel">
+              <button class="ft-button red-button" type="submit">Cancel</button>
+          </form>
+      </div>
+	</div>
 </template>
 
 
 <script lang="ts">
 
-import Menu from '@/components/Menu.vue';
+import Menu from '../components/Menu.vue';
 import axios from 'axios';
 import { io, Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
@@ -44,20 +46,20 @@ export default defineComponent({
             socket: io(`http://${process.env.VUE_APP_IP}:3004/`),
             sessionCookie: '',
             router: useRouter(),
-            gameModes: [{name: 'Long ring long land', ballAccel: 5, ballSize: 50, ballSpeed: 700, maxAngle: 20, playerSize: 400, playerSpeed: 700, winScore: 5, img: 'sleep.png'},
-                        {name: 'INCREASE', ballAccel: 500, ballSize: 50, ballSpeed: 1200, maxAngle: 45, playerSize: 400, playerSpeed: 1700, winScore: 5, img: 'increase.png'},
-                        {name: 'Classic', ballAccel: 50, ballSize: 30, ballSpeed: 1200, maxAngle: 45, playerSize: 300, playerSpeed: 1700, winScore: 7, img: 'classic.png'},
-                        {name: 'Too fast for y\'all', ballAccel: 50, ballSize: 15, ballSpeed: 600, maxAngle: 45, playerSize: 200, playerSpeed: 3700, winScore: 5, img: 'fast.png'},
-                        {name: '#*$@*#§?!!', ballAccel: 300, ballSize: 25, ballSpeed: 1500, maxAngle: 75, playerSize: 200, playerSpeed: 2700, winScore: 10, img: 'wtf.png'}]
+            gameModes: [{name: 'Long ring long land', mode: 1, img: 'sleep.png'},
+                        {name: 'INCREASE', mode: 1, img: 'increase.png'},
+                        {name: 'Classic', mode: 2, img: 'classic.png'},
+                        {name: 'Too fast for y\'all', mode: 3, img: 'fast.png'},
+                        {name: '#*$@*#§?!!', mode: 3, img: 'wtf.png'}]
 		}
 	},
 	async mounted() {
         this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
-        this.socket.on('joinGame', (infos: any) => {
+        this.socket.on('successJoin', (infos: any) => {
             console.log('ca a join', infos);
             localStorage.setItem('gameInfos', JSON.stringify({options: infos.options, side: infos.side}));
         });
-        this.socket.on('full', (infos: any) => {
+        this.socket.on('gameFull', (infos: any) => {
             console.log('c est full');
             this.router.push('/game');
             localStorage.setItem('opponentInfos', JSON.stringify({side: infos.opponentSide}));
@@ -70,16 +72,17 @@ export default defineComponent({
         {
             return (`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/images/${img}`);
         },
-        launchGame(gameMode: {name: string, ballAccel: number, ballSize: number, ballSpeed: number, maxAngle: number, playerSize: number, playerSpeed: number, winScore: number })
+        launchGame(gameMode: {name: string, mode: number})
         {
             this.isSearching = true;
-			axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true }).then(res => {
-				this.socket.emit('quickPlay', {mode: 1, name: 'onsenfou', sessionKey: res.data});
+			axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
+				this.socket.emit('quickPlay', {mode: gameMode.mode, name: res.data});
 			})
         },
         cancel()
         {
             this.isSearching = false;
+			this.socket.emit('cancelQuickPlay');
         }
     }
 });

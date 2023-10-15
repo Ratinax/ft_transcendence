@@ -16,13 +16,14 @@ export class Ball {
 		this.y = this.y + (this.currentSpeed * frameTime) * Math.sin(this.direction / (180 / Math.PI));
 	}
 
-	spawn(gameWidth: number, gameHeight: number, direction: number, ballSpeed: number) {
-		this.x = gameWidth / 2;
+	randomSpawn(gameWidth: number, gameHeight: number, direction: number, ballSpeed: number) {
+		const x = this.x = gameWidth / 2;
 		this.y = Math.floor(Math.random() * gameHeight);
 		if (this.y < 200)
 			this.y += 200;
 		else if (this.y > gameHeight - 200)
 			this.y -= 200;
+		const	y = this.y;
 		let	up = Math.round(Math.random() * 2);
 		if (up === 0 || up === 1)
 			up = 1;
@@ -33,6 +34,16 @@ export class Ball {
 			this.direction += 360;
 		else if (this.direction > 180)
 			this.direction -= 360;
+		const	finalDirection = this.direction;
+		this.currentSpeed = ballSpeed;
+
+		return {x: x, y: y, direction: finalDirection};
+	}
+
+	spawn(x: any, y: any, direction: any, ballSpeed: number) {
+		this.x = x;
+		this.y = y;
+		this.direction = direction;
 		this.currentSpeed = ballSpeed;
 	}
 
