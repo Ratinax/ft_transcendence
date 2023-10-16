@@ -75,4 +75,8 @@ export class MessageService {
             return (true);
         return (false);
     }
+    async cleanMessages(channel_id: number)
+    {
+        return (await this.messageRepository.clear());
+    }
 }
