@@ -16,6 +16,7 @@
 <script lang="ts">
 import { Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
 	name: 'JoinChannel',
@@ -27,6 +28,7 @@ export default defineComponent({
 	data()
 	{
 		return {
+			router: useRouter(),
 			channelName: '',
 			password: '',
 			matrixError: [
@@ -37,6 +39,7 @@ export default defineComponent({
 				'Wrong password',
 				'You are banned from this channel',
 				'This channel is in private mode',
+				'Should only contains A-Z, a-z, 0-9, and \'._-\''
 			],
 			matrixIndex: 0,
 		}
@@ -46,6 +49,14 @@ export default defineComponent({
 		window.addEventListener('keydown', this.handleKeyDown);
 		if (this.socket)
 		{
+			this.socket.on('joinNotGoodChars', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.notGoodChars();
+			});
+			this.socket.on('joinNotConnected', async (response: {sessionCookie: string}) => {
+				if (response.sessionCookie === this.sessionCookie)
+				this.noMoreConnected();
+			});
 			this.socket.on('joinNoSuchChannel', async (response: {sessionCookie: string}) => {
 				if (response.sessionCookie === this.sessionCookie)
 				this.noSuchChannel();
@@ -125,6 +136,14 @@ export default defineComponent({
 				this.$emit('close');
 			}
 		},
+		notGoodChars()
+		{
+			this.matrixIndex = 7;
+		},
+		noMoreConnected()
+		{
+			this.router.push('/');
+		}
 	},
 	beforeUnmount() {
 		window.removeEventListener('keydown', this.handleKeyDown);

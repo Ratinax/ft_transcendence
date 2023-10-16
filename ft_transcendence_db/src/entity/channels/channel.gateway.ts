@@ -93,13 +93,20 @@ export class ChannelGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       return ('not connected');
+
     const user = await this.sessionService.getUser(body.sessionCookie);
+    const regex = /^[A-Za-z0-9_.-]+$/;
     if (!user)
     {
-      this.server.emit('joinNoSuchChannel', {sessionCookie: body.sessionCookie});
+      this.server.emit('joinNotConnected', {sessionCookie: body.sessionCookie});
       return ('not connected')
     }
-
+    if (!regex.test(body.channelName))
+    {
+      this.server.emit('joinNotGoodChars', {sessionCookie: body.sessionCookie});
+      return ('notGoodChars');
+    }
+    
     const channels = await this.channelService.findByName(body.channelName);
     if (!channels || !channels[0])
     {
