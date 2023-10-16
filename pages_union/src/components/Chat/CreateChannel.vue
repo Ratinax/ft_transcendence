@@ -48,7 +48,7 @@ export default defineComponent({
 				'You must not have an empty field',
 				'Channel name and password must be between 3 and 20 caracteres',
 				'Channel already exists',
-				'Channel name must only contain A-Z, a-z, 0-9, and \'._\' ',
+				'Channel name must only contain A-Z, a-z, 0-9, and \'._\' -',
 			],
 			password: '',
 			channelName: '',

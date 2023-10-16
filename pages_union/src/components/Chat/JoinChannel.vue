@@ -39,7 +39,7 @@ export default defineComponent({
 				'Wrong password',
 				'You are banned from this channel',
 				'This channel is in private mode',
-				'Should only contains A-Z, a-z, 0-9, and \'._-\''
+				'Should only contains A-Z, a-z, 0-9, and \'._ -\''
 			],
 			matrixIndex: 0,
 		}
