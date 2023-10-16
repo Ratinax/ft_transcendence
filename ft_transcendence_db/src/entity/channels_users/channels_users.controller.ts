@@ -40,7 +40,7 @@ export class ChannelsUsersController {
         if (!user)
             return (null);
         const res = (await this.channelsUsersService.findRelation(user.id, channelId))[0];
-        if (!res.isOwner)
+        if (!res.isAdmin)
             return (false);
         const users = await this.channelsUsersService.findBannedUsers(channelId);
         return (users);

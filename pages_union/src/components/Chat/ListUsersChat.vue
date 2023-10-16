@@ -13,7 +13,7 @@
 				@close-options="handleCleanUSerOpt"/>
 		</div>
 		<div class="form-ban-list-container">
-			<form v-if="userInChannel && userInChannel?.isOwner" class="buttons" @submit.prevent="showBannedList">
+			<form v-if="userInChannel && userInChannel?.isAdmin" class="buttons" @submit.prevent="showBannedList">
 				<button class="ft-button blue-button ban-list" type="submit">Ban List</button>
 			</form>
 		</div>
