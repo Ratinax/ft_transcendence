@@ -193,8 +193,6 @@ export default defineComponent({
 	font-size: 1.05em;
 	top: 6.6em;
 	z-index: 2;
-	text-align: center;
-	width: 100%;
 }
 
 .showErrorMessageTransition-enter-active,

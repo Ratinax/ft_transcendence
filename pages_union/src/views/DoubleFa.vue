@@ -13,6 +13,11 @@
 					<input class="code" ref="digit6" v-model="digit6" placeholder="0" type="text" disabled/>
 				</div>
 				<button class="invisible" type="submit"></button>
+					<div class="fa-error-container">
+					<Transition name="fa-error">
+						<p class="fa-error-message" v-if="showErrorMessage">Bad 2FA code, please try again</p>
+					</Transition>
+				</div>
 			</form>
 			<div id="loader"></div>
 		</div>
@@ -42,6 +47,7 @@ export default defineComponent({
 			digit4: '',
 			digit5: '',
 			digit6: '',
+			showErrorMessage: false,
 		}
 	},
 	mounted()
@@ -62,12 +68,12 @@ export default defineComponent({
 
 		const route = this.route as any;
 		qrcode.toDataURL(route.params.link, (err, data) =>
-		{
+			{
 				if (err)
 				console.error(err)
 				else
 				this.qrlink = data;
-			})
+		})
 
 
 		this.interValId = setInterval(() => {
@@ -117,9 +123,19 @@ export default defineComponent({
 				}
 				else
 				{
+					// eslint-disable-next-line no-undef
+					const codes = document.querySelectorAll(".code") as NodeListOf<HTMLInputElement>;
+					codes.forEach((code, index) => {
+						code.value = '';
+						if (index > 0) {
+							code.disabled = true;
+						}
+					})
+					codes[0].focus();
+					this.showErrorMessage = true;
+
 					localStorage.setItem('timeLeft', JSON.stringify(0));
 					clearInterval(this.interValId);
-					this.router.replace({path: '/'})
 				}
 			}
 			catch (e)
@@ -253,5 +269,28 @@ input:disabled {
 	background: white;
 	opacity: 0.7;
 }
-</style>
 
+.fa-error-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.fa-error-message {
+	position: absolute;
+	margin-top: 2em;
+	color: red;
+}
+
+.fa-error-enter-active,
+.fa-error-leave-active {
+	transition: all .42s ease;
+}
+
+.fa-error-enter-from,
+.fa-error-leave-to {
+	transform: translateY(10px);
+	opacity: 0;
+}
+
+</style>
