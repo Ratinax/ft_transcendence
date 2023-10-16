@@ -4,6 +4,7 @@
 			<form @submit.prevent="sendMessage">
 				<input v-model="messageText" class="message-input-error message-input" :placeholder="'You are timeout for ' + durationTimeoutString" v-if="isUserTimeout"/>
 				<input class="message-input-error message-input" v-model="messageText" placeholder="One of you block the other one" v-else-if="isBlockedBy"/>
+				<input class="message-input-error message-input" v-model="messageText" placeholder="Your message exceed 1024 caracteres" v-else-if="isMessageTooLong"/>
 				<input class="message-input" v-model="messageText" placeholder="Send a message..." v-else/>
 			</form>
 			<form @submit.prevent="showGameOptions = true">
@@ -41,6 +42,7 @@ export default defineComponent({
 			durationTimeoutString: '',
 			isBlockedBy: false,
 			showGameOptions: false,
+			isMessageTooLong: false,
 		}
 	},
 	mounted()
@@ -51,7 +53,11 @@ export default defineComponent({
 		})
 		this.socket?.on('sendMessageTimeout', async (response: {duration: number, sessionCookie: string}) => {
 			if (this.sessionCookie === response.sessionCookie)
-			this.timeout(response.duration);
+				this.timeout(response.duration);
+		});
+		this.socket?.on('messageTooLong', async (response: {sessionCookie: string}) => {
+			if (this.sessionCookie === response.sessionCookie)
+				this.messageTooLong();
 		});
 	},
 	methods:
@@ -97,6 +103,7 @@ export default defineComponent({
 			this.durationTimeoutString = '';
 			this.isUserTimeout = false;
 			this.isBlockedBy = false;
+			this.isMessageTooLong = false;
 		},
 		inviteInGame(gameSettings: {ballAccel: number,
 			ballSize: number, ballSpeed: number,
@@ -114,6 +121,11 @@ export default defineComponent({
 				game: gameSettings });
 			this.showGameOptions = false;
 		},
+		messageTooLong()
+		{
+			console.log('message too long')
+			this.isMessageTooLong = true;
+		}
 	}
 });
 </script>

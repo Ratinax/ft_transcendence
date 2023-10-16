@@ -201,9 +201,6 @@ onBeforeMount(() => {
 		game.ball.direction = infos.direction;
 		game.ball.move(latency.value / 1000 + opponentLatency.value / 1000);
 	});
-	socket.on('gameOver', () => {
-		
-	})
 })
 
 onMounted(() => {

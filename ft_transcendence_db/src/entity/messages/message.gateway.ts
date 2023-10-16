@@ -38,7 +38,11 @@ export class MessagesGateway {
       const relation = (await this.channelsUsersService.findRelation(user.id, body.channel_id))[0];
       if (!relation)
         return ('no such relation');
-
+      if (body.message.length > 1024)
+      {
+        this.server.emit('messageTooLong', {sessionCookie: body.sessionCookie});
+        return ('messageTooLong');
+      }
       if (relation.channel.isADm && await this.isBlockedRelation(relation))
       {
         this.server.emit('sendMessageBlocked', {sessionCookie: body.sessionCookie})
