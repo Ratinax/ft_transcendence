@@ -142,7 +142,11 @@ function loop() {
 	spawnBall();
 	playerCollision();
 	if (checkGoal())
+	{
 		socket.emit('score');
+		if (game.player.score === game.options?.winScore)
+			socket.emit('endGame')
+	}
 	socket.emit('updatePlayerPos', {pos: game.player.racket.y});
 	requestAnimationFrame(loop);
 }
@@ -196,6 +200,9 @@ onBeforeMount(() => {
 		game.ball.currentSpeed = infos.speed;
 		game.ball.direction = infos.direction;
 		game.ball.move(latency.value / 1000 + opponentLatency.value / 1000);
+	});
+	socket.on('gameOver', () => {
+		
 	})
 })
 

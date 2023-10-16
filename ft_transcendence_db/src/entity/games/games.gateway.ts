@@ -100,6 +100,15 @@ export class GamesGateway {
 			this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('opponentScore');
 	}
 
+	@SubscribeMessage('endGame')
+	endGame(@ConnectedSocket() client: Socket) {
+		const	gameIndex = this.gameService.getGameIndexFromId(client.id);
+		if (gameIndex === -1)
+			return ;
+		this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('gameOver');
+		this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('gameOver');
+	}
+
 	@SubscribeMessage('bounce')
 	bounce(@ConnectedSocket() client: Socket, @MessageBody() body) {
 		const	gameIndex = this.gameService.getGameIndexFromId(client.id);
