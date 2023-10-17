@@ -91,11 +91,11 @@ export class FriendshipService {
         let res;
         if (friendshipAllready)
         {
-            friendshipAllready.statu = 'accepted';
-            res = await this.friendshipRepository.save(friendshipAllready);
+            ;
         }
         else if (friendshipAllready2)
         {
+            console.log('here2')
             friendshipAllready2.statu = 'accepted';
             res = await this.friendshipRepository.save(friendshipAllready2);
         }
