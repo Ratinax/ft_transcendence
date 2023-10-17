@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Unique } from "typeorm";
 
 /**
  * User entity
@@ -21,7 +21,7 @@ export class Channels {
     @Column({ name: 'is_a_dm', default: false })
     isADm: boolean;
 
-    @Column({ type: 'varchar', length: 100, name:'name' })
+    @Column({ type: 'varchar', length: 100, name:'name', unique: true})
     name: string;
 
     @Column({ name: 'category' }) // Public, Private or Protected by password

@@ -11,6 +11,7 @@ export class ChannelsUsersService {
 
     async createNew(channels_users: Partial<ChannelsUsers>)
     {
+        console.log(await this.findRelation(channels_users.user.id, channels_users.channel.channel_id), channels_users)
         const relation = (await this.findRelation(channels_users.user.id, channels_users.channel.channel_id))[0];
         if (relation)
             return (false);

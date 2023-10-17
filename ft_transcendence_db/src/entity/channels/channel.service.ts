@@ -21,11 +21,6 @@ export class ChannelService {
 
     async createChannel(channel: Partial<Channels>)
     {
-        const channelAllreadyExisting = await this.channelRepository.findOne({where: {name: channel.name}});
-        if (channelAllreadyExisting)
-        {
-            throw new InternalServerErrorException('channel allready exists');
-        }
         const passwordHashed = await this.hashedPassword(channel.password);
         const finalChannel = {...channel, password: passwordHashed};
         const newChannel = this.channelRepository.create(finalChannel);

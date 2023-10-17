@@ -43,7 +43,7 @@ export class ChannelGateway {
     if (!this.createGoodInputs(data.channel, data.sessionCookie))
       return ('input error');
     const channel = data.channel;
-    try 
+    try
     {
       const response = await this.channelService.createChannel(channel);
       this.server.emit('updateListChannels', {channel: {...response, isUserOwner: true}, sessionCookie: data.sessionCookie});

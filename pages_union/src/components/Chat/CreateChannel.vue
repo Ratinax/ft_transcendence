@@ -95,13 +95,14 @@ export default defineComponent({
 					},
 					sessionCookie: this.sessionCookie});
 		},
-	close()
+		close()
 		{
 			this.resetData();
 			this.$emit('close');
 		},
 		resetData()
 		{
+			console.log('reset datA');
 			this.password = '';
 			this.channelName = '';
 			this.selectedCategory = 0;
@@ -129,7 +130,7 @@ export default defineComponent({
 		},
 		handleKeyDown(event: KeyboardEvent) {
 			if (event.key === 'Escape') {
-				this.$emit('close');
+				this.close()
 			}
 		}
 	},

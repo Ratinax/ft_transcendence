@@ -16,10 +16,11 @@
 		<div class="buttons" :class="{'nochannel': channels.length === 0}">
 			<button 
 				class="ft-button blue-button" 
-				@click="showCreateChannel = true">
+				@click="showingCreateChannel">
 				Create Channel
 			</button>
-			<CreateChannel 
+			<CreateChannel
+				ref="createChannel"
 				:show="showCreateChannel"
 				:sessionCookie="sessionCookie"
 				:socket="socket"
@@ -132,6 +133,12 @@ export default defineComponent({
 					break ;
 				}
 			}
+		},
+		showingCreateChannel()
+		{
+			this.showCreateChannel = true;
+			console.log('here');
+			(this.$refs.createChannel as typeof CreateChannel).resetData()
 		}
 	},
 });
