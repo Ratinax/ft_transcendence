@@ -4,11 +4,12 @@ import { Server } from 'socket.io';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 
-@WebSocketGateway(3001, {
+@WebSocketGateway({
   cors: {
     origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
   },
+  namespace: 'chat'
 })
 export class ChannelsUsersGateway {
 

@@ -5,11 +5,12 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 
-@WebSocketGateway(3002, {
+@WebSocketGateway({
   cors: {
     origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
   },
+  namespace: 'relation'
 })
 export class FriendshipGateway {
 

@@ -9,18 +9,13 @@ import { ChannelsUsers } from '../channels_users/channels_users.entity';
 import { Channels } from './channel.entity';
 import { MessageService } from '../messages/message.service';
 
-
-function getWebSocketGatewayOptions() {
-  return {
+@WebSocketGateway({
     cors: {
       origin: `http://${ConfigIp.IP}:8080`,
       credentials: true,
     },
-  };
-}
-
-@WebSocketGateway(3001, getWebSocketGatewayOptions()
-)
+	namespace: 'chat'
+  })
 
 export class ChannelGateway {
 

@@ -210,7 +210,7 @@ export default defineComponent({
 		}
 		onBeforeMount(() =>
 			{
-			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_CONNECTION_SOCKET_PORT}/`, { withCredentials: true });
+			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true });
 				socket.on('isConnected', (response) => {
 					if (response.pseudo === userName.value)
 					isConnected.value = true;
