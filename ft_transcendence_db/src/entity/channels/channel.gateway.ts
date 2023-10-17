@@ -7,6 +7,7 @@ import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 import { ChannelsUsers } from '../channels_users/channels_users.entity';
 import { Channels } from './channel.entity';
+import { MessageService } from '../messages/message.service';
 
 @WebSocketGateway({
     cors: {
@@ -21,7 +22,7 @@ export class ChannelGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly channelService: ChannelService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
+  constructor(private readonly channelService: ChannelService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService, private readonly messageService: MessageService) {}
 
 
   @SubscribeMessage('createChannel')
@@ -165,6 +166,7 @@ export class ChannelGateway {
     const res = await this.channelsUsersService.leave(body.channel, user);
     if (res === 'Empty')
     {
+      await this.messageService.cleanMessages(body.channel.channel_id);
       await this.channelsUsersService.cleanChan(body.channel.name);
       await this.channelService.removeChan(body.channel.channel_id);
     }

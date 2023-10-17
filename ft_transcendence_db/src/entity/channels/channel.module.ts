@@ -10,6 +10,8 @@ import { sessionProviders } from '../sessions/session.providers';
 import { SessionService } from '../sessions/session.service';
 import { UserService } from '../users/user.service';
 import { userProviders } from '../users/user.providers';
+import { messageProviders } from '../messages/message.providers';
+import { MessageService } from '../messages/message.service';
 
 
 @Module({
@@ -19,11 +21,13 @@ import { userProviders } from '../users/user.providers';
     ...channelsUsersProviders,
     ...sessionProviders,
     ...userProviders,
+    ...messageProviders,
     ChannelService,
     ChannelGateway,
     ChannelsUsersService,
     SessionService,
     UserService,
+    MessageService,
   ],
     controllers: [ChannelController],
 })
