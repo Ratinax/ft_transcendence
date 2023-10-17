@@ -91,7 +91,7 @@ export default defineComponent({
 				this.socket.emit('createChannel', { channel: {
 					name: this.channelName,
 					password: this.password,
-					category: this.categories[(this.selectedCategory) - 1].name,
+					category: this.categories[(this.selectedCategory) - 1]?.name,
 					},
 					sessionCookie: this.sessionCookie});
 		},
