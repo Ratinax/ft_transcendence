@@ -22,7 +22,7 @@ import { Racket } from "../assets/game/racket";
 import { io } from 'socket.io-client';
 import axios from 'axios';
 
-const	socket = io(`http://${process.env.VUE_APP_IP}:3004/`);
+const	socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`);
 
 const	start = ref(false);
 let		name = '';
@@ -148,6 +148,8 @@ function loop() {
 			socket.emit('endGame')
 	}
 	socket.emit('updatePlayerPos', {pos: game.player.racket.y});
+	if (game.isOver)
+		return ;
 	requestAnimationFrame(loop);
 }
 
@@ -202,7 +204,7 @@ onBeforeMount(() => {
 		game.ball.move(latency.value / 1000 + opponentLatency.value / 1000);
 	});
 	socket.on('gameOver', () => {
-		
+		game.isOver = true;
 	})
 })
 

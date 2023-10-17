@@ -10,11 +10,12 @@ import { Channels } from '../channels/channel.entity';
 import { Games } from '../games/game.entity';
 import { GameService } from '../games/game.service';
 
-@WebSocketGateway(3001, {
+@WebSocketGateway({
   cors: {
     origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
   },
+  namespace: 'chat'
 })
 export class MessagesGateway {
 

@@ -8,18 +8,13 @@ import { ConfigIp } from 'src/config-ip';
 import { ChannelsUsers } from '../channels_users/channels_users.entity';
 import { Channels } from './channel.entity';
 
-
-function getWebSocketGatewayOptions() {
-  return {
+@WebSocketGateway({
     cors: {
       origin: `http://${ConfigIp.IP}:8080`,
       credentials: true,
     },
-  };
-}
-
-@WebSocketGateway(3001, getWebSocketGatewayOptions()
-)
+	namespace: 'chat'
+  })
 
 export class ChannelGateway {
 

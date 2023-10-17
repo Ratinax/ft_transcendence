@@ -1,21 +1,23 @@
 <template>
-	<Menu />
-	<div class="page-background"></div>
-	<div class="view col choose-game-container">
-		<div v-if="!isSearching" class="col content">
-			<div class="game-mode" v-for="gameMode in gameModes" :key="gameMode.name" @click="launchGame(gameMode)">
-				<img :src="getImageURL(gameMode .img)"/>
-				<p>{{gameMode.name}}</p>
+	<div>
+		<Menu />
+		<div class="page-background"></div>
+		<div class="view col choose-game-container">
+			<div v-if="!isSearching" class="col content">
+				<div class="game-mode" v-for="gameMode in gameModes" :key="gameMode.name" @click="launchGame(gameMode)">
+					<img :src="getImageURL(gameMode .img)"/>
+					<p>{{gameMode.name}}</p>
+				</div>
 			</div>
-		</div>
-		<div v-else class="col content">
-			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50" class="svg-wrap">
-				<circle r="15" cx="50" cy="25" class="svg-stroke" stroke-linecap="round"></circle>
-			</svg>
-			<p id="waiting-text">Waiting for players</p>
-			<form @submit.prevent="cancel">
-				<button class="ft-button red-button" type="submit">Cancel</button>
-			</form>
+			<div v-else class="col content">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50" class="svg-wrap">
+					<circle r="15" cx="50" cy="25" class="svg-stroke" stroke-linecap="round"></circle>
+				</svg>
+				<p id="waiting-text">Waiting for players</p>
+				<form @submit.prevent="cancel">
+					<button class="ft-button red-button" type="submit">Cancel</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </template>
@@ -39,7 +41,7 @@ export default defineComponent({
 	data() {
 		return {
             isSearching: false,
-            socket: io(`http://${process.env.VUE_APP_IP}:3004/`),
+            socket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`),
             sessionCookie: '',
             router: useRouter(),
             gameModes: [{name: 'Long ring long land', mode: 1, img: 'sleep.png'},

@@ -29,6 +29,7 @@ export class Game {
 	dir = 1;
 
 	score = false;
+	isOver = false;
 
 	canvas: HTMLCanvasElement | null;
 	ctx: CanvasRenderingContext2D | null;

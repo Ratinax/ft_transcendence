@@ -4,11 +4,12 @@ import { Server } from 'socket.io';
 import { InternalServerErrorException, OnModuleInit, Req } from '@nestjs/common';
 import { ConfigIp } from 'src/config-ip';
 
-@WebSocketGateway(3003, {
+@WebSocketGateway({
   cors: {
     origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
   },
+  namespace: 'session'
 })
 export class SessionGateway implements OnModuleInit {
 

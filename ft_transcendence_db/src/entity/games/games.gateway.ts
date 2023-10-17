@@ -4,11 +4,12 @@ import { Server, Socket } from 'socket.io';
 import { ConfigIp } from 'src/config-ip';
 import { SessionService } from '../sessions/session.service';
 
-@WebSocketGateway(3004, {
+@WebSocketGateway({
 	cors: {
     origin: `http://${ConfigIp.IP}:8080`,
     credentials: true,
-	}
+	},
+	namespace: 'game'
 })
 export class GamesGateway {
 	@WebSocketServer()
