@@ -226,5 +226,16 @@ export class UserController {
             return (null);
         return (user.doubleFaURL); 
     }
-    
+    @Get('doUserExists/:username')
+    async getDoUserExists(@Req() req: Request, @Param('username') username: string)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            return (null);
+        }
+        const user = await this.userService.getUser(username);
+        if (!user || !user[0])
+            return (false);
+        return (true);
+    }
 }

@@ -116,6 +116,10 @@ export default defineComponent({
 			if (typeof route.params.pseudo === 'string'){
 				userName.value = route.params.pseudo;
 			}
+			const doUserExists = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/doUserExists/${userName.value}`, {withCredentials: true});
+			if (!doUserExists.data)
+				router.replace({path: '/pagenotfound'})
+
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
 			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/games-wins/${userName.value}`, {withCredentials: true});
