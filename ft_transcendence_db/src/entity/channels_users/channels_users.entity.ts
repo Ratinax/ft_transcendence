@@ -1,6 +1,6 @@
 import { Channels } from "../channels/channel.entity";
 import { Users } from "../users/user.entity";
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Index, Unique } from "typeorm";
 
 
 /**
@@ -19,6 +19,7 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "t
  */
 
 @Entity()
+@Unique(['user', 'channel'])
 export class ChannelsUsers {
     @PrimaryGeneratedColumn()
     id: number;
