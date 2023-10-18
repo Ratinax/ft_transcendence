@@ -7,25 +7,25 @@
 					<font-awesome-icon icon="fa-solid fa-angles-right" size="2x" />
 				</div>
 			</li>
-			<li class="nav-item">
+			<li :class="{'nav-item': true, 'is-selected': page === 'Profile'}">
 				<div class="nav-link clickable" @click="goToUserPage">
 					<font-awesome-icon icon="fa-solid fa-user" size="2x" />
 					<span class="link-text">Profile</span>
 				</div>
 			</li>
-			<li class="nav-item">
+			<li :class="{'nav-item': true, 'is-selected': page === 'Chat'}">
 				<div class="nav-link clickable" @click="goToMessages">
 					<font-awesome-icon icon="fa-solid fa-comments" size="2x" />
 					<span class="link-text">Chat</span>
 				</div>
 			</li>
-			<li class="nav-item">
+			<li :class="{'nav-item': true, 'is-selected': page === 'Social'}">
 				<div class="nav-link clickable" @click="goToRelations">
 					<font-awesome-icon icon="fa-solid fa-user-plus" size="2x" />
 					<span class="link-text">Social</span>
 				</div>
 			</li>
-			<li class="nav-item">
+			<li :class="{'nav-item': true, 'is-selected': page === 'Game'}">
 				<div class="nav-link clickable" @click="goChooseAGame">
 					<font-awesome-icon icon="fa-solid fa-gamepad" size="2x" />
 					<span class="link-text">Game</span>
@@ -54,6 +54,10 @@ export default defineComponent({
 			pseudo: '',
 
 		}
+	},
+	props:
+	{
+		page: String,
 	},
 	async beforeMount()
 	{
@@ -134,11 +138,12 @@ export default defineComponent({
 	background-color: var(--pblack);
 	color: var(--pcyan);
 	transition: color var(--transition-speed) ease;
+	transition: background-color var(--transition-speed) ease;
 	cursor: pointer;
 }
 
 .nav-link.clickable:hover .link-text {
-	color: white;
+	/* color: white; */
 	transition: color var(--transition-speed) ease;
 }
 
@@ -190,6 +195,13 @@ export default defineComponent({
 		width: 100%;
 	}
 
+	.is-selected
+	{
+		border-bottom: .1em solid var(--pcyan);
+		background-color: var(--pblack);
+		color: var(--pcyan);
+	}
+	
 	.navbar:hover {
 		width: 14rem;
 	}
@@ -220,7 +232,12 @@ export default defineComponent({
 	.nav-item {
 		width: 20%;
 	}
-
+	.is-selected
+	{
+		border-bottom: .1em solid var(--pcyan);
+		background-color: var(--pdark);
+		color: var(--pcyan);
+	}
 	.logo {
 		display: none;
 	}
@@ -242,6 +259,14 @@ export default defineComponent({
 
 	.nav-link svg {
 		margin: 0;
+	}
+
+	.nav-link.clickable:hover {
+		background-color: var(--pdark);
+		color: var(--pcyan);
+		transition: color var(--transition-speed) ease;
+		transition: background-color var(--transition-speed) ease;
+		cursor: pointer;
 	}
 }
 

@@ -1,5 +1,5 @@
 <template>
-	<Menu />
+	<Menu :page="'Profile'"/>
 	<Qrcode ref="QrcodeRef" :show="showQrcode" @close="showQrcode = false"/>
 	<div class="page-background"></div>
 	<div class="row user-page view">
