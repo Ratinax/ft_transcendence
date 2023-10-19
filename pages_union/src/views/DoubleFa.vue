@@ -5,12 +5,12 @@
 			<img :src="qrlink" id="qrcode-doublefa"/>
 			<form  @submit.prevent="check2Fa">
 				<div class="input-numbers">
-					<input class="code" ref="digit1" v-model="digit1" placeholder="0" type="text" />
-					<input class="code" ref="digit2" v-model="digit2" placeholder="0" type="text" disabled/>
-					<input class="code" ref="digit3" v-model="digit3" placeholder="0" type="text" disabled/>
-					<input class="code" ref="digit4" v-model="digit4" placeholder="0" type="text" disabled/>
-					<input class="code" ref="digit5" v-model="digit5" placeholder="0" type="text" disabled/>
-					<input class="code" ref="digit6" v-model="digit6" placeholder="0" type="text" disabled/>
+					<input class="code" ref="digit1" v-model="digits[0]" placeholder="0" type="text"/>
+					<input class="code" ref="digit2" v-model="digits[1]" placeholder="0" type="text"/>
+					<input class="code" ref="digit3" v-model="digits[2]" placeholder="0" type="text"/>
+					<input class="code" ref="digit4" v-model="digits[3]" placeholder="0" type="text"/>
+					<input class="code" ref="digit5" v-model="digits[4]" placeholder="0" type="text"/>
+					<input class="code" ref="digit6" v-model="digits[5]" placeholder="0" type="text"/>
 				</div>
 				<button class="invisible" type="submit"></button>
 					<div class="fa-error-container">
@@ -41,30 +41,26 @@ export default defineComponent({
 			qrlink: '',
 			timeLeft: 30,
 			interValId: null as any,
-			digit1: '',
-			digit2: '',
-			digit3: '',
-			digit4: '',
-			digit5: '',
-			digit6: '',
+			digits: ['', '', '', '', '', ''],
 			showErrorMessage: false,
 		}
 	},
 	mounted()
-{
+	{
 		this.timeLeft = 30;
 		let timeLeftString = localStorage.getItem('timeLeft');
 		if (!timeLeftString)
-		timeLeftString = '';
+			timeLeftString = '';
 		let timeLeft;
+		console.log(timeLeftString)
 		if (timeLeftString === '')
-		timeLeft = -1;
+			timeLeft = -1;
 		else
-		timeLeft = JSON.parse(timeLeftString);
+			timeLeft = JSON.parse(timeLeftString);
 		if (timeLeft && timeLeft > 0)
-		this.timeLeft = timeLeft;
-		else if (timeLeft !== 0 || timeLeft === -1)
-		localStorage.setItem('timeLeft', JSON.stringify(30));
+			this.timeLeft = timeLeft;
+		else if (!timeLeft || timeLeft === -1)
+			localStorage.setItem('timeLeft', JSON.stringify(30));
 
 		const route = this.route as any;
 		qrcode.toDataURL(route.params.link, (err, data) =>
@@ -89,17 +85,32 @@ export default defineComponent({
 		console.log(codes);
 		codes.forEach((code, index) => {
 			code.addEventListener('keydown', (e: KeyboardEvent) => {
-				code.value = '';
-				if (digits.includes(e.key) && index < 5) {
-					setTimeout(() => {
-						codes[index + 1].disabled = false;
-						codes[index + 1].focus()
-					}, 10);
+				if (digits.includes(e.key)) {
+					code.value = '';
+					if (index < 5)
+						setTimeout(() => {
+							codes[index + 1].disabled = false;
+							codes[index + 1].focus()
+						}, 10);
 				}
-				else if (e.key === 'Backspace' && index > 0) {
+				else if (e.key === 'Backspace') {
+					code.value = '';
 					setTimeout(() => {
-						code.disabled = true;
-						codes[index - 1].focus();
+						if (this.digits[index] === '' && index > 0)
+							codes[index - 1].focus();
+						this.digits[index] = '';
+					}, 10)
+				}
+				else if (e.key === 'ArrowLeft' && index > 0)
+				{
+					setTimeout(() => {
+							codes[index - 1].focus();
+					}, 10)
+				}
+				else if (e.key === 'ArrowRight' && index < 5)
+				{
+					setTimeout(() => {
+							codes[index + 1].focus();
 					}, 10)
 				}
 			})
@@ -123,19 +134,7 @@ export default defineComponent({
 				}
 				else
 				{
-					// eslint-disable-next-line no-undef
-					const codes = document.querySelectorAll(".code") as NodeListOf<HTMLInputElement>;
-					codes.forEach((code, index) => {
-						code.value = '';
-						if (index > 0) {
-							code.disabled = true;
-						}
-					})
-					codes[0].focus();
 					this.showErrorMessage = true;
-
-					localStorage.setItem('timeLeft', JSON.stringify(0));
-					clearInterval(this.interValId);
 				}
 			}
 			catch (e)
@@ -150,24 +149,25 @@ export default defineComponent({
 					try
 					{
 						const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/timeLeft2Fa/`, {withCredentials: true})).data;
+						console.log(res);
 						this.timeLeft--;
 						const loader = document.getElementById('loader');
 						if (loader)
-						loader.style.background = `conic-gradient(
-transparent 0%,
-transparent ${(30 - this.timeLeft) * 3.333}%,
-#c5c6c7 ${(30 - this.timeLeft) * 3.333}%,
-#c5c6c7 100%`
+							loader.style.background = `conic-gradient(
+								transparent 0%,
+								transparent ${(30 - this.timeLeft) * 3.333}%,
+								#c5c6c7 ${(30 - this.timeLeft) * 3.333}%,
+								#c5c6c7 100%`
 						let timeLeft = (localStorage.getItem('timeLeft'));
 						if (!timeLeft)
 						timeLeft = '0';
 						if (+timeLeft > 0)
-						localStorage.setItem('timeLeft', JSON.stringify(this.timeLeft));
+							localStorage.setItem('timeLeft', JSON.stringify(this.timeLeft));
 						if (res < 0)
 						{
 							localStorage.setItem('timeLeft', JSON.stringify(0));
 							clearInterval(this.interValId);
-						this.router.replace({path: '/'})
+							this.router.replace({path: '/'})
 						}
 					}
 					catch (e)
@@ -179,30 +179,13 @@ transparent ${(30 - this.timeLeft) * 3.333}%,
 		getCode()
 		{
 			let res = '';
-			if (this.digit1 === '')
-			res += '0';
-			else
-			res += this.digit1;
-			if (this.digit2 === '')
-			res += '0';
-			else
-			res += this.digit2;
-			if (this.digit3 === '')
-			res += '0';
-			else
-			res += this.digit3;
-			if (this.digit4 === '')
-			res += '0';
-			else
-			res += this.digit4;
-			if (this.digit5 === '')
-			res += '0';
-			else
-			res += this.digit5;
-			if (this.digit6 === '')
-			res += '0';
-			else
-			res += this.digit6;
+			for (let i = 0; i < this.digits.length; i++)
+			{
+				if (this.digits[i] === '')
+					res += '0';
+				else
+					res += this.digits[i];
+			}
 			return (res);
 		}
 	}
@@ -210,6 +193,19 @@ transparent ${(30 - this.timeLeft) * 3.333}%,
 </script>
 
 <style scoped>
+.code
+{
+	caret-color: transparent;
+}
+
+.code:focus
+{
+	box-shadow: 0 4px 0 var(--pblue);
+	height: 2.5em;
+	margin-top: 0em;
+	transition: height 200ms ease;
+	transition: margin-top 200ms ease;
+}
 
 .double-fa-page
 {
@@ -241,10 +237,6 @@ transparent ${(30 - this.timeLeft) * 3.333}%,
 	border-radius: 10%;
 	text-align: center;
 	margin: 0.25em;
-}
-.input-numbers input:focus
-{
-	box-shadow: 0 4px 0 var(--pblue);
 }
 
 .page-background

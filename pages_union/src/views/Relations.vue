@@ -1,6 +1,6 @@
 <template>
 	<div class="page-background"></div>
-	<Menu/>
+	<Menu :page="'Social'"/>
 	<div class="view col relations-page" @click.self="closeSearchUser">
 		<div class="col search-container">
 			<form @submit.prevent="searchUser">

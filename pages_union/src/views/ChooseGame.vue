@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Menu />
+		<Menu :page="'Game'"/>
 		<div class="page-background"></div>
 		<div class="view col choose-game-container">
 			<div v-if="!isSearching" class="col content">

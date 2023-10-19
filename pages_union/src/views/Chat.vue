@@ -1,5 +1,5 @@
 <template>
-	<Menu />
+	<Menu :page="'Chat'"/>
 	<div class="page-background"></div>
 	<div class="row chat-page view">
 		<div class="row chat-container">
