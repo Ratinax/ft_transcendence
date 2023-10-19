@@ -62,15 +62,15 @@ export class GameService {
 	addToGame(playerName: string, mode: number, playerId: string) {
 		for (let i = 0; i < this.games.length; i++) {
 			if (this.games[i].mode === mode && !this.games[i].isFull) {
-				this.games[i].leftPlayer = new Player(playerName, playerId);
-				this.games[i].leftPlayer.isConnected = true;
+				this.games[i].rightPlayer = new Player(playerName, playerId);
+				this.games[i].rightPlayer.isConnected = true;
 				this.games[i].isFull = true;
 				return {side: false, options: this.games[i].options};
 			}
 		}
 		const	newGame = new Game(false, mode);
-		newGame.rightPlayer = new Player(playerName, playerId);
-		newGame.rightPlayer.isConnected = true;
+		newGame.leftPlayer = new Player(playerName, playerId);
+		newGame.leftPlayer.isConnected = true;
 		switch (mode) {
 			case 1:
 				newGame.options = this.slowOptions;

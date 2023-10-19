@@ -6,8 +6,8 @@
 				<div>
 					<canvas></canvas>
 				</div>
-				<p>latency: {{latency}}ms</p>
-				<p>opponent latency: {{opponentLatency}}ms</p>
+				<p>({{playerName}}) latency: {{latency}}ms</p>
+				<p>({{opponentName}}) [opponent] latency: {{opponentLatency}}ms</p>
 			</div>
 		</div>
 	</div>
@@ -26,8 +26,10 @@ import { useRouter } from 'vue-router';
 const	socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`);
 const	router = useRouter();
 
+
 const	start = ref(false);
-let		name = '';
+let		playerName = '';
+let		opponentName = ref('');
 
 const	game = new Game();
 
@@ -173,7 +175,6 @@ function loop() {
 		if (game.player.score === game.options?.winScore)
 			socket.emit('endGame')
 	}
-	// socket.emit('updatePlayerPos', {pos: game.player.racket.y});
 	if (game.isOver)
 		return ;
 	requestAnimationFrame(loop);
@@ -182,19 +183,23 @@ function loop() {
 onBeforeMount(() => {
 	const options = localStorage.getItem('gameInfos');
 	const optionsParsed = JSON.parse(options);
+	const opponent = localStorage.getItem('opponentInfos');
+	const opponentParsed = JSON.parse(opponent);
 
 	game.options = optionsParsed.options;
 	game.player.side = optionsParsed.side;
 	game.score = optionsParsed.side;
 	if (game.player.side !== null)
 		game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
-
+	
 	game.opponent.side = !game.player.side;
 	game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
+	opponentName.value = opponentParsed.opponentName;
+
 
 	axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
-				name = res.data;
-				socket.emit('updateSocket', {name: name });
+				playerName = res.data;
+				socket.emit('updateSocket', {name: playerName });
 			});
 
 	socket.on('updateOpponent', (infos: any) => {

@@ -1,39 +1,41 @@
 <template>
-	<Menu :page="'Chat'"/>
-	<div class="page-background"></div>
-	<div class="row chat-page view">
-		<div class="row chat-container">
-			<ListChannels 
-				ref="listChannels" 
-				v-if="socket && sessionCookie && displayListChannels" 
-				:sessionCookie="sessionCookie"
-				:channelSelected="selectedChannel" 
-				:socket="socket" 
-				@channel-selected="onChannelSelected"
-				@leave-channel="onLeaveChannel"
-				:display="displayListChannels"/>
-			<div class= "messageszone">
-				<Messages v-if="socket && sessionCookie" ref="messages" :socket="socket" :sessionCookie="sessionCookie" />
-				<SendMessage
-					v-if="socket && sessionCookie"
-					ref="sendMessage"
-					:showContent="!!selectedChannel?.channel_id"
-					:channelId="selectedChannel?.channel_id"
+	<div>
+		<Menu :page="'Chat'"/>
+		<div class="page-background"></div>
+		<div class="row chat-page view">
+			<div class="row chat-container">
+				<ListChannels 
+					ref="listChannels" 
+					v-if="socket && sessionCookie && displayListChannels" 
+					:sessionCookie="sessionCookie"
+					:channelSelected="selectedChannel" 
+					:socket="socket" 
+					@channel-selected="onChannelSelected"
+					@leave-channel="onLeaveChannel"
+					:display="displayListChannels"/>
+				<div class= "messageszone">
+					<Messages v-if="socket && sessionCookie" ref="messages" :socket="socket" :sessionCookie="sessionCookie" />
+					<SendMessage
+						v-if="socket && sessionCookie"
+						ref="sendMessage"
+						:showContent="!!selectedChannel?.channel_id"
+						:channelId="selectedChannel?.channel_id"
+						:socket="socket"
+						:sessionCookie="sessionCookie"/>
+				</div>
+				<ListUsersChat
+					ref="listUsersChat" 
+					v-if="socket && sessionCookie" 
+					:sessionCookie="sessionCookie"
+					:channel="selectedChannel" 
 					:socket="socket"
-					:sessionCookie="sessionCookie"/>
+					:display="displayUsersChat"
+				/>
 			</div>
-			<ListUsersChat
-				ref="listUsersChat" 
-				v-if="socket && sessionCookie" 
-				:sessionCookie="sessionCookie"
-				:channel="selectedChannel" 
-				:socket="socket"
-				:display="displayUsersChat"
-			/>
-		</div>
-		<div class="chat-button-container">
-			<button class="ft-button blue-button button-left" @click.prevent="toggleChannels">channels</button>
-			<button class="ft-button blue-button button-right" @click.prevent="toggleUsers">users</button>
+			<div class="chat-button-container">
+				<button class="ft-button blue-button button-left" @click.prevent="toggleChannels">channels</button>
+				<button class="ft-button blue-button button-right" @click.prevent="toggleUsers">users</button>
+			</div>
 		</div>
 	</div>
 </template>

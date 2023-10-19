@@ -2,7 +2,6 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import { GameService } from './game.service';
 import { Server, Socket } from 'socket.io';
 import { ConfigIp } from 'src/config-ip';
-import { SessionService } from '../sessions/session.service';
 
 @WebSocketGateway({
 	cors: {
@@ -24,8 +23,8 @@ export class GamesGateway {
 			this.server.to(client.id).emit('successJoin', infos);
 			const	gameIndex = this.gameService.getGameIndex(body.name);
 			if (this.gameService.games[gameIndex].isFull) {
-				this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('gameFull', {opponentName: this.gameService.games[gameIndex].rightPlayer.id});
-				this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('gameFull', {opponentName: this.gameService.games[gameIndex].leftPlayer.id});
+				this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('gameFull', {opponentName: this.gameService.games[gameIndex].rightPlayer.name});
+				this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('gameFull', {opponentName: this.gameService.games[gameIndex].leftPlayer.name});
 			}
 		}
 	}
@@ -44,6 +43,10 @@ export class GamesGateway {
 	@SubscribeMessage('updateSocket')
 	updateSocket(@ConnectedSocket() client: Socket, @MessageBody() body) {
 		const	gameIndex = this.gameService.getGameIndex(body.name);
+
+		if (gameIndex === -1)
+			return ;
+
 		if (this.gameService.games[gameIndex].leftPlayer.name === body.name) {
 			this.gameService.games[gameIndex].leftPlayer.id = client.id;
 		}
@@ -96,9 +99,15 @@ export class GamesGateway {
 		if (gameIndex === -1)
 			return ;
 		if (this.gameService.games[gameIndex].leftPlayer.id === client.id)
+		{
 			this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('opponentScore');
+			this.gameService.games[gameIndex].leftPlayer.score++;
+		}
 		else
+		{
 			this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('opponentScore');
+			this.gameService.games[gameIndex].rightPlayer.score++;
+		}
 	}
 
 	@SubscribeMessage('endGame')
@@ -108,6 +117,7 @@ export class GamesGateway {
 			return ;
 		this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('gameOver');
 		this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('gameOver');
+		// console.log(this.gameService.games[gameIndex]);
 		this.gameService.games.splice(gameIndex, 1);
 	}
 

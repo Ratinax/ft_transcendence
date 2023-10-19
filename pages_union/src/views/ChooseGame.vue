@@ -45,23 +45,20 @@ export default defineComponent({
             sessionCookie: '',
             router: useRouter(),
             gameModes: [{name: 'Long ring long land', mode: 1, img: 'sleep.png'},
-                        {name: 'INCREASE', mode: 1, img: 'increase.png'},
+                        // {name: 'INCREASE', mode: 1, img: 'increase.png'},
                         {name: 'Classic', mode: 2, img: 'classic.png'},
-                        {name: 'Too fast for y\'all', mode: 3, img: 'fast.png'},
-                        {name: '#*$@*#§?!!', mode: 3, img: 'wtf.png'}]
+                        {name: 'Too fast for y\'all', mode: 3, img: 'fast.png'},]
+                        // {name: '#*$@*#§?!!', mode: 3, img: 'wtf.png'}]
 		}
 	},
 	async mounted() {
         this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
         this.socket.on('successJoin', (infos: any) => {
-            console.log('ca a join', infos);
             localStorage.setItem('gameInfos', JSON.stringify({options: infos.options, side: infos.side}));
         });
         this.socket.on('gameFull', (infos: any) => {
-            console.log('c est full');
+			localStorage.setItem('opponentInfos', JSON.stringify({opponentName: infos.opponentName}));
             this.router.push('/game');
-            localStorage.setItem('opponentInfos', JSON.stringify({side: infos.opponentSide}));
-
 		});
 	},
 	methods:
@@ -130,6 +127,7 @@ export default defineComponent({
 {
 	opacity: 0.5;
 	filter: blur(0);
+	transform: scale(90%);
 }
 
 .game-mode p {
