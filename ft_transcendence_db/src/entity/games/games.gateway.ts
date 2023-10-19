@@ -58,9 +58,9 @@ export class GamesGateway {
 		if (gameIndex === -1)
 			return ;
 		if (this.gameService.games[gameIndex].leftPlayer.id === client.id)
-			this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('updateOpponent', {pos: body.pos});
+			this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('updateOpponent', body);
 		else
-			this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('updateOpponent', {pos: body.pos});
+			this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('updateOpponent', body);
 	}
 
 	@SubscribeMessage('latency')

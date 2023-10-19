@@ -42,20 +42,44 @@ game.ball = new Ball();
 
 window.addEventListener('keydown', e => {
 		if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "Z")
+		{
 			game.up = true;
+			if (!game.down)
+				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 1});
+			else
+				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 0});
+		}
 		if (e.key === "s" || e.key === "S")
+		{
 			game.down = true;
+			if (!game.up)
+				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: -1});
+			else
+				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 0});
+		}
 	})
 
 	window.addEventListener('keyup', e => {
 		if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "Z")
+		{
 			game.up = false;
+			if (game.down)
+				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: -1});
+			else
+				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 0});
+		}
 		if (e.key === "s" || e.key === "S")
+		{
 			game.down = false;
+			if (game.up)
+				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 1});
+			else
+				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 0});
+		}
 	});
 
 function spawnBall() {
-	if (game.isWaiting && performance.now() >= game.waiting_timer + 2000)
+	if (game.isWaiting && performance.now() >= game.waiting_timer + game.spawnTime)
 	{
 		if (game.score)
 		{
@@ -149,7 +173,7 @@ function loop() {
 		if (game.player.score === game.options?.winScore)
 			socket.emit('endGame')
 	}
-	socket.emit('updatePlayerPos', {pos: game.player.racket.y});
+	// socket.emit('updatePlayerPos', {pos: game.player.racket.y});
 	if (game.isOver)
 		return ;
 	requestAnimationFrame(loop);
@@ -175,6 +199,7 @@ onBeforeMount(() => {
 
 	socket.on('updateOpponent', (infos: any) => {
 		game.opponent.racket.y = infos.pos;
+		game.opponentDirection = infos.direction;
 	});
 
 	socket.on('pong', () => {

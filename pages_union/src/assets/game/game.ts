@@ -27,6 +27,9 @@ export class Game {
 	height = this.width / (4/3);
 	firstLoop = true;
 	dir = 1;
+	spawnTime = 3500;
+
+	opponentDirection = 0;
 
 	score = false;
 	isOver = false;
@@ -78,6 +81,14 @@ export class Game {
 			this.ctx.fillText(`${this.player.score}`, this.canvas.width - 700, 100)
 			this.ctx.fillText(`${this.opponent.score}`, 700, 100)			
 		}
+		if (this.isWaiting && !this.isOver)
+		{
+			this.ctx.fillStyle = 'black';
+			this.ctx.fillRect(this.width / 2 - 125, this.height / 2 - 125, 250, 250);
+			this.ctx.fillStyle = 'white';
+			this.ctx.font = "250px Comic Sans MS";
+			this.ctx.fillText(`${Math.round((performance.now() - this.waiting_timer - this.spawnTime) / -1000)}`, this.width / 2 - 80, this.height / 2 + 80);
+		}
 	}
 
 	update() {
@@ -94,6 +105,11 @@ export class Game {
 			this.player.racket.up(this.frameTime, this.options.playerSpeed, this.options.playerSize);
 		if (this.down && this.player.racket)
 			this.player.racket.down(this.frameTime, this.options.playerSpeed, this.options.playerSize, this.height);
+
+		if (this.opponentDirection === 1 && this.opponent.racket)
+			this.opponent.racket.up(this.frameTime, this.options.playerSpeed, this.options.playerSize);
+		if (this.opponentDirection === -1 && this.opponent.racket)
+			this.opponent.racket.down(this.frameTime, this.options.playerSpeed, this.options.playerSize, this.height);
 
 		if (!this.isWaiting)
 			this.ball.move(this.frameTime);
