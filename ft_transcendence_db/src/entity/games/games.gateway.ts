@@ -15,7 +15,7 @@ export class GamesGateway {
 	@WebSocketServer()
 	server: Server;
 
-	constructor(private readonly gameService: GameService, private readonly sessionService: SessionService) {}
+	constructor(private readonly gameService: GameService) {}
 
 	@SubscribeMessage('quickPlay')
 	quickPlay(@ConnectedSocket() client: Socket, @MessageBody() body) {
@@ -108,6 +108,7 @@ export class GamesGateway {
 			return ;
 		this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('gameOver');
 		this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('gameOver');
+		this.gameService.games.splice(gameIndex, 1);
 	}
 
 	@SubscribeMessage('bounce')

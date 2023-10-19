@@ -21,8 +21,10 @@ import { Player } from "../assets/game/player";
 import { Racket } from "../assets/game/racket";
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const	socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`);
+const	router = useRouter();
 
 const	start = ref(false);
 let		name = '';
@@ -135,7 +137,7 @@ setInterval(() => {
 	ping = performance.now();
 	socket.emit('ping', {latency: latency.value});
 	socket.emit('latency', {latency: latency.value});
-}, 1000);
+}, 100);
 
 function loop() {
 	game.update();
@@ -205,6 +207,9 @@ onBeforeMount(() => {
 	});
 	socket.on('gameOver', () => {
 		game.isOver = true;
+		setTimeout(() => {
+			router.push('/choose_game');
+		}, 3000);
 	})
 })
 
