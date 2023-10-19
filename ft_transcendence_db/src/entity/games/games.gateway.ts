@@ -132,6 +132,14 @@ export class GamesGateway {
 			this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('ballBounce', body);
 	}
 
+	@SubscribeMessage('imInGame')
+	isConnected(@ConnectedSocket() client: Socket) {
+		if (this.gameService.getGameIndexFromId(client.id) !== -1)
+			this.server.to(client.id).emit('isInGame', {isInGame: false});
+		else
+			this.server.to(client.id).emit('isInGame', {isInGame: true});
+	}
+
 	// updateGameFromIndex(index: number) {
 		// const	updateData = this.gameService.games[index].update();
 		// this.server.to(this.gameService.games[index].player.socket).emit('update', {update: updateData});

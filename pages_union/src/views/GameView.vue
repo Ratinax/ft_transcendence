@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
 import { Ball } from "../assets/game/ball";
 import { Game, gameOptions } from "../assets/game/game";
 import { Player } from "../assets/game/player";
@@ -30,6 +30,7 @@ const	router = useRouter();
 const	start = ref(false);
 let		playerName = '';
 let		opponentName = ref('');
+let		exit = false;
 
 const	game = new Game();
 
@@ -47,17 +48,17 @@ window.addEventListener('keydown', e => {
 		{
 			game.up = true;
 			if (!game.down)
-				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 1});
+				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 1});
 			else
-				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 0});
+				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
 		}
 		if (e.key === "s" || e.key === "S")
 		{
 			game.down = true;
 			if (!game.up)
-				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: -1});
+				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: -1});
 			else
-				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 0});
+				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
 		}
 	})
 
@@ -66,17 +67,17 @@ window.addEventListener('keydown', e => {
 		{
 			game.up = false;
 			if (game.down)
-				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: -1});
+				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: -1});
 			else
-				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 0});
+				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
 		}
 		if (e.key === "s" || e.key === "S")
 		{
 			game.down = false;
 			if (game.up)
-				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 1});
+				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 1});
 			else
-				socket.emit('updatePlayerPos', {pos: game.player.racket.y, direction: 0});
+				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
 		}
 	});
 
@@ -98,7 +99,7 @@ function playerCollision() {
 
 	if (game.player.racket && game.ball.racketCollision(game.player.racket, game.options.ballSize, game.options.playerSize)) //&& (((game.ball.direction > 90 || game.ball.direction < -90) && game.player.side === true) || ((game.ball.direction < 90 || game.ball.direction > -90) && game.player.side === false)))
 	{
-		hitModulo = (game.ball.y - game.player.racket.y + game.options.playerSize / 2) / game.options.playerSize * 2 - 1;
+		hitModulo = (game.ball.y - game.player.racket?.y + game.options.playerSize / 2) / game.options.playerSize * 2 - 1;
 		if (hitModulo > 1)
 			hitModulo = 1;
 		else if (hitModulo < -1)
@@ -107,7 +108,7 @@ function playerCollision() {
 		if (game.player.side === false)
 			game.ball.direction = 180 - game.ball.direction;
 		game.ball.currentSpeed += game.options.ballAccel;
-		socket.emit('bounce', {x: game.player.racket.x, y: game.ball.y, direction: game.ball.direction, speed: game.ball.currentSpeed});
+		socket.emit('bounce', {x: game.player.racket?.x, y: game.ball.y, direction: game.ball.direction, speed: game.ball.currentSpeed});
 	}
 }
 
@@ -182,12 +183,22 @@ function loop() {
 
 onBeforeMount(() => {
 	const options = localStorage.getItem('gameInfos');
-	const optionsParsed = JSON.parse(options);
 	const opponent = localStorage.getItem('opponentInfos');
+
+	if (!options || !opponent)
+	{
+		localStorage.clear();
+		router.push('/choose_game');
+		exit = true;
+		return ;
+	}
+	
+	const optionsParsed = JSON.parse(options);
 	const opponentParsed = JSON.parse(opponent);
 
 	game.options = optionsParsed.options;
 	game.player.side = optionsParsed.side;
+
 	game.score = optionsParsed.side;
 	if (game.player.side !== null)
 		game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
@@ -196,6 +207,7 @@ onBeforeMount(() => {
 	game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
 	opponentName.value = opponentParsed.opponentName;
 
+	localStorage.clear();
 
 	axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
 				playerName = res.data;
@@ -244,6 +256,7 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
+	if (!exit)
 		launch();
 	});
 
