@@ -54,6 +54,7 @@ export class Game {
 		this.ctx.lineWidth = 10;
 		this.ctx.stroke();
 		this.ctx.setLineDash([]);
+		this.ctx.closePath();
 	}
 
 	updateScreen() {
@@ -71,6 +72,7 @@ export class Game {
 
 		this.ctx.font = "50px Comic Sans MS";
 		this.ctx.fillStyle = "white";
+		this.ctx.fillText(`${this.frameTime}`, 700, 1500);
 		if (this.player.side)
 		{
 			this.ctx.fillText(`${this.player.score}`, 700, 100)

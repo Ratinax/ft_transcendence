@@ -9,6 +9,12 @@ export class Ball {
 	display(size: number, ctx: CanvasRenderingContext2D, unitRatio: number) {
 		ctx.fillStyle = "white";
 		ctx.fillRect((this.x / unitRatio) - (size / 2 / unitRatio), (this.y / unitRatio) - (size / 2 / unitRatio), size / unitRatio, size / unitRatio);
+		// ctx.strokeStyle = "green";
+		// ctx.beginPath();
+		// ctx.moveTo(this.x, this.y);
+		// ctx.lineTo(this.x + 50 * Math.cos(this.direction / (180 / Math.PI)), this.y + 50 * Math.sin(this.direction / (180 / Math.PI)));
+		// ctx.stroke();
+		// ctx.closePath();
 	}
 
 	move(frameTime: number) {

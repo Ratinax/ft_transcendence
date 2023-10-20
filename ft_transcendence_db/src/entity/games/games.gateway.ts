@@ -101,12 +101,12 @@ export class GamesGateway {
 		if (this.gameService.games[gameIndex].leftPlayer.id === client.id)
 		{
 			this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('opponentScore');
-			this.gameService.games[gameIndex].leftPlayer.score++;
+			this.gameService.games[gameIndex].rightPlayer.score++;
 		}
 		else
 		{
 			this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('opponentScore');
-			this.gameService.games[gameIndex].rightPlayer.score++;
+			this.gameService.games[gameIndex].leftPlayer.score++;
 		}
 	}
 

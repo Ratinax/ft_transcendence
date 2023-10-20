@@ -109,32 +109,34 @@ function playerCollision() {
 			game.ball.direction = 180 - game.ball.direction;
 		game.ball.currentSpeed += game.options.ballAccel;
 		socket.emit('bounce', {x: game.player.racket?.x, y: game.ball.y, direction: game.ball.direction, speed: game.ball.currentSpeed});
+		return true;
 	}
+	return false;
 }
 
 function checkGoal() {
 	const goal = game.ball.score(game.width, game.options.ballSize);
 	if (goal)
 	{
-		if (goal === 1 && !game.isWaiting && game.player.side === true)
+		if (goal === 2 && !game.isWaiting && game.player.side === true)
 		{
-			game.player.score++;
-			game.ball.x = -200;
-			game.ball.y = -200;
-			game.isWaiting = true;
-			game.waiting_timer = performance.now();
-			game.dir = 0;
-			game.score = true;
-			return true;
-		}
-		else if (goal === 2 && !game.isWaiting && game.player.side === false)
-		{
-			game.player.score++;
+			game.opponent.score++;
 			game.ball.x = -200;
 			game.ball.y = -200;
 			game.isWaiting = true;
 			game.waiting_timer = performance.now();
 			game.dir = 1;
+			game.score = true;
+			return true;
+		}
+		else if (goal === 1 && !game.isWaiting && game.player.side === false)
+		{
+			game.opponent.score++;
+			game.ball.x = -200;
+			game.ball.y = -200;
+			game.isWaiting = true;
+			game.waiting_timer = performance.now();
+			game.dir = 0;
 			game.score = true;
 			return true;
 		}
@@ -169,11 +171,10 @@ setInterval(() => {
 function loop() {
 	game.update();
 	spawnBall();
-	playerCollision();
-	if (checkGoal())
+	if (!playerCollision() && checkGoal())
 	{
 		socket.emit('score');
-		if (game.player.score === game.options?.winScore)
+		if (game.opponent.score === game.options?.winScore)
 			socket.emit('endGame')
 	}
 	if (game.isOver)
@@ -236,7 +237,7 @@ onBeforeMount(() => {
 	socket.on('opponentScore', () => {
 		game.isWaiting = true;
 		game.waiting_timer = performance.now();
-		game.opponent.score++;
+		game.player.score++;
 		game.ball.x = -200;
 	});
 

@@ -72,6 +72,8 @@ export default defineComponent({
             this.isSearching = true;
 			axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
 				this.socket.emit('quickPlay', {mode: gameMode.mode, name: res.data});
+			}).catch((e) => {
+				console.error(e);
 			})
         },
         cancel()
