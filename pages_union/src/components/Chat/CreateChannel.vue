@@ -60,25 +60,20 @@ export default defineComponent({
 		if (this.socket)
 		{
 
-			this.socket.on('createGoodRequest', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('createGoodRequest',() => {
 					this.goodRequest();
 			});
-			this.socket.on('createAlreadyExists', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('createAlreadyExists',() => {
 					this.alreadyExists();
 			});
-			this.socket.on('createPasswordOrNameWrongSize', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('createPasswordOrNameWrongSize',() => {
 					this.wrongInputLength();
 
 			});
-			this.socket.on('createWrongCategory', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('createWrongCategory',() => {
 					this.wrongCategory();
 			});
-			this.socket.on('createNotAllowedChars', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('createNotAllowedChars', () => {
 					this.wrongChars();
 			});
 		}

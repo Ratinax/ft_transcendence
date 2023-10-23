@@ -49,36 +49,28 @@ export default defineComponent({
 		window.addEventListener('keydown', this.handleKeyDown);
 		if (this.socket)
 		{
-			this.socket.on('joinNotGoodChars', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('joinNotGoodChars', () => {
 				this.notGoodChars();
 			});
-			this.socket.on('joinNotConnected', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('joinNotConnected', () => {
 				this.noMoreConnected();
 			});
-			this.socket.on('joinNoSuchChannel', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('joinNoSuchChannel', () => {
 				this.noSuchChannel();
 			});
-			this.socket.on('joinAlreadyIn', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('joinAlreadyIn', () => {
 				this.alreadyIn();
 			});
-			this.socket.on('joinWrongPassword', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('joinWrongPassword', () => {
 				this.wrongPassword();
 			});
-			this.socket.on('joinGoodRequest', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('joinGoodRequest', () => {
 				this.goodRequest();
 			});
-			this.socket.on('joinBanned', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('joinBanned', () => {
 				this.joinBanned();
 			});
-			this.socket.on('joinPrivateMode', async (response: {sessionCookie: string}) => {
-				if (response.sessionCookie === this.sessionCookie)
+			this.socket.on('joinPrivateMode', () => {
 				this.privateMode();
 			});
 		}

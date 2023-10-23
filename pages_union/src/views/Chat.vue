@@ -82,8 +82,7 @@ export default defineComponent({
 			if (response.channel_id === this.selectedChannel?.channel_id)
 			this.updateMessages();
 		});
-		this.socket.on('updateListChannels', async (response: {sessionCookie: string, channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
-			if (response.sessionCookie === this.sessionCookie)
+		this.socket.on('updateListChannels', async (response: {channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
 			this.updateListChannels(response.channel);
 		});
 		this.socket.on('updateListUsers', (response: {channel: {channel_id: number}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
