@@ -68,19 +68,13 @@ export default defineComponent({
 	},
 	mounted()
 	{
-		this.socket?.on('timeoutGoodRequest', async (response: {channel: {channel_id: number}, sessionCookie: string}) => {
-			if (response.channel.channel_id === this.channel?.channel_id && this.sessionCookie === response.sessionCookie)
-		{
-				if (this.$refs.timeout)
+		this.socket?.on('timeoutGoodRequest', async () => {
+			if (this.$refs.timeout)
 				(this.$refs.timeout as typeof TimeOut).goodRequest();
-			}
 		});
-		this.socket?.on('timeoutWrongAmount', async (response: {channel: {channel_id: number}, sessionCookie: string}) => {
-			if (response.channel.channel_id === this.channel?.channel_id && this.sessionCookie === response.sessionCookie)
-		{
-				if (this.$refs.timeout)
+		this.socket?.on('timeoutWrongAmount', async () => {
+			if (this.$refs.timeout)
 				(this.$refs.timeout as typeof TimeOut).notGoodAmount();
-			}
 		});
 		document.addEventListener("click", this.handleClickOutsideOptions);
 	},

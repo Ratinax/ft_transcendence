@@ -89,6 +89,7 @@ export default defineComponent({
 			try 
 			{
 				const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels/`, {withCredentials: true});
+				this.socket.emit('joinRooms', {channels: response.data});
 				this.channels = response.data;
 			} 
 			catch (error) 

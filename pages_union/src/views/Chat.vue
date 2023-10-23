@@ -85,14 +85,12 @@ export default defineComponent({
 		this.socket.on('updateListChannels', async (response: {channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
 			this.updateListChannels(response.channel);
 		});
-		this.socket.on('updateListUsers', (response: {channel: {channel_id: number}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
-			if (response.channel.channel_id === this.selectedChannel?.channel_id) {
+		this.socket.on('updateListUsers', (response: {users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 				this.updateListUsers(response.users);
-			}
 		});
 		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (!response)
-			return ;
+				return ;
 			if (this.sessionCookie === response.sessionCookie && response.channel.channel_id === this.selectedChannel?.channel_id) {
 				this.updateListChannels(undefined);
 				this.updateListUsers(null);
