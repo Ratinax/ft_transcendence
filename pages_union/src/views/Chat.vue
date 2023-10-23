@@ -165,7 +165,7 @@ export default defineComponent({
 		},
 		toggleChannels() {
 			this.displayListChannels = !this.displayListChannels;
-		}
+		},
 	},
 	watch: {
 		windowWidth(newWidth) {

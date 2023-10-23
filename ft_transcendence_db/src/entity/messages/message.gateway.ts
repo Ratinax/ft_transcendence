@@ -52,6 +52,7 @@ export class MessagesGateway {
       else if (relation.channel.isADm && !(await this.isBlockedRelation(relation)))
       {
         this.unHide(user.id, relation.channel);
+        this.server.emit('unHideChannel', {channel_id: relation.channel.channel_id})
       }
       const timeoutDate = new Date(relation.dateTimeout);
       const currentDate = new Date(body.dateSent);

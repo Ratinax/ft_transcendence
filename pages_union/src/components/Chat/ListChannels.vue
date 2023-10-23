@@ -52,7 +52,8 @@ import { defineComponent } from 'vue';
 interface ChannelData {
 	channel_id: number,
 	name: string,
-	isUserOwner: boolean
+	isUserOwner: boolean,
+	isHide: boolean,
 }
 
 export default defineComponent({
@@ -78,6 +79,9 @@ export default defineComponent({
 	},
 	mounted() 
 	{
+		this.socket.on('unHideChannel', (response: {channel_id: number}) => {
+			this.unHideChannel(response.channel_id);
+		})
 		this.fetchChannels();
 	},
 	methods: {
@@ -139,6 +143,17 @@ export default defineComponent({
 			this.showCreateChannel = true;
 			console.log('here');
 			(this.$refs.createChannel as typeof CreateChannel).resetData()
+		},
+		unHideChannel(channel_id: number)
+		{
+			for (let i = 0; i < this.channels.length; i++)
+			{
+				if (this.channels[i].channel_id === channel_id)
+				{
+					this.channels[i].isHide = false;
+					return ;
+				}
+			}
 		}
 	},
 });
