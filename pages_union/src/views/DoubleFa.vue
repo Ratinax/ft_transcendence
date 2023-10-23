@@ -3,8 +3,9 @@
 	<div class="double-fa-page">
 		<div>
 			<img :src="qrlink" id="qrcode-doublefa"/>
-			<form  @submit.prevent="check2Fa">
-				<div class="input-numbers">
+			<div id="numbers-input-container">
+				<form  @submit.prevent="check2Fa">
+					<div class="input-numbers">
 					<input class="code" ref="digit1" v-model="digits[0]" placeholder="0" type="text"/>
 					<input class="code" ref="digit2" v-model="digits[1]" placeholder="0" type="text"/>
 					<input class="code" ref="digit3" v-model="digits[2]" placeholder="0" type="text"/>
@@ -19,6 +20,7 @@
 					</Transition>
 				</div>
 			</form>
+			</div>
 			<div id="loader"></div>
 		</div>
 	</div>
@@ -193,6 +195,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#numbers-input-container
+{
+	height: 3em;
+}
 .code
 {
 	caret-color: transparent;
