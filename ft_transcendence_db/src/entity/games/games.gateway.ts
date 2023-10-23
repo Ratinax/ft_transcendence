@@ -2,6 +2,7 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import { GameService } from './game.service';
 import { Server, Socket } from 'socket.io';
 import { ConfigIp } from 'src/config-ip';
+import { UserService } from '../users/user.service';
 
 @WebSocketGateway({
 	cors: {
@@ -14,7 +15,7 @@ export class GamesGateway {
 	@WebSocketServer()
 	server: Server;
 
-	constructor(private readonly gameService: GameService) {}
+	constructor(private readonly gameService: GameService, private readonly userService: UserService) {}
 
 	@SubscribeMessage('quickPlay')
 	quickPlay(@ConnectedSocket() client: Socket, @MessageBody() body) {
@@ -111,13 +112,26 @@ export class GamesGateway {
 	}
 
 	@SubscribeMessage('endGame')
-	endGame(@ConnectedSocket() client: Socket) {
+	async endGame(@ConnectedSocket() client: Socket) {
 		const	gameIndex = this.gameService.getGameIndexFromId(client.id);
 		if (gameIndex === -1)
 			return ;
 		this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('gameOver');
 		this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('gameOver');
-		// console.log(this.gameService.games[gameIndex]);
+		try
+		{
+			const user1 = (await this.userService.getUser(this.gameService.games[gameIndex].rightPlayer.name))[0];
+			const user2 = (await this.userService.getUser(this.gameService.games[gameIndex].leftPlayer.name))[0];
+			this.gameService.createGame({playerOne: {id: user1.id},
+				playerTwo: {id: user2.id},
+				scorePOne: this.gameService.games[gameIndex].rightPlayer.score,
+				scorePTwo: this.gameService.games[gameIndex].leftPlayer.score,
+				mode: this.gameService.games[gameIndex].mode});
+		}
+		catch (e)
+		{
+			console.error(e);
+		}
 		this.gameService.games.splice(gameIndex, 1);
 	}
 

@@ -1,6 +1,6 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
 import { FriendshipService } from './friendship.service';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
@@ -34,7 +34,7 @@ export class FriendshipGateway {
     }
 
     @SubscribeMessage('removeFriendship')
-    async removeFriendship(@MessageBody() body: {sessionCookie: string, friend_id: number}) 
+    async removeFriendship(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, friend_id: number}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
@@ -46,7 +46,7 @@ export class FriendshipGateway {
       try
       {
         await this.friendshipService.deleteFriendship(body.friend_id, user.id);
-        this.server.emit('deleteFriendship', {sessionCookie: body.sessionCookie});
+        this.server.to(client.id).emit('deleteFriendship');
       }
       catch (e)
       {

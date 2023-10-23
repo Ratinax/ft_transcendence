@@ -40,7 +40,7 @@ export class GameService {
 		maxAngle: 45,
 		playerSize: 300,
 		playerSpeed: 1800,
-		winScore: 7,
+		winScore: 1,
 	}
 
 	getGameIndex(playerName: string) {
@@ -86,78 +86,8 @@ export class GameService {
 		return {side: true, options: newGame.options};
 	}
 
-	// addToGame(playerId: number, name: string, mode: number, isCustom: boolean, playerSocket: string) {
-		// for (let i = 0; i < this.games.length; i++) {
-			// if (this.games[i].mode === mode && !this.games[i].isFull)
-			// {
-				// this.games[i].opponent = new Player();
-				// this.games[i].opponent.id = playerId;
-				// this.games[i].opponent.socket = playerSocket;
-				// this.games[i].opponent.name = name;
-				// this.games[i].opponent.side = !this.games[i].player.side;
-				// this.games[i].opponent.racket = new Racket(this.games[i].opponent.side, this.games[i].width, this.games[i].height);
-				// this.games[i].isFull = true;
-				// return this.games[i].opponent.side;
-			// }
-		// }
-		// const newGame = new Game();
-		// newGame.ball = new Ball();
-		// switch (mode) {
-			// case 1:
-				// newGame.options = this.slowOptions;
-				// break;
-			// case 2:
-				// newGame.options = this.classicOptions;
-				// break;
-			// case 3:
-				// newGame.options = this.fastOptions;
-				// break;
-		// }
-		// newGame.player = new Player();
-		// newGame.player.id = playerId;
-		// newGame.player.socket = playerSocket;
-		// newGame.player.name = name;
-		// newGame.player.side = true;
-		// newGame.player.racket = new Racket(newGame.player.side, newGame.width, newGame.height);
-		// newGame.mode = mode;
-		// newGame.isCustom = isCustom;
-		// if (isCustom && !newGame.creatorId)
-			// newGame.creatorId = playerId;
-		// this.games.push(newGame);
-		// return newGame.player.side;
-	// }
-// 
-	// getGameIndexFromSocket(playerSocket: string) {
-		// for (let i = 0; i < this.games.length; i++) {
-			// if ((this.games[i].player && this.games[i].player.socket && this.games[i].player.socket === playerSocket) || ( this.games[i].opponent && this.games[i].opponent.socket && this.games[i].opponent.socket === playerSocket))
-				// return i;
-		// }
-		// return -1;
-	// }
-// 
-	// getGameIndexFromId(playerId: number) {
-		// for (let i = 0; i < this.games.length; i++) {
-			// if ((this.games[i].player && this.games[i].player.socket && this.games[i].player.id === playerId) || ( this.games[i].opponent && this.games[i].opponent.socket && this.games[i].opponent.id === playerId))
-				// return i;
-		// }
-		// return -1;
-	// }
-// 
-	// joinQuickPlay(playerId: number, name: string, mode: number, playerSocket: string) {
-		// const	side = this.addToGame(playerId, name, mode, false, playerSocket);
-		// console.log(this.games);
-		// switch(mode) {
-			// case 1:
-				// return {options: this.slowOptions, side: side};
-			// case 2:
-				// return {options: this.classicOptions, side: side};
-			// case 3:
-				// return {options: this.fastOptions, side: side};
-		// }
-	// }
-
     async createGame(game: Partial<Games>)
-    {
+	{
         const newChannel = this.gameRepository.create(game);
         const res = await this.gameRepository.save(newChannel);
         return (res);

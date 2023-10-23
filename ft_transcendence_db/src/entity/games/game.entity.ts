@@ -61,4 +61,6 @@ export class Games {
     @Column({ name: 'win_score', default: 0 })
     winScore: number;
 
+    @Column({name: 'mode', default: 1})
+    mode: number;
 }
