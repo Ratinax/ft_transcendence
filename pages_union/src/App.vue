@@ -23,7 +23,7 @@ export default defineComponent({
 		this.socket.on('pingAlive', async () => {
 			await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/pingBack`, {}, { withCredentials: true });
 		})
-	}
+	},
 })
 </script>
 

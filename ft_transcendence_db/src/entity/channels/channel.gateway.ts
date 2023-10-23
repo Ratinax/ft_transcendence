@@ -48,12 +48,13 @@ export class ChannelGateway {
         isAdmin: true,
         isOwner: true,
       });
-      this.server.to(client.id).emit('createGoodRequest', {sessionCookie: data.sessionCookie});
+      client.join(channel.name);
+      this.server.to(client.id).emit('createGoodRequest');
       return ({response, response2});
     } 
     catch (e)
     {
-      this.server.to(client.id).emit('createAlreadyExists', {sessionCookie: data.sessionCookie});
+      this.server.to(client.id).emit('createAlreadyExists');
     }
   }
 
@@ -127,6 +128,7 @@ export class ChannelGateway {
       name: channel.name,
     }
     this.server.to(client.id).emit('updateListChannels', {channel: {...channelToReturn, isUserOwner: false}});
+    client.join(channel.name);
     this.server.to(client.id).emit('joinGoodRequest');
   }
 
@@ -171,7 +173,7 @@ export class ChannelGateway {
       await this.channelService.removeChan(body.channel.channel_id);
     }
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-    this.server.emit('updateAfterPart', {
+    this.server.to(body.channel.name).emit('updateAfterPart', {
       users: users, 
       channel: body.channel,
       sessionCookie: body.sessionCookie});
