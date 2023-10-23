@@ -20,6 +20,7 @@
 						ref="sendMessage"
 						:showContent="!!selectedChannel?.channel_id"
 						:channelId="selectedChannel?.channel_id"
+						:channelName="selectedChannel?.name"
 						:socket="socket"
 						:sessionCookie="sessionCookie"/>
 				</div>
@@ -95,18 +96,14 @@ export default defineComponent({
 				this.updateListChannels(undefined);
 				this.updateListUsers(null);
 			}
-			else if (this.sessionCookie === response.sessionCookie)
-			{
-				this.updateListChannels(this.selectedChannel);
-			}
 			else if (response.channel.channel_id === this.selectedChannel?.channel_id) {
 				this.updateListUsers(response.users);
 			}
 		});
-		this.socket.on('sendMessageGoodRequest', async (response: {channel_id: number, sessionCookie: string}) => {
+		this.socket.on('sendMessageGoodRequest', async (response: {channel_id: number}) => {
 			this.refreshSendMessageBar();
 			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
-			(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
+				(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
 		});
 	},
 	methods:

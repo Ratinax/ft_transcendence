@@ -1,6 +1,6 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
 import { MessageService } from './message.service';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
@@ -25,8 +25,8 @@ export class MessagesGateway {
   constructor(private readonly messagesService: MessageService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService, private readonly blockshipService: BlockshipService, private readonly gameService: GameService) {}
 
   @SubscribeMessage('createMessage')
-  async create(
-    @MessageBody() body: {sessionCookie: string, channel_id: number, dateSent: Date, message: string, isAGameInvite: boolean, game: Partial<Games> | undefined}) 
+  async create(@ConnectedSocket() client: Socket,
+    @MessageBody() body: {sessionCookie: string, channel_id: number, channelName: string, dateSent: Date, message: string, isAGameInvite: boolean, game: Partial<Games> | undefined}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
@@ -41,12 +41,12 @@ export class MessagesGateway {
         return ('no such relation');
       if (body.message.length > 1024)
       {
-        this.server.emit('messageTooLong', {sessionCookie: body.sessionCookie});
+        this.server.to(client.id).emit('messageTooLong');
         return ('messageTooLong');
       }
       if (relation.channel.isADm && await this.isBlockedRelation(relation))
       {
-        this.server.emit('sendMessageBlocked', {sessionCookie: body.sessionCookie})
+        this.server.to(client.id).emit('sendMessageBlocked', {sessionCookie: body.sessionCookie})
         return ;
       }
       else if (relation.channel.isADm && !(await this.isBlockedRelation(relation)))
@@ -63,7 +63,7 @@ export class MessagesGateway {
       
       if (timeoutSeconds + +timeoutDuration > currentSeconds)
       {
-        this.server.emit('sendMessageTimeout', {sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
+        this.server.to(client.id).emit('sendMessageTimeout', {sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
         return 'user timeout';
       }
 
@@ -97,8 +97,8 @@ export class MessagesGateway {
         });
       }
       
-      this.server.emit('updateMessage', {channel_id: body.channel_id});
-      this.server.emit('sendMessageGoodRequest', {channel_id: body.channel_id, sessionCookie: body.sessionCookie});
+      this.server.to(body.channelName).emit('updateMessage', {channel_id: body.channel_id});
+      this.server.to(body.channelName).emit('sendMessageGoodRequest', {channel_id: body.channel_id});
   }
   @SubscribeMessage('removeGameInvite')
   async removeGameInvite(@MessageBody() body: {id: number, sessionCookie: string})
