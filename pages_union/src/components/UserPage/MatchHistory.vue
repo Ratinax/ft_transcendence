@@ -5,7 +5,8 @@
 		:playerOneData="match.playerOne"
 		:playerTwoData="match.playerTwo"
 		:playerOneScore="match.scorePlayerOne"
-		:playerTwoScore="match.scorePlayerTwo"></MatchScore>
+		:playerTwoScore="match.scorePlayerTwo"
+		:mode="match.mode"></MatchScore>
 	<div v-if="matchHistory?.length === 0">
 		<p class="user-no-match-text">No recent matches.</p>
 	</div>
@@ -28,6 +29,7 @@ interface MatchHistory {
 	},
 	scorePlayerOne: number,
 	scorePlayerTwo: number,
+	mode: number,
 }
 
 export default defineComponent({
