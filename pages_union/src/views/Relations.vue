@@ -69,8 +69,7 @@ export default defineComponent({
 	{
 		this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
 		this.socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/relation`);
-		this.socket.on('acceptFriendship', (response: {sessionCookie: string}) => {
-			if (response.sessionCookie === this.sessionCookie)
+		this.socket.on('acceptFriendship', () => {
 			this.acceptFriendship();
 		});
 		this.socket.on('deleteFriendship', () => {

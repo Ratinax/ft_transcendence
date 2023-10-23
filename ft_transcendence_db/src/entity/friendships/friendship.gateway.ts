@@ -20,7 +20,7 @@ export class FriendshipGateway {
     constructor(private readonly friendshipService: FriendshipService, private readonly sessionService: SessionService) {}
 
     @SubscribeMessage('acceptFriendship')
-    async acceptFriendship(@MessageBody() body: {sessionCookie: string, friend_id: number}) 
+    async acceptFriendship(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, friend_id: number}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
@@ -30,7 +30,7 @@ export class FriendshipGateway {
       if (!user)
         return (null);
       await this.friendshipService.acceptFriendship(user.id, body.friend_id);
-      this.server.emit('acceptFriendship', {sessionCookie: body.sessionCookie});
+      this.server.to(client.id).emit('acceptFriendship');
     }
 
     @SubscribeMessage('removeFriendship')
