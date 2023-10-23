@@ -1,6 +1,6 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
 import { BlockshipService } from './blockship.service';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 import { InternalServerErrorException } from '@nestjs/common';
@@ -21,7 +21,7 @@ export class BlockshipGateway {
     }
 
     @SubscribeMessage('removeBlockship')
-    async refuseBlockship(@MessageBody() body: {sessionCookie: string, userblocked_id: number}) 
+    async refuseBlockship(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, userblocked_id: number}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
@@ -32,7 +32,7 @@ export class BlockshipGateway {
         return (null);
 
       await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
-      this.server.emit('deleteBlockship', {sessionCookie: body.sessionCookie});
-      return (true);
+      this.server.to(client.id).emit('deleteBlockship');
+      return (true); 
     }
 }

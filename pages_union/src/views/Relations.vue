@@ -75,8 +75,7 @@ export default defineComponent({
 		this.socket.on('deleteFriendship', () => {
 			this.deleteFriendship();
 		}); 
-		this.socket.on('deleteBlockship', (response: {sessionCookie: string}) => {
-			if (response.sessionCookie === this.sessionCookie)
+		this.socket.on('deleteBlockship', () => {
 			this.deleteBlockship();
 		});
 	},
