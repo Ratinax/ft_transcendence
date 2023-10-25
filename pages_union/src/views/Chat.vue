@@ -90,7 +90,6 @@ export default defineComponent({
 			this.addMessage(response.message);
 		});
 		this.socket.on('addChannel', async (response: {channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
-			console.log('update')
 			this.addChannel(response.channel);
 		});
 		this.socket.on('updateListUsers', (response: {users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
@@ -105,10 +104,8 @@ export default defineComponent({
 				this.updateListUsers(response.users);
 			}
 		});
-		this.socket.on('sendMessageGoodRequest', async (response: {channel_id: number}) => {
+		this.socket.on('sendMessageGoodRequest', async () => {
 			this.refreshSendMessageBar();
-			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
-				(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
 		});
 		this.socket.on('removeMessage', async (response: {channel_id: number, message_id: number}) => {
 			this.removeMessage(response.message_id);
@@ -166,19 +163,13 @@ export default defineComponent({
 		},
 
 		async findUsersOfChannel() {
-			console.log('ca emit bien')
 			this.socket?.emit('findUsersOfChannel', { channel: this.selectedChannel, sessionCookie: this.sessionCookie });
 		},
-		/**
-		 * 
-		 * @param {Array} users - the list of users of the selectedChannel 
-		*/
 		updateListUsers(users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}> | null) {
 			if (this.$refs.listUsersChat)
 			(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
 		},
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
-			console.log('channel :', channel)
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
 		},
 		refreshSendMessageBar() {

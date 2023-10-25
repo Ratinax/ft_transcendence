@@ -101,7 +101,7 @@ export class MessagesGateway {
       }
       this.server.to(body.channelName).except(client.id).emit('addMessage', {message: message});
       this.server.to(client.id).emit('addMessage', {message: {...message, isSender: true}});
-      this.server.to(body.channelName).emit('sendMessageGoodRequest', {channel_id: body.channel_id});
+      this.server.to(client.id).emit('sendMessageGoodRequest');
   }
   @SubscribeMessage('removeGameInvite')
   async removeGameInvite(@MessageBody() body: {id: number, sessionCookie: string})

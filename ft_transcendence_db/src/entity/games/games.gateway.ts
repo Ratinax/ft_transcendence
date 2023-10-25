@@ -18,7 +18,6 @@ export class GamesGateway {
 	constructor(private readonly gameService: GameService, private readonly userService: UserService) {
 		setInterval(() => {
 			this.gameService.checkConnection(this.server);
-			console.log(this.gameService.games)
 		}, 500)
 	}
 

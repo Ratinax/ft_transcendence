@@ -199,7 +199,6 @@ export class ChannelGateway {
     const relation = await this.channelsUsersService.findRelationByCName(user.id, body.channelName);
     if (!relation || !relation[0])
       return ('not authorized');
-    console.log('leave', body.channelName);
     client.leave(body.channelName)
   }
   @SubscribeMessage('joinRoom')
@@ -215,7 +214,6 @@ export class ChannelGateway {
     const relation = await this.channelsUsersService.findRelationByCName(user.id, body.channelName);
     if (!relation || !relation[0])
       return ('not authorized');
-    console.log('join', body.channelName);
     client.join(body.channelName)
   }
 }
