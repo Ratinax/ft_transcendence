@@ -93,7 +93,7 @@ export default defineComponent({
 			} 
 			catch (error) 
 			{
-				console.error('Failed to get channel liste', error);
+				console.error('Failed to get channel list', error);
 				return ;
 			}
 			this.$nextTick(() => {
@@ -141,7 +141,6 @@ export default defineComponent({
 		showingCreateChannel()
 		{
 			this.showCreateChannel = true;
-			console.log('here');
 			(this.$refs.createChannel as typeof CreateChannel).resetData()
 		},
 		unHideChannel(channel_id: number)

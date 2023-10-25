@@ -3,8 +3,9 @@
 	<div class="double-fa-page">
 		<div>
 			<img :src="qrlink" id="qrcode-doublefa"/>
-			<form  @submit.prevent="check2Fa">
-				<div class="input-numbers">
+			<div id="numbers-input-container">
+				<form  @submit.prevent="check2Fa">
+					<div class="input-numbers">
 					<input class="code" ref="digit1" v-model="digits[0]" placeholder="0" type="text"/>
 					<input class="code" ref="digit2" v-model="digits[1]" placeholder="0" type="text"/>
 					<input class="code" ref="digit3" v-model="digits[2]" placeholder="0" type="text"/>
@@ -19,6 +20,7 @@
 					</Transition>
 				</div>
 			</form>
+			</div>
 			<div id="loader"></div>
 		</div>
 	</div>
@@ -52,7 +54,6 @@ export default defineComponent({
 		if (!timeLeftString)
 			timeLeftString = '';
 		let timeLeft;
-		console.log(timeLeftString)
 		if (timeLeftString === '')
 			timeLeft = -1;
 		else
@@ -82,7 +83,6 @@ export default defineComponent({
 
 		const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-		console.log(codes);
 		codes.forEach((code, index) => {
 			code.addEventListener('keydown', (e: KeyboardEvent) => {
 				if (digits.includes(e.key)) {
@@ -149,7 +149,6 @@ export default defineComponent({
 					try
 					{
 						const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/timeLeft2Fa/`, {withCredentials: true})).data;
-						console.log(res);
 						this.timeLeft--;
 						const loader = document.getElementById('loader');
 						if (loader)
@@ -193,6 +192,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#numbers-input-container
+{
+	height: 3em;
+}
 .code
 {
 	caret-color: transparent;

@@ -47,6 +47,7 @@ export default defineComponent({
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/match-history/${props.pseudo}`, {withCredentials: true});
 
 			matchHistory.value = response.data;
+			matchHistory.value?.reverse();
 		})
 
 		return { userPseudo, matchHistory };

@@ -1,6 +1,6 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
 import { ChannelsUsersService } from './channels_users.service';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 
@@ -19,7 +19,7 @@ export class ChannelsUsersGateway {
   constructor(private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
 
   @SubscribeMessage('findUsersOfChannel')
-  async findUsersOfChannel(@MessageBody() body: {sessionCookie: string, channel: {name: string, channel_id: number}})
+  async findUsersOfChannel(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, channel: {name: string, channel_id: number}})
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
@@ -28,7 +28,7 @@ export class ChannelsUsersGateway {
     try 
     {
         const res = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-        this.server.emit('updateListUsers', {users: res, channel: body.channel});
+        this.server.to(client.id).emit('updateListUsers', {users: res});
     }
     catch (e)
     {
@@ -52,9 +52,8 @@ export class ChannelsUsersGateway {
     
     const res = await this.channelsUsersService.ban(body.channel, body.userBanned);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-    this.server.emit('updateAfterPart', {
-      users: users, 
-      channel: body.channel,
+    this.server.to(body.channel.name).emit('updateAfterPart', {
+      users: users,
       sessionCookie: await this.sessionService.getSessionKey(body.userBanned.id)});
     return (res);
   }
@@ -76,9 +75,8 @@ export class ChannelsUsersGateway {
 
     const res = await this.channelsUsersService.leave(body.channel, body.userKicked);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-    this.server.emit('updateAfterPart', {
-      users: users, 
-      channel: body.channel,
+    this.server.to(body.channel.name).emit('updateAfterPart', {
+      users: users,
       sessionCookie: await this.sessionService.getSessionKey(body.userKicked.id)});
     return (res);
   }
@@ -95,9 +93,8 @@ export class ChannelsUsersGateway {
     const res = await this.channelsUsersService.setAdmin(body.channel, body.userSetAdmin);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
 
-    this.server.emit('updateListUsers', {
-      users: users, 
-      channel: body.channel});
+    this.server.to(body.channel.name).emit('updateListUsers', {
+      users: users});
     return (res);
   }
 
@@ -115,14 +112,13 @@ export class ChannelsUsersGateway {
 
     const res = await this.channelsUsersService.removeAdmin(body.channel, body.userRemovedAdmin);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-    this.server.emit('updateListUsers', {
-      users: users, 
-      channel: body.channel});
+    this.server.to(body.channel.name).emit('updateListUsers', {
+      users: users});
     return (res);
   }
 
   @SubscribeMessage('timeoutUser')
-  async timeoutUser(@MessageBody() body: {sessionCookie: string, userTimeouted: {id: number}, channel: {channel_id: number, name: string}, duration_timeout: number})
+  async timeoutUser(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, userTimeouted: {id: number}, channel: {channel_id: number, name: string}, duration_timeout: number})
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
@@ -139,14 +135,14 @@ export class ChannelsUsersGateway {
     
     if (body.duration_timeout >= 2592000 || body.duration_timeout < 10) // 30 days and 10 seconds
     {
-      this.server.emit('timeoutWrongAmount', {channel: body.channel, sessionCookie: body.sessionCookie});
+      this.server.to(client.id).emit('timeoutWrongAmount');
       return ;
     }
     await this.channelsUsersService.timeoutUser(body.channel, body.userTimeouted, body.duration_timeout);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     
-    this.server.emit('updateListUsers', {channel: body.channel, users: users});
-    this.server.emit('timeoutGoodRequest', {channel: body.channel, sessionCookie: body.sessionCookie});
+    this.server.to(body.channel.name).emit('updateListUsers', {users: users});
+    this.server.to(client.id).emit('timeoutGoodRequest');
   }
 
   async checkUserAdminPerms(sessionCookie: string, channel_id: number)

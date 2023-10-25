@@ -61,6 +61,7 @@ export default defineComponent({
         });
         this.socket.on('gameFull', (infos: any) => {
 			localStorage.setItem('opponentInfos', JSON.stringify({opponentName: infos.opponentName}));
+			
             this.router.push('/game');
 		});
 
@@ -81,7 +82,8 @@ export default defineComponent({
 				this.socket.emit('quickPlay', {mode: gameMode.mode, name: res.data});
 			}).catch((e) => {
 				console.error(e);
-			})
+			});
+			this.$emit('quick-play');
         },
         cancel()
         {

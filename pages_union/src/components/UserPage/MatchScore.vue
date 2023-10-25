@@ -1,28 +1,33 @@
 <template>
-	<div class="row match-score">
-		<div class="row user-score">
-			<div class="col">
-				<div class="profile-pic-container" @click="goToUserPage(playerOne?.pseudo)">
-					<img :src="playerOne?.profilPic" :alt="playerOne?.pseudo">
+	<div class="match-score-container">
+		<div class="match-gamemode-name">
+			{{ modeName }}
+		</div>
+		<div class="row match-score">
+			<div class="row user-score">
+				<div class="col">
+					<div class="profile-pic-container" @click="goToUserPage(playerOne?.pseudo)">
+						<img :src="playerOne?.profilPic" :alt="playerOne?.pseudo">
+					</div>
+					<span class="text user-pseudo" @click="goToUserPage(playerOne?.pseudo)">{{ playerOne?.pseudo }}</span>
 				</div>
-				<span class="text user-pseudo" @click="goToUserPage(playerOne?.pseudo)">{{ playerOne?.pseudo }}</span>
+				<font-awesome-icon v-if=" playerOneScore && playerTwoScore && playerOneScore > playerTwoScore" class="win right" icon="fa-solid fa-w" size="xl" />
+				<font-awesome-icon v-else class="loss right" icon="fa-solid fa-l" size="xl"/>
 			</div>
-			<font-awesome-icon v-if="playerOneScore > playerTwoScore" class="win right" icon="fa-solid fa-w" size="xl" />
-			<font-awesome-icon v-else class="loss right" icon="fa-solid fa-l" size="xl"/>
-		</div>
-		<div class="row scores">
-			<span class="text score" style="text-align: right;">{{ pOneScore }}</span>
-			<font-awesome-icon class="score-separator" icon="fa-solid fa-code-commit" size="lg" />
-			<span class="text score">{{ pTwoScore }}</span>
-		</div>
-		<div class="row user-score">
-			<font-awesome-icon v-if="!(playerOneScore > playerTwoScore)" class="win left" icon="fa-solid fa-w" size="xl" />
-			<font-awesome-icon v-else class="loss left" icon="fa-solid fa-l" size="xl" />
-			<div class="col">
-				<div class="profile-pic-container" @click="goToUserPage(playerTwo?.pseudo)">
-					<img :src="playerTwo?.profilPic" :alt="playerTwo?.pseudo">
+			<div class="row scores">
+				<span class="text score" style="text-align: right;">{{ pOneScore }}</span>
+				<font-awesome-icon class="score-separator" icon="fa-solid fa-code-commit" size="lg" />
+				<span class="text score">{{ pTwoScore }}</span>
+			</div>
+			<div class="row user-score">
+				<font-awesome-icon v-if="!(playerOneScore && playerTwoScore && playerOneScore > playerTwoScore)" class="win left" icon="fa-solid fa-w" size="xl" />
+				<font-awesome-icon v-else class="loss left" icon="fa-solid fa-l" size="xl" />
+				<div class="col">
+					<div class="profile-pic-container" @click="goToUserPage(playerTwo?.pseudo)">
+						<img :src="playerTwo?.profilPic" :alt="playerTwo?.pseudo">
+					</div>
+					<span class="text user-pseudo" @click="goToUserPage(playerTwo?.pseudo)">{{ playerTwo?.pseudo }}</span>
 				</div>
-				<span class="text user-pseudo" @click="goToUserPage(playerTwo?.pseudo)">{{ playerTwo?.pseudo }}</span>
 			</div>
 		</div>
 	</div>
@@ -45,12 +50,19 @@ export default defineComponent({
 		playerTwoData: Object as () => UserInfo,
 		playerOneScore: Number,
 		playerTwoScore: Number,
+		mode: Number,
 	},
 	setup(props) {
 		const router = useRouter();
 		const playerOne = ref(props.playerOneData);
 		const playerTwo = ref(props.playerTwoData);
 		const userOneWin = ref<boolean>();
+		const gameModes = ["SLOW", "CLASSIC", "FAST"];
+		let modeName = "unknown gamemode";
+		if (props.mode) {
+			modeName = gameModes[props.mode - 1];
+		}
+
 		if (props.playerOneScore && props.playerTwoScore) {
 			userOneWin.value = props.playerOneScore > props.playerTwoScore;
 		}
@@ -65,12 +77,15 @@ export default defineComponent({
 			});*/
 		}
 
-		return {playerOne, 
+		return {
+			playerOne, 
 			playerTwo, 
 			userOneWin,
 			pOneScore,
 			pTwoScore,
-			goToUserPage};
+			goToUserPage,
+			modeName
+		};
 	}
 });
 </script>
@@ -86,12 +101,22 @@ export default defineComponent({
 {
 	color: var(--pcyan);
 }
-.match-score {
+
+.match-score-container {
 	padding: .742em;
 	border-radius: .5em;
 	background: rgba(0, 0, 0, 0.42);
 	border-radius: .5em;
 	margin-bottom: .742em;
+}
+
+.match-gamemode-name {
+	text-align: center;
+	color: orange;
+	font-size: 1.1em;
+}
+
+.match-score {
 	justify-content: space-between;
 	align-items: center;
 }
@@ -161,10 +186,10 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 768px) {
-  .profile-pic-container {
-    width: 2.5em;
-    height: 2.5em;
-  }
+	.profile-pic-container {
+		width: 2.5em;
+		height: 2.5em;
+	}
 }
 
 @media screen and (max-width: 400px) {

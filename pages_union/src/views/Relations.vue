@@ -46,6 +46,7 @@ import Menu from '../components/Menu.vue'
 import UsersSearched from '../components/Relations/UsersSearched.vue';
 import ListUsers from '../components/Relations/ListUsers.vue';
 
+
 export default defineComponent({
 	name: 'Relations-Page',
 	components: 

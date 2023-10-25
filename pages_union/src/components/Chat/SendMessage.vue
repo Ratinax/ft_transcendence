@@ -29,6 +29,7 @@ export default defineComponent({
 	},
 	props: 
 	{
+		channelName: String,
 		showContent: Boolean,
 		socket: Socket,
 		channelId: Number,
@@ -47,17 +48,14 @@ export default defineComponent({
 	},
 	mounted()
 	{
-		this.socket?.on('sendMessageBlocked', (response: any) => {
-			if (this.sessionCookie === response.sessionCookie)
+		this.socket?.on('sendMessageBlocked', () => {
 			this.isBlockedBy = true;
 		})
-		this.socket?.on('sendMessageTimeout', async (response: {duration: number, sessionCookie: string}) => {
-			if (this.sessionCookie === response.sessionCookie)
-				this.timeout(response.duration);
+		this.socket?.on('sendMessageTimeout', async (response: {duration: number}) => {
+			this.timeout(response.duration);
 		});
-		this.socket?.on('messageTooLong', async (response: {sessionCookie: string}) => {
-			if (this.sessionCookie === response.sessionCookie)
-				this.messageTooLong();
+		this.socket?.on('messageTooLong', async () => {
+			this.messageTooLong();
 		});
 	},
 	methods:
@@ -80,7 +78,9 @@ export default defineComponent({
 		{
 			if (this.messageText === '')
 			return ;
-			this.socket?.emit('createMessage', { channel_id: this.channelId,
+			this.socket?.emit('createMessage', {
+				channelName: this.channelName,
+				channel_id: this.channelId,
 				message: this.messageText,
 				dateSent: this.getCurrentDate(),
 				isAGameInvite: false, sessionCookie: this.sessionCookie });
@@ -113,6 +113,7 @@ export default defineComponent({
 			winScore: number})
 		{
 			this.socket?.emit('createMessage', { 
+				channelName: this.channelName,
 				channel_id: this.channelId,
 				message: '',
 				dateSent: this.getCurrentDate(),
@@ -123,7 +124,6 @@ export default defineComponent({
 		},
 		messageTooLong()
 		{
-			console.log('message too long')
 			this.isMessageTooLong = true;
 		}
 	}

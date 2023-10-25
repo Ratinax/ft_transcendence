@@ -30,7 +30,6 @@ export default defineComponent({
 		isAGameInvite: Boolean,
 		isSender: Boolean,
 		id: Number,
-		game: Object,
 		socket: Socket,
 		sessionCookie: String,
 	},

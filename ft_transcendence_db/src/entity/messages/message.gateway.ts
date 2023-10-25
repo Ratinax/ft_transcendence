@@ -1,6 +1,6 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
 import { MessageService } from './message.service';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
@@ -25,8 +25,8 @@ export class MessagesGateway {
   constructor(private readonly messagesService: MessageService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService, private readonly blockshipService: BlockshipService, private readonly gameService: GameService) {}
 
   @SubscribeMessage('createMessage')
-  async create(
-    @MessageBody() body: {sessionCookie: string, channel_id: number, dateSent: Date, message: string, isAGameInvite: boolean, game: Partial<Games> | undefined}) 
+  async create(@ConnectedSocket() client: Socket,
+    @MessageBody() body: {sessionCookie: string, channel_id: number, channelName: string, dateSent: Date, message: string, isAGameInvite: boolean, game: Partial<Games> | undefined}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
@@ -41,12 +41,12 @@ export class MessagesGateway {
         return ('no such relation');
       if (body.message.length > 1024)
       {
-        this.server.emit('messageTooLong', {sessionCookie: body.sessionCookie});
+        this.server.to(client.id).emit('messageTooLong');
         return ('messageTooLong');
       }
       if (relation.channel.isADm && await this.isBlockedRelation(relation))
       {
-        this.server.emit('sendMessageBlocked', {sessionCookie: body.sessionCookie})
+        this.server.to(client.id).emit('sendMessageBlocked', {sessionCookie: body.sessionCookie})
         return ;
       }
       else if (relation.channel.isADm && !(await this.isBlockedRelation(relation)))
@@ -60,22 +60,24 @@ export class MessagesGateway {
 
       const timeoutSeconds = timeoutDate.getTime() / 1000;
       const currentSeconds = currentDate.getTime() / 1000;
+      let message;
       
       if (timeoutSeconds + +timeoutDuration > currentSeconds)
       {
-        this.server.emit('sendMessageTimeout', {sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
+        this.server.to(client.id).emit('sendMessageTimeout', {sessionCookie: body.sessionCookie, duration: timeoutSeconds + +timeoutDuration - currentSeconds})
         return 'user timeout';
       }
 
       if (body.game)
       {
         const reelGame = await this.gameService.createGame(this.toGoodInputGame(body.game));
-        await this.messagesService.post({
+        message = await this.messagesService.post({
           content: body.message,
           dateSent: body.dateSent,
           channel: {channel_id: body.channel_id},
           user: {
-            ...user,
+            id: user.id,
+            pseudo: user.pseudo
           },
           isAGameInvite: body.isAGameInvite,
           game: {
@@ -86,19 +88,20 @@ export class MessagesGateway {
       else
       {
 
-        await this.messagesService.post({
+        message = await this.messagesService.post({
           content: body.message,
           dateSent: body.dateSent,
           channel: {channel_id: body.channel_id},
           user: {
-            ...user,
+            id: user.id,
+            pseudo: user.pseudo
           },
           isAGameInvite: body.isAGameInvite,
         });
       }
-      
-      this.server.emit('updateMessage', {channel_id: body.channel_id});
-      this.server.emit('sendMessageGoodRequest', {channel_id: body.channel_id, sessionCookie: body.sessionCookie});
+      this.server.to(body.channelName).except(client.id).emit('addMessage', {message: message});
+      this.server.to(client.id).emit('addMessage', {message: {...message, isSender: true}});
+      this.server.to(body.channelName).emit('sendMessageGoodRequest', {channel_id: body.channel_id});
   }
   @SubscribeMessage('removeGameInvite')
   async removeGameInvite(@MessageBody() body: {id: number, sessionCookie: string})
@@ -116,7 +119,7 @@ export class MessagesGateway {
     const res = await this.messagesService.removeMessage(body.id);
     if (res)
     {
-      this.server.emit('updateMessage', {channel_id: res.channel.channel_id});
+      this.server.emit('removeMessage', {message_id: body.id});
     }
   }
 

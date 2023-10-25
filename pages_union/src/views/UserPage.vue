@@ -167,7 +167,6 @@ export default defineComponent({
 		{
 			try
 			{
-				console.log('click')
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/friendships/ask/`, {pseudo: userName.value}, {withCredentials: true});
 				isFriend.value = res.data;
 			}

@@ -6,7 +6,6 @@
 			:isAGameInvite="message.isAGameInvite"
 			:isSender="message.isSender"
       :id="message.id"
-      :game="message.game"
       :socket="socket"
       :sessionCookie="sessionCookie"/>
   </div>
@@ -17,6 +16,14 @@ import Message from './Message.vue';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 import { Socket } from 'socket.io-client';
+
+interface messageData {
+  id: number,
+  user: {pseudo: string},
+  content: string,
+  isAGameInvite: boolean,
+  isSender: boolean
+}
 
 export default defineComponent({
     name: 'Messages-Component',
@@ -31,18 +38,7 @@ export default defineComponent({
     },
     data() {
       return {
-          messages: [] as Array<{id: number,
-            user: {pseudo: string},
-            content: string,
-            isAGameInvite: boolean,
-            isSender: boolean,
-            game: {ballAccel: number,
-                ballSize: number, 
-                ballSpeed: number,
-                maxAngle: number,
-                playerSize: number,
-                playerSpeed: number,
-                winScore: number}}>}
+          messages: [] as Array<messageData>}
     },
     created()
     {
@@ -76,12 +72,31 @@ export default defineComponent({
               this.updateScrollPosition();
           });
       },
+      addMessage(message: messageData)
+      {
+        this.messages.push(message);
+        this.updateScrollPosition();
+      },
+      removeMessage(message_id: number)
+      {
+        for (let i = 0; i < this.messages.length; i++)
+        {
+          if (this.messages[i].id === message_id)
+          {
+            this.messages.splice(i, 1);
+            break ;
+          }
+        }
+      },
       updateScrollPosition()
       {
-        if (this.$refs.messageContainer)
-        {
-          (this.$refs.messageContainer as HTMLElement).scrollTop = (this.$refs.messageContainer as HTMLElement).scrollHeight; 
-        }
+        this.$nextTick(() => {
+
+          if (this.$refs.messageContainer)
+          {
+            (this.$refs.messageContainer as HTMLElement).scrollTop = (this.$refs.messageContainer as HTMLElement).scrollHeight; 
+          }
+        })
       }
     }
 });
