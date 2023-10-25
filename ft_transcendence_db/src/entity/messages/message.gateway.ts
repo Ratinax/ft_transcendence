@@ -99,8 +99,8 @@ export class MessagesGateway {
           isAGameInvite: body.isAGameInvite,
         });
       }
-      this.server.to(body.channelName).except(client.id).emit('addMessage', {channel_id: body.channel_id, message: message});
-      this.server.to(client.id).emit('addMessage', {channel_id: body.channel_id, message: {...message, isSender: true}});
+      this.server.to(body.channelName).except(client.id).emit('addMessage', {message: message});
+      this.server.to(client.id).emit('addMessage', {message: {...message, isSender: true}});
       this.server.to(body.channelName).emit('sendMessageGoodRequest', {channel_id: body.channel_id});
   }
   @SubscribeMessage('removeGameInvite')
@@ -119,7 +119,7 @@ export class MessagesGateway {
     const res = await this.messagesService.removeMessage(body.id);
     if (res)
     {
-      this.server.emit('removeMessage', {channel_id: res.channel.channel_id, message_id: body.id});
+      this.server.emit('removeMessage', {message_id: body.id});
     }
   }
 

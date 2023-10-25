@@ -128,8 +128,9 @@ export class ChannelGateway {
       name: channel.name,
     }
     this.server.to(client.id).emit('updateListChannels', {channel: {...channelToReturn, isUserOwner: false}});
+    this.server.to(channel.name).emit('updateListChannels', {channel: {...channelToReturn, isUserOwner: false}});
     client.join(channel.name);
-    this.server.to(client.id).emit('joinGoodRequest');
+    this.server.to(client.id).emit('joinGoodRequest', {channel: {...channelToReturn, isUserOwner: false}});
   }
 
   async checkJoinGoodInput(relation: ChannelsUsers[], client: Socket, channel: Channels, password: string)
@@ -156,7 +157,7 @@ export class ChannelGateway {
   }
 
   @SubscribeMessage('leaveChannel')
-  async leaveChannel(@MessageBody() body: {sessionCookie: string, channel: {channel_id: number, name: string}}) 
+  async leaveChannel(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, channel: {channel_id: number, name: string}}) 
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
@@ -174,9 +175,43 @@ export class ChannelGateway {
     }
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.to(body.channel.name).emit('updateAfterPart', {
-      users: users, 
-      channel: body.channel,
+      users: users,
       sessionCookie: body.sessionCookie});
+      this.server.to(client.id).emit('updateAfterPart', {
+        users: users,
+        sessionCookie: body.sessionCookie});
     return (res);
+  }
+  @SubscribeMessage('leaveRoom')
+  async leaveRoom(@ConnectedSocket() client: Socket, @MessageBody() body: {channelName: string, sessionCookie: string})
+  {
+    if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    {
+      return ('not connected');
+    }
+    const user = await this.sessionService.getUser(body.sessionCookie);
+    if (!user)
+      return (null);
+    const relation = await this.channelsUsersService.findRelationByCName(user.id, body.channelName);
+    if (!relation || !relation[0])
+      return ('not authorized');
+    console.log('leave', body.channelName);
+    client.leave(body.channelName)
+  }
+  @SubscribeMessage('joinRoom')
+  async joinRoom(@ConnectedSocket() client: Socket, @MessageBody() body: {channelName: string, sessionCookie: string})
+  {
+    if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    {
+      return ('not connected');
+    }
+    const user = await this.sessionService.getUser(body.sessionCookie);
+    if (!user)
+      return (null);
+    const relation = await this.channelsUsersService.findRelationByCName(user.id, body.channelName);
+    if (!relation || !relation[0])
+      return ('not authorized');
+    console.log('join', body.channelName);
+    client.join(body.channelName)
   }
 }

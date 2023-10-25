@@ -18,15 +18,6 @@ export class ChannelsUsersGateway {
 
   constructor(private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
 
-  @SubscribeMessage('joinRooms')
-  joinRooms(@ConnectedSocket() client: Socket, @MessageBody() body: {channels: Array<{name: string}>})
-  {
-    for (let i = 0; i < body.channels.length; i++)
-    {
-      client.join(body.channels[i].name)
-    }
-  }
-
   @SubscribeMessage('findUsersOfChannel')
   async findUsersOfChannel(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, channel: {name: string, channel_id: number}})
   {
@@ -37,7 +28,7 @@ export class ChannelsUsersGateway {
     try 
     {
         const res = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-        this.server.to(body.channel.name).emit('updateListUsers', {users: res});
+        this.server.to(client.id).emit('updateListUsers', {users: res});
     }
     catch (e)
     {
@@ -62,8 +53,7 @@ export class ChannelsUsersGateway {
     const res = await this.channelsUsersService.ban(body.channel, body.userBanned);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.to(body.channel.name).emit('updateAfterPart', {
-      users: users, 
-      channel: body.channel,
+      users: users,
       sessionCookie: await this.sessionService.getSessionKey(body.userBanned.id)});
     return (res);
   }
@@ -86,8 +76,7 @@ export class ChannelsUsersGateway {
     const res = await this.channelsUsersService.leave(body.channel, body.userKicked);
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.to(body.channel.name).emit('updateAfterPart', {
-      users: users, 
-      channel: body.channel,
+      users: users,
       sessionCookie: await this.sessionService.getSessionKey(body.userKicked.id)});
     return (res);
   }

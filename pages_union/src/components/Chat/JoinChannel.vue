@@ -86,7 +86,7 @@ export default defineComponent({
 				return ;
 			}
 			if (this.socket)
-			this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, sessionCookie: this.sessionCookie})
+				this.socket.emit('joinChannel', {channelName: this.channelName, password: this.password, sessionCookie: this.sessionCookie})
 		},
 		close()
 		{

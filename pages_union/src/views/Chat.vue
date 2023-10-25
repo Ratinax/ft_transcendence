@@ -86,24 +86,22 @@ export default defineComponent({
 		window.addEventListener('resize', this.handleResize);
 		this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
 		this.socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/chat`);
-		this.socket.on('addMessage', (response: {channel_id: number, message: messageData}) => {
-			if (response.channel_id === this.selectedChannel?.channel_id)
-				this.addMessage(response.message);
+		this.socket.on('addMessage', (response: {message: messageData}) => {
+			this.addMessage(response.message);
 		});
 		this.socket.on('updateListChannels', async (response: {channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
+			console.log('update')
 			this.updateListChannels(response.channel);
 		});
 		this.socket.on('updateListUsers', (response: {users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
-				this.updateListUsers(response.users);
+			this.updateListUsers(response.users);
 		});
 		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
-			if (!response)
-				return ;
-			if (this.sessionCookie === response.sessionCookie && response.channel.channel_id === this.selectedChannel?.channel_id) {
+			if (this.sessionCookie === response.sessionCookie) {
 				this.updateListChannels(undefined);
 				this.updateListUsers(null);
 			}
-			else if (response.channel.channel_id === this.selectedChannel?.channel_id) {
+			else {
 				this.updateListUsers(response.users);
 			}
 		});
@@ -113,8 +111,7 @@ export default defineComponent({
 				(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
 		});
 		this.socket.on('removeMessage', async (response: {channel_id: number, message_id: number}) => {
-			if (response.channel_id === this.selectedChannel?.channel_id)
-				this.removeMessage(response.message_id);
+			this.removeMessage(response.message_id);
 		});
 	},
 	methods:
@@ -149,6 +146,11 @@ export default defineComponent({
 			this.setSelectedChannel(channel);
 		},
 		setSelectedChannel(channel: {channel_id: number, name: string, isUserOwner: boolean} | undefined) {
+			console.log('set selected')
+			if (this.selectedChannel)
+				this.socket.emit('leaveRoom', {channelName: this.selectedChannel.name, sessionCookie: this.sessionCookie});
+			if (channel)
+				this.socket.emit('joinRoom', {channelName: channel.name, sessionCookie: this.sessionCookie});
 			let fetchMessages = true;
 			if (this.selectedChannel === channel)
 				fetchMessages = false;
@@ -160,6 +162,7 @@ export default defineComponent({
 		},
 
 		async findUsersOfChannel() {
+			console.log('ca emit bien')
 			this.socket?.emit('findUsersOfChannel', { channel: this.selectedChannel, sessionCookie: this.sessionCookie });
 		},
 		/**
