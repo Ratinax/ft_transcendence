@@ -99,9 +99,8 @@ export class MessagesGateway {
           isAGameInvite: body.isAGameInvite,
         });
       }
-      console.log(message);
-      this.server.to(body.channelName).except(client.id).emit('updateMessage', {channel_id: body.channel_id, message: message});
-      this.server.to(client.id).emit('updateMessage', {channel_id: body.channel_id, message: {...message, isSender: true}});
+      this.server.to(body.channelName).except(client.id).emit('addMessage', {channel_id: body.channel_id, message: message});
+      this.server.to(client.id).emit('addMessage', {channel_id: body.channel_id, message: {...message, isSender: true}});
       this.server.to(body.channelName).emit('sendMessageGoodRequest', {channel_id: body.channel_id});
   }
   @SubscribeMessage('removeGameInvite')

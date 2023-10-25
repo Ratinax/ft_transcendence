@@ -97,7 +97,6 @@ export default defineComponent({
 		},
 		resetData()
 		{
-			console.log('reset datA');
 			this.password = '';
 			this.channelName = '';
 			this.selectedCategory = 0;

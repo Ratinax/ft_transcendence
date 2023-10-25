@@ -42,7 +42,6 @@ export default defineComponent({
 	{
 			this.listUsersBanned = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels_users/bannedUsers/${this.channel?.channel_id}`, {withCredentials: true})).data;
 			this.listUsersBanned.length > 0 ? this.showErrorMessage = false: this.showErrorMessage = true;
-			console.log(this.showErrorMessage);
 		},
 		close()
 	{

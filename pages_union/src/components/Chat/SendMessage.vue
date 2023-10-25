@@ -124,7 +124,6 @@ export default defineComponent({
 		},
 		messageTooLong()
 		{
-			console.log('message too long')
 			this.isMessageTooLong = true;
 		}
 	}

@@ -142,7 +142,6 @@ export default defineComponent({
 		showingCreateChannel()
 		{
 			this.showCreateChannel = true;
-			console.log('here');
 			(this.$refs.createChannel as typeof CreateChannel).resetData()
 		},
 		unHideChannel(channel_id: number)

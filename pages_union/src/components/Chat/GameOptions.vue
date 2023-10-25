@@ -73,7 +73,7 @@ export default defineComponent({
 			this.$emit('close');
 		},
 		letsSee()
-	{
+		{
 			console.log(this.ballAccel);
 		},
 		inviteInGame()
