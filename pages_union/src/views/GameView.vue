@@ -26,7 +26,6 @@ import { useRouter } from 'vue-router';
 const	socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`);
 const	router = useRouter();
 
-
 const	start = ref(false);
 let		playerName = '';
 let		opponentName = ref('');

@@ -29,6 +29,7 @@ export class Game {
 	dir = 1;
 	spawnTime = 3500;
 
+	opponentStatus = false;
 	opponentDirection = 0;
 
 	score = false;

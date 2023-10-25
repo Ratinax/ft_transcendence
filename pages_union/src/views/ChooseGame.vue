@@ -51,6 +51,13 @@ export default defineComponent({
                         // {name: '#*$@*#§?!!', mode: 3, img: 'wtf.png'}]
 		}
 	},
+	beforeMount() {
+		let playerName = "";
+		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
+				playerName = res.data;
+				this.socket.emit('updateSocket', {name: playerName });
+			});
+	},
 	beforeUnmount() {
 		this.socket.close();
 	},

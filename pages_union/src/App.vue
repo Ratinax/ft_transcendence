@@ -16,12 +16,10 @@ export default defineComponent({
 	{
 		return {
 			socket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true }),
-			gameSocket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`, { withCredentials: true }),
 		}
 	},
 	mounted()
 	{
-		console.log(this.gameSocket);
 		this.socket.on('pingAlive', async () => {
 			await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/pingBack`, {}, { withCredentials: true });
 		})

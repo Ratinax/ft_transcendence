@@ -87,7 +87,9 @@ export class GameService {
 	}
 
 	checkConnection(server: Server) {
+		let removeGame = false;
 		for (let i = 0; i < this.games.length; i++) {
+			removeGame = false;
 			if (this.games[i].leftPlayer)
 				this.games[i].leftPlayer.nbLoop++;
 			if (this.games[i].leftPlayer?.nbLoop >= 3)
@@ -98,6 +100,8 @@ export class GameService {
 					if (this.games[i].leftPlayer.isConnected)
 						server.to(this.games[i].rightPlayer?.id).emit('opponentDisconnect');
 					this.games[i].leftPlayer.isConnected = false;
+					if (!this.games[i].isFull)
+						removeGame = true;
 				}
 				else
 				{
@@ -119,6 +123,8 @@ export class GameService {
 					if (this.games[i].rightPlayer.isConnected)
 						server.to(this.games[i].leftPlayer?.id).emit('opponentDisconnect');
 					this.games[i].rightPlayer.isConnected = false;
+					if (!this.games[i].isFull)
+						removeGame = true;
 				}
 				else
 				{
@@ -128,6 +134,11 @@ export class GameService {
 				}
 				this.games[i].rightPlayer.firstPing = false;
 				this.games[i].rightPlayer.secondPing = false;
+			}
+			if (removeGame)
+			{
+				this.games.splice(i, 1);
+				i--;
 			}
 		}
 	}
