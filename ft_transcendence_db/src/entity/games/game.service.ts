@@ -106,7 +106,7 @@ export class GameService {
 					if (!this.games[i].isFull)
 						removeGame = true;
 				}
-				else
+				else if(!(this.games[i].leftPlayer.firstPing && this.games[i].leftPlayer.secondPing))
 				{
 					if (!this.games[i].rightPlayer?.isConnected && this.games[i].leftPlayer)
 					{
