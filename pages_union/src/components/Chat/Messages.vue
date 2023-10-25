@@ -87,14 +87,16 @@ export default defineComponent({
             break ;
           }
         }
-        this.updateScrollPosition();
       },
       updateScrollPosition()
       {
-        if (this.$refs.messageContainer)
-        {
-          (this.$refs.messageContainer as HTMLElement).scrollTop = (this.$refs.messageContainer as HTMLElement).scrollHeight; 
-        }
+        this.$nextTick(() => {
+
+          if (this.$refs.messageContainer)
+          {
+            (this.$refs.messageContainer as HTMLElement).scrollTop = (this.$refs.messageContainer as HTMLElement).scrollHeight; 
+          }
+        })
       }
     }
 });
