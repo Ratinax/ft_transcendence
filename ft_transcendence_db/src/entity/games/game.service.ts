@@ -177,6 +177,7 @@ export class GameService {
             },
             scorePlayerOne: game.scorePOne,
             scorePlayerTwo: game.scorePTwo,
+			mode: game.mode
             }));
         return (gameHistory);
     }

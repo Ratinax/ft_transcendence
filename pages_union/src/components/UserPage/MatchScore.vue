@@ -57,7 +57,7 @@ export default defineComponent({
 		const playerOne = ref(props.playerOneData);
 		const playerTwo = ref(props.playerTwoData);
 		const userOneWin = ref<boolean>();
-		const gameModes = ["SLOW", "CLASSIC", "FAST"];
+		const gameModes = ["SLOW", "CLASSIC", "FAST", "CUSTOM"];
 		let modeName = "unknown gamemode";
 		if (props.mode) {
 			modeName = gameModes[props.mode - 1];

@@ -52,7 +52,7 @@ export default defineComponent({
 		}
 	},
 	beforeUnmount() {
-		// this.socket
+		this.socket.close();
 	},
 	async mounted() {
         this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;

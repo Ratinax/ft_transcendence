@@ -266,7 +266,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-	
+	socket.close();
 })
 
 
