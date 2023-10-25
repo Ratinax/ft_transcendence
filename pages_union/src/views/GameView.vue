@@ -247,6 +247,7 @@ onBeforeMount(() => {
 		game.ball.direction = infos.direction;
 		game.ball.move(latency.value / 1000 + opponentLatency.value / 1000);
 	});
+
 	socket.on('gameOver', () => {
 		game.isOver = true;
 		setTimeout(() => {
@@ -254,8 +255,9 @@ onBeforeMount(() => {
 		}, 3000);
 	});
 
-	socket.on('opponentDisconnect', () => {
-		console.log('opponent diconnected...');
+	socket.on('opponentGaveUp', (body) => {
+		game.player.score = body.score;
+		socket.emit('endGame');
 	})
 })
 

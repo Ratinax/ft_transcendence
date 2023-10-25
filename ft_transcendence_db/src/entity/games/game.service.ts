@@ -97,16 +97,22 @@ export class GameService {
 				this.games[i].leftPlayer.nbLoop = 0;
 				if (!(this.games[i].leftPlayer.firstPing && this.games[i].leftPlayer.secondPing))
 				{
-					if (this.games[i].leftPlayer.isConnected)
-						server.to(this.games[i].rightPlayer?.id).emit('opponentDisconnect');
+					if (this.games[i].leftPlayer?.isConnected && this.games[i].rightPlayer)
+					{
+						this.games[i].rightPlayer.score = this.games[i].options.winScore;
+						server.to(this.games[i].rightPlayer.id).emit('opponentGaveUp', {score: this.games[i].options.winScore});
+					}
 					this.games[i].leftPlayer.isConnected = false;
 					if (!this.games[i].isFull)
 						removeGame = true;
 				}
 				else
 				{
-					if (!this.games[i].leftPlayer.isConnected)
-						server.to(this.games[i].rightPlayer?.id).emit('opponentReconnect');
+					if (!this.games[i].rightPlayer?.isConnected && this.games[i].leftPlayer)
+					{
+						this.games[i].leftPlayer.score = this.games[i].options.winScore;
+						server.to(this.games[i].leftPlayer.id).emit('opponentGaveUp', {score: this.games[i].options.winScore});
+					}
 					this.games[i].leftPlayer.isConnected = true;
 				}
 				this.games[i].leftPlayer.firstPing = false;

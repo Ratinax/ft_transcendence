@@ -1,4 +1,3 @@
-import { Ball } from "./ball.entity";
 import { Player } from "./player.entity";
 
 export interface gameOptions {
