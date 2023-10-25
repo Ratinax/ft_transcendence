@@ -102,14 +102,6 @@ export default defineComponent({
 		},
 		handleChannelClicked(channel: {channel_id: number}) 
 		{
-			for (let i = 0; i < (this.$refs.channelRef as Array<typeof Channel>).length; i++)
-			{
-				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].getChannelId() === channel.channel_id)
-				{
-					(this.$refs.channelRef as Array<typeof Channel>)[i].unsetNotif();
-					break ;
-				}
-			}
 			this.$emit('channel-selected', channel);
 		},
 		updateScrollPosition()
@@ -127,17 +119,6 @@ export default defineComponent({
 		{
 			this.fetchChannels();
 		},
-		pushNotifs(channel_id: number)
-		{
-			for (let i = 0; i < (this.$refs.channelRef as Array<typeof Channel>).length; i++)
-			{
-				if ((this.$refs.channelRef as Array<typeof Channel>)[i] && (this.$refs.channelRef as Array<typeof Channel>)[i].getChannelId() === channel_id)
-				{
-					(this.$refs.channelRef as Array<typeof Channel>)[i].setNotif();
-					break ;
-				}
-			}
-		},
 		showingCreateChannel()
 		{
 			this.showCreateChannel = true;
@@ -151,6 +132,21 @@ export default defineComponent({
 				{
 					this.channels[i].isHide = false;
 					return ;
+				}
+			}
+		},
+		addChannel(channel: ChannelData)
+		{
+			this.channels.push(channel);
+		},
+		removeChannel(channel_id: number)
+		{
+			for (let i = 0; i < this.channels.length; i++)
+			{
+				if (this.channels[i].channel_id === channel_id)
+				{
+					this.channels.splice(i, 1);
+					break ;
 				}
 			}
 		}
