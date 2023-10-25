@@ -6,7 +6,6 @@
 			:isAGameInvite="message.isAGameInvite"
 			:isSender="message.isSender"
       :id="message.id"
-      :game="message.game"
       :socket="socket"
       :sessionCookie="sessionCookie"/>
   </div>
@@ -17,6 +16,14 @@ import Message from './Message.vue';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 import { Socket } from 'socket.io-client';
+
+interface messageData {
+  id: number,
+  user: {pseudo: string},
+  content: string,
+  isAGameInvite: boolean,
+  isSender: boolean
+}
 
 export default defineComponent({
     name: 'Messages-Component',
@@ -31,18 +38,7 @@ export default defineComponent({
     },
     data() {
       return {
-          messages: [] as Array<{id: number,
-            user: {pseudo: string},
-            content: string,
-            isAGameInvite: boolean,
-            isSender: boolean,
-            game: {ballAccel: number,
-                ballSize: number, 
-                ballSpeed: number,
-                maxAngle: number,
-                playerSize: number,
-                playerSpeed: number,
-                winScore: number}}>}
+          messages: [] as Array<messageData>}
     },
     created()
     {
@@ -75,6 +71,11 @@ export default defineComponent({
           this.$nextTick(() => {
               this.updateScrollPosition();
           });
+      },
+      async addMessage(message: messageData)
+      {
+        this.messages.push(message);
+        this.updateScrollPosition();
       },
       updateScrollPosition()
       {

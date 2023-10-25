@@ -60,6 +60,7 @@ export class MessagesGateway {
 
       const timeoutSeconds = timeoutDate.getTime() / 1000;
       const currentSeconds = currentDate.getTime() / 1000;
+      let message;
       
       if (timeoutSeconds + +timeoutDuration > currentSeconds)
       {
@@ -70,12 +71,13 @@ export class MessagesGateway {
       if (body.game)
       {
         const reelGame = await this.gameService.createGame(this.toGoodInputGame(body.game));
-        await this.messagesService.post({
+        message = await this.messagesService.post({
           content: body.message,
           dateSent: body.dateSent,
           channel: {channel_id: body.channel_id},
           user: {
-            ...user,
+            id: user.id,
+            pseudo: user.pseudo
           },
           isAGameInvite: body.isAGameInvite,
           game: {
@@ -86,18 +88,20 @@ export class MessagesGateway {
       else
       {
 
-        await this.messagesService.post({
+        message = await this.messagesService.post({
           content: body.message,
           dateSent: body.dateSent,
           channel: {channel_id: body.channel_id},
           user: {
-            ...user,
+            id: user.id,
+            pseudo: user.pseudo
           },
           isAGameInvite: body.isAGameInvite,
         });
       }
-      
-      this.server.to(body.channelName).emit('updateMessage', {channel_id: body.channel_id});
+      console.log(message);
+      this.server.to(body.channelName).except(client.id).emit('updateMessage', {channel_id: body.channel_id, message: message});
+      this.server.to(client.id).emit('updateMessage', {channel_id: body.channel_id, message: {...message, isSender: true}});
       this.server.to(body.channelName).emit('sendMessageGoodRequest', {channel_id: body.channel_id});
   }
   @SubscribeMessage('removeGameInvite')

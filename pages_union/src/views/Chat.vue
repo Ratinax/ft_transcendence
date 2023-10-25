@@ -52,6 +52,13 @@ import { io } from 'socket.io-client';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 
+interface messageData {
+  id: number,
+  user: {pseudo: string},
+  content: string,
+  isAGameInvite: boolean,
+  isSender: boolean,
+}
 
 export default defineComponent({
 	name: 'Chat-Page',
@@ -79,9 +86,9 @@ export default defineComponent({
 		window.addEventListener('resize', this.handleResize);
 		this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
 		this.socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/chat`);
-		this.socket.on('updateMessage', (response: {channel_id: number}) => {
+		this.socket.on('updateMessage', (response: {channel_id: number, message: messageData}) => {
 			if (response.channel_id === this.selectedChannel?.channel_id)
-			this.updateMessages();
+				this.addMessage(response.message);
 		});
 		this.socket.on('updateListChannels', async (response: {channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
 			this.updateListChannels(response.channel);
@@ -121,17 +128,25 @@ export default defineComponent({
 				this.setSelectedChannel(channel);
 			}
 		},
-		updateMessages() {
+		addMessage(message: messageData) {
 			if (this.$refs.messages)
-			(this.$refs.messages as typeof Messages).updateMessages(this.selectedChannel);
+				(this.$refs.messages as typeof Messages).addMessage(message);
+		},
+		fetchMessages() {
+			if (this.$refs.messages)
+				(this.$refs.messages as typeof Messages).updateMessages(this.selectedChannel);
 		},
 		onChannelSelected(channel: {channel_id: number, name: string, isUserOwner: boolean}) {
 			this.setSelectedChannel(channel);
 		},
 		setSelectedChannel(channel: {channel_id: number, name: string, isUserOwner: boolean} | undefined) {
+			let fetchMessages = true;
+			if (this.selectedChannel === channel)
+				fetchMessages = false;
 			this.selectedChannel = channel;
 			this.findUsersOfChannel();
-			this.updateMessages();
+			if (fetchMessages)
+				this.fetchMessages();
 			this.refreshSendMessageBar();
 		},
 
