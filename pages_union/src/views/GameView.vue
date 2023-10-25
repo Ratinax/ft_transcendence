@@ -164,7 +164,7 @@ function launch() {
 
 setInterval(() => {
 	ping = performance.now();
-	socket.emit('ping', {latency: latency.value});
+	socket.emit('ping');
 	socket.emit('latency', {latency: latency.value});
 }, 100);
 
@@ -253,13 +253,21 @@ onBeforeMount(() => {
 		setTimeout(() => {
 			router.push('/choose_game');
 		}, 3000);
+	});
+
+	socket.on('opponentDisconnect', () => {
+		console.log('opponent diconnected...');
 	})
 })
 
 onMounted(() => {
 	if (!exit)
 		launch();
-	});
+});
+
+onBeforeUnmount(() => {
+	
+})
 
 
 </script>

@@ -6,8 +6,8 @@ import { UserService } from '../users/user.service';
 
 @WebSocketGateway({
 	cors: {
-    origin: `http://${ConfigIp.IP}:8080`,
-    credentials: true,
+	origin: `http://${ConfigIp.IP}:8080`,
+	credentials: true,
 	},
 	namespace: 'game'
 })
@@ -15,7 +15,12 @@ export class GamesGateway {
 	@WebSocketServer()
 	server: Server;
 
-	constructor(private readonly gameService: GameService, private readonly userService: UserService) {}
+	constructor(private readonly gameService: GameService, private readonly userService: UserService) {
+		setInterval(() => {
+			this.gameService.checkConnection(this.server);
+			console.log(this.gameService.games)
+		}, 500)
+	}
 
 	@SubscribeMessage('quickPlay')
 	quickPlay(@ConnectedSocket() client: Socket, @MessageBody() body) {
@@ -81,6 +86,32 @@ export class GamesGateway {
 	@SubscribeMessage('ping')
 	pong(@ConnectedSocket() client: Socket) {
 		this.server.to(client.id).emit('pong');
+
+		const	gameIndex = this.gameService.getGameIndexFromId(client.id);
+		if (gameIndex === -1)
+			return ;
+		if (this.gameService.games[gameIndex].leftPlayer.id === client.id)
+		{
+			if (this.gameService.games[gameIndex].leftPlayer.nbLoop === 0)
+			{
+				this.gameService.games[gameIndex].leftPlayer.firstPing = true;
+			}
+			else
+			{
+				this.gameService.games[gameIndex].leftPlayer.secondPing = true;
+			}
+		}
+		else if (this.gameService.games[gameIndex].rightPlayer.id === client.id)
+		{
+			if (this.gameService.games[gameIndex].rightPlayer.nbLoop === 0)
+			{
+				this.gameService.games[gameIndex].rightPlayer.firstPing = true;
+			}
+			else
+			{
+				this.gameService.games[gameIndex].rightPlayer.secondPing = true;
+			}
+		}
 	}
 
 	@SubscribeMessage('spawnBallInfos')
@@ -120,12 +151,12 @@ export class GamesGateway {
 		this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('gameOver');
 		try
 		{
-			const user1 = (await this.userService.getUser(this.gameService.games[gameIndex].rightPlayer.name))[0];
-			const user2 = (await this.userService.getUser(this.gameService.games[gameIndex].leftPlayer.name))[0];
+			const user2 = (await this.userService.getUser(this.gameService.games[gameIndex].rightPlayer.name))[0];
+			const user1 = (await this.userService.getUser(this.gameService.games[gameIndex].leftPlayer.name))[0];
 			this.gameService.createGame({playerOne: {id: user1.id},
 				playerTwo: {id: user2.id},
-				scorePOne: this.gameService.games[gameIndex].rightPlayer.score,
-				scorePTwo: this.gameService.games[gameIndex].leftPlayer.score,
+				scorePTwo: this.gameService.games[gameIndex].rightPlayer.score,
+				scorePOne: this.gameService.games[gameIndex].leftPlayer.score,
 				mode: this.gameService.games[gameIndex].mode});
 		}
 		catch (e)

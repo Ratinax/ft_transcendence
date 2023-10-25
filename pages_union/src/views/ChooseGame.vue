@@ -51,6 +51,9 @@ export default defineComponent({
                         // {name: '#*$@*#§?!!', mode: 3, img: 'wtf.png'}]
 		}
 	},
+	beforeUnmount() {
+		// this.socket
+	},
 	async mounted() {
         this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
         this.socket.on('successJoin', (infos: any) => {
@@ -60,6 +63,10 @@ export default defineComponent({
 			localStorage.setItem('opponentInfos', JSON.stringify({opponentName: infos.opponentName}));
             this.router.push('/game');
 		});
+
+		setInterval(() => {
+			this.socket.emit('ping');
+		})
 	},
 	methods:
 	{

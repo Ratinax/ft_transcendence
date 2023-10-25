@@ -3,8 +3,7 @@ import { Repository } from 'typeorm';
 import { Games } from './game.entity';
 import { Game, gameOptions } from './entities/game.entity';
 import { Player } from './entities/player.entity';
-import { Ball } from './entities/ball.entity';
-import { Racket } from './entities/racket.entity';
+import { Server } from 'socket.io';
 
 @Injectable()
 export class GameService {
@@ -13,6 +12,7 @@ export class GameService {
         private gameRepository: Repository<Games>,
     ) {}
     games: Game[] = [];
+
 	classicOptions: gameOptions = {
 		ballAccel: 100,
 		ballSize: 30,
@@ -40,7 +40,7 @@ export class GameService {
 		maxAngle: 45,
 		playerSize: 300,
 		playerSpeed: 1800,
-		winScore: 1,
+		winScore: 7,
 	}
 
 	getGameIndex(playerName: string) {
@@ -84,6 +84,52 @@ export class GameService {
 		}
 		this.games.push(newGame);
 		return {side: true, options: newGame.options};
+	}
+
+	checkConnection(server: Server) {
+		for (let i = 0; i < this.games.length; i++) {
+			if (this.games[i].leftPlayer)
+				this.games[i].leftPlayer.nbLoop++;
+			if (this.games[i].leftPlayer?.nbLoop >= 3)
+			{
+				this.games[i].leftPlayer.nbLoop = 0;
+				if (!(this.games[i].leftPlayer.firstPing && this.games[i].leftPlayer.secondPing))
+				{
+					if (this.games[i].leftPlayer.isConnected)
+						server.to(this.games[i].rightPlayer?.id).emit('opponentDisconnect');
+					this.games[i].leftPlayer.isConnected = false;
+				}
+				else
+				{
+					if (!this.games[i].leftPlayer.isConnected)
+						server.to(this.games[i].rightPlayer?.id).emit('opponentReconnect');
+					this.games[i].leftPlayer.isConnected = true;
+				}
+				this.games[i].leftPlayer.firstPing = false;
+				this.games[i].leftPlayer.secondPing = false;
+			}
+
+			if (this.games[i].rightPlayer)
+				this.games[i].rightPlayer.nbLoop++;
+			if (this.games[i].rightPlayer?.nbLoop >= 3)
+			{
+				this.games[i].rightPlayer.nbLoop = 0;
+				if (!(this.games[i].rightPlayer.firstPing && this.games[i].rightPlayer.secondPing))
+				{
+					if (this.games[i].rightPlayer.isConnected)
+						server.to(this.games[i].leftPlayer?.id).emit('opponentDisconnect');
+					this.games[i].rightPlayer.isConnected = false;
+				}
+				else
+				{
+					if (!this.games[i].rightPlayer.isConnected)
+						server.to(this.games[i].leftPlayer?.id).emit('opponentReconnect');
+					this.games[i].rightPlayer.isConnected = true;
+				}
+				this.games[i].rightPlayer.firstPing = false;
+				this.games[i].rightPlayer.secondPing = false;
+			}
+		}
 	}
 
     async createGame(game: Partial<Games>)
