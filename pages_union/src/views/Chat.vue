@@ -112,6 +112,10 @@ export default defineComponent({
 			if (!this.selectedChannel || this.selectedChannel?.channel_id !== response.channel_id)
 				(this.$refs?.listChannels as typeof ListChannels)?.pushNotifs(response.channel_id);
 		});
+		this.socket.on('removeMessage', async (response: {channel_id: number, message_id: number}) => {
+			if (response.channel_id === this.selectedChannel?.channel_id)
+				this.removeMessage(response.message_id);
+		});
 	},
 	methods:
 	{
@@ -131,6 +135,11 @@ export default defineComponent({
 		addMessage(message: messageData) {
 			if (this.$refs.messages)
 				(this.$refs.messages as typeof Messages).addMessage(message);
+		},
+		removeMessage(message_id: number)
+		{
+			if (this.$refs.messages)
+				(this.$refs.messages as typeof Messages).removeMessage(message_id);
 		},
 		fetchMessages() {
 			if (this.$refs.messages)

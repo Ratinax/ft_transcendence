@@ -72,9 +72,21 @@ export default defineComponent({
               this.updateScrollPosition();
           });
       },
-      async addMessage(message: messageData)
+      addMessage(message: messageData)
       {
         this.messages.push(message);
+        this.updateScrollPosition();
+      },
+      removeMessage(message_id: number)
+      {
+        for (let i = 0; i < this.messages.length; i++)
+        {
+          if (this.messages[i].id === message_id)
+          {
+            this.messages.splice(i, 1);
+            break ;
+          }
+        }
         this.updateScrollPosition();
       },
       updateScrollPosition()

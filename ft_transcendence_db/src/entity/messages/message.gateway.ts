@@ -120,7 +120,7 @@ export class MessagesGateway {
     const res = await this.messagesService.removeMessage(body.id);
     if (res)
     {
-      this.server.emit('updateMessage', {channel_id: res.channel.channel_id});
+      this.server.emit('removeMessage', {channel_id: res.channel.channel_id, message_id: body.id});
     }
   }
 
