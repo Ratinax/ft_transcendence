@@ -89,16 +89,16 @@ export default defineComponent({
 		this.socket.on('addMessage', (response: {message: messageData}) => {
 			this.addMessage(response.message);
 		});
-		this.socket.on('updateListChannels', async (response: {channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
+		this.socket.on('addChannel', async (response: {channel: {channel_id: number, name: string, isUserOwner: boolean}}) => {
 			console.log('update')
-			this.updateListChannels(response.channel);
+			this.addChannel(response.channel);
 		});
 		this.socket.on('updateListUsers', (response: {users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			this.updateListUsers(response.users);
 		});
-		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
+		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string, isUserOwner: boolean}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (this.sessionCookie === response.sessionCookie) {
-				this.updateListChannels(undefined);
+				this.removeChannel(response.channel);
 				this.updateListUsers(null);
 			}
 			else {
@@ -119,14 +119,18 @@ export default defineComponent({
 		handleResize() {
 			this.windowWidth = window.innerWidth;
 		},
-		/**
-		* 
-		* @param {Object} channel - Channel from which a user has entered or left
-		*/
-		updateListChannels(channel: {channel_id: number, name: string, isUserOwner: boolean} | undefined){
+		addChannel(channel: {channel_id: number, name: string, isUserOwner: boolean})
+		{
 			if (this.$refs.listChannels) {
-				(this.$refs.listChannels as typeof ListChannels).fetchChannels();
+					(this.$refs.listChannels as typeof ListChannels).addChannel(channel);
 				this.setSelectedChannel(channel);
+			}
+		},
+		removeChannel(channel: {channel_id: number, name: string, isUserOwner: boolean})
+		{
+			if (this.$refs.listChannels) {
+				(this.$refs.listChannels as typeof ListChannels).removeChannel(channel?.channel_id);
+				this.setSelectedChannel(undefined);
 			}
 		},
 		addMessage(message: messageData) {
@@ -146,7 +150,6 @@ export default defineComponent({
 			this.setSelectedChannel(channel);
 		},
 		setSelectedChannel(channel: {channel_id: number, name: string, isUserOwner: boolean} | undefined) {
-			console.log('set selected')
 			if (this.selectedChannel)
 				this.socket.emit('leaveRoom', {channelName: this.selectedChannel.name, sessionCookie: this.sessionCookie});
 			if (channel)
@@ -155,7 +158,8 @@ export default defineComponent({
 			if (this.selectedChannel === channel)
 				fetchMessages = false;
 			this.selectedChannel = channel;
-			this.findUsersOfChannel();
+			if (channel)
+				this.findUsersOfChannel();
 			if (fetchMessages)
 				this.fetchMessages();
 			this.refreshSendMessageBar();
@@ -174,6 +178,7 @@ export default defineComponent({
 			(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
 		},
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
+			console.log('channel :', channel)
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
 		},
 		refreshSendMessageBar() {

@@ -153,6 +153,21 @@ export default defineComponent({
 					return ;
 				}
 			}
+		},
+		addChannel(channel: ChannelData)
+		{
+			this.channels.push(channel);
+		},
+		removeChannel(channel_id: number)
+		{
+			for (let i = 0; i < this.channels.length; i++)
+			{
+				if (this.channels[i].channel_id === channel_id)
+				{
+					this.channels.splice(i, 1);
+					break ;
+				}
+			}
 		}
 	},
 });

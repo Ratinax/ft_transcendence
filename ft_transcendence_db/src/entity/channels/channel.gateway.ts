@@ -41,7 +41,7 @@ export class ChannelGateway {
     try
     {
       const response = await this.channelService.createChannel(channel);
-      this.server.to(client.id).emit('updateListChannels', {channel: {...response, isUserOwner: true}});
+      this.server.to(client.id).emit('addChannel', {channel: {...response, isUserOwner: true}});
       const response2 = await this.channelsUsersService.createNew({
         user: user,
         channel: response,
@@ -127,8 +127,10 @@ export class ChannelGateway {
       channel_id: channel.channel_id,
       name: channel.name,
     }
-    this.server.to(client.id).emit('updateListChannels', {channel: {...channelToReturn, isUserOwner: false}});
-    this.server.to(channel.name).emit('updateListChannels', {channel: {...channelToReturn, isUserOwner: false}});
+    const users = await this.channelsUsersService.findUsersOfChannel(channel.name);
+
+    this.server.to(client.id).emit('addChannel', {channel: {...channelToReturn, isUserOwner: false}});
+    this.server.to(channel.name).emit('updateListUsers', {users: users});
     client.join(channel.name);
     this.server.to(client.id).emit('joinGoodRequest', {channel: {...channelToReturn, isUserOwner: false}});
   }
@@ -174,12 +176,14 @@ export class ChannelGateway {
       await this.channelService.removeChan(body.channel.channel_id);
     }
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
-    this.server.to(body.channel.name).emit('updateAfterPart', {
+    this.server.to(body.channel.name).except(client.id).emit('updateAfterPart', {
       users: users,
+      channel: body.channel,
       sessionCookie: body.sessionCookie});
-      this.server.to(client.id).emit('updateAfterPart', {
-        users: users,
-        sessionCookie: body.sessionCookie});
+    this.server.to(client.id).emit('updateAfterPart', {
+      users: users,
+      channel: body.channel,
+      sessionCookie: body.sessionCookie});
     return (res);
   }
   @SubscribeMessage('leaveRoom')
