@@ -78,7 +78,7 @@ export default defineComponent({
 
 		setInterval(() => {
 			this.socket.emit('ping');
-		})
+		}, 100)
 	},
 	methods:
 	{

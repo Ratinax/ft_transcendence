@@ -33,12 +33,11 @@ export default defineComponent({
 		id: Number,
 		socket: Socket,
 		sessionCookie: String,
+		gameSocket: Socket,
 	},
 	data()
 	{
-		return {
-			gameSocket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`),
-		}
+		return {}
 	},
 	methods: 
 	{

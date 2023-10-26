@@ -51,6 +51,7 @@ import Menu from "../components/Menu.vue"
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { defineComponent } from 'vue';
+import { useRouter } from "vue-router";
 
 interface messageData {
   id: number,
@@ -80,7 +81,18 @@ export default defineComponent({
 			windowWidth: window.innerWidth,
 			displayUsersChat: true,
 			displayListChannels: true,
+			gameSocket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`),
+			router: useRouter(),
 		}
+	},
+	beforeMount() {
+		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
+				const	playerName = res.data;
+				this.gameSocket.emit('updateSocket', {name: playerName });
+			});
+	},
+	beforeUnmount() {
+		this.gameSocket.close();
 	},
 	async mounted() {
 		window.addEventListener('resize', this.handleResize);
@@ -110,6 +122,19 @@ export default defineComponent({
 		this.socket.on('removeMessage', async (response: {channel_id: number, message_id: number}) => {
 			this.removeMessage(response.message_id);
 		});
+
+		this.gameSocket.on('successJoin', (infos: any) => {
+            localStorage.setItem('gameInfos', JSON.stringify({options: infos.options, side: infos.side}));
+        });
+        this.gameSocket.on('gameFull', (infos: any) => {
+			localStorage.setItem('opponentInfos', JSON.stringify({opponentName: infos.opponentName}));
+			
+            this.router.push('/game');
+		});
+
+		setInterval(() => {
+			this.gameSocket.emit('ping');
+		}, 100);
 	},
 	methods:
 	{

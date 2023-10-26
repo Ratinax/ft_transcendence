@@ -20,6 +20,7 @@ export class GamesGateway {
 	constructor(private readonly gameService: GameService, private readonly userService: UserService) {
 		setInterval(() => {
 			this.gameService.checkConnection(this.server);
+			console.log(this.gameService.games);
 		}, 500)
 	}
 
@@ -50,27 +51,19 @@ export class GamesGateway {
 	@SubscribeMessage('createCustom')
 	createCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
         body.options = this.toGoodInputGame(body.options);
-		console.log(body)
 		const	gameIndex = this.gameService.getGameIndex(body.name);
 		if (gameIndex === -1) {
-			console.log('here')
 			const	infos = this.gameService.createCustomGame(body.name, client.id, body.options);
-			console.log('infos');
 			this.server.to(client.id).emit('successJoin', infos);
 		}
 	}
 
 	@SubscribeMessage('joinCustom')
 	joinCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
-		console.log(body.name, body.creatorName)
 		const	gameIndex = this.gameService.getGameIndex(body.name);
 		const	joinIndex = this.gameService.getGameIndex(body.creatorName);
-		console.log('here in join')
-		console.log(gameIndex, joinIndex);
 		if (gameIndex === -1 && joinIndex !== -1) {
-			console.log('success');
 			const	infos = this.gameService.joinCustomGame(body.name, client.id, joinIndex);
-			console.log(infos);
 			this.server.to(client.id).emit('successJoin', infos);
 			if (this.gameService.games[joinIndex].isFull) {
 				this.server.to(this.gameService.games[joinIndex].leftPlayer.id).emit('gameFull', {opponentName: this.gameService.games[joinIndex].rightPlayer.name});
