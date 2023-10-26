@@ -72,7 +72,7 @@ export class GameService {
 		this.games[gameIndex].rightPlayer = new Player(playerName, playerId);
 		this.games[gameIndex].rightPlayer.isConnected = true;
 		this.games[gameIndex].isFull = true;
-		return {side: true, options: this.games[gameIndex].options};
+		return {side: false, options: this.games[gameIndex].options};
 	}
 
 	addToGame(playerName: string, mode: number, playerId: string) {
