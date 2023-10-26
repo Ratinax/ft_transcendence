@@ -3,6 +3,7 @@ import { GameService } from './game.service';
 import { Server, Socket } from 'socket.io';
 import { ConfigIp } from 'src/config-ip';
 import { UserService } from '../users/user.service';
+import { Games } from './game.entity';
 
 @WebSocketGateway({
 	cors: {
@@ -47,8 +48,11 @@ export class GamesGateway {
 
 	@SubscribeMessage('createCustom')
 	createCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
+        body.options = this.toGoodInputGame(body.options);
+		console.log(body)
 		const	gameIndex = this.gameService.getGameIndex(body.name);
 		if (gameIndex === -1) {
+			console.log('here')
 			const	infos = this.gameService.createCustomGame(body.name, client.id, body.options);
 			this.server.to(client.id).emit('successJoin', infos);
 		}
@@ -56,10 +60,15 @@ export class GamesGateway {
 
 	@SubscribeMessage('joinCustom')
 	joinCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		console.log(body.name, body.creatorName)
 		const	gameIndex = this.gameService.getGameIndex(body.name);
 		const	joinIndex = this.gameService.getGameIndex(body.creatorName);
+		console.log('here in join')
+		console.log(gameIndex, joinIndex);
 		if (gameIndex === -1 && joinIndex !== -1) {
+			console.log('success');
 			const	infos = this.gameService.joinCustomGame(body.name, client.id, joinIndex);
+			console.log(infos);
 			this.server.to(client.id).emit('successJoin', infos);
 			if (this.gameService.games[joinIndex].isFull) {
 				this.server.to(this.gameService.games[joinIndex].leftPlayer.id).emit('gameFull', {opponentName: this.gameService.games[joinIndex].rightPlayer.name});
@@ -206,5 +215,23 @@ export class GamesGateway {
 			this.server.to(client.id).emit('isInGame', {isInGame: false});
 		else
 			this.server.to(client.id).emit('isInGame', {isInGame: true});
+	}
+	toGoodInputGame(game: Partial<Games>)
+	{
+		if (Number.isNaN(game.ballAccel - 0) || game.ballAccel > 500 || game.ballAccel < 5)
+			game.ballAccel = 50;
+		if (Number.isNaN(game.ballSize - 0) || game.ballSize > 50 || game.ballSize < 15)
+			game.ballSize = 30;
+		if (Number.isNaN(game.ballSpeed - 0) || game.ballSpeed > 1500 || game.ballSpeed < 600)
+			game.ballSpeed = 1200;
+		if (Number.isNaN(game.maxAngle - 0) || game.maxAngle > 80 || game.maxAngle < 50)
+			game.maxAngle = 45;
+		if (Number.isNaN(game.playerSize - 0) || game.playerSize > 500 || game.playerSize < 100)
+			game.playerSize = 300;
+		if (Number.isNaN(game.playerSpeed - 0) || game.playerSpeed > 3700 || game.playerSpeed < 600)
+			game.playerSpeed = 1300;
+		if (Number.isNaN(game.winScore - 0) || game.winScore > 21 || game.winScore < 1)
+			game.winScore = 5;
+		return (game);
 	}
 }

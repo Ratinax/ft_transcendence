@@ -77,7 +77,7 @@ export default defineComponent({
 			console.log(this.ballAccel);
 		},
 		inviteInGame()
-	{
+		{
 			this.ballAccel = 50;
 			this.ballSize = 30;
 			this.ballSpeed = 1200;

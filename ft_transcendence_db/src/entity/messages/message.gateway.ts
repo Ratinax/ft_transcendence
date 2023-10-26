@@ -70,7 +70,6 @@ export class MessagesGateway {
 
       if (body.game)
       {
-        const reelGame = await this.gameService.createGame(this.toGoodInputGame(body.game));
         message = await this.messagesService.post({
           content: body.message,
           dateSent: body.dateSent,
@@ -80,9 +79,6 @@ export class MessagesGateway {
             pseudo: user.pseudo
           },
           isAGameInvite: body.isAGameInvite,
-          game: {
-            id: reelGame.id,
-          },
         });
       }
       else
@@ -99,6 +95,8 @@ export class MessagesGateway {
           isAGameInvite: body.isAGameInvite,
         });
       }
+      // if (body.isAGameInvite)
+        
       this.server.to(body.channelName).except(client.id).emit('addMessage', {message: message});
       this.server.to(client.id).emit('addMessage', {message: {...message, isSender: true}});
       this.server.to(client.id).emit('sendMessageGoodRequest');
@@ -123,24 +121,6 @@ export class MessagesGateway {
     }
   }
 
-  toGoodInputGame(game: Partial<Games>)
-  {
-    if (Number.isNaN(game.ballAccel - 0) || game.ballAccel > 500 || game.ballAccel < 5)
-      game.ballAccel = 50;
-    if (Number.isNaN(game.ballSize - 0) || game.ballSize > 50 || game.ballSize < 15)
-      game.ballSize = 30;
-    if (Number.isNaN(game.ballSpeed - 0) || game.ballSpeed > 1500 || game.ballSpeed < 600)
-      game.ballSpeed = 1200;
-    if (Number.isNaN(game.maxAngle - 0) || game.maxAngle > 80 || game.maxAngle < 50)
-      game.maxAngle = 45;
-    if (Number.isNaN(game.playerSize - 0) || game.playerSize > 500 || game.playerSize < 100)
-      game.playerSize = 300;
-    if (Number.isNaN(game.playerSpeed - 0) || game.playerSpeed > 3700 || game.playerSpeed < 600)
-      game.playerSpeed = 1300;
-    if (Number.isNaN(game.winScore - 0) || game.winScore > 21 || game.winScore < 1)
-      game.winScore = 5;
-    return (game);
-  }
   async unHide(user_id: number, channel: Partial<Channels>)
   {
     const users = await this.channelsUsersService.findUsersOfChannel(channel.name);

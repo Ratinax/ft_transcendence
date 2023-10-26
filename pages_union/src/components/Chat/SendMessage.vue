@@ -17,9 +17,10 @@
 </template>
 
 <script lang="ts">
-import { Socket } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
 import GameOptions from './GameOptions.vue';
+import axios from 'axios';
 
 export default defineComponent({
 	name: 'SendMessage',
@@ -44,6 +45,7 @@ export default defineComponent({
 			isBlockedBy: false,
 			showGameOptions: false,
 			isMessageTooLong: false,
+			gameSocket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`),
 		}
 	},
 	mounted()
@@ -105,13 +107,14 @@ export default defineComponent({
 			this.isBlockedBy = false;
 			this.isMessageTooLong = false;
 		},
-		inviteInGame(gameSettings: {ballAccel: number,
+		async inviteInGame(gameSettings: {ballAccel: number,
 			ballSize: number, ballSpeed: number,
 			maxAngle: number,
 			playerSize: number,
 			playerSpeed: number,
 			winScore: number})
 		{
+			const userName = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, {withCredentials: true})).data;
 			this.socket?.emit('createMessage', { 
 				channelName: this.channelName,
 				channel_id: this.channelId,
@@ -120,6 +123,14 @@ export default defineComponent({
 				isAGameInvite: true,
 				sessionCookie: this.sessionCookie,
 				game: gameSettings });
+			
+			console.log(userName);
+			this.gameSocket?.emit('createCustom', {
+				name: userName,
+				options: {
+					...gameSettings,
+				}
+			});
 			this.showGameOptions = false;
 		},
 		messageTooLong()

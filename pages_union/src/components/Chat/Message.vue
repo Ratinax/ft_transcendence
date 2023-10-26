@@ -19,8 +19,9 @@
 </template>
 
 <script lang="ts">
-import { Socket } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
+import axios from 'axios';
 
 export default defineComponent({
 	name: "Message-Component",
@@ -33,15 +34,28 @@ export default defineComponent({
 		socket: Socket,
 		sessionCookie: String,
 	},
+	data()
+	{
+		return {
+			gameSocket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`),
+		}
+	},
 	methods: 
 	{
-		joinGame()
+		async joinGame()
 		{
-			console.log('Feature incoming');
+			const userName = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, {withCredentials: true})).data;
+			
+			this.gameSocket?.emit('joinCustom', {
+				name: userName,
+				creatorName: this.username,
+			})
 		},
 		removeGameInvite()
 		{
-			this.socket?.emit('removeGameInvite', {id: this.id, sessionCookie: this.sessionCookie})		}
+			this.socket?.emit('removeGameInvite', {id: this.id, sessionCookie: this.sessionCookie});
+			this.gameSocket?.emit('cancelQuickPlay');
+		}
 	}
 });
 </script>

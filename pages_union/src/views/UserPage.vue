@@ -217,11 +217,11 @@ export default defineComponent({
 			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true });
 				socket.on('isConnected', (response) => {
 					if (response.pseudo === userName.value)
-					isConnected.value = true;
+						isConnected.value = true;
 				})
 				socket.on('noMoreConnected', (response) => {
 					if (response.pseudo === userName.value)
-					isConnected.value = false;
+						isConnected.value = false;
 				})
 				fecthData()
 		})
