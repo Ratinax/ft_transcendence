@@ -9,6 +9,7 @@ import { BlockshipService } from '../blockships/blockship.service';
 import { Channels } from '../channels/channel.entity';
 import { Games } from '../games/game.entity';
 import { GameService } from '../games/game.service';
+import { gameOptions } from '../games/entities/game.entity';
 
 @WebSocketGateway({
   cors: {
@@ -26,7 +27,7 @@ export class MessagesGateway {
 
   @SubscribeMessage('createMessage')
   async create(@ConnectedSocket() client: Socket,
-    @MessageBody() body: {sessionCookie: string, channel_id: number, channelName: string, dateSent: Date, message: string, isAGameInvite: boolean, game: Partial<Games> | undefined}) 
+    @MessageBody() body: {sessionCookie: string, channel_id: number, channelName: string, dateSent: Date, message: string, isAGameInvite: boolean, game: gameOptions | undefined}) 
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {

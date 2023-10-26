@@ -37,30 +37,6 @@ export class Games {
     @Column({ name: 'score_p_two', default: 0 })
     scorePTwo: number;
 
-    @Column({ name: 'is_game_over', default: 0 })
-    isGameOver: Boolean;
-
-    @Column({ name: 'ball_accel', default: 0 })
-    ballAccel: number;
-    
-    @Column({ name: 'ball_size', default: 0 })
-    ballSize: number;
-    
-    @Column({ name: 'ball_speed', default: 0 })
-    ballSpeed: number;
-
-    @Column({ name: 'max_angle', default: 0 })
-    maxAngle: number;
-
-    @Column({ name: 'player_speed', default: 0 })
-    playerSpeed: number;
-
-    @Column({ name: 'player_size', default: 0 })
-    playerSize: number;
-
-    @Column({ name: 'win_score', default: 0 })
-    winScore: number;
-
     @Column({name: 'mode', default: 1})
     mode: number;
 }

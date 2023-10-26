@@ -3,7 +3,6 @@ import { GameService } from './game.service';
 import { SessionService } from '../sessions/session.service';
 import { UserService } from '../users/user.service';
 import { Request } from 'express';
-import { Games } from './game.entity';
 
 @Controller('games')
 export class GameController {

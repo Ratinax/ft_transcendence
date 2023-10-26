@@ -4,6 +4,7 @@ import { Server, Socket } from 'socket.io';
 import { ConfigIp } from 'src/config-ip';
 import { UserService } from '../users/user.service';
 import { Games } from './game.entity';
+import { gameOptions } from './entities/game.entity';
 
 @WebSocketGateway({
 	cors: {
@@ -54,6 +55,7 @@ export class GamesGateway {
 		if (gameIndex === -1) {
 			console.log('here')
 			const	infos = this.gameService.createCustomGame(body.name, client.id, body.options);
+			console.log('infos');
 			this.server.to(client.id).emit('successJoin', infos);
 		}
 	}
@@ -216,7 +218,7 @@ export class GamesGateway {
 		else
 			this.server.to(client.id).emit('isInGame', {isInGame: true});
 	}
-	toGoodInputGame(game: Partial<Games>)
+	toGoodInputGame(game: gameOptions)
 	{
 		if (Number.isNaN(game.ballAccel - 0) || game.ballAccel > 500 || game.ballAccel < 5)
 			game.ballAccel = 50;
