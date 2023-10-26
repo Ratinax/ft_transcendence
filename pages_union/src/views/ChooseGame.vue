@@ -27,7 +27,7 @@
 
 import Menu from '../components/Menu.vue';
 import axios from 'axios';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -52,6 +52,9 @@ export default defineComponent({
 		}
 	},
 	beforeMount() {
+		this.socket.on('inGame', () => {
+			this.isSearching = true;
+		})
 		let playerName = "";
 		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
 				playerName = res.data;
@@ -65,6 +68,7 @@ export default defineComponent({
         this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
         this.socket.on('successJoin', (infos: any) => {
             localStorage.setItem('gameInfos', JSON.stringify({options: infos.options, side: infos.side}));
+			this.isSearching = true;
         });
         this.socket.on('gameFull', (infos: any) => {
 			localStorage.setItem('opponentInfos', JSON.stringify({opponentName: infos.opponentName}));
@@ -84,7 +88,7 @@ export default defineComponent({
         },
         launchGame(gameMode: {name: string, mode: number})
         {
-            this.isSearching = true;
+            // this.isSearching = true;
 			axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
 				this.socket.emit('quickPlay', {mode: gameMode.mode, name: res.data});
 			}).catch((e) => {

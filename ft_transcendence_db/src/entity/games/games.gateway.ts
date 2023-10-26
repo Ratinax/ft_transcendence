@@ -58,6 +58,7 @@ export class GamesGateway {
 		else if (this.gameService.games[gameIndex].rightPlayer.name === body.name) {
 			this.gameService.games[gameIndex].rightPlayer.id = client.id;
 		}
+		this.server.to(client.id).emit('inGame');
 	}
 
 	@SubscribeMessage('updatePlayerPos')
