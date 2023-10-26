@@ -59,6 +59,22 @@ export class GameService {
 		return -1;
 	}
 
+	createCustomGame(playerName: string, playerId: string, options: gameOptions) {
+		const	newGame = new Game(false, 4);
+		newGame.leftPlayer = new Player(playerName, playerId);
+		newGame.leftPlayer.isConnected = true;
+		newGame.options = options;
+		this.games.push(newGame);
+		return {side: true, options: newGame.options};
+	}
+
+	joinCustomGame(playerName: string, playerId: string, gameIndex: number) {
+		this.games[gameIndex].rightPlayer = new Player(playerName, playerId);
+		this.games[gameIndex].rightPlayer.isConnected = true;
+		this.games[gameIndex].isFull = true;
+		return {side: true, options: this.games[gameIndex].options};
+	}
+
 	addToGame(playerName: string, mode: number, playerId: string) {
 		for (let i = 0; i < this.games.length; i++) {
 			if (this.games[i].mode === mode && !this.games[i].isFull) {

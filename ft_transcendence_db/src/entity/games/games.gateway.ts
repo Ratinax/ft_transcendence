@@ -45,6 +45,29 @@ export class GamesGateway {
 		}
 	}
 
+	@SubscribeMessage('createCustom')
+	createCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		const	gameIndex = this.gameService.getGameIndex(body.name);
+		if (gameIndex === -1) {
+			const	infos = this.gameService.createCustomGame(body.name, client.id, body.options);
+			this.server.to(client.id).emit('successJoin', infos);
+		}
+	}
+
+	@SubscribeMessage('joinCustom')
+	joinCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		const	gameIndex = this.gameService.getGameIndex(body.name);
+		const	joinIndex = this.gameService.getGameIndex(body.creatorName);
+		if (gameIndex === -1 && joinIndex !== -1) {
+			const	infos = this.gameService.joinCustomGame(body.name, client.id, joinIndex);
+			this.server.to(client.id).emit('successJoin', infos);
+			if (this.gameService.games[joinIndex].isFull) {
+				this.server.to(this.gameService.games[joinIndex].leftPlayer.id).emit('gameFull', {opponentName: this.gameService.games[joinIndex].rightPlayer.name});
+				this.server.to(this.gameService.games[joinIndex].rightPlayer.id).emit('gameFull', {opponentName: this.gameService.games[joinIndex].leftPlayer.name});
+			}
+		}
+	}
+
 	@SubscribeMessage('updateSocket')
 	updateSocket(@ConnectedSocket() client: Socket, @MessageBody() body) {
 		const	gameIndex = this.gameService.getGameIndex(body.name);
