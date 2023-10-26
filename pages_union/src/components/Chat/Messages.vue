@@ -7,7 +7,8 @@
 			:isSender="message.isSender"
       :id="message.id"
       :socket="socket"
-      :sessionCookie="sessionCookie"/>
+      :sessionCookie="sessionCookie"
+      @join-custom="onJoinCustom"/>
   </div>
 </template>
 
@@ -97,7 +98,11 @@ export default defineComponent({
             (this.$refs.messageContainer as HTMLElement).scrollTop = (this.$refs.messageContainer as HTMLElement).scrollHeight; 
           }
         })
-      }
+      },
+      onJoinCustom(body: any)
+      {
+        this.$emit('join-custom', body);
+      },
     }
 });
 </script>

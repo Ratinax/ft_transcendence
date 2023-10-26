@@ -10,12 +10,7 @@ import { Users } from "../users/user.entity";
  * - playerTwo : User
  * - scorePOne: number
  * - scorePTwo: number
- * - isGameOver: boolean
- * - ballSpeed: number
- * - ballSpeedInc :number
- * - racketSpeed: number
- * - racketSize: number
- * - scoreToWin: number
+ * - mode: number
  */
 
 @Entity()

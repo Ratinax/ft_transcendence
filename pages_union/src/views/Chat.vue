@@ -14,7 +14,7 @@
 					@leave-channel="onLeaveChannel"
 					:display="displayListChannels"/>
 				<div class= "messageszone">
-					<Messages v-if="socket && sessionCookie" ref="messages" :socket="socket" :sessionCookie="sessionCookie" />
+					<Messages v-if="socket && sessionCookie" ref="messages" :socket="socket" :sessionCookie="sessionCookie" @join-custom="onJoinCustom"/>
 					<SendMessage
 						v-if="socket && sessionCookie"
 						ref="sendMessage"
@@ -22,7 +22,8 @@
 						:channelId="selectedChannel?.channel_id"
 						:channelName="selectedChannel?.name"
 						:socket="socket"
-						:sessionCookie="sessionCookie"/>
+						:sessionCookie="sessionCookie"
+						@create-custom="onCreateCustom"/>
 				</div>
 				<ListUsersChat
 					ref="listUsersChat" 
@@ -207,6 +208,20 @@ export default defineComponent({
 		},
 		toggleChannels() {
 			this.displayListChannels = !this.displayListChannels;
+		},
+		onCreateCustom(body: {name: string, options: {ballAccel: number, ballSize: number, ballSpeed: number, maxAngle: number, playerSize: number, playerSpeed: number, winScore: number}})
+		{
+			this.gameSocket?.emit('createCustom', {
+				name: body.name,
+				options: body.options,
+			});
+		},
+		onJoinCustom(body: any)
+		{
+			this.gameSocket?.emit('joinCustom', {
+				name: body.name,
+				creatorName: body.creatorName,
+			})
 		},
 	},
 	watch: {

@@ -45,7 +45,6 @@ export default defineComponent({
 			isBlockedBy: false,
 			showGameOptions: false,
 			isMessageTooLong: false,
-			gameSocket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`),
 		}
 	},
 	mounted()
@@ -125,12 +124,9 @@ export default defineComponent({
 				game: gameSettings });
 			
 			console.log(userName);
-			this.gameSocket?.emit('createCustom', {
-				name: userName,
-				options: {
+			this.$emit('create-custom', {name: userName, options: {
 					...gameSettings,
-				}
-			});
+				}})
 			this.showGameOptions = false;
 		},
 		messageTooLong()

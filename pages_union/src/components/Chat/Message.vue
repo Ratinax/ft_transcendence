@@ -45,7 +45,7 @@ export default defineComponent({
 		{
 			const userName = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, {withCredentials: true})).data;
 			
-			this.gameSocket?.emit('joinCustom', {
+			this.$emit('join-custom', {
 				name: userName,
 				creatorName: this.username,
 			})
