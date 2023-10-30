@@ -88,6 +88,7 @@ export default defineComponent({
 		},
 		async sendMessage()
 		{
+			console.log('send Message')
 			if (this.messageText === '')
 			return ;
 			this.socket?.emit('createMessage', {
@@ -124,6 +125,7 @@ export default defineComponent({
 			playerSpeed: number,
 			winScore: number})
 		{
+			console.log('invite in game')
 			const userName = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, {withCredentials: true})).data;
 			this.socket?.emit('createMessage', { 
 				channelName: this.channelName,

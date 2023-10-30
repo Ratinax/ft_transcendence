@@ -8,6 +8,7 @@
       :id="message.id"
       :socket="socket"
       :sessionCookie="sessionCookie"
+      :channelName="channelName"
       @join-custom="onJoinCustom"/>
   </div>
 </template>
@@ -36,6 +37,7 @@ export default defineComponent({
     {
       socket: Socket,
       sessionCookie: String,
+      channelName: String,
     },
     data() {
       return {

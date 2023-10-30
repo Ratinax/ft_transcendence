@@ -34,6 +34,7 @@ export default defineComponent({
 		socket: Socket,
 		sessionCookie: String,
 		gameSocket: Socket,
+		channelName: String,
 	},
 	data()
 	{
@@ -52,7 +53,7 @@ export default defineComponent({
 		},
 		removeGameInvite()
 		{
-			this.socket?.emit('removeGameInvite', {id: this.id, sessionCookie: this.sessionCookie});
+			this.socket?.emit('removeGameInvite', {sessionCookie: this.sessionCookie, channelName: this.channelName});
 			this.gameSocket?.emit('cancelQuickPlay');
 		}
 	}

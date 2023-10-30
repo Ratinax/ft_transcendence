@@ -1,8 +1,9 @@
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { SessionService } from './session.service';
 import { Server } from 'socket.io';
-import { InternalServerErrorException, OnModuleInit, Req } from '@nestjs/common';
+import { OnModuleInit } from '@nestjs/common';
 import { ConfigIp } from 'src/config-ip';
+import { MessageService } from '../messages/message.service';
 
 @WebSocketGateway({
   cors: {
@@ -16,7 +17,7 @@ export class SessionGateway implements OnModuleInit {
     @WebSocketServer()
     server: Server;
 
-    constructor(private readonly sessionService: SessionService) {
+    constructor(private readonly sessionService: SessionService, private readonly messageService: MessageService) {
     }
     onModuleInit() {
         this.pingUsersThread();
@@ -45,6 +46,10 @@ export class SessionGateway implements OnModuleInit {
             const connected = res.connected;
             for (let i = 0; i < noMoreConnected.length; i++)
             {
+                // const message = await this.messageService.removeGameInvite(noMoreConnected[i]);
+                console.log
+                // if (message)
+                //     this.messageGateway.removeGameInviteOfDisconnected({message_id: message.id, channelName: message.channel.name});
                 this.server.emit('noMoreConnected', {pseudo: noMoreConnected[i]});
             }
             for (let i = 0; i < connected.length; i++)

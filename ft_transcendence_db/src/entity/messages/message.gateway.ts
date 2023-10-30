@@ -2,12 +2,10 @@ import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, Conne
 import { MessageService } from './message.service';
 import { Server, Socket } from 'socket.io';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
-import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 import { BlockshipService } from '../blockships/blockship.service';
 import { Channels } from '../channels/channel.entity';
-import { Games } from '../games/game.entity';
 import { GameService } from '../games/game.service';
 import { gameOptions } from '../games/entities/game.entity';
 
@@ -29,6 +27,7 @@ export class MessagesGateway {
   async create(@ConnectedSocket() client: Socket,
     @MessageBody() body: {sessionCookie: string, channel_id: number, channelName: string, dateSent: Date, message: string, isAGameInvite: boolean, game: gameOptions | undefined}) 
     {
+      console.log('has been called')
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
         return ('not connected');
@@ -91,7 +90,6 @@ export class MessagesGateway {
       }
       else
       {
-
         message = await this.messagesService.post({
           content: body.message,
           dateSent: body.dateSent,
@@ -109,22 +107,26 @@ export class MessagesGateway {
       this.server.to(client.id).emit('sendMessageGoodRequest');
   }
   @SubscribeMessage('removeGameInvite')
-  async removeGameInvite(@MessageBody() body: {id: number, sessionCookie: string})
+  async removeGameInvite(@MessageBody() body: {sessionCookie: string, channelName: string})
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
-      {
-        return ('not connected');
-      }
-      const user = await this.sessionService.getUser(body.sessionCookie);
-      if (!user)
-        return ('not connected');
-    const isGoodUser = await this.messagesService.getIsUserSenderOfMessage(user.id, body.id);
+    {
+      return ('not connected');
+    }
+    const user = await this.sessionService.getUser(body.sessionCookie);
+    if (!user)
+      return ('not connected');
+    console.log('here', user)
+    const gameInvite = await this.messagesService.getGameInvite(user.id);
+    if (!gameInvite)
+      return ('no such game invite');
+    const isGoodUser = await this.messagesService.getIsUserSenderOfMessage(user.id, gameInvite.id);
     if (!isGoodUser)
-      return ('Not the user that sent the game invite')
-    const res = await this.messagesService.removeMessage(body.id);
+    return ('Not the user that sent the game invite')
+    const res = await this.messagesService.removeMessage(gameInvite.id);
     if (res)
     {
-      this.server.emit('removeMessage', {message_id: body.id});
+      this.server.to(body.channelName).emit('removeMessage', {message_id: gameInvite.id});
     }
   }
 

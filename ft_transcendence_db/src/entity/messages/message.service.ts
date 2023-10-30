@@ -97,9 +97,20 @@ export class MessageService {
     async removeGameInvite(userName: string)
     {
         const gameInvite = await this.messageRepository.findOne({where: {user: {pseudo: userName}, isAGameInvite: true}});
-        
         if (gameInvite)
-            return await this.removeMessage(gameInvite.id);
+        {
+            const id = gameInvite.id;
+            const result = await this.removeMessage(gameInvite.id);
+            return {...result, id: id};
+        }
+        return (null);
+    }
+    async getGameInvite(user_id: number)
+    {
+        console.log(user_id);
+        const gameInvite = await this.messageRepository.findOne({where: {user: {id: user_id}, isAGameInvite: true}});
+        if (gameInvite)
+            return (gameInvite);
         return (null);
     }
 }

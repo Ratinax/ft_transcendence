@@ -14,7 +14,7 @@
 					@leave-channel="onLeaveChannel"
 					:display="displayListChannels"/>
 				<div class= "messageszone">
-					<Messages v-if="socket && sessionCookie" ref="messages" :socket="socket" :sessionCookie="sessionCookie" @join-custom="onJoinCustom"/>
+					<Messages v-if="socket && sessionCookie" ref="messages" :socket="socket" :sessionCookie="sessionCookie" :channelName="selectedChannel?.name" @join-custom="onJoinCustom"/>
 					<SendMessage
 						v-if="socket && sessionCookie"
 						ref="sendMessage"
@@ -120,7 +120,7 @@ export default defineComponent({
 		this.socket.on('sendMessageGoodRequest', async () => {
 			this.refreshSendMessageBar();
 		});
-		this.socket.on('removeMessage', async (response: {channel_id: number, message_id: number}) => {
+		this.socket.on('removeMessage', async (response: {message_id: number}) => {
 			this.removeMessage(response.message_id);
 		});
 
@@ -128,11 +128,11 @@ export default defineComponent({
             localStorage.setItem('gameInfos', JSON.stringify({options: infos.options, side: infos.side}));
         });
         this.gameSocket.on('gameFull', (infos: any) => {
+			this.socket.emit('removeGameInvite', {channelName: this.selectedChannel?.name,sessionCookie: this.sessionCookie});
 			localStorage.setItem('opponentInfos', JSON.stringify({opponentName: infos.opponentName}));
 			
             this.router.push('/game');
 		});
-
 		setInterval(() => {
 			this.gameSocket.emit('ping');
 		}, 100);
