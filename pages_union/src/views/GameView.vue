@@ -8,22 +8,18 @@
 						<img :src="playerProfilePic" alt="player profile picture">
 					</div>
 					<div class="col">
-						<span>
-							{{ playerName }}
-						</span>
-						<span class="latency">
-							{{ latency }}ms
-						</span>
+						<span v-if="game.player.side">{{ playerName }}</span>
+						<span v-else>{{ opponentName }}</span>
+						<span v-if="game.player.side" class="latency">{{ latency }}ms</span>
+						<span v-else class="latency">{{ opponentLatency }}ms</span>
 					</div>
 				</div>
 				<div class="row right user-info">
 					<div class="col">
-						<span>
-							{{ opponentName}}
-						</span>
-						<span class="latency" style="text-align: right;">
-							{{ opponentLatency }}ms
-						</span>
+						<span v-if="!game.player.side">{{ playerName }}</span>
+						<span v-else>{{ opponentName }}</span>
+						<span v-if="!game.player.side" class="latency" style="text-align: right;">{{ latency }}ms</span>
+						<span v-else class="latency">{{ opponentLatency }}ms</span>
 					</div>
 					<div class="profile-pic-container">
 						<img :src="opponentProfilePic" alt="opponent profile picture">
@@ -38,7 +34,7 @@
 <script lang="ts" setup>
 import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
 import { Ball } from "../assets/game/ball";
-import { Game, gameOptions } from "../assets/game/game";
+import { Game} from "../assets/game/game";
 import { Player } from "../assets/game/player";
 import { Racket } from "../assets/game/racket";
 import { io } from 'socket.io-client';
@@ -48,7 +44,6 @@ import { useRouter } from 'vue-router';
 const	socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/game`);
 const	router = useRouter();
 
-const	start = ref(false);
 let		playerName = ref('');
 let		playerProfilePic = ref('');
 let		opponentName = ref('');
@@ -271,8 +266,8 @@ onBeforeMount(() => {
 			game.player.side = body.side;
 			game.score = body.side;
 			if (game.player.side !== null)
-				game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
-			
+			game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
+
 			game.opponent.side = !game.player.side;
 			game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
 			opponentName.value = body.opponentName;
@@ -288,7 +283,7 @@ onBeforeMount(() => {
 
 onMounted(() => {
 	if (!exit)
-		launch();
+	launch();
 });
 
 onBeforeUnmount(() => {
