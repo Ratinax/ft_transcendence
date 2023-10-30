@@ -80,7 +80,7 @@ export class MessageService {
         const messages = await this.messageRepository
             .createQueryBuilder('messages')
             .innerJoinAndSelect('messages.channel', 'channel')
-            .where('channel.id = :channel_id', { channel_id: channel_id })
+            .where('channel.channel_id = :channel_id', { channel_id: channel_id })
             .getMany();
         for (let i = 0; i < messages.length; i++)
         {
