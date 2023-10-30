@@ -12,7 +12,7 @@
 				<button class="ft-button gameInviteText" type="submit">Invite in game</button>
 			</form>
 		</div>
-		<GameOptions :show="showGameOptions" @close="showGameOptions = false" @invite-in-game="inviteInGame"></GameOptions>
+		<GameOptions ref="GameOptions" :show="showGameOptions" @close="showGameOptions = false" @invite-in-game="inviteInGame"></GameOptions>
 	</div>
 </template>
 
@@ -57,6 +57,17 @@ export default defineComponent({
 		});
 		this.socket?.on('messageTooLong', async () => {
 			this.messageTooLong();
+		});
+		this.socket?.on('sendGameInviteGoodRequest', async (response: {userName: string, options: {ballAccel: number,
+			ballSize: number, ballSpeed: number,
+			maxAngle: number,
+			playerSize: number,
+			playerSpeed: number,
+			winScore: number}}) => {
+			this.sendGameInviteGoodRequest(response.userName, response.options);
+		}); // sendGameInviteAllready
+		this.socket?.on('sendGameInviteAllready', async () => {
+			this.sendGameInviteAllready();
 		});
 	},
 	methods:
@@ -124,15 +135,29 @@ export default defineComponent({
 				game: gameSettings });
 			
 			console.log(userName);
-			this.$emit('create-custom', {name: userName, options: {
-					...gameSettings,
-				}})
-			this.showGameOptions = false;
+			
+			// this.showGameOptions = false;
+		},
+		sendGameInviteGoodRequest(userName: string, options: {ballAccel: number,
+			ballSize: number, ballSpeed: number,
+			maxAngle: number,
+			playerSize: number,
+			playerSpeed: number,
+			winScore: number})
+		{
+			if (this.$refs.GameOptions)
+				(this.$refs.GameOptions as typeof GameOptions).close()
+			this.$emit('create-custom', {name: userName, options: options});
+		},
+		sendGameInviteAllready()
+		{
+			if (this.$refs.GameOptions)
+				(this.$refs.GameOptions as typeof GameOptions).setErrorMessage('You allready made a game invite')
 		},
 		messageTooLong()
 		{
 			this.isMessageTooLong = true;
-		}
+		},
 	}
 });
 </script>

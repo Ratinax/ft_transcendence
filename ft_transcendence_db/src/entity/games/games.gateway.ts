@@ -20,7 +20,7 @@ export class GamesGateway {
 	constructor(private readonly gameService: GameService, private readonly userService: UserService) {
 		setInterval(() => {
 			this.gameService.checkConnection(this.server);
-			console.log(this.gameService.games);
+			// console.log(this.gameService.games);
 		}, 500)
 	}
 
@@ -237,19 +237,33 @@ export class GamesGateway {
 	toGoodInputGame(game: gameOptions)
 	{
 		if (Number.isNaN(game.ballAccel - 0) || game.ballAccel > 500 || game.ballAccel < 5)
+		{
 			game.ballAccel = 50;
+		}
 		if (Number.isNaN(game.ballSize - 0) || game.ballSize > 50 || game.ballSize < 15)
+		{
 			game.ballSize = 30;
+		}
 		if (Number.isNaN(game.ballSpeed - 0) || game.ballSpeed > 1500 || game.ballSpeed < 600)
+		{
 			game.ballSpeed = 1200;
-		if (Number.isNaN(game.maxAngle - 0) || game.maxAngle > 80 || game.maxAngle < 50)
+		}
+		if (Number.isNaN(game.maxAngle - 0) || game.maxAngle > 80 || game.maxAngle < 20)
+		{
 			game.maxAngle = 45;
+		}
 		if (Number.isNaN(game.playerSize - 0) || game.playerSize > 500 || game.playerSize < 100)
+		{
 			game.playerSize = 300;
+		}
 		if (Number.isNaN(game.playerSpeed - 0) || game.playerSpeed > 3700 || game.playerSpeed < 600)
+		{
 			game.playerSpeed = 1300;
+		}
 		if (Number.isNaN(game.winScore - 0) || game.winScore > 21 || game.winScore < 1)
+		{
 			game.winScore = 5;
+		}
 		return (game);
 	}
 }

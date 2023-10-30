@@ -79,4 +79,12 @@ export class MessageService {
     {
         return (await this.messageRepository.clear());
     }
+    async getAllreadyAGameInvite(user_id: number)
+    {
+        const gameInvite = await this.messageRepository.findOne({where: {user: {id: user_id}, isAGameInvite: true}});
+        console.log(gameInvite);
+        if (gameInvite)
+            return (true);
+        return (false);
+    }
 }

@@ -1,6 +1,7 @@
 <template>
 	<div class="pop-up-overlay" v-if="show" @click.self="close">
 		<div class="pop-up">
+			<p v-if="errorMessage" class="error"> {{ errorMessage }} </p>
 			<div class="row range-slider-div">
 				<label>Ball acceleration</label>
 				<input type="range" min="5" max="500" class="range-slider" v-model="ballAccel">
@@ -63,20 +64,18 @@ export default defineComponent({
 			playerSize: 300,
 			playerSpeed: 1300,
 			winScore: 5,
+			errorMessage: '',
 		}
 	},
 
 	methods:
 	{
 		close()
-	{
+		{
+			this.resetData();
 			this.$emit('close');
 		},
-		letsSee()
-		{
-			console.log(this.ballAccel);
-		},
-		inviteInGame()
+		resetData()
 		{
 			this.ballAccel = 50;
 			this.ballSize = 30;
@@ -85,6 +84,14 @@ export default defineComponent({
 			this.playerSize = 300;
 			this.playerSpeed = 1300;
 			this.winScore = 5;
+			this.errorMessage = '';
+		},
+		letsSee()
+		{
+			console.log(this.ballAccel);
+		},
+		inviteInGame()
+		{
 			this.$emit('invite-in-game', {
 				ballAccel: this.ballAccel,
 				ballSize: this.ballSize,
@@ -94,12 +101,15 @@ export default defineComponent({
 				playerSpeed: this.playerSpeed,
 				winScore: this.winScore
 			});
-
 		},
 		handleKeyDown(event: KeyboardEvent) {
 			if (event.key === 'Escape') {
 				this.$emit('close');
 			}
+		},
+		setErrorMessage(errorMessage: string)
+		{
+			this.errorMessage = errorMessage;
 		}
 	},
 	mounted() {
@@ -112,6 +122,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+.error
+{
+	color: red;
+}
 
 label {
 	font-size: .9em;

@@ -53,7 +53,7 @@ export default defineComponent({
 	},
 	beforeMount() {
 		this.socket.on('inGame', () => {
-			this.isSearching = true;
+			this.isSearching = false;
 		})
 		let playerName = "";
 		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {

@@ -71,6 +71,11 @@ export class MessagesGateway {
 
       if (body.game)
       {
+        if (await this.allreadyAGameInvite(user.id))
+        {
+          this.server.to(client.id).emit('sendGameInviteAllready');
+          return ;
+        }
         message = await this.messagesService.post({
           content: body.message,
           dateSent: body.dateSent,
@@ -81,6 +86,8 @@ export class MessagesGateway {
           },
           isAGameInvite: body.isAGameInvite,
         });
+        this.server.to(client.id).emit('sendGameInviteGoodRequest', {userName: user.pseudo, options: body.game});
+
       }
       else
       {
@@ -93,10 +100,9 @@ export class MessagesGateway {
             id: user.id,
             pseudo: user.pseudo
           },
-          isAGameInvite: body.isAGameInvite,
+          isAGameInvite: false,
         });
       }
-      // if (body.isAGameInvite)
         
       this.server.to(body.channelName).except(client.id).emit('addMessage', {message: message});
       this.server.to(client.id).emit('addMessage', {message: {...message, isSender: true}});
@@ -144,5 +150,11 @@ export class MessagesGateway {
     if (result || result2)
       return (true);
     return (false);
+  }
+  async allreadyAGameInvite(user_id: number)
+  {
+    const result = await this.messagesService.getAllreadyAGameInvite(user_id);
+    
+    return (result);
   }
 }
