@@ -77,14 +77,29 @@ export class MessageService {
     }
     async cleanMessages(channel_id: number)
     {
-        return (await this.messageRepository.clear());
+        const messages = await this.messageRepository
+            .createQueryBuilder('messages')
+            .innerJoinAndSelect('messages.channel', 'channel')
+            .where('channel.id = :channel_id', { channel_id: channel_id })
+            .getMany();
+        for (let i = 0; i < messages.length; i++)
+        {
+            await this.removeMessage(messages[i].id)
+        }
     }
     async getAllreadyAGameInvite(user_id: number)
     {
         const gameInvite = await this.messageRepository.findOne({where: {user: {id: user_id}, isAGameInvite: true}});
-        console.log(gameInvite);
         if (gameInvite)
             return (true);
         return (false);
+    }
+    async removeGameInvite(userName: string)
+    {
+        const gameInvite = await this.messageRepository.findOne({where: {user: {pseudo: userName}, isAGameInvite: true}});
+        
+        if (gameInvite)
+            return await this.removeMessage(gameInvite.id);
+        return (null);
     }
 }

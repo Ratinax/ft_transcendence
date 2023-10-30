@@ -5,6 +5,7 @@ import { ConfigIp } from 'src/config-ip';
 import { UserService } from '../users/user.service';
 import { Games } from './game.entity';
 import { gameOptions } from './entities/game.entity';
+import { MessageService } from '../messages/message.service';
 
 @WebSocketGateway({
 	cors: {
@@ -17,7 +18,7 @@ export class GamesGateway {
 	@WebSocketServer()
 	server: Server;
 
-	constructor(private readonly gameService: GameService, private readonly userService: UserService) {
+	constructor(private readonly gameService: GameService, private readonly userService: UserService, private readonly messageService: MessageService) {
 		setInterval(() => {
 			this.gameService.checkConnection(this.server);
 			// console.log(this.gameService.games);
@@ -68,6 +69,7 @@ export class GamesGateway {
 			if (this.gameService.games[joinIndex].isFull) {
 				this.server.to(this.gameService.games[joinIndex].leftPlayer.id).emit('gameFull', {opponentName: this.gameService.games[joinIndex].rightPlayer.name});
 				this.server.to(this.gameService.games[joinIndex].rightPlayer.id).emit('gameFull', {opponentName: this.gameService.games[joinIndex].leftPlayer.name});
+				this.messageService.removeGameInvite(body.creatorName);
 			}
 		}
 	}

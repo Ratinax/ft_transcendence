@@ -8,6 +8,8 @@ import { sessionProviders } from '../sessions/session.providers';
 import { userProviders } from '../users/user.providers';
 import { UserService } from '../users/user.service';
 import { GamesGateway } from './games.gateway';
+import { messageProviders } from '../messages/message.providers';
+import { MessageService } from '../messages/message.service';
 
 @Module({
   imports: [DatabaseModule],
@@ -15,10 +17,12 @@ import { GamesGateway } from './games.gateway';
     ...gameProviders,
     ...sessionProviders,
     ...userProviders,
+    ...messageProviders,
     GamesGateway,
     GameService,
     SessionService,
     UserService,
+    MessageService,
   ],
     controllers: [GameController],
 })
