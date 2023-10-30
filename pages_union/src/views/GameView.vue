@@ -1,15 +1,36 @@
 <template>
-	<div>
-		<div class="page-background"></div>
-		<div class="container">
-			<div>
-				<div>
-					<canvas></canvas>
+	<div class="page-background"></div>
+	<Menu :page="'GameView'"/>
+	<div class="view gameview-container col">
+		<div class="row users-infos">
+			<div class="row left user-info">
+				<div class="profile-pic-container">
+					<img :src="playerProfilePic" alt="player profile picture">
 				</div>
-				<p>({{playerName}}) latency: {{latency}}ms</p>
-				<p>({{opponentName}}) [opponent] latency: {{opponentLatency}}ms</p>
+				<div class="col">
+					<span>
+						{{ playerName }}
+					</span>
+					<span class="latency">
+						{{ latency }}ms
+					</span>
+				</div>
+			</div>
+			<div class="row right user-info">
+				<div class="col">
+					<span>
+						{{ opponentName}}
+					</span>
+					<span class="latency" style="text-align: right;">
+						{{ opponentLatency }}ms
+					</span>
+				</div>
+				<div class="profile-pic-container">
+					<img :src="opponentProfilePic" alt="opponent profile picture">
+				</div>
 			</div>
 		</div>
+		<canvas></canvas>
 	</div>
 </template>
 
@@ -19,6 +40,7 @@ import { Ball } from "../assets/game/ball";
 import { Game, gameOptions } from "../assets/game/game";
 import { Player } from "../assets/game/player";
 import { Racket } from "../assets/game/racket";
+import Menu from "../components/Menu.vue";
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
@@ -27,8 +49,10 @@ const	socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/
 const	router = useRouter();
 
 const	start = ref(false);
-let		playerName = '';
+let		playerName = ref('');
+let		playerProfilePic = ref('');
 let		opponentName = ref('');
+let		opponentProfilePic = ref('');
 let		exit = false;
 
 const	game = new Game();
@@ -43,42 +67,42 @@ game.opponent = new Player();
 game.ball = new Ball();
 
 window.addEventListener('keydown', e => {
-		if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "Z")
-		{
-			game.up = true;
-			if (!game.down)
-				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 1});
-			else
-				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
-		}
-		if (e.key === "s" || e.key === "S")
-		{
-			game.down = true;
-			if (!game.up)
-				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: -1});
-			else
-				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
-		}
-	})
+	if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "Z")
+	{
+		game.up = true;
+		if (!game.down)
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 1});
+		else
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
+	}
+	if (e.key === "s" || e.key === "S")
+	{
+		game.down = true;
+		if (!game.up)
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: -1});
+		else
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
+	}
+})
 
-	window.addEventListener('keyup', e => {
-		if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "Z")
-		{
-			game.up = false;
-			if (game.down)
-				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: -1});
-			else
-				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
-		}
-		if (e.key === "s" || e.key === "S")
-		{
-			game.down = false;
-			if (game.up)
-				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 1});
-			else
-				socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
-		}
-	});
+window.addEventListener('keyup', e => {
+	if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "Z")
+	{
+		game.up = false;
+		if (game.down)
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: -1});
+		else
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
+	}
+	if (e.key === "s" || e.key === "S")
+	{
+		game.down = false;
+		if (game.up)
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 1});
+		else
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
+	}
+});
 
 function spawnBall() {
 	if (game.isWaiting && performance.now() >= game.waiting_timer + game.spawnTime)
@@ -100,12 +124,12 @@ function playerCollision() {
 	{
 		hitModulo = (game.ball.y - game.player.racket?.y + game.options.playerSize / 2) / game.options.playerSize * 2 - 1;
 		if (hitModulo > 1)
-			hitModulo = 1;
+		hitModulo = 1;
 		else if (hitModulo < -1)
-			hitModulo = -1;
+		hitModulo = -1;
 		game.ball.direction = hitModulo * game.options.maxAngle;
 		if (game.player.side === false)
-			game.ball.direction = 180 - game.ball.direction;
+		game.ball.direction = 180 - game.ball.direction;
 		game.ball.currentSpeed += game.options.ballAccel;
 		socket.emit('bounce', {x: game.player.racket?.x, y: game.ball.y, direction: game.ball.direction, speed: game.ball.currentSpeed});
 		return true;
@@ -147,7 +171,7 @@ function launch() {
 	const	canvas = document.querySelector('canvas');
 	const	ctx = canvas?.getContext("2d");
 	if (!canvas || !ctx)
-		return;
+	return;
 
 	const	ratio = 4/3;
 	canvas.width = 2000;
@@ -174,10 +198,10 @@ function loop() {
 	{
 		socket.emit('score');
 		if (game.opponent.score === game.options?.winScore)
-			socket.emit('endGame')
+		socket.emit('endGame')
 	}
 	if (game.isOver)
-		return ;
+	return ;
 	requestAnimationFrame(loop);
 }
 
@@ -192,7 +216,7 @@ onBeforeMount(() => {
 		exit = true;
 		return ;
 	}
-	
+
 	const optionsParsed = JSON.parse(options);
 	const opponentParsed = JSON.parse(opponent);
 
@@ -201,8 +225,8 @@ onBeforeMount(() => {
 
 	game.score = optionsParsed.side;
 	if (game.player.side !== null)
-		game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
-	
+	game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
+
 	game.opponent.side = !game.player.side;
 	game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
 	opponentName.value = opponentParsed.opponentName;
@@ -210,9 +234,20 @@ onBeforeMount(() => {
 	localStorage.clear();
 
 	axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
-				playerName = res.data;
-				socket.emit('updateSocket', {name: playerName });
-			});
+		playerName.value = res.data;
+
+		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${playerName.value}`, {withCredentials: true}).then((res) => {
+			playerProfilePic.value = res.data;
+		});
+
+		socket.emit('updateSocket', {name: playerName });
+	});
+
+	axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${opponentName.value}`, {withCredentials: true}).then((res) => {
+		opponentProfilePic.value = res.data;
+	});
+
+
 
 	socket.on('updateOpponent', (infos: any) => {
 		game.opponent.racket.y = infos.pos;
@@ -263,7 +298,7 @@ onBeforeMount(() => {
 
 onMounted(() => {
 	if (!exit)
-		launch();
+	launch();
 });
 
 onBeforeUnmount(() => {
@@ -282,18 +317,73 @@ onBeforeUnmount(() => {
 	margin-top: 1em;
 }
 
-p {
-	color: aliceblue;
+.gameview-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.page-background
-{
-	z-index: -1;
+.users-infos {
+	width: 90%;
+	max-width: 1260px;
+}
+
+.user-info {
+	display: flex;
+	align-items: center;
 }
 
 canvas {
-	background-color: black;
-	width: 60%;
+	background-color: var(--pblack);
+	border-radius: 1em;
+	width: 90%;
+	max-width: 1260px;
+}
+
+.profile-pic-container {
+	display: flex;
+	justify-content: center;
+	border-radius: 50%;
+	overflow: hidden;
+	width: 5em;
+	height: 5em;
+	margin: .42em 0; 
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
+	transition: all 200ms ease;
+}
+
+.users-infos {
+	color: var(--pblue);
+	font-size: 1.1em;
+}
+
+.left {
+	margin-right: auto;
+}
+
+.right {
+	margin-left: auto;
+}
+
+.right div[class="col"] {
+	margin-right: 1em;
+}
+
+.left div[class="col"] {
+	margin-left: 1em;
+}
+
+.latency {
+	font-size: .8em;
+	color: var(--plight);
+}
+
+@media only screen and (max-width: 600px) {
+	.profile-pic-container {
+		width: 2.5em;
+		height: 2.5em;
+	}
+
 }
 
 </style>

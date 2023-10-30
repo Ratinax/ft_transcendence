@@ -19,7 +19,7 @@
 						</div>
 
 						<div id="fa2" v-if="!showButtons">
-							<p class="text">2Fa</p>
+						<p class="text">2Fa</p>
 							<div class="switch-choice-container">
 								<label class="switch-choice">
 									<input id="fa2-input" class="input-switch" type="checkbox" @click="switch2fa">
@@ -31,7 +31,7 @@
 					</div>
 					<div class="col user-match-history">
 						<MatchHistory :pseudo="userName"></MatchHistory>
-					</div>
+					</div> 
 				</div>
 			</div>
 			<div class="row button-zone">
@@ -85,7 +85,7 @@ export default defineComponent({
 		{
 			this.showQrcode = true;
 			if (this.$refs.QrcodeRef as typeof Qrcode)
-				(this.$refs.QrcodeRef as typeof Qrcode).getQrCode();
+			(this.$refs.QrcodeRef as typeof Qrcode).getQrCode();
 		}
 	},
 	setup() {
@@ -118,7 +118,7 @@ export default defineComponent({
 			}
 			const doUserExists = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/doUserExists/${userName.value}`, {withCredentials: true});
 			if (!doUserExists.data)
-				router.replace({path: '/pagenotfound'})
+			router.replace({path: '/pagenotfound'})
 
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
@@ -133,7 +133,7 @@ export default defineComponent({
 			const res2fa = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/is2fa/${userName.value}`, {withCredentials: true})).data;
 			const checkbox = document.getElementById("fa2-input") as HTMLInputElement;
 			if (checkbox)
-				checkbox.checked = res2fa;
+			checkbox.checked = res2fa;
 			is2faState.value = res2fa;
 		}
 
@@ -156,7 +156,7 @@ export default defineComponent({
 			{
 				const res = await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/unblock/`, {pseudo: userName.value}, {withCredentials: true});
 				if (res.data === 'Success')
-					isBlocked.value = false;
+				isBlocked.value = false;
 			}
 			catch (e)
 			{
@@ -193,7 +193,7 @@ export default defineComponent({
 			{
 				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/channels/initDM/`, {pseudo: userName.value}, {withCredentials: true})).data;
 				if (res)
-					router.push({ path: '/chat' } )
+				router.push({ path: '/chat' } )
 			}
 			catch (e)
 			{
@@ -217,11 +217,11 @@ export default defineComponent({
 			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true });
 				socket.on('isConnected', (response) => {
 					if (response.pseudo === userName.value)
-						isConnected.value = true;
+					isConnected.value = true;
 				})
 				socket.on('noMoreConnected', (response) => {
 					if (response.pseudo === userName.value)
-						isConnected.value = false;
+					isConnected.value = false;
 				})
 				fecthData()
 		})
@@ -465,7 +465,6 @@ export default defineComponent({
 		flex-direction: column;
 	}
 
-	.user-profile,
 	.user-stats {
 		height: auto;
 	}
@@ -507,6 +506,7 @@ export default defineComponent({
 
 @media (max-width: 960px) {
 	.user-profile {
+		height: 54em;
 		flex-direction: column;
 	}
 
