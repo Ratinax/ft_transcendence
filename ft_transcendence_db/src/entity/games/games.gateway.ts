@@ -88,6 +88,29 @@ export class GamesGateway {
 		this.server.to(client.id).emit('inGame');
 	}
 
+	@SubscribeMessage('gameInfos')
+	sendGameInfos(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		const	gameIndex = this.gameService.getGameIndex(body.name);
+		if (gameIndex === -1)
+		{
+			this.server.to(client.id).emit('getGameInfos', {inGame: false});
+			return ;
+		}
+		let	name = '';
+		let side = false;
+		if (this.gameService.games[gameIndex].leftPlayer.id === client.id)
+		{
+			name = this.gameService.games[gameIndex].rightPlayer.name;
+			side = true;
+		}
+		else if (this.gameService.games[gameIndex].rightPlayer.id === client.id)
+		{
+			name = this.gameService.games[gameIndex].leftPlayer.name;
+			side = false;
+		}
+		this.server.to(client.id).emit('getGameInfos', {inGame: true, options: this.gameService.games[gameIndex].options, side: side, opponentName: name});
+	}
+
 	@SubscribeMessage('updatePlayerPos')
 	updatePlayerPos(@ConnectedSocket() client: Socket, @MessageBody() body) {
 		const	gameIndex = this.gameService.getGameIndexFromId(client.id);

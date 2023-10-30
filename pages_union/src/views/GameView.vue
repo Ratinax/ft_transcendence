@@ -1,36 +1,37 @@
 <template>
-	<div class="page-background"></div>
-	<Menu :page="'GameView'"/>
-	<div class="view gameview-container col">
-		<div class="row users-infos">
-			<div class="row left user-info">
-				<div class="profile-pic-container">
-					<img :src="playerProfilePic" alt="player profile picture">
+	<div>
+		<div class="page-background"></div>
+		<div class="view gameview-container col">
+			<div class="row users-infos">
+				<div class="row left user-info">
+					<div class="profile-pic-container">
+						<img :src="playerProfilePic" alt="player profile picture">
+					</div>
+					<div class="col">
+						<span>
+							{{ playerName }}
+						</span>
+						<span class="latency">
+							{{ latency }}ms
+						</span>
+					</div>
 				</div>
-				<div class="col">
-					<span>
-						{{ playerName }}
-					</span>
-					<span class="latency">
-						{{ latency }}ms
-					</span>
+				<div class="row right user-info">
+					<div class="col">
+						<span>
+							{{ opponentName}}
+						</span>
+						<span class="latency" style="text-align: right;">
+							{{ opponentLatency }}ms
+						</span>
+					</div>
+					<div class="profile-pic-container">
+						<img :src="opponentProfilePic" alt="opponent profile picture">
+					</div>
 				</div>
 			</div>
-			<div class="row right user-info">
-				<div class="col">
-					<span>
-						{{ opponentName}}
-					</span>
-					<span class="latency" style="text-align: right;">
-						{{ opponentLatency }}ms
-					</span>
-				</div>
-				<div class="profile-pic-container">
-					<img :src="opponentProfilePic" alt="opponent profile picture">
-				</div>
-			</div>
+			<canvas></canvas>
 		</div>
-		<canvas></canvas>
 	</div>
 </template>
 
@@ -40,7 +41,6 @@ import { Ball } from "../assets/game/ball";
 import { Game, gameOptions } from "../assets/game/game";
 import { Player } from "../assets/game/player";
 import { Racket } from "../assets/game/racket";
-import Menu from "../components/Menu.vue";
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
@@ -138,7 +138,7 @@ function playerCollision() {
 }
 
 function checkGoal() {
-	const goal = game.ball.score(game.width, game.options.ballSize);
+	const goal = game.ball.score(game.width, game.options?.ballSize);
 	if (goal)
 	{
 		if (goal === 2 && !game.isWaiting && game.player.side === true)
@@ -206,48 +206,12 @@ function loop() {
 }
 
 onBeforeMount(() => {
-	const options = localStorage.getItem('gameInfos');
-	const opponent = localStorage.getItem('opponentInfos');
-
-	if (!options || !opponent)
-	{
-		localStorage.clear();
-		router.push('/choose_game');
-		exit = true;
-		return ;
-	}
-
-	const optionsParsed = JSON.parse(options);
-	const opponentParsed = JSON.parse(opponent);
-
-	game.options = optionsParsed.options;
-	game.player.side = optionsParsed.side;
-
-	game.score = optionsParsed.side;
-	if (game.player.side !== null)
-	game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
-
-	game.opponent.side = !game.player.side;
-	game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
-	opponentName.value = opponentParsed.opponentName;
-
-	localStorage.clear();
 
 	axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
 		playerName.value = res.data;
-
-		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${playerName.value}`, {withCredentials: true}).then((res) => {
-			playerProfilePic.value = res.data;
-		});
-
-		socket.emit('updateSocket', {name: playerName });
+		socket.emit('updateSocket', {name: playerName.value});
+		socket.emit('gameInfos', {name: playerName.value});
 	});
-
-	axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${opponentName.value}`, {withCredentials: true}).then((res) => {
-		opponentProfilePic.value = res.data;
-	});
-
-
 
 	socket.on('updateOpponent', (infos: any) => {
 		game.opponent.racket.y = infos.pos;
@@ -293,12 +257,38 @@ onBeforeMount(() => {
 	socket.on('opponentGaveUp', (body) => {
 		game.player.score = body.score;
 		socket.emit('endGame');
+	});
+
+	socket.on('getGameInfos', (body) => {
+		if (!body.inGame)
+		{
+			exit = true;
+			router.push('/choose_game');
+		}
+		else
+		{
+			game.options = body.options;
+			game.player.side = body.side;
+			game.score = body.side;
+			if (game.player.side !== null)
+				game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
+			
+			game.opponent.side = !game.player.side;
+			game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
+			opponentName.value = body.opponentName;
+			axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${playerName.value}`, {withCredentials: true}).then((res) => {
+				playerProfilePic.value = res.data;
+			});
+			axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${opponentName.value}`, {withCredentials: true}).then((res) => {
+				opponentProfilePic.value = res.data;
+			});
+		}
 	})
 })
 
 onMounted(() => {
 	if (!exit)
-	launch();
+		launch();
 });
 
 onBeforeUnmount(() => {
@@ -334,7 +324,7 @@ onBeforeUnmount(() => {
 }
 
 canvas {
-	background-color: var(--pblack);
+	background-color: black;
 	border-radius: 1em;
 	width: 90%;
 	max-width: 1260px;
