@@ -226,6 +226,10 @@ setInterval(() => {
 	socket.emit('latency', {latency: latency.value});
 }, 100);
 
+setInterval(() => {
+	socket.emit('imInGame');
+}, 1000);
+
 function loop() {
 	game.update();
 	spawnBall();
@@ -292,6 +296,12 @@ onBeforeMount(() => {
 		game.player.score = body.score;
 		socket.emit('endGame');
 	});
+
+	socket.on('isInGame', (body) => {
+		if (!body.isInGame) {
+			router.push('/choose_game');
+		}
+	})
 
 })
 

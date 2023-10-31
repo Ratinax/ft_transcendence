@@ -6,6 +6,7 @@ export class Player {
 	firstPing = false;
 	secondPing = false;
 	nbLoop = 0;
+	updateInGame = false;
 
 	constructor(name: string, id: string) {
 		this.name = name;

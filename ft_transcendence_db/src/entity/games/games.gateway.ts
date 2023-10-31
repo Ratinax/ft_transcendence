@@ -81,13 +81,16 @@ export class GamesGateway {
 		if (gameIndex === -1)
 			return ;
 
-		if (this.gameService.games[gameIndex].leftPlayer.name === body.name) {
+		if (this.gameService.games[gameIndex].leftPlayer.name === body.name && !this.gameService.games[gameIndex].leftPlayer.updateInGame) {
 			this.gameService.games[gameIndex].leftPlayer.id = client.id;
+			this.gameService.games[gameIndex].leftPlayer.updateInGame = true;
+			this.server.to(client.id).emit('inGame');
 		}
-		else if (this.gameService.games[gameIndex].rightPlayer.name === body.name) {
+		else if (this.gameService.games[gameIndex].rightPlayer.name === body.name && !this.gameService.games[gameIndex].rightPlayer.updateInGame) {
 			this.gameService.games[gameIndex].rightPlayer.id = client.id;
+			this.gameService.games[gameIndex].rightPlayer.updateInGame = true;
+			this.server.to(client.id).emit('inGame');
 		}
-		this.server.to(client.id).emit('inGame');
 	}
 
 	@SubscribeMessage('updatePlayerPos')
@@ -208,7 +211,7 @@ export class GamesGateway {
 
 	@SubscribeMessage('imInGame')
 	isConnected(@ConnectedSocket() client: Socket) {
-		if (this.gameService.getGameIndexFromId(client.id) !== -1)
+		if (this.gameService.getGameIndexFromId(client.id) === -1)
 			this.server.to(client.id).emit('isInGame', {isInGame: false});
 		else
 			this.server.to(client.id).emit('isInGame', {isInGame: true});
