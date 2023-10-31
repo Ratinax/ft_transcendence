@@ -4,8 +4,11 @@
 		<div class="view gameview-container col">
 			<div class="row users-infos">
 				<div class="row left user-info">
-					<div class="profile-pic-container">
+					<div v-if="game.player.side" class="profile-pic-container">
 						<img :src="playerProfilePic" alt="player profile picture">
+					</div>
+					<div v-else class="profile-pic-container">
+						<img :src="opponentProfilePic" alt="opponent profile picture">
 					</div>
 					<div class="col">
 						<span v-if="game.player.side">{{ playerName }}</span>
@@ -21,7 +24,10 @@
 						<span v-if="!game.player.side" class="latency" style="text-align: right;">{{ latency }}ms</span>
 						<span v-else class="latency">{{ opponentLatency }}ms</span>
 					</div>
-					<div class="profile-pic-container">
+					<div v-if="!game.player.side" class="profile-pic-container">
+						<img :src="playerProfilePic" alt="player profile picture">
+					</div>
+					<div v-else class="profile-pic-container">
 						<img :src="opponentProfilePic" alt="opponent profile picture">
 					</div>
 				</div>
@@ -162,11 +168,45 @@ function checkGoal() {
 	return false;
 }
 
+async function getOptions() {
+	const pseudo = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true })
+	playerName.value = pseudo.data;
+	const res = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/gameOptions/${playerName.value}`, { withCredentials: true });
+	console.log(res.data);
+
+	if (!res.data.inGame)
+	{
+		exit = true;
+		router.push('/choose_game');
+	}
+	else
+	{
+		res.data.options.ballAccel = +res.data.options.ballAccel;
+		res.data.options.winScore = +res.data.options.winScore;
+		game.options = res.data.options;
+		game.player.side = res.data.side;
+		game.score = res.data.side;
+		if (game.player.side !== null)
+			game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
+		game.opponent.side = !game.player.side;
+		game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
+		opponentName.value = res.data.opponentName;
+		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${playerName.value}`, {withCredentials: true}).then((res) => {
+			playerProfilePic.value = res.data;
+		});
+		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${opponentName.value}`, {withCredentials: true}).then((res) => {
+			opponentProfilePic.value = res.data;
+		});
+	}
+}
+
 function launch() {
 	const	canvas = document.querySelector('canvas');
 	const	ctx = canvas?.getContext("2d");
 	if (!canvas || !ctx)
 	return;
+
+	console.log(game.options);
 
 	const	ratio = 4/3;
 	canvas.width = 2000;
@@ -205,7 +245,6 @@ onBeforeMount(() => {
 	axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
 		playerName.value = res.data;
 		socket.emit('updateSocket', {name: playerName.value});
-		socket.emit('gameInfos', {name: playerName.value});
 	});
 
 	socket.on('updateOpponent', (infos: any) => {
@@ -254,39 +293,17 @@ onBeforeMount(() => {
 		socket.emit('endGame');
 	});
 
-	socket.on('getGameInfos', (body) => {
-		if (!body.inGame)
-		{
-			exit = true;
-			router.push('/choose_game');
-		}
-		else
-		{
-			game.options = body.options;
-			game.player.side = body.side;
-			game.score = body.side;
-			if (game.player.side !== null)
-			game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
-
-			game.opponent.side = !game.player.side;
-			game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
-			opponentName.value = body.opponentName;
-			axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${playerName.value}`, {withCredentials: true}).then((res) => {
-				playerProfilePic.value = res.data;
-			});
-			axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${opponentName.value}`, {withCredentials: true}).then((res) => {
-				opponentProfilePic.value = res.data;
-			});
-		}
-	})
 })
 
 onMounted(() => {
-	if (!exit)
-	launch();
+	getOptions().then(() => {
+		if (!exit)
+			launch();
+	})
 });
 
 onBeforeUnmount(() => {
+	console.log('test2')
 	socket.close();
 })
 

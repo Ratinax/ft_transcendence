@@ -33,4 +33,26 @@ export class GameController {
             return (await this.gameService.getGames(user.id));
         return (false);
     }
+
+	@Get('gameOptions/:pseudo')
+	async getGameOptions(@Param('pseudo') pseudo: string, @Req() req: Request) {
+		if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+			return null;
+		const gameIndex = this.gameService.getGameIndex(pseudo);
+		if (gameIndex === -1)
+			return {inGame: false};
+		let	name = '';
+		let side = false;
+		if (this.gameService.games[gameIndex].leftPlayer.name === pseudo)
+		{
+			name = this.gameService.games[gameIndex].rightPlayer.name;
+			side = true;
+		}
+		else if (this.gameService.games[gameIndex].rightPlayer.name === pseudo)
+		{
+			name = this.gameService.games[gameIndex].leftPlayer.name;
+			side = false;
+		}
+		return JSON.stringify({inGame: true, options: this.gameService.games[gameIndex].options, side: side, opponentName: name});
+	}
 }
