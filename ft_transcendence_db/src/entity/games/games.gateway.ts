@@ -19,9 +19,29 @@ export class GamesGateway {
 	server: Server;
 
 	constructor(private readonly gameService: GameService, private readonly userService: UserService, private readonly messageService: MessageService) {
-		setInterval(() => {
+		setInterval(async () => {
 			this.gameService.checkConnection(this.server);
-			// console.log(this.gameService.games);
+			console.log(this.gameService.games);
+			for (let i = 0; i < this.gameService.games.length; i++) {
+				if (this.gameService.games[i].isFull && !this.gameService.games[i].leftPlayer.isConnected && !this.gameService.games[i].rightPlayer.isConnected) {
+					try
+					{
+						const user2 = (await this.userService.getUser(this.gameService.games[i].rightPlayer.name))[0];
+						const user1 = (await this.userService.getUser(this.gameService.games[i].leftPlayer.name))[0];
+						this.gameService.createGame({playerOne: {id: user1.id},
+							playerTwo: {id: user2.id},
+							scorePTwo: this.gameService.games[i].rightPlayer.score,
+							scorePOne: this.gameService.games[i].leftPlayer.score,
+							mode: this.gameService.games[i].mode});
+					}
+					catch (e)
+					{
+						console.error(e);
+					}
+					this.gameService.games.splice(i, 1);
+					i--;
+				}
+			}
 		}, 500)
 	}
 
