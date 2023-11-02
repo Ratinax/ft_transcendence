@@ -1,4 +1,4 @@
-import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Users } from './user.entity';
 import * as fs from 'fs';
@@ -21,7 +21,7 @@ export class UserService {
         
         if (userFound)
         {
-            throw new InternalServerErrorException('User already exists');
+            throw new UnauthorizedException('User already exists');
         }
         try 
         {
@@ -29,7 +29,7 @@ export class UserService {
         }
         catch (e)
         {
-            throw new InternalServerErrorException(e);
+            throw new BadRequestException(e);
         }
         const user = {
             pseudo: body.pseudo,
@@ -134,7 +134,7 @@ export class UserService {
         else if (extension === 'png;')
             extension = '.png'
         else
-            throw new InternalServerErrorException('Bad file format, (required .png .jpg)');
+            throw new BadRequestException('Bad file format, (required .png .jpg)');
         try 
         {
             const uniqueFileName = Date.now() + '_' + this.generateRandomString(42) + extension;
@@ -148,7 +148,7 @@ export class UserService {
         } 
         catch (error) 
         {
-            throw new InternalServerErrorException('Failed to save image');
+            throw new UnauthorizedException('Failed to save image');
         }
     }
 

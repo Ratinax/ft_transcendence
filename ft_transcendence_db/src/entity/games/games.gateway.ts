@@ -20,7 +20,7 @@ export class GamesGateway {
 	constructor(private readonly gameService: GameService, private readonly userService: UserService, private readonly messageService: MessageService) {
 		setInterval(async () => {
 			this.gameService.checkConnection(this.server);
-			// console.log(this.gameService.games);
+			console.log(this.gameService.games);
 			for (let i = 0; i < this.gameService.games.length; i++) {
 				if (this.gameService.games[i].isFull && !this.gameService.games[i].leftPlayer.isConnected && !this.gameService.games[i].rightPlayer.isConnected) {
 					try

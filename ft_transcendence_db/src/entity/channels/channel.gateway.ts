@@ -2,7 +2,6 @@ import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, Conne
 import { ChannelService } from './channel.service';
 import { Server, Socket } from 'socket.io';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
-import { InternalServerErrorException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 import { ChannelsUsers } from '../channels_users/channels_users.entity';

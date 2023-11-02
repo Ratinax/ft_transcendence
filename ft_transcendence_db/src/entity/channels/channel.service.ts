@@ -1,4 +1,4 @@
-import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Channels } from './channel.entity';
 import * as bcrypt from 'bcrypt';
@@ -36,10 +36,10 @@ export class ChannelService {
     async setPassword(channel_id: number, password: string)
     {
         if (password.length > 20 || password.length < 3)
-            throw new InternalServerErrorException('Password not good length');
+            throw new BadRequestException('Password not good length');
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
         if (!relation)
-            throw new InternalServerErrorException('Mo such channel');
+            throw new BadRequestException('No such channel');
 
         const passwordHashed = await this.hashedPassword(password);
 
@@ -57,10 +57,10 @@ export class ChannelService {
     async changePassword(channel_id: number, password: string)
     {
         if (password.length > 20 || password.length < 3)
-            throw new InternalServerErrorException('Password not good length');
+            throw new BadRequestException('Password not good length');
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
         if (!relation)
-            throw new InternalServerErrorException('Mo such channel');
+            throw new BadRequestException('No such channel');
         const passwordHashed = await this.hashedPassword(password);
 
         relation.category = 'Protected by password';
@@ -76,7 +76,7 @@ export class ChannelService {
     {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
         if (!relation)
-            throw new InternalServerErrorException('Mo such channel');
+            throw new BadRequestException('No such channel');
         relation.category = 'Public';
         relation.password = '';
         const res = await this.channelRepository.save(relation);
@@ -91,7 +91,7 @@ export class ChannelService {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
 
         if (!relation)
-            throw new InternalServerErrorException('Mo such channel');
+            throw new BadRequestException('No such channel');
         relation.category = 'Private';
         relation.password = '';
 
@@ -106,7 +106,7 @@ export class ChannelService {
     {
         const relation = await this.channelRepository.findOne({where: {channel_id: channel_id}});
         if (!relation)
-            throw new InternalServerErrorException('Mo such channel');
+            throw new BadRequestException('No such channel');
         const res = await this.channelRepository.remove(relation);
         return (res);
     }
