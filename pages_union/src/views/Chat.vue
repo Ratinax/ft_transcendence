@@ -108,7 +108,7 @@ export default defineComponent({
 		this.socket.on('updateListUsers', (response: {users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			this.updateListUsers(response.users);
 		});
-		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string, isUserOwner: boolean}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
+		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (this.sessionCookie === response.sessionCookie) {
 				this.removeChannel(this.selectedChannel);
 				this.updateListUsers(null);

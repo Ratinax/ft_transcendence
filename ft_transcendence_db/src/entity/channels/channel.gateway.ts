@@ -178,11 +178,9 @@ export class ChannelGateway {
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.to(body.channel.name).except(client.id).emit('updateAfterPart', {
       users: users,
-      channel: body.channel,
       sessionCookie: body.sessionCookie});
     this.server.to(client.id).emit('updateAfterPart', {
       users: users,
-      channel: body.channel,
       sessionCookie: body.sessionCookie});
     const messageRemoved = await this.messageService.removeGameInvite(user.pseudo);
     if (messageRemoved)
