@@ -24,11 +24,11 @@ export class FriendshipGateway {
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
-        return ('not connected');
+        throw new UnauthorizedException('You are not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
       if (!user)
-        return (null);
+        throw new BadRequestException('Ressource not found');
       await this.friendshipService.acceptFriendship(user.id, body.friend_id);
       this.server.to(client.id).emit('acceptFriendship');
     }
@@ -42,7 +42,7 @@ export class FriendshipGateway {
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
       if (!user)
-        return (null);
+        throw new BadRequestException('Ressource not found');
       try
       {
         await this.friendshipService.deleteFriendship(body.friend_id, user.id);

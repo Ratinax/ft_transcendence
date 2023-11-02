@@ -99,9 +99,7 @@ export class ChannelsUsersService {
             res = await this.channelsUsersRepository.save(relation);
         }
         else if (!relation)
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const channels = await this.findUsersOfChannel(relation.channel.name);
         if (channels.length === 0)
             return ('Empty');

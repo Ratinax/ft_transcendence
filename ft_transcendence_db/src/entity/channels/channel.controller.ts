@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { ChannelService } from './channel.service';
 import { ChannelsUsersService } from '../channels_users/channels_users.service';
 import { SessionService } from '../sessions/session.service';
@@ -14,12 +14,10 @@ export class ChannelController {
     async find(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         if (!user)
-            return (null);
+            throw new BadRequestException('User not found');
         const channels = await this.channelsUsersService.findChannelsOfUsers(user.id);
         let res = [];
         for (let i = 0; i < channels.length; i++)
@@ -34,9 +32,7 @@ export class ChannelController {
     async setPassword(@Body() body: {channel: {channel_id: number}, password: string}, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
         return (await this.channelService.setPassword(body.channel.channel_id, body.password));
@@ -46,9 +42,7 @@ export class ChannelController {
     async toPublic(@Body() body: {channel: {channel_id}}, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
         return (await this.channelService.toPublic(body.channel.channel_id));
@@ -58,9 +52,7 @@ export class ChannelController {
     async changePassword(@Body() body: {channel: {channel_id: number}, password: string}, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
         return (await this.channelService.changePassword(body.channel.channel_id, body.password));
@@ -70,9 +62,7 @@ export class ChannelController {
     async toPrivate(@Body() body: {channel: {channel_id: number}}, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
         return (await this.channelService.toPrivate(body.channel.channel_id));
@@ -93,12 +83,10 @@ export class ChannelController {
     async getState(@Param('name') name: string, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const channel = (await this.channelService.findByName(name))[0];
         if (!channel)
-            return (null);
+            throw new BadRequestException('Channel not found');
         return (channel.category);
     }
 
@@ -106,9 +94,7 @@ export class ChannelController {
     async initDM(@Body() body: {pseudo: string}, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const user2 = (await this.userService.getUser(body.pseudo))[0];
         let result;

@@ -7,6 +7,7 @@ import { ConfigIp } from 'src/config-ip';
 import { ChannelsUsers } from '../channels_users/channels_users.entity';
 import { Channels } from './channel.entity';
 import { MessageService } from '../messages/message.service';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 @WebSocketGateway({
     cors: {
@@ -23,19 +24,18 @@ export class ChannelGateway {
 
   constructor(private readonly channelService: ChannelService, private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService, private readonly messageService: MessageService) {}
 
-
   @SubscribeMessage('createChannel')
   async create(@ConnectedSocket() client: Socket, @MessageBody() data: {sessionCookie: string, channel: {name: string, password: string, category: string}})
   {
     if (await this.sessionService.getIsSessionExpired(data.sessionCookie))
     {
-      return ('not connected');
+      throw new UnauthorizedException('You are not connected')
     }
     const user = await this.sessionService.getUser(data.sessionCookie);
     if (!user)
-      return ('not connected')
+		throw new UnauthorizedException('You are not connected')
     if (!this.createGoodInputs(data.channel, client))
-      return ('input error');
+		throw new BadRequestException('Error in input');
     const channel = data.channel;
     try
     {
@@ -88,19 +88,19 @@ export class ChannelGateway {
   async join(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, password: string, channelName: string})
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
-      return ('not connected');
+		throw new UnauthorizedException('You are not connected');
 
     const user = await this.sessionService.getUser(body.sessionCookie);
     const regex = /^[A-Za-z0-9_\- ]+$/;
     if (!user)
     {
       this.server.to(client.id).emit('joinNotConnected');
-      return ('not connected')
+	  throw new UnauthorizedException('You are not connected');
     }
     if (!regex.test(body.channelName))
     {
       this.server.to(client.id).emit('joinNotGoodChars');
-      return ('notGoodChars');
+      throw new BadRequestException('Error in input');
     }
     
     const channels = await this.channelService.findByName(body.channelName);
@@ -162,7 +162,7 @@ export class ChannelGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      return ('not connected');
+		throw new UnauthorizedException('You are not connected')
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
     if (!user)
@@ -191,14 +191,14 @@ export class ChannelGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      return ('not connected');
+		throw new UnauthorizedException('You are not connected')
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
     if (!user)
       return (null);
     const relation = await this.channelsUsersService.findRelationByCName(user.id, body.channelName);
     if (!relation || !relation[0])
-      return ('not authorized');
+      throw new UnauthorizedException('You are not authorized to do this')
     client.leave(body.channelName)
   }
   @SubscribeMessage('joinRoom')
@@ -206,14 +206,14 @@ export class ChannelGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      return ('not connected');
+		throw new UnauthorizedException('You are not connected')
     }
     const user = await this.sessionService.getUser(body.sessionCookie);
     if (!user)
       return (null);
     const relation = await this.channelsUsersService.findRelationByCName(user.id, body.channelName);
     if (!relation || !relation[0])
-      return ('not authorized');
+      throw new UnauthorizedException('You are not authorized to do this')
     client.join(body.channelName)
   }
 }

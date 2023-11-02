@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { GameService } from './game.service';
 import { SessionService } from '../sessions/session.service';
 import { UserService } from '../users/user.service';
@@ -12,12 +12,10 @@ export class GameController {
     async getGamesAndWins(@Param('pseudo') pseudo: string, @Req() req)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = (await this.userService.getUser(pseudo))[0];
         if (!user)
-            return (null);
+			throw new BadRequestException('Ressource not found');
         return (await this.gameService.getGamesAndWins(user.id))
     }
 
@@ -25,9 +23,7 @@ export class GameController {
     async getMatchHistory(@Param('pseudo') pseudo: string, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = (await this.userService.getUser(pseudo))[0];
         if (user)
             return (await this.gameService.getGames(user.id));
@@ -37,7 +33,7 @@ export class GameController {
 	@Get('gameOptions/:pseudo')
 	async getGameOptions(@Param('pseudo') pseudo: string, @Req() req: Request) {
 		if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-			return null;
+			throw new UnauthorizedException('You are not able to access this data');
 		const gameIndex = this.gameService.getGameIndex(pseudo);
 		if (gameIndex === -1)
 			return {inGame: false};

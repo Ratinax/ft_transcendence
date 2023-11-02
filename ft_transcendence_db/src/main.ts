@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
-import * as dotenv from 'dotenv';
 import * as cookieParser from 'cookie-parser';
 import { ConfigIp } from './config-ip';
 
