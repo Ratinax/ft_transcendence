@@ -3,6 +3,7 @@ import { ChannelsUsersService } from './channels_users.service';
 import { Server, Socket } from 'socket.io';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
+import { MessageService } from '../messages/message.service';
 
 @WebSocketGateway({
   cors: {
@@ -16,7 +17,7 @@ export class ChannelsUsersGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService) {}
+  constructor(private readonly channelsUsersService: ChannelsUsersService, private readonly sessionService: SessionService, private readonly messageService: MessageService) {}
 
   @SubscribeMessage('findUsersOfChannel')
   async findUsersOfChannel(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, channel: {name: string, channel_id: number}})
@@ -55,6 +56,10 @@ export class ChannelsUsersGateway {
     this.server.to(body.channel.name).emit('updateAfterPart', {
       users: users,
       sessionCookie: await this.sessionService.getSessionKey(body.userBanned.id)});
+    const messageRemoved = await this.messageService.removeGameInviteById(body.userBanned.id);
+    if (messageRemoved)
+      this.server.to(body.channel.name).emit('removeMessage', {message_id: messageRemoved.id});
+
     return (res);
   }
 
@@ -78,6 +83,10 @@ export class ChannelsUsersGateway {
     this.server.to(body.channel.name).emit('updateAfterPart', {
       users: users,
       sessionCookie: await this.sessionService.getSessionKey(body.userKicked.id)});
+    const messageRemoved = await this.messageService.removeGameInviteById(body.userKicked.id);
+    if (messageRemoved)
+      this.server.to(body.channel.name).emit('removeMessage', {message_id: messageRemoved.id});
+      
     return (res);
   }
 

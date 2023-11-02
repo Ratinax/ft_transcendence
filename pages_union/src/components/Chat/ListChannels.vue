@@ -141,11 +141,15 @@ export default defineComponent({
 		},
 		removeChannel(channel_id: number)
 		{
+			console.log(channel_id);
+			console.log(this.channels);
 			for (let i = 0; i < this.channels.length; i++)
 			{
 				if (this.channels[i].channel_id === channel_id)
 				{
+					console.log(this.channels[i]);
 					this.channels.splice(i, 1);
+					console.log(i, 1);
 					break ;
 				}
 			}
