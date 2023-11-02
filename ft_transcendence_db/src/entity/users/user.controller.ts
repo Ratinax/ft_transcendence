@@ -134,14 +134,14 @@ export class UserController {
         const res = await this.userService.getUsers(pseudoPart);
         return (res);
     }
-    @Get('is2fa/:pseudo')
+    @Get('is2fa')
     async getIs2fa(@Param('pseudo') pseudo: string, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
             return (null);
         }
-        const user = (await this.userService.getUser(pseudo))[0];
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         if (!user)
             return (false);
         return (user.doubleFa);
