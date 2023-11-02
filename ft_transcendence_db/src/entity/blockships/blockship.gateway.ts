@@ -3,7 +3,6 @@ import { BlockshipService } from './blockship.service';
 import { Server, Socket } from 'socket.io';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
-import { InternalServerErrorException } from '@nestjs/common';
 
 @WebSocketGateway({
   cors: {

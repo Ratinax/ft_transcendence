@@ -1,7 +1,7 @@
 import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
 import { FriendshipService } from './friendship.service';
 import { Server, Socket } from 'socket.io';
-import { InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 
@@ -38,7 +38,7 @@ export class FriendshipGateway {
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
-        return ('not connected');
+        throw new UnauthorizedException('You are not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
       if (!user)
@@ -50,7 +50,7 @@ export class FriendshipGateway {
       }
       catch (e)
       {
-        throw new InternalServerErrorException(e);
+        throw new BadRequestException(e);
       }
     }
 }
