@@ -52,7 +52,7 @@ export default defineComponent({
 		playerTwoScore: Number,
 		mode: Number,
 	},
-	setup(props) {
+	setup(props, context) {
 		const router = useRouter();
 		const playerOne = ref(props.playerOneData);
 		const playerTwo = ref(props.playerTwoData);
@@ -71,10 +71,7 @@ export default defineComponent({
 
 		function	goToUserPage(player: string | undefined) {
 			router.push({ name: "UserPage", params: { pseudo: player } } )
-			//TODO: check if we want to remove that thing 
-			/*.then(() => {
-				window.location.reload();
-			});*/
+			context.emit('fetch-datas', player);
 		}
 
 		return {

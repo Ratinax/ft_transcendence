@@ -30,7 +30,7 @@
 						</div>
 					</div>
 					<div class="col user-match-history">
-						<MatchHistory :pseudo="userName"></MatchHistory>
+						<MatchHistory :pseudo="userName" @fetch-datas="fetchDatas"></MatchHistory>
 					</div> 
 				</div>
 			</div>
@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onUpdated, onBeforeMount, } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import Menu from "../components/Menu.vue"
 import MatchHistory from '../components/UserPage/MatchHistory.vue';
 import Qrcode from '../components/UserPage/Qrcode.vue';
@@ -110,11 +110,15 @@ export default defineComponent({
 				return 0;
 			}
 		})
-
-		async function	fecthData() {
+		async function	fecthData(player: string | null) {
 			const route = useRoute();
-			if (typeof route.params.pseudo === 'string'){
+			if (route && typeof route.params.pseudo === 'string'){
 				userName.value = route.params.pseudo;
+			}
+			console.log(player)
+			if (player)
+			{
+				userName.value = player;
 			}
 			const doUserExists = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/doUserExists/${userName.value}`, {withCredentials: true});
 			if (!doUserExists.data)
@@ -130,11 +134,17 @@ export default defineComponent({
 			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
 			isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
 			isBlockedBy.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/isBlockedBy/${userName.value}`, {withCredentials: true})).data;
-			const res2fa = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/is2fa/${userName.value}`, {withCredentials: true})).data;
-			const checkbox = document.getElementById("fa2-input") as HTMLInputElement;
-			if (checkbox)
-			checkbox.checked = res2fa;
-			is2faState.value = res2fa;
+			
+			if (!showButtons.value)
+			{
+				const res2fa = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/is2fa/`, {withCredentials: true})).data;
+				const checkbox = document.getElementById("fa2-input") as HTMLInputElement;
+				if (checkbox)
+					checkbox.checked = res2fa;
+				is2faState.value = res2fa;
+			}
+			else
+				is2faState.value = false;
 		}
 
 		async function	blockUser()
@@ -212,6 +222,10 @@ export default defineComponent({
 				console.error(e);
 			}
 		}
+		function fetchDatas(player: string)
+		{
+			fecthData(player)
+		}
 		onBeforeMount(() =>
 			{
 			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true });
@@ -223,11 +237,7 @@ export default defineComponent({
 					if (response.pseudo === userName.value)
 					isConnected.value = false;
 				})
-				fecthData()
-		})
-		onUpdated(() =>
-			{
-				fecthData()
+				fecthData(null);
 		})
 		return { userName, 
 			profilePic, 
@@ -246,6 +256,7 @@ export default defineComponent({
 			addFriend,
 			sendMessage,
 			switch2fa,
+			fetchDatas,
 		};
 	},
 });
