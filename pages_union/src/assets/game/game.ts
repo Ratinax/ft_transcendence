@@ -73,7 +73,6 @@ export class Game {
 
 		this.ctx.font = "50px Comic Sans MS";
 		this.ctx.fillStyle = "white";
-		this.ctx.fillText(`${this.ball.currentSpeed}`, 1000, 700)
 		if (this.player.side)
 		{
 			this.ctx.fillText(`${this.player.score}`, 700, 100)
@@ -90,7 +89,10 @@ export class Game {
 			this.ctx.fillRect(this.width / 2 - 125, this.height / 2 - 125, 250, 250);
 			this.ctx.fillStyle = 'white';
 			this.ctx.font = "250px Comic Sans MS";
-			this.ctx.fillText(`${Math.round((performance.now() - this.waiting_timer - this.spawnTime) / -1000)}`, this.width / 2 - 70, this.height / 2 + 80);
+			let	timer = Math.round((performance.now() - this.waiting_timer - this.spawnTime) / -1000);
+			if (timer < 0)
+				timer = 0;
+			this.ctx.fillText(`${timer}`, this.width / 2 - 70, this.height / 2 + 80);
 		}
 	}
 
