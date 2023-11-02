@@ -3,7 +3,6 @@ import { GameService } from './game.service';
 import { Server, Socket } from 'socket.io';
 import { ConfigIp } from 'src/config-ip';
 import { UserService } from '../users/user.service';
-import { Games } from './game.entity';
 import { gameOptions } from './entities/game.entity';
 import { MessageService } from '../messages/message.service';
 
@@ -242,30 +241,44 @@ export class GamesGateway {
 		{
 			game.ballAccel = 50;
 		}
-		if (Number.isNaN(game.ballSize - 0) || game.ballSize > 50 || game.ballSize < 15)
+		else
+			game.ballAccel = +game.ballAccel
+		if (Number.isNaN(game.ballSize - 0) || game.ballSize > 50 || game.ballSize < 30)
 		{
 			game.ballSize = 30;
 		}
+		else
+			game.ballSize = +game.ballSize;
 		if (Number.isNaN(game.ballSpeed - 0) || game.ballSpeed > 1500 || game.ballSpeed < 600)
 		{
 			game.ballSpeed = 1200;
 		}
+		else
+			game.ballSpeed = +game.ballSpeed;
 		if (Number.isNaN(game.maxAngle - 0) || game.maxAngle > 80 || game.maxAngle < 20)
 		{
 			game.maxAngle = 45;
 		}
+		else
+			game.maxAngle = +game.maxAngle;
 		if (Number.isNaN(game.playerSize - 0) || game.playerSize > 500 || game.playerSize < 100)
 		{
 			game.playerSize = 300;
 		}
+		else
+			game.playerSize = +game.playerSize
 		if (Number.isNaN(game.playerSpeed - 0) || game.playerSpeed > 3700 || game.playerSpeed < 600)
 		{
 			game.playerSpeed = 1300;
 		}
+		else
+			game.playerSpeed = +game.playerSpeed;
 		if (Number.isNaN(game.winScore - 0) || game.winScore > 21 || game.winScore < 1)
 		{
 			game.winScore = 5;
 		}
+		else
+			game.winScore = +game.winScore;
 		return (game);
 	}
 }

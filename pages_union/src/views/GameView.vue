@@ -132,6 +132,8 @@ function playerCollision() {
 		if (game.player.side === false)
 		game.ball.direction = 180 - game.ball.direction;
 		game.ball.currentSpeed += game.options.ballAccel;
+		if (game.ball.currentSpeed > 3200)
+			game.ball.currentSpeed = 3200;
 		socket.emit('bounce', {x: game.player.racket?.x, y: game.ball.y, direction: game.ball.direction, speed: game.ball.currentSpeed});
 		return true;
 	}
@@ -177,12 +179,10 @@ async function getOptions() {
 	if (!res.data.inGame)
 	{
 		exit = true;
-		router.push('/choose_game');
+		router.replace('/choose_game');
 	}
 	else
 	{
-		res.data.options.ballAccel = +res.data.options.ballAccel;
-		res.data.options.winScore = +res.data.options.winScore;
 		game.options = res.data.options;
 		game.player.side = res.data.side;
 		game.score = res.data.side;
@@ -288,7 +288,7 @@ onBeforeMount(() => {
 	socket.on('gameOver', () => {
 		game.isOver = true;
 		setTimeout(() => {
-			router.push('/choose_game');
+			router.replace('/choose_game');
 		}, 3000);
 	});
 
@@ -298,8 +298,8 @@ onBeforeMount(() => {
 	});
 
 	socket.on('isInGame', (body) => {
-		if (!body.isInGame) {
-			router.push('/choose_game');
+		if (!body.isInGame && !game.isOver) {
+			router.replace('/choose_game');
 		}
 	})
 

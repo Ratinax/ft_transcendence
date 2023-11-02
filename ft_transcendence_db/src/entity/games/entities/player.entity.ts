@@ -2,9 +2,9 @@ export class Player {
 	name: string;
 	id: string;
 	score = 0;
-	isConnected = false;
-	firstPing = false;
-	secondPing = false;
+	isConnected = true;
+	firstPing = true;
+	secondPing = true;
 	nbLoop = 0;
 	updateInGame = false;
 

@@ -9,7 +9,7 @@
 			</div>
 			<div class="range-slider-div">
 				<label>Ball size</label>
-				<input type="range" min="15" max="50" class="range-slider" v-model="ballSize">
+				<input type="range" min="30" max="50" class="range-slider" v-model="ballSize">
 				<input type="text" v-model="ballSize">
 			</div>
 			<div class="range-slider-div">

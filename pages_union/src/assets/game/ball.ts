@@ -23,25 +23,28 @@ export class Ball {
 	}
 
 	randomSpawn(gameWidth: number, gameHeight: number, direction: number, ballSpeed: number) {
-		const x = this.x = gameWidth / 2;
-		this.y = Math.floor(Math.random() * gameHeight);
-		if (this.y < 200)
-			this.y += 200;
-		else if (this.y > gameHeight - 200)
-			this.y -= 200;
-		const	y = this.y;
-		let	up = Math.round(Math.random() * 2);
-		if (up === 0 || up === 1)
-			up = 1;
-		else
-			up = -1;
-		this.direction = Math.round((Math.random() * 30 + 20) * up) + direction * 180;
-		if (this.direction < -180)
-			this.direction += 360;
-		else if (this.direction > 180)
-			this.direction -= 360;
-		const	finalDirection = this.direction;
+		// const x = this.x = gameWidth / 2;
+		// this.y = Math.floor(Math.random() * gameHeight);
+		// if (this.y < 200)
+			// this.y += 200;
+		// else if (this.y > gameHeight - 200)
+			// this.y -= 200;
+		// const	y = this.y;
+		// let	up = Math.round(Math.random() * 2);
+		// if (up === 0 || up === 1)
+			// up = 1;
+		// else
+			// up = -1;
+		// this.direction = Math.round((Math.random() * 30 + 20) * up) + direction * 180;
+		// if (this.direction < -180)
+			// this.direction += 360;
+		// else if (this.direction > 180)
+			// this.direction -= 360;
+		const	finalDirection = 0//this.direction;
 		this.currentSpeed = ballSpeed;
+
+		const x = this.x = gameWidth / 2;
+		const y = this.y = gameHeight / 2;
 
 		return {x: x, y: y, direction: finalDirection};
 	}
