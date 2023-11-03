@@ -14,7 +14,7 @@
 							<img :src="profilePic" alt="User profile picture"> 
 						</div>
 						<div class="row user-name-and-status">
-							<div :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
+							<div v-if="isFriend" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 
@@ -122,10 +122,9 @@ export default defineComponent({
 					userName.value = route.params.pseudo;
 				}
 			}
-			console.log(player)
 			const doUserExists = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/doUserExists/${userName.value}`, {withCredentials: true});
 			if (!doUserExists.data)
-			router.replace({path: '/pagenotfound'})
+				router.replace({path: '/pagenotfound'})
 
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
@@ -135,7 +134,8 @@ export default defineComponent({
 			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo/`, {withCredentials: true})).data);
 			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
 			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
-			isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
+			if (isFriend.value)
+				isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
 			isBlockedBy.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/isBlockedBy/${userName.value}`, {withCredentials: true})).data;
 			
 			if (!showButtons.value)
