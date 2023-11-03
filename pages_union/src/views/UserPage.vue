@@ -122,7 +122,7 @@ export default defineComponent({
 		const router = useRouter();
 		const showButtons = ref<boolean>(false);
 		const userName = ref('');
-		const profilePic = ref(undefined)
+		const profilePic = ref('')
 		const userGamesPlayed = ref(0);
 		const isBlocked = ref(false);
 		const isConnected = ref(false);
@@ -285,23 +285,35 @@ export default defineComponent({
 			}
 			
 			if (file) {
-				const reader = new FileReader();
-				reader.onloadend = () => {
-					imageDataURL = reader.result;
-				};
-				// reader.onloadend
-				await reader.readAsDataURL(file);
+				try {
+					imageDataURL = await readAsDataURLAsync(file);
+				} 
+				catch (e)
+				{
+					console.error(e);
+				}
 			}
 			try
 			{
-				console.log(imageDataURL)
-				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/changePP`, { image: imageDataURL},{ withCredentials: true})
+				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/changePP`, {image: imageDataURL},{ withCredentials: true})).data
+				profilePic.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`,{ withCredentials: true})).data
+				console.log(profilePic.value);
 			}
 			catch (e)
 			{
 				console.error(e);
 			}
 		}
+		function readAsDataURLAsync(file: any) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onload = () => {
+				resolve(reader.result);
+				};
+				reader.onerror = reject;
+				reader.readAsDataURL(file);
+			});
+}
 		onBeforeMount(() =>
 			{
 			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true });
