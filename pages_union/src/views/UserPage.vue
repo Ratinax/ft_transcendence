@@ -1,60 +1,69 @@
 <template>
-	<Menu :page="'Profile'"/>
-	<Qrcode ref="QrcodeRef" :show="showQrcode" @close="showQrcode = false"/>
-	<div class="page-background"></div>
-	<div class="row user-page view">
-		<div class="col user-page-content">
-			<div v-if="isBlockedBy" id="blocked-from-message">
-				<p> <font-awesome-icon :icon="['fas', 'triangle-exclamation']" /> You are Blocked By that user </p>
-			</div>
-			<div class="col user-box">
-				<div class="row user-profile">
-					<div class="col user-profile-pic-and-name">
-						<div class="profile-pic-container">
-							<img :src="profilePic" alt="User profile picture"> 
-						</div>
-						<div class="row user-name-and-status">
-							<div v-if="isFriend === 'accepted'" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
-							<p class="user-name text">{{ nickname }}</p>
-						</div>
-						<p class="text">@{{ userName }}</p>
-
-						<div id="fa2" v-if="!showButtons">
-						<p class="text">2Fa</p>
-							<div class="switch-choice-container">
-								<label class="switch-choice">
-									<input id="fa2-input" class="input-switch" type="checkbox" @click="switch2fa">
-									<span class="slider round-slider"></span>
-								</label>
+	<div>
+		<Menu :page="'Profile'"/>
+		<Qrcode ref="QrcodeRef" :show="showQrcode" @close="showQrcode = false"/>
+		<div class="page-background"></div>
+		<div class="row user-page view">
+			<div class="col user-page-content">
+				<div v-if="isBlockedBy" id="blocked-from-message">
+					<p> <font-awesome-icon :icon="['fas', 'triangle-exclamation']" /> You are Blocked By that user </p>
+				</div>
+				<div class="col user-box">
+					<div class="row user-profile">
+						<div class="col user-profile-pic-and-name">
+							<div class="profile-pic-container">
+								<img :src="profilePic" alt="User profile picture"> 
 							</div>
-							<font-awesome-icon v-if="is2faState" id="see-qrcode" :icon="['fas', 'eye']" @click="seeQrcode"/>
+							<div class="row user-name-and-status">
+								<div v-if="isFriend === 'accepted'" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
+								<div v-if="!changePseudo">
+									<p class="user-name text" @click="changePseudo = true">{{ nickname }}</p>
+								</div>
+								<div v-else>
+									<form @submit.prevent="changeMyPseudo">
+										<input class="user-name-input text" maxlength="8" minlength="3" size="11" v-model=nickname autofocus @keydown.esc="changePseudo = false">
+									</form>
+								</div>
+							</div>
+							<p class="text">@{{ userName }}</p>
+
+							<div id="fa2" v-if="!showButtons">
+							<p class="text">2Fa</p>
+								<div class="switch-choice-container">
+									<label class="switch-choice">
+										<input id="fa2-input" class="input-switch" type="checkbox" @click="switch2fa">
+										<span class="slider round-slider"></span>
+									</label>
+								</div>
+								<font-awesome-icon v-if="is2faState" id="see-qrcode" :icon="['fas', 'eye']" @click="seeQrcode"/>
+							</div>
 						</div>
+						<div class="col user-match-history">
+							<MatchHistory :pseudo="userName" @fetch-datas="fecthData"></MatchHistory>
+						</div> 
 					</div>
-					<div class="col user-match-history">
-						<MatchHistory :pseudo="userName" @fetch-datas="fecthData"></MatchHistory>
-					</div> 
 				</div>
-			</div>
-			<div class="row button-zone">
-				<button v-if="showButtons && isBlocked" class="ft-button red-button" @click="unblockUser">UNBLOCK USER</button>
-				<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button red-button" @click="blockUser">BLOCK USER</button>
-				<button v-if="showButtons && !isBlocked && isFriend === 'accepted'" class="ft-button green-button" @click="removeFriend">REMOVE FRIEND</button>
-				<button v-if="showButtons && !isBlocked && isFriend === 'pending'" class="ft-button green-button" @click="removeFriend">REMOVE FRIEND REQUEST</button>
-				<button v-if="showButtons && !isBlocked && isFriend === '' && !isBlockedBy" class="ft-button green-button" @click="addFriend">ADD FRIEND</button>
-				<button v-if="showButtons && !isBlockedBy" class="ft-button blue-button" @click="sendMessage">Send  message</button>
-			</div>
-			<div class="row user-box user-stats">
-				<div class="col user-stat">
-					<h1 class="text">Game(s) played</h1>
-					<p class="text user-score fade-text">{{ userGamesPlayed }}</p>
+				<div class="row button-zone">
+					<button v-if="showButtons && isBlocked" class="ft-button red-button" @click="unblockUser">UNBLOCK USER</button>
+					<button v-if="showButtons && !isBlocked && isFriend === ''" class="ft-button red-button" @click="blockUser">BLOCK USER</button>
+					<button v-if="showButtons && !isBlocked && isFriend === 'accepted'" class="ft-button green-button" @click="removeFriend">REMOVE FRIEND</button>
+					<button v-if="showButtons && !isBlocked && isFriend === 'pending'" class="ft-button green-button" @click="removeFriend">REMOVE FRIEND REQUEST</button>
+					<button v-if="showButtons && !isBlocked && isFriend === '' && !isBlockedBy" class="ft-button green-button" @click="addFriend">ADD FRIEND</button>
+					<button v-if="showButtons && !isBlockedBy" class="ft-button blue-button" @click="sendMessage">Send  message</button>
 				</div>
-				<div class="col user-stat middle">
-					<h1 class="text">Win rate</h1>
-					<p class="text user-score fade-text">{{userWinRate}}%</p>
-				</div>
-				<div class="col user-stat">
-					<h1 class="text">Win(s)</h1>
-					<p class="text user-score fade-text">{{ userWins }}</p>
+				<div class="row user-box user-stats">
+					<div class="col user-stat">
+						<h1 class="text">Game(s) played</h1>
+						<p class="text user-score fade-text">{{ userGamesPlayed }}</p>
+					</div>
+					<div class="col user-stat middle">
+						<h1 class="text">Win rate</h1>
+						<p class="text user-score fade-text">{{userWinRate}}%</p>
+					</div>
+					<div class="col user-stat">
+						<h1 class="text">Win(s)</h1>
+						<p class="text user-score fade-text">{{ userWins }}</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -63,8 +72,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onUpdated, onBeforeMount, } from 'vue';
-import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
+import { defineComponent, ref, computed, onBeforeMount, } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import Menu from "../components/Menu.vue"
 import MatchHistory from '../components/UserPage/MatchHistory.vue';
 import Qrcode from '../components/UserPage/Qrcode.vue';
@@ -78,6 +87,7 @@ export default defineComponent({
 	{
 		return {
 			showQrcode: false,
+			changePseudo: false,
 		}
 	},
 	methods:
@@ -87,6 +97,9 @@ export default defineComponent({
 			this.showQrcode = true;
 			if (this.$refs.QrcodeRef as typeof Qrcode)
 			(this.$refs.QrcodeRef as typeof Qrcode).getQrCode();
+		},
+		changeMyPseudo() {
+			this.changePseudo = false;
 		}
 	},
 	setup() {
@@ -344,6 +357,10 @@ export default defineComponent({
 	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
 }
 
+.profile-pic-container:hover {
+	cursor: pointer;
+}
+
 .user-name-and-status {
 	margin: .2em 0 1em 0;
 	align-items: center;
@@ -368,6 +385,19 @@ export default defineComponent({
 
 .user-name {
 	font-size: 2em;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.user-name-input {
+	font-size: 2em;
+	display: flex;
+	justify-content: center;
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	background-color: rgb(0, 0, 0, 0);
+}
+
+.user-name:hover {
+	cursor: pointer;
 }
 
 .user-match-history {
