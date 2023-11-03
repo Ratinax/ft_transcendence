@@ -11,7 +11,7 @@
 						<img :src="opponentProfilePic" alt="opponent profile picture">
 					</div>
 					<div class="col">
-						<span v-if="game.player.side">{{ playerName }}</span>
+						<span v-if="game.player.side">{{ nickname }}</span>
 						<span v-else>{{ opponentName }}</span>
 						<span v-if="game.player.side" class="latency">{{ latency }}ms</span>
 						<span v-else class="latency">{{ opponentLatency }}ms</span>
@@ -19,7 +19,7 @@
 				</div>
 				<div class="row right user-info">
 					<div class="col">
-						<span v-if="!game.player.side">{{ playerName }}</span>
+						<span v-if="!game.player.side">{{ nickname }}</span>
 						<span v-else>{{ opponentName }}</span>
 						<span v-if="!game.player.side" class="latency" style="text-align: right;">{{ latency }}ms</span>
 						<span v-else class="latency">{{ opponentLatency }}ms</span>
@@ -51,6 +51,7 @@ const	socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/
 const	router = useRouter();
 
 let		playerName = ref('');
+let		nickname = ref('');
 let		playerProfilePic = ref('');
 let		opponentName = ref('');
 let		opponentProfilePic = ref('');
@@ -172,7 +173,9 @@ function checkGoal() {
 
 async function getOptions() {
 	const pseudo = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true })
+	const nicknameTmp = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/nickname`, { withCredentials: true })
 	playerName.value = pseudo.data;
+	nickname.value = nicknameTmp.data;
 	const res = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/gameOptions/${playerName.value}`, { withCredentials: true });
 	console.log(res.data);
 
@@ -190,11 +193,12 @@ async function getOptions() {
 			game.player.racket = new Racket(game.player.side, 2000, 2000 / (4/3));
 		game.opponent.side = !game.player.side;
 		game.opponent.racket = new Racket(game.opponent.side, 2000, 2000 / (4/3));
-		opponentName.value = res.data.opponentName;
+		opponentName.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/nickname/${res.data.opponentName}`, { withCredentials: true })).data;
+
 		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${playerName.value}`, {withCredentials: true}).then((res) => {
 			playerProfilePic.value = res.data;
 		});
-		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${opponentName.value}`, {withCredentials: true}).then((res) => {
+		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${res.data.opponentName}`, {withCredentials: true}).then((res) => {
 			opponentProfilePic.value = res.data;
 		});
 	}

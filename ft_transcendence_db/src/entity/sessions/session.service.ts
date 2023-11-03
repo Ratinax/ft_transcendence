@@ -46,6 +46,7 @@ export class SessionService{
                 is42User: sessions.user.is42User,
                 doubleFaURL: sessions.user.doubleFaURL,
                 doubleFa: sessions.user.doubleFa,
+                nickname: sessions.user.nickname,
             }));
         return (user[0]);
     }
