@@ -34,7 +34,9 @@ export class FriendshipController {
     async askFriend(@Req() req: Request, @Body() body: {pseudo: string})
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        	throw new UnauthorizedException('You are not able to access this data')
+        	throw new UnauthorizedException('You are not able to access this data');
+		if (!body.pseudo)
+			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const friend = (await this.userService.getUser(body.pseudo))[0];
         
@@ -56,7 +58,9 @@ export class FriendshipController {
     async removeFriend(@Req() req: Request, @Body() body: {pseudo: string})
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        	throw new UnauthorizedException('You are not able to access this data')
+        	throw new UnauthorizedException('You are not able to access this data');
+		if (!body.pseudo)
+			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const friend = (await this.userService.getUser(body.pseudo))[0];
         try

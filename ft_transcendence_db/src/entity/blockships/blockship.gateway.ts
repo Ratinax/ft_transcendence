@@ -23,16 +23,17 @@ export class BlockshipGateway {
     @SubscribeMessage('removeBlockship')
     async refuseBlockship(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, userblocked_id: number}) 
     {
-      if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
-      {
-        throw new UnauthorizedException('You are not connected');
-      }
-      const user = await this.sessionService.getUser(body.sessionCookie);
-      if (!user)
-        throw new BadGatewayException('User not found');
-
-      await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
-      this.server.to(client.id).emit('deleteBlockship');
-      return (true); 
+		if (!body.sessionCookie || !body.userblocked_id)
+			return ;
+    	if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    	{
+    	  throw new UnauthorizedException('You are not connected');
+    	}
+    	const user = await this.sessionService.getUser(body.sessionCookie);
+    	if (!user)
+    	  throw new BadGatewayException('User not found');
+    	await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
+    	this.server.to(client.id).emit('deleteBlockship');
+    	return (true); 
     }
 }

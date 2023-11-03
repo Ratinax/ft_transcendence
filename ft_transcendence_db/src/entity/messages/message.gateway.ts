@@ -8,6 +8,7 @@ import { BlockshipService } from '../blockships/blockship.service';
 import { Channels } from '../channels/channel.entity';
 import { GameService } from '../games/game.service';
 import { gameOptions } from '../games/entities/game.entity';
+import { BadRequestException } from '@nestjs/common';
 
 @WebSocketGateway({
   cors: {
@@ -27,7 +28,8 @@ export class MessagesGateway {
   async create(@ConnectedSocket() client: Socket,
     @MessageBody() body: {sessionCookie: string, channel_id: number, channelName: string, dateSent: Date, message: string, isAGameInvite: boolean, game: gameOptions | undefined}) 
     {
-      console.log('has been called')
+      if (!body.sessionCookie || !body.channel_id || !body.channelName || !body.dateSent || !body.message || !body.isAGameInvite)
+	  	return ;
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
         return ('not connected');
@@ -109,6 +111,8 @@ export class MessagesGateway {
   @SubscribeMessage('removeGameInvite')
   async removeGameInvite(@MessageBody() body: {sessionCookie: string, channelName: string})
   {
+	if (!body.sessionCookie || !body.channelName)
+		throw new BadRequestException('Uncomplete request');
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       return ('not connected');

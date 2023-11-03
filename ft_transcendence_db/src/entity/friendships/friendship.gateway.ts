@@ -22,35 +22,39 @@ export class FriendshipGateway {
     @SubscribeMessage('acceptFriendship')
     async acceptFriendship(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, friend_id: number}) 
     {
-      if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
-      {
-        throw new UnauthorizedException('You are not connected');
-      }
-      const user = await this.sessionService.getUser(body.sessionCookie);
-      if (!user)
-        throw new BadRequestException('Ressource not found');
-      await this.friendshipService.acceptFriendship(user.id, body.friend_id);
-      this.server.to(client.id).emit('acceptFriendship');
+		if (!body || !body.sessionCookie || !body.friend_id)
+			return ;
+    	if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    	{
+    	  throw new UnauthorizedException('You are not connected');
+    	}
+    	const user = await this.sessionService.getUser(body.sessionCookie);
+    	if (!user)
+    	  throw new BadRequestException('Ressource not found');
+    	await this.friendshipService.acceptFriendship(user.id, body.friend_id);
+    	this.server.to(client.id).emit('acceptFriendship');
     }
 
     @SubscribeMessage('removeFriendship')
     async removeFriendship(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, friend_id: number}) 
     {
-      if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
-      {
-        throw new UnauthorizedException('You are not connected');
-      }
-      const user = await this.sessionService.getUser(body.sessionCookie);
-      if (!user)
-        throw new BadRequestException('Ressource not found');
-      try
-      {
-        await this.friendshipService.deleteFriendship(body.friend_id, user.id);
-        this.server.to(client.id).emit('deleteFriendship');
-      }
-      catch (e)
-      {
-        throw new BadRequestException(e);
-      }
+		if (!body || !body.sessionCookie || !body.friend_id)
+			return ;
+    	if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    	{
+    	  throw new UnauthorizedException('You are not connected');
+    	}
+    	const user = await this.sessionService.getUser(body.sessionCookie);
+    	if (!user)
+    	  throw new BadRequestException('Ressource not found');
+    	try
+    	{
+    	  await this.friendshipService.deleteFriendship(body.friend_id, user.id);
+    	  this.server.to(client.id).emit('deleteFriendship');
+    	}
+    	catch (e)
+    	{
+    	  throw new BadRequestException(e);
+    	}
     }
 }
