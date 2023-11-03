@@ -11,14 +11,14 @@
 				<div class="col user-box">
 					<div class="row user-profile">
 						<div class="col user-profile-pic-and-name">
-							<div class="profile-pic-container" @click="chooseImage">
+							<div :class="{'profile-pic-container': true, 'transform-to-button': !showButtons}" @click="chooseImage">
 								<img :src="profilePic" alt="User profile picture"> 
 								<input type="file" accept="image/*" ref="imageInput"  @change="onImageSelect" />
 							</div>
 							<div class="row user-name-and-status">
 								<div v-if="isFriend === 'accepted'" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
 								<div v-if="!changePseudo">
-									<p class="user-name text" @click="changePseudo = true">{{ nickname }}</p>
+									<p :class="{'user-name text': true, 'transform-to-button': !showButtons}" @click="changePseudo = !showButtons">{{ nickname }}</p>
 								</div>
 								<div v-else>
 									<form @submit.prevent="changeMyPseudo">
@@ -258,7 +258,8 @@ export default defineComponent({
 		}
 
 		function	chooseImage() {
-			imageInput.value?.click();
+			if (!showButtons.value)
+				imageInput.value?.click();
 		}
 
 		function	onImageSelect(event: any) {
@@ -408,10 +409,6 @@ export default defineComponent({
 	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
 }
 
-.profile-pic-container:hover {
-	cursor: pointer;
-}
-
 .user-name-and-status {
 	margin: .2em 0 1em 0;
 	align-items: center;
@@ -448,7 +445,7 @@ export default defineComponent({
     text-align: center;
 }
 
-.user-name:hover {
+.transform-to-button:hover {
 	cursor: pointer;
 }
 
