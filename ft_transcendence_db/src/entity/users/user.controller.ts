@@ -108,11 +108,8 @@ export class UserController {
             return ('');
         if (user.is42User && !user.hasPersoPP)
         {
-            console.log('here')
             return (user.profilPic);
         }
-        console.log(user);
-        console.log(`returns : http://${process.env.IP_ADDRESS}:3000/users/image/${user.profilPic}`)
         return (`http://${process.env.IP_ADDRESS}:3000/users/image/${user.profilPic}`);
     }
     @Get('pseudo')
@@ -175,7 +172,6 @@ export class UserController {
             }
         }
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
-        console.log(imagePath)
         return (res.sendFile(imagePath));
     }
     @Get('verify2Fa/:code')
@@ -273,22 +269,18 @@ export class UserController {
     @Post('changePP')
     async changePP(@Req() req: Request, @Body() body: {image: string})
     {
-        console.log('heeerre')
         if (!body.image)
         {
-            console.log('baba')
             throw new BadRequestException('Uncomplete request');
         }
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
-            console.log('baba')
             throw new UnauthorizedException('You are not able to access this data')
         }
-        console.log('heeerre22')
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
         if (!user)
             throw new BadRequestException('Couldn\'t get user');
         const res = await this.userService.changePP(user.id, body.image);
-        return (true);
+        return (res);
     }
 }

@@ -189,7 +189,6 @@ export class ChannelGateway {
     const messageRemoved = await this.messageService.removeGameInvite(user.pseudo);
     if (messageRemoved)
       this.server.to(body.channel.name).emit('removeMessage', {message_id: messageRemoved.id});
-    console.log(res);
     return (res);
   }
   @SubscribeMessage('leaveRoom')

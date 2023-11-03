@@ -120,7 +120,6 @@ export class MessagesGateway {
     const user = await this.sessionService.getUser(body.sessionCookie);
     if (!user)
       return ('not connected');
-    console.log('here', user)
     const gameInvite = await this.messagesService.getGameInvite(user.id);
     if (!gameInvite)
       return ('no such game invite');
