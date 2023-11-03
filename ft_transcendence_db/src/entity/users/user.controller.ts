@@ -12,6 +12,8 @@ export class UserController {
     @Post('signup')
     async signUp(@Body() body: {password: string, image: string, pseudo: string}, @Res({passthrough: true}) res: Response)
     {
+		if (!body.password || !body.image || !body.pseudo)
+			throw new BadRequestException('Uncomplete request');
         if (body.password.length < 8 || body.password.length > 20)
             throw new BadRequestException('Password should be between 8 and 20 caracteres');
         if (body.pseudo.length < 3 || body.pseudo.length > 8)
@@ -31,6 +33,8 @@ export class UserController {
     @Post('signin')
     async signIn(@Body() body: {password: string, pseudo: string}, @Res({passthrough: true}) res: Response)
     {
+		if (!body.password || !body.pseudo)
+			throw new BadRequestException('Uncomplete request');
         const result = await this.userService.signIn(body);
         if (!result || result === 'Wrong password')
         {

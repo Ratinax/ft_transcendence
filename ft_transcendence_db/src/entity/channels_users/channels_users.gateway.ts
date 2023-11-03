@@ -23,6 +23,8 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('findUsersOfChannel')
   async findUsersOfChannel(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, channel: {name: string, channel_id: number}})
   {
+	if (!body || !body.sessionCookie || !body.channel || !body.channel.channel_id || !body.channel.name)
+		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       throw new UnauthorizedException('You are not connected');
@@ -40,6 +42,8 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('banUser')
   async ban(@MessageBody() body: {sessionCookie: string, userBanned: {id: number}, channel: {channel_id: number, name: string}}) 
   {
+	if (!body || !body.sessionCookie || !body.userBanned || !body.userBanned.id || !body.channel || !body.channel.channel_id || !body.channel.name)
+		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       throw new UnauthorizedException('You are not connected');
@@ -67,6 +71,8 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('kickUser')
   async kick(@MessageBody() body: {sessionCookie: string, userKicked: {id: number}, channel: {channel_id: number, name: string}}) 
   {
+	if (!body || !body.sessionCookie || !body.userKicked || !body.userKicked.id || !body.channel || !body.channel.channel_id || !body.channel.name)
+	 return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       throw new UnauthorizedException('You are not connected');
@@ -111,6 +117,8 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('removeAdmin')
   async removeAdmin(@MessageBody() body: {sessionCookie: string, userRemovedAdmin: {id: number}, channel: {channel_id: number, name: string}}) 
   {
+	if (!body || !body.sessionCookie || !body.userRemovedAdmin || !body.userRemovedAdmin.id || !body.channel || !body.channel.channel_id || !body.channel.name)
+		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       throw new UnauthorizedException('You are not connected');
@@ -130,6 +138,8 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('timeoutUser')
   async timeoutUser(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, userTimeouted: {id: number}, channel: {channel_id: number, name: string}, duration_timeout: number})
   {
+	if (!body || !body.sessionCookie || !body.userTimeouted || !body.userTimeouted.id || !body.duration_timeout || body.channel || !body.channel.channel_id || !body.channel.name)
+		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       throw new UnauthorizedException('You are not connected');

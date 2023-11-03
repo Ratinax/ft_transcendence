@@ -27,6 +27,8 @@ export class ChannelGateway {
   @SubscribeMessage('createChannel')
   async create(@ConnectedSocket() client: Socket, @MessageBody() data: {sessionCookie: string, channel: {name: string, password: string, category: string}})
   {
+	if (!data || !data.sessionCookie || !data.channel || !data.channel.category || !data.channel.name || !data.channel.password)
+		return ;
     if (await this.sessionService.getIsSessionExpired(data.sessionCookie))
     {
       throw new UnauthorizedException('You are not connected')
@@ -86,6 +88,8 @@ export class ChannelGateway {
   @SubscribeMessage('joinChannel')
   async join(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, password: string, channelName: string})
   {
+	if (!body || !body.sessionCookie || !body.password || !body.channelName)
+		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
 		throw new UnauthorizedException('You are not connected');
 
@@ -159,6 +163,8 @@ export class ChannelGateway {
   @SubscribeMessage('leaveChannel')
   async leaveChannel(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, channel: {channel_id: number, name: string}}) 
   {
+	if (!body || !body.sessionCookie || !body.channel.channel_id || !body.channel.name)
+		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
 		throw new UnauthorizedException('You are not connected')
@@ -189,6 +195,8 @@ export class ChannelGateway {
   @SubscribeMessage('leaveRoom')
   async leaveRoom(@ConnectedSocket() client: Socket, @MessageBody() body: {channelName: string, sessionCookie: string})
   {
+	if (!body || !body.channelName || !body.sessionCookie)
+		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
 		throw new UnauthorizedException('You are not connected')
@@ -204,6 +212,8 @@ export class ChannelGateway {
   @SubscribeMessage('joinRoom')
   async joinRoom(@ConnectedSocket() client: Socket, @MessageBody() body: {channelName: string, sessionCookie: string})
   {
+	if (!body || !body.channelName || !body.sessionCookie)
+		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
 		throw new UnauthorizedException('You are not connected')

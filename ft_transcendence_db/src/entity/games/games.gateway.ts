@@ -46,6 +46,8 @@ export class GamesGateway {
 
 	@SubscribeMessage('quickPlay')
 	quickPlay(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.name || !body.mode)
+			return ;
 		if (this.gameService.getGameIndex(body.name) === -1) {
 			const infos = this.gameService.addToGame(body.name, body.mode, client.id);
 			this.server.to(client.id).emit('successJoin', infos);
@@ -70,6 +72,8 @@ export class GamesGateway {
 
 	@SubscribeMessage('createCustom')
 	createCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.options || !body.name)
+			return ;
         body.options = this.toGoodInputGame(body.options);
 		const	gameIndex = this.gameService.getGameIndex(body.name);
 		if (gameIndex === -1) {
@@ -80,6 +84,8 @@ export class GamesGateway {
 
 	@SubscribeMessage('joinCustom')
 	joinCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.name || !body.creatorName)
+			return ;
 		const	gameIndex = this.gameService.getGameIndex(body.name);
 		const	joinIndex = this.gameService.getGameIndex(body.creatorName);
 		if (gameIndex === -1 && joinIndex !== -1) {
@@ -95,6 +101,9 @@ export class GamesGateway {
 
 	@SubscribeMessage('updateSocket')
 	updateSocket(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.name)
+			return ;
+
 		const	gameIndex = this.gameService.getGameIndex(body.name);
 
 		if (gameIndex === -1)
@@ -114,6 +123,8 @@ export class GamesGateway {
 
 	@SubscribeMessage('updatePlayerPos')
 	updatePlayerPos(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.pos || !body.direction)
+			return ;
 		const	gameIndex = this.gameService.getGameIndexFromId(client.id);
 		if (gameIndex === -1)
 			return ;
@@ -125,6 +136,8 @@ export class GamesGateway {
 
 	@SubscribeMessage('latency')
 	updateLatency(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.latency)
+			return ;
 		const	gameIndex = this.gameService.getGameIndexFromId(client.id);
 		if (gameIndex === -1)
 			return ;
@@ -167,6 +180,8 @@ export class GamesGateway {
 
 	@SubscribeMessage('spawnBallInfos')
 	spawnBall(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.x || !body.y || !body.direction)
+			return ;
 		const	gameIndex = this.gameService.getGameIndexFromId(client.id);
 		if (gameIndex === -1)
 			return ;
@@ -219,6 +234,8 @@ export class GamesGateway {
 
 	@SubscribeMessage('bounce')
 	bounce(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.x || !body.y || !body.speed || !body.direction)
+			return ;
 		const	gameIndex = this.gameService.getGameIndexFromId(client.id);
 		if (gameIndex === -1)
 			return ;
