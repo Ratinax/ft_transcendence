@@ -98,7 +98,15 @@ export default defineComponent({
 			if (this.$refs.QrcodeRef as typeof Qrcode)
 			(this.$refs.QrcodeRef as typeof Qrcode).getQrCode();
 		},
-		changeMyPseudo() {
+		async changeMyPseudo() {
+			try
+			{
+				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/changeNickname`, {nickname: this.nickname}, {withCredentials: true});
+			}
+			catch (e)
+			{
+				console.error(e);
+			}
 			this.changePseudo = false;
 		}
 	},
