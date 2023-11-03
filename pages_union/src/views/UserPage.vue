@@ -17,6 +17,7 @@
 							<div v-if="isFriend === 'accepted'" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
 							<p class="user-name text">{{ nickname }}</p>
 						</div>
+						<p class="text">@{{ userName }}</p>
 
 						<div id="fa2" v-if="!showButtons">
 						<p class="text">2Fa</p>
