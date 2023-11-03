@@ -11,8 +11,9 @@
 				<div class="col user-box">
 					<div class="row user-profile">
 						<div class="col user-profile-pic-and-name">
-							<div class="profile-pic-container">
+							<div class="profile-pic-container" @click="chooseImage">
 								<img :src="profilePic" alt="User profile picture"> 
+								<input type="file" accept="image/*" ref="imageInput"  @change="onImageSelect" />
 							</div>
 							<div class="row user-name-and-status">
 								<div v-if="isFriend === 'accepted'" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
@@ -117,6 +118,9 @@ export default defineComponent({
 		const isConnected = ref(false);
 		const isFriend = ref('');
 		const userWins = ref(0);
+		const error = ref("");
+		let imageDataURL: any = "";
+		const imageInput = ref<HTMLInputElement | null>(null);
 		const userWinRate = computed(() => {
 			if (userGamesPlayed.value > 0) {
 				return Math.round(userWins.value / userGamesPlayed.value * 100);
@@ -242,6 +246,39 @@ export default defineComponent({
 				console.error(e);
 			}
 		}
+
+		function	chooseImage() {
+			imageInput.value?.click();
+		}
+
+		function	onImageSelect(event: any) {
+			if (error.value === "Bad File Format (required .png .jpg), will be replaced by a default one"
+				|| error.value === 'File too large, must be 50mb max, will be replaced by a default one')
+				error.value = '';
+			const file = event.target.files[0];
+			if (!(file.type === 'image/png' 
+				|| file.type === 'image/jpeg'
+				|| file.type === 'image/jpg'))
+			{
+				error.value = 'Bad File Format (required .png .jpg), will be replaced by a default one';
+				imageDataURL = null;
+				return ;
+			}
+			if (file.size > 50000000)
+			{
+				error.value = 'File too large, must be 50mb max, will be replaced by a default one';
+				imageDataURL = null;
+				return ;
+			}
+			
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = () => {
+					imageDataURL = reader.result;
+				};
+				reader.readAsDataURL(file);
+			}
+		}
 		onBeforeMount(() =>
 			{
 			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true });
@@ -274,6 +311,9 @@ export default defineComponent({
 			sendMessage,
 			switch2fa,
 			fecthData,
+			chooseImage,
+			onImageSelect,
+			imageInput
 		};
 	},
 });
