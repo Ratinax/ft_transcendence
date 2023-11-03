@@ -12,7 +12,7 @@ export class UserController {
     @Post('signup')
     async signUp(@Body() body: {password: string, image: string, pseudo: string}, @Res({passthrough: true}) res: Response)
     {
-		if (!body.password || !body.image || !body.pseudo)
+		if (!body.password || !body.pseudo)
 			throw new BadRequestException('Uncomplete request');
         if (body.password.length < 8 || body.password.length > 20)
             throw new BadRequestException('Password should be between 8 and 20 caracteres');
@@ -269,5 +269,26 @@ export class UserController {
         if (!user || !user.id)
         	throw new UnauthorizedException('You are not able to access this data')
         await this.userService.changeNickname(user.id, body.nickname);
+    }
+    @Post('changePP')
+    async changePP(@Req() req: Request, @Body() body: {image: string})
+    {
+        console.log('heeerre')
+        if (!body.image)
+        {
+            console.log('baba')
+            throw new BadRequestException('Uncomplete request');
+        }
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        {
+            console.log('baba')
+            throw new UnauthorizedException('You are not able to access this data')
+        }
+        console.log('heeerre22')
+        const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
+        if (!user)
+            throw new BadRequestException('Couldn\'t get user');
+        const res = await this.userService.changePP(user.id, body.image);
+        return (true);
     }
 }

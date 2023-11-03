@@ -150,6 +150,36 @@ export class UserService {
         }
     }
 
+    async changeImage(image: string, imageName: string)
+    {
+        let extension;
+        if (!image)
+            return 'default.jpg';
+        else
+            extension = image.substring(11, 15);
+        if (extension === 'jpg;' || extension === 'jpeg')
+            extension = '.jpg';
+        else if (extension === 'png;')
+            extension = '.png'
+        else
+            throw new BadRequestException('Bad file format, (required .png .jpg)');
+        try 
+        {
+            const uniqueFileName = imageName.slice(0, imageName.length - 4) + extension;
+            const uploadDirectory = path.join(__dirname, '../../../', 'images');
+            await fs.promises.mkdir(uploadDirectory, {recursive: true}); // create directory, if already exists do nothing 
+            const filePath = path.join(__dirname, '../../../', 'images', uniqueFileName);
+            // Save image with replacing useles chars and convert it to buffer using base 64 codage
+            const imageBuffer = Buffer.from(image.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''), 'base64'); // remove useless beginning of string
+            fs.writeFileSync(filePath, imageBuffer); //create image
+            return (uniqueFileName);
+        } 
+        catch (error) 
+        {
+            throw new UnauthorizedException('Failed to save image');
+        }
+    }
+
     async comparePasswords(user: {password: string}, password: string)
     {
         return (await bcrypt.compare(password + process.env.PEPPER, user.password));
@@ -240,4 +270,18 @@ export class UserService {
         user.nickname = newNickname;
         return (await this.userRepository.save(user));
     }
+    async changePP(user_id: number, image: string)
+    {
+        const user = await this.userRepository.findOne({where: {id : user_id}});
+        let imageName;
+
+        if (user.is42User)
+            imageName = await this.uploadImage(image);
+        else
+            imageName = await this.changeImage(image, user.profilPic);
+        user.profilPic = imageName;
+        await this.userRepository.save(user);
+        return (true);
+    }
+    
 }

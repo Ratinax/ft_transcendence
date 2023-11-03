@@ -262,7 +262,7 @@ export default defineComponent({
 				imageInput.value?.click();
 		}
 
-		function	onImageSelect(event: any) {
+		async function	onImageSelect(event: any) {
 			if (error.value === "Bad File Format (required .png .jpg), will be replaced by a default one"
 				|| error.value === 'File too large, must be 50mb max, will be replaced by a default one')
 				error.value = '';
@@ -284,10 +284,20 @@ export default defineComponent({
 			
 			if (file) {
 				const reader = new FileReader();
-				reader.onload = () => {
+				reader.onloadend = () => {
 					imageDataURL = reader.result;
 				};
-				reader.readAsDataURL(file);
+				// reader.onloadend
+				await reader.readAsDataURL(file);
+			}
+			try
+			{
+				console.log(imageDataURL)
+				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/changePP`, { image: imageDataURL},{ withCredentials: true})
+			}
+			catch (e)
+			{
+				console.error(e);
 			}
 		}
 		onBeforeMount(() =>
