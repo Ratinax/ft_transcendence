@@ -5,7 +5,7 @@
 		<div class="view col choose-game-container">
 			<div v-if="!isSearching" class="col content">
 				<div class="game-mode" v-for="gameMode in gameModes" :key="gameMode.name" @click="launchGame(gameMode)">
-					<img :src="getImageURL(gameMode .img)"/>
+					<img :src="getImageURL(gameMode.img)"/>
 					<p>{{gameMode.name}}</p>
 				</div>
 			</div>

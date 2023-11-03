@@ -177,7 +177,7 @@ export class ChannelsUsersService {
         const users = usersAndChannels.map((channelsUsers) => ({
             id: channelsUsers.user.id, 
             pseudo: channelsUsers.user.pseudo, 
-            profilPic: channelsUsers.user.is42User ? channelsUsers.user.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${channelsUsers.user.profilPic}`,
+            profilPic: (channelsUsers.user.is42User && !channelsUsers.user.hasPersoPP) ? channelsUsers.user.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/image/${channelsUsers.user.profilPic}`,
             isBanned: channelsUsers.isBanned,
             }));
         return (users);
