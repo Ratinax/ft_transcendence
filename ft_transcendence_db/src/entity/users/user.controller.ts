@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, Query, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Param, Post, Query, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Request, Response } from 'express';
 import * as path from 'path';
@@ -40,7 +40,7 @@ export class UserController {
         const uri = result.uri;
         if (user.is42User)
         {
-            throw new BadRequestException('This is a user registered using login with 42');
+            throw new ForbiddenException('This is a user registered using login with 42');
         }
         if (!uri)
         {
@@ -65,7 +65,7 @@ export class UserController {
                 throw new BadRequestException('Couldn\'t log you in');
             const result = await this.userService.login42({pseudo: infos.data.login, profilPic: infos.data.image.link});
             if (!result)
-                throw new BadRequestException('There\'s allready a user with that username');
+                throw new ForbiddenException('There\'s allready a user with that username');
             const user = result.user;
             const uri = result.uri;
             if (!uri)
@@ -75,8 +75,6 @@ export class UserController {
                 if (!infos)
                     throw new UnauthorizedException('Couldn\'t log you in');
                 res.cookie('SESSION_KEY', session.sessionKey, {httpOnly: true, expires: new Date(session.expirationDate)});
-                // res.cookie('42_TOKEN', token.data.access_token, {httpOnly: true, expires: new Date(Date.now() + token.data.expires_in * 1000)});
-                // res.cookie('42_REFRESH', token.data.refresh_token, {httpOnly: true, maxAge: 1000000000}); // TODO check if we indeed remove that
                 return (true);
             }
             res.cookie('2FAKEY', user.pseudo, {httpOnly: true, expires: new Date(Date.now() + 30000)});

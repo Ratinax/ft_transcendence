@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Users } from './user.entity';
 import * as fs from 'fs';
@@ -21,7 +21,7 @@ export class UserService {
         
         if (userFound)
         {
-            throw new UnauthorizedException('User already exists');
+            throw new ForbiddenException('User already exists');
         }
         try 
         {
