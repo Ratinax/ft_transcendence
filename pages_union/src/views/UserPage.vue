@@ -30,7 +30,7 @@
 						</div>
 					</div>
 					<div class="col user-match-history">
-						<MatchHistory :pseudo="userName" @fetch-datas="fetchDatas"></MatchHistory>
+						<MatchHistory :pseudo="userName" @fetch-datas="fecthData"></MatchHistory>
 					</div> 
 				</div>
 			</div>
@@ -111,15 +111,18 @@ export default defineComponent({
 			}
 		})
 		async function	fecthData(player: string | null) {
-			const route = useRoute();
-			if (route && typeof route.params.pseudo === 'string'){
-				userName.value = route.params.pseudo;
-			}
-			console.log(player)
 			if (player)
 			{
 				userName.value = player;
 			}
+			else
+			{
+				const route = useRoute();
+				if (route && typeof route.params.pseudo === 'string'){
+					userName.value = route.params.pseudo;
+				}
+			}
+			console.log(player)
 			const doUserExists = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/doUserExists/${userName.value}`, {withCredentials: true});
 			if (!doUserExists.data)
 			router.replace({path: '/pagenotfound'})
@@ -222,10 +225,6 @@ export default defineComponent({
 				console.error(e);
 			}
 		}
-		function fetchDatas(player: string)
-		{
-			fecthData(player)
-		}
 		onBeforeMount(() =>
 			{
 			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true });
@@ -256,7 +255,7 @@ export default defineComponent({
 			addFriend,
 			sendMessage,
 			switch2fa,
-			fetchDatas,
+			fecthData,
 		};
 	},
 });

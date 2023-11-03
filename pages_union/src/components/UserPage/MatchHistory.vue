@@ -38,6 +38,7 @@ export default defineComponent({
 	props: {
 		pseudo: String,
 	},
+	emits: ["fetch-datas"],
 	setup(props, context) {
 
 		const userPseudo = ref(props.pseudo);
