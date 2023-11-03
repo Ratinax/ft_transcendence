@@ -104,7 +104,9 @@ export class UserService {
             return token;
         }
         catch (e)
+        {
         	throw new UnauthorizedException('You are not able to access this data')
+        }
     }
 
     generateRandomString(length: number): string

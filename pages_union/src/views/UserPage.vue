@@ -14,7 +14,7 @@
 							<img :src="profilePic" alt="User profile picture"> 
 						</div>
 						<div class="row user-name-and-status">
-							<div v-if="isFriend" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
+							<div v-if="isFriend === 'accepted'" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
 							<p class="user-name text">{{ userName }}</p>
 						</div>
 
@@ -134,7 +134,7 @@ export default defineComponent({
 			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo/`, {withCredentials: true})).data);
 			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
 			isFriend.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/friendships/friendRelation/${userName.value}`, {withCredentials: true})).data;
-			if (isFriend.value)
+			if (isFriend.value === 'accepted')
 				isConnected.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/isConnected/${userName.value}`, {withCredentials: true})).data;
 			isBlockedBy.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/isBlockedBy/${userName.value}`, {withCredentials: true})).data;
 			

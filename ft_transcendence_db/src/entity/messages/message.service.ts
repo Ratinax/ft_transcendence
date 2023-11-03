@@ -118,7 +118,7 @@ export class MessageService {
     }
     async getGameInvite(user_id: number)
     {
-        console.log(user_id);
+        // console.log(user_id);
         const gameInvite = await this.messageRepository.findOne({where: {user: {id: user_id}, isAGameInvite: true}});
         if (gameInvite)
             return (gameInvite);
