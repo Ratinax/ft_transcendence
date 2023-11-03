@@ -33,6 +33,9 @@ export class Users {
     @Column({name: 'is_42_user', type: 'boolean', default: false})
     is42User: Boolean;
 
+    @Column({name: 'has_perso_pp', type: 'boolean', default: false})
+    hasPersoPP: Boolean;
+
     @Column({name: 'double_fa', type: 'boolean', default: false})
     doubleFa: Boolean;
 

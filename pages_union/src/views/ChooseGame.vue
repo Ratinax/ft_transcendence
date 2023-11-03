@@ -85,7 +85,7 @@ export default defineComponent({
 	{
 		getImageURL(img: string)
         {
-            return (`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/images/${img}`);
+            return (`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/image/${img}`);
         },
         launchGame(gameMode: {name: string, mode: number})
         {

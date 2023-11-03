@@ -81,7 +81,6 @@ export class UserService {
         }
         else if (userFrom42)
         {
-            userFrom42.profilPic = user.profilPic;
             await this.userRepository.save(userFrom42);
             if (userFrom42.doubleFa)
             {
@@ -180,6 +179,7 @@ export class UserService {
             profilPic: user.is42User ? user.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`,
             is42User: user.is42User,
             nickname: user.nickname,
+            hasPersoPP: user.hasPersoPP,
             }));
         return (usersMapped);
     }
@@ -195,6 +195,7 @@ export class UserService {
             is42User: user.is42User,
             doubleFa: user.doubleFa,
             nickname: user.nickname,
+            hasPersoPP: user.hasPersoPP,
             }));
         return (usersMapped);
     }

@@ -106,11 +106,13 @@ export class UserController {
         const user = (await this.userService.getUser(pseudo))[0];
         if (!user)
             return ('');
-        if (user.is42User)
+        if (user.is42User && !user.hasPersoPP)
         {
+            console.log('here')
             return (user.profilPic);
         }
-        return (`http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`);
+        console.log(user.profilPic)
+        return (`http://${process.env.IP_ADDRESS}:3000/users/image/${user.profilPic}`);
     }
     @Get('pseudo')
     async getPSeudo(@Req() req: Request)
@@ -154,7 +156,7 @@ export class UserController {
             throw new UnauthorizedException('Couldn\'t get user');
         return (true);
     }
-    @Get('/images/:imageName')
+    @Get('/image/:imageName')
     async getImage(@Param('imageName') imageName: string, @Req() req: Request, @Res() res: Response) 
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
@@ -164,7 +166,7 @@ export class UserController {
         {
             if (users[i].profilPic === imageName)
             {
-                if (users[i].is42User)
+                if (users[i].is42User && !users[i].hasPersoPP)
                 {
                     return (res.sendFile(imageName));
                 }
@@ -172,6 +174,7 @@ export class UserController {
             }
         }
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
+        console.log('imagePath')
         return (res.sendFile(imagePath));
     }
     @Get('verify2Fa/:code')
