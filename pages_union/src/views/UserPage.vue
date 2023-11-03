@@ -105,7 +105,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				this.nickname = this.nicknameTmp;
 			}
 			this.changePseudo = false;
 		}
@@ -114,6 +114,7 @@ export default defineComponent({
 		let socket;
 
 		const nickname = ref('');
+		const nicknameTmp = ref('');
 		const isBlockedBy = ref(false);
 		const is2faState = ref(false);
 		const router = useRouter();
@@ -151,6 +152,7 @@ export default defineComponent({
 				router.replace({path: '/pagenotfound'})
 		
 			nickname.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/nickname/${userName.value}`, {withCredentials: true})).data;
+			nicknameTmp.value = nickname.value;
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
 			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/games-wins/${userName.value}`, {withCredentials: true});
@@ -265,6 +267,7 @@ export default defineComponent({
 		})
 		return { userName,
 			nickname,
+			nicknameTmp,
 			profilePic, 
 			userGamesPlayed, 
 			userWins, 
@@ -402,6 +405,7 @@ export default defineComponent({
 	justify-content: center;
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	background-color: rgb(0, 0, 0, 0);
+    text-align: center;
 }
 
 .user-name:hover {
