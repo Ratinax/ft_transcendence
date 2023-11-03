@@ -123,7 +123,7 @@ export class GamesGateway {
 
 	@SubscribeMessage('updatePlayerPos')
 	updatePlayerPos(@ConnectedSocket() client: Socket, @MessageBody() body) {
-		if (!body || !body.pos || !body.direction)
+		if (!body || !body.pos)
 			return ;
 		const	gameIndex = this.gameService.getGameIndexFromId(client.id);
 		if (gameIndex === -1)
