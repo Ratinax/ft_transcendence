@@ -176,11 +176,12 @@ export class UserService {
         const usersMapped = users.map((user) => ({
             id: user.id, 
             pseudo: user.pseudo, 
-            profilPic: user.is42User ? user.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`,
+            profilPic: (user.is42User && !user.hasPersoPP) ? user.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/image/${user.profilPic}`,
             is42User: user.is42User,
             nickname: user.nickname,
             hasPersoPP: user.hasPersoPP,
             }));
+        console.log(usersMapped);
         return (usersMapped);
     }
     async getUser(username: string)

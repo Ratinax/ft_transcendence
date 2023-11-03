@@ -111,7 +111,8 @@ export class UserController {
             console.log('here')
             return (user.profilPic);
         }
-        console.log(user.profilPic)
+        console.log(user);
+        console.log(`returns : http://${process.env.IP_ADDRESS}:3000/users/image/${user.profilPic}`)
         return (`http://${process.env.IP_ADDRESS}:3000/users/image/${user.profilPic}`);
     }
     @Get('pseudo')
@@ -174,7 +175,7 @@ export class UserController {
             }
         }
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
-        console.log('imagePath')
+        console.log(imagePath)
         return (res.sendFile(imagePath));
     }
     @Get('verify2Fa/:code')
