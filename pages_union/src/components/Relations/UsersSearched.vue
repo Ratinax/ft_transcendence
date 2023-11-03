@@ -5,7 +5,8 @@
 				<div class="circle">
 					<img :src="user.profilPic" >
 				</div>
-				<p class="text user-searched-pseudo">{{ user.pseudo }}</p>
+				<p class="text user-searched-pseudo">{{ user.nickname }}</p>
+				<p class="text user-searched-pseudo grey">@{{ user.pseudo }}</p>
 			</div>
 		</div>
 	</Transition>
@@ -24,10 +25,10 @@ export default defineComponent({
 		show: Boolean,
 	},
 	data()
-{
+	{
 		return {
 			router: useRouter(),
-			listUsersSearched: [] as Array<{id: number, pseudo: string, profilPic: string, is42User: boolean}>,
+			listUsersSearched: [] as Array<{id: number, pseudo: string, nickname: string, profilPic: string}>,
 		}
 	},
 	methods:
@@ -51,7 +52,7 @@ export default defineComponent({
 				}
 			}
 		},
-		goToProfil(user: {id: number, pseudo: string, profilPic: string, is42User: boolean})
+		goToProfil(user: {id: number, pseudo: string, profilPic: string})
 		{
 			this.router.push({name: 'UserPage', params: {pseudo: user.pseudo}})
 		},
@@ -71,6 +72,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+.grey
+{
+	color: grey;
+}
 
 .showUserSearchResult-enter-active,
 .showUserSearchResult-leave-active {

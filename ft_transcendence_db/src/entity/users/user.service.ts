@@ -172,13 +172,14 @@ export class UserService {
     async getUsers(userPart: string)
     {
         const users = await this.userRepository.createQueryBuilder('users')
-        .where('pseudo LIKE :userPart', { userPart: `%${userPart}%` })
+        .where('pseudo LIKE :userPart OR nickname LIKE :userPart', { userPart: `%${userPart}%` })
             .getMany();
         const usersMapped = users.map((user) => ({
             id: user.id, 
             pseudo: user.pseudo, 
             profilPic: user.is42User ? user.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${user.profilPic}`,
             is42User: user.is42User,
+            nickname: user.nickname,
             }));
         return (usersMapped);
     }
