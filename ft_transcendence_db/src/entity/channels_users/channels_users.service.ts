@@ -30,6 +30,7 @@ export class ChannelsUsersService {
             id: channelsUsers.user.id, 
             pseudo: channelsUsers.user.pseudo, 
             profilPic: channelsUsers.user.profilPic, 
+            nickname: channelsUsers.user.nickname,
             isOwner: channelsUsers.isOwner,
             isAdmin: channelsUsers.isAdmin, 
             isBanned: channelsUsers.isBanned,

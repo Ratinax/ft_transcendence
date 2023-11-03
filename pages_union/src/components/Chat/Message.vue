@@ -1,13 +1,13 @@
 <template>
 	<div class="message-container">
 		<div v-if="!isAGameInvite" class="message-content" :class="{sent: isSender}">
-			<p class="username" v-if="!isSender">{{ username }}</p>
+			<p class="username" v-if="!isSender">{{ nickname }}</p>
 			<p class="message text" :class="{sent: isSender}" >{{ content }}</p>
 		</div>
 		<div v-else-if="!isSender" class="invite-box">
 			<p class="invite">
 				<span style="color: var(--pcyan)">
-					{{ username }}
+					{{ nickname }}
 				</span> sent a Pong game invite !
 			</p>
 			<button class="ft-button green-button" @click="joinGame">ACCEPT</button>
@@ -26,6 +26,7 @@ import axios from 'axios';
 export default defineComponent({
 	name: "Message-Component",
 	props: {
+		nickname: String,
 		username: String,
 		content: String,
 		isAGameInvite: Boolean,

@@ -225,4 +225,15 @@ export class UserController {
             return (false);
         return (true);
     }
+
+    @Get('nickname/:username')
+    async nickname(@Req() req: Request, @Param('username') username: string)
+    {
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        	throw new UnauthorizedException('You are not able to access this data')
+        const user = await this.userService.getUser(username);
+        if (!user || !user[0])
+            return (false);
+        return (user[0].nickname);
+    }
 }

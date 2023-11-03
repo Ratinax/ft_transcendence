@@ -9,7 +9,7 @@
 					<div class="profile-pic-container" @click="goToUserPage(playerOne?.pseudo)">
 						<img :src="playerOne?.profilPic" :alt="playerOne?.pseudo">
 					</div>
-					<span class="text user-pseudo" @click="goToUserPage(playerOne?.pseudo)">{{ playerOne?.pseudo }}</span>
+					<span class="text user-pseudo" @click="goToUserPage(playerOne?.pseudo)">{{ playerOne?.nickname }}</span>
 				</div>
 				<font-awesome-icon v-if=" playerOneScore && playerTwoScore && playerOneScore > playerTwoScore" class="win right" icon="fa-solid fa-w" size="xl" />
 				<font-awesome-icon v-else class="loss right" icon="fa-solid fa-l" size="xl"/>
@@ -26,7 +26,7 @@
 					<div class="profile-pic-container" @click="goToUserPage(playerTwo?.pseudo)">
 						<img :src="playerTwo?.profilPic" :alt="playerTwo?.pseudo">
 					</div>
-					<span class="text user-pseudo" @click="goToUserPage(playerTwo?.pseudo)">{{ playerTwo?.pseudo }}</span>
+					<span class="text user-pseudo" @click="goToUserPage(playerTwo?.pseudo)">{{ playerTwo?.nickname }}</span>
 				</div>
 			</div>
 		</div>
@@ -38,6 +38,7 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 interface UserInfo {
+	nickname: string,
 	pseudo: string,
 	profilPic: string,	
 }
@@ -45,7 +46,6 @@ interface UserInfo {
 export default defineComponent({
 	name: "MatchScore",
 	props: {
-		pseudo: String,	
 		playerOneData: Object as () => UserInfo,
 		playerTwoData: Object as () => UserInfo,
 		playerOneScore: Number,

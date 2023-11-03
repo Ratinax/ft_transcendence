@@ -1,7 +1,8 @@
 <template>
   <div ref="messageContainer" class="messages">
     <Message v-for="message in messages" :key="message.id"
-			:username="message.user.pseudo" 
+			:username="message.user.pseudo"
+      :nickname="message.user.nickname"
 			:content="message.content" 
 			:isAGameInvite="message.isAGameInvite"
 			:isSender="message.isSender"
@@ -21,7 +22,7 @@ import { Socket } from 'socket.io-client';
 
 interface messageData {
   id: number,
-  user: {pseudo: string},
+  user: {pseudo: string, nickname: string},
   content: string,
   isAGameInvite: boolean,
   isSender: boolean

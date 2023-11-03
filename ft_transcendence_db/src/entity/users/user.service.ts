@@ -34,7 +34,8 @@ export class UserService {
         const user = {
             pseudo: body.pseudo,
             password: await this.hashedPassword(body.password),
-            profilPic: imageName
+            profilPic: imageName,
+            nickname: body.pseudo,
         };
         const newUser = this.userRepository.create(user);
         const res = await this.userRepository.save(newUser);
@@ -67,7 +68,7 @@ export class UserService {
         	throw new UnauthorizedException('You are not able to access this data')
         else if (!userFromPseudo && !userFrom42)
         {
-            const userToCreate = {pseudo: user.pseudo, profilPic: user.profilPic, is42User: true};
+            const userToCreate = {pseudo: user.pseudo, profilPic: user.profilPic, is42User: true, nickname: user.pseudo};
             const newUser = this.userRepository.create(userToCreate);
             const res = await this.userRepository.save(newUser);
             if (!res)
@@ -192,6 +193,7 @@ export class UserService {
             profilPic: user.profilPic,
             is42User: user.is42User,
             doubleFa: user.doubleFa,
+            nickname: user.nickname,
             }));
         return (usersMapped);
     }

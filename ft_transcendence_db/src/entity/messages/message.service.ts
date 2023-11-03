@@ -35,6 +35,7 @@ export class MessageService {
                 user:
                 {
                     pseudo: message.user.pseudo,
+                    nickname: message.user.nickname,
                 },
                 content: message.content,
                 isAGameInvite: message.isAGameInvite,

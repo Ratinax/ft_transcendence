@@ -1,7 +1,6 @@
 <template>
 	<MatchScore v-for="match in matchHistory"
 		:key="match.id"
-		:pseudo="userPseudo"
 		:playerOneData="match.playerOne"
 		:playerTwoData="match.playerTwo"
 		:playerOneScore="match.scorePlayerOne"
@@ -20,10 +19,12 @@ import axios from 'axios';
 interface MatchHistory {
 	id: number,
 	playerOne: {
+		nickname: string,
 		pseudo: string,
 		profilPic: string,
 	},
 	playerTwo: {
+		nickname: string,
 		pseudo: string,
 		profilPic: string,
 	},
@@ -41,7 +42,6 @@ export default defineComponent({
 	emits: ["fetch-datas"],
 	setup(props, context) {
 
-		const userPseudo = ref(props.pseudo);
 		const matchHistory = ref<MatchHistory[]>();
 
 		onBeforeMount(async () => {
@@ -55,7 +55,7 @@ export default defineComponent({
 		{
 			context.emit('fetch-datas', player);
 		}
-		return { userPseudo, matchHistory, fetchDatas };
+		return { matchHistory, fetchDatas };
 	}
 });
 </script>
