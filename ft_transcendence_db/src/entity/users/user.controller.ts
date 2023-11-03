@@ -240,7 +240,7 @@ export class UserController {
         return (user[0].nickname);
     }
     @Get('nickname')
-    async getNickname(@Req() req: Request, @Param('username') username: string)
+    async getNickname(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         {
@@ -251,5 +251,17 @@ export class UserController {
             throw new UnauthorizedException('You are not able to access this data')
 
         return (user.nickname);
+    }
+    @Post('changeNickname')
+    async changeNickname(@Body() body: {nickname: string}, @Req() req: Request)
+    {
+        if (!body.nickname)
+			throw new BadRequestException('Uncomplete request');
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
+        	throw new UnauthorizedException('You are not able to access this data')
+        const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
+        if (!user || !user.id)
+        	throw new UnauthorizedException('You are not able to access this data')
+        await this.userService.changeNickname(user.id, body.nickname);
     }
 }
