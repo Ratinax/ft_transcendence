@@ -19,7 +19,8 @@ export class BlockshipService {
             .getMany();
         const users = blockships.map((blockship) => ({
             id: blockship.userblocked.id, 
-            pseudo: blockship.userblocked.pseudo, 
+            pseudo: blockship.userblocked.pseudo,
+            nickname: blockship.userblocked.nickname,
             profilPic: blockship.userblocked.profilPic, 
             }));
         return (users);

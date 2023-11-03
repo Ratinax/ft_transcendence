@@ -6,7 +6,7 @@
 		<div v-if="users.length" class="col users-relations">
 			<User v-for="user in users" 
 				:key="user.id" 
-				:user="user" 
+				:user="user"
 				:isARequest="isFriendRequestList" 
 				@accept-friendship="onAcceptFriendship" 
 				@remove-relation="onRemoveRelation"/>
@@ -38,9 +38,9 @@ export default defineComponent({
 		headerText: String,
 	},
 	data()
-{
+	{
 		return {
-			users: [] as Array<{pseudo: string, profilPic: string, isConnected: boolean, id: number}> ,
+			users: [] as Array<{pseudo: string, nickname: string, profilPic: string, isConnected: boolean, id: number}> ,
 		}
 	},
 	async created()
@@ -69,10 +69,6 @@ export default defineComponent({
 		onAcceptFriendship(asking_user_id: number)
 		{
 			this.$emit('accept-friendship', {friend_id : asking_user_id})
-		},
-		updateFriendList(users: Array<{pseudo: string, profilPic: string, isConnected: boolean, id: number}> )
-		{
-			this.users = users;
 		},
 		onRemoveRelation(removed_user_id: number)
 		{

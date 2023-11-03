@@ -3,7 +3,7 @@
         <div class="round-image-container">
             <img :src="profilPic" alt="Image" @click.prevent="goToProfil"/>
         </div>
-        <span class="user-pseudo text" @click.prevent="goToProfil"> {{ user?.pseudo }}</span>
+        <span class="user-pseudo text" @click.prevent="goToProfil"> {{ user?.nickname }}</span>
 		<div class="user-buttons">
 			<button @click.prevent="accept" v-if="isARequest" class="ft-button green-button">
 				<font-awesome-icon icon="fa-solid fa-check" />

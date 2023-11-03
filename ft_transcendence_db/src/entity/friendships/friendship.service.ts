@@ -25,11 +25,13 @@ export class FriendshipService {
             .getMany();
         const usersFromFriend = friendshipsFromFriend.map((friendship) => ({
             id: friendship.friend.id, 
-            pseudo: friendship.friend.pseudo, 
+            pseudo: friendship.friend.pseudo,
+            nickname: friendship.friend.nickname,
             profilPic: friendship.friend.profilPic}));
         const usersFromUser = friendshipsFromUser.map((friendship) => ({
             id: friendship.user.id, 
-            pseudo: friendship.user.pseudo, 
+            pseudo: friendship.user.pseudo,
+            nickname: friendship.user.nickname,
             profilPic: friendship.user.profilPic}));
         return ([...usersFromFriend, ...usersFromUser]);
     }
@@ -46,6 +48,7 @@ export class FriendshipService {
         const usersAsking = friensdAsking.map((friendship) => ({
             id: friendship.user.id, 
             pseudo: friendship.user.pseudo, 
+            nickname: friendship.user.nickname, 
             profilPic: friendship.user.profilPic}));
         return (usersAsking);
     }
