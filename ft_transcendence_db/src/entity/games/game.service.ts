@@ -188,10 +188,12 @@ export class GameService {
         .getMany();
         const gameHistory = games.map((game) => ({
             playerOne: {
+				nickname: game.playerOne.nickname,
                 pseudo: game.playerOne.pseudo,
                 profilPic: game.playerOne.is42User ? game.playerOne.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${game.playerOne.profilPic}`,
             },
             playerTwo: {
+				nickname: game.playerTwo.nickname,
                 pseudo: game.playerTwo.pseudo,
                 profilPic: game.playerTwo.is42User ? game.playerTwo.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/images/${game.playerTwo.profilPic}`,
 

@@ -193,6 +193,7 @@ export class UserService {
             profilPic: user.profilPic,
             is42User: user.is42User,
             doubleFa: user.doubleFa,
+            nickname: user.nickname,
             }));
         return (usersMapped);
     }

@@ -15,7 +15,7 @@
 						</div>
 						<div class="row user-name-and-status">
 							<div v-if="isFriend === 'accepted'" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
-							<p class="user-name text">{{ userName }}</p>
+							<p class="user-name text">{{ nickname }}</p>
 						</div>
 
 						<div id="fa2" v-if="!showButtons">
@@ -91,6 +91,7 @@ export default defineComponent({
 	setup() {
 		let socket;
 
+		const nickname = ref('');
 		const isBlockedBy = ref(false);
 		const is2faState = ref(false);
 		const router = useRouter();
@@ -122,10 +123,12 @@ export default defineComponent({
 					userName.value = route.params.pseudo;
 				}
 			}
+			
 			const doUserExists = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/doUserExists/${userName.value}`, {withCredentials: true});
 			if (!doUserExists.data)
 				router.replace({path: '/pagenotfound'})
-
+		
+			nickname.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/nickname/${userName.value}`, {withCredentials: true})).data;
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
 			const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/games-wins/${userName.value}`, {withCredentials: true});
@@ -238,7 +241,8 @@ export default defineComponent({
 				})
 				fecthData(null);
 		})
-		return { userName, 
+		return { userName,
+			nickname,
 			profilePic, 
 			userGamesPlayed, 
 			userWins, 
@@ -262,7 +266,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 #blocked-from-message
 {
 	text-align: center;
