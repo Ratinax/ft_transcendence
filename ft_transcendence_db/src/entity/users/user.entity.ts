@@ -20,6 +20,9 @@ export class Users {
   
     @Column({ type: 'varchar', length: 20, unique: true })
     pseudo: string;
+
+    @Column({ type: 'varchar', length: 20})
+    nickname: string;
     
     @Column({ type: 'varchar', length: 100, default: ''})
     password: string;

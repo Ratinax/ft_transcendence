@@ -34,11 +34,11 @@ import { defineComponent } from 'vue';
 import UsersBanned from './UsersBanned.vue';
 
 interface UserData {
-	id: number, 
+	id: number,
 	isOwner: boolean, 
-	isAdmin: boolean, 
-	isConnected: boolean, 
-	pseudo: string
+	isAdmin: boolean,
+	pseudo: string,
+	nickname: string,
 }
 
 export default defineComponent({
@@ -84,7 +84,7 @@ export default defineComponent({
 			else
 			this.userInChannel = null;
 		},
-		updateListUsers(users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>)
+		updateListUsers(users: Array<UserData>)
 		{
 			this.users = users;
 			this.setAccessWrites();

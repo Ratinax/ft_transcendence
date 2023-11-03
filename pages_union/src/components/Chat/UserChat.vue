@@ -6,7 +6,7 @@
 				@click="handleUserClicked">
 				<font-awesome-icon v-if="userInChat?.isAdmin || userInChat?.isOwner" icon="fa-solid fa-crown" size="xs" />
 				<font-awesome-icon v-else icon="fa-solid fa-user" size="xs" />
-				{{ userInChat?.pseudo }}
+				{{ userInChat?.nickname }}
 			</span>
 		</div>
 		<div v-if="isSelected" class="option-list">
