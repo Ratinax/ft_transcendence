@@ -232,4 +232,11 @@ export class UserService {
             return (null);
         return (user[0].doubleFaAscii);
     }
+    async changeNickname(user_id: number, newNickname: string)
+    {
+        const user = await this.userRepository.findOne({where: {id : user_id}});
+     
+        user.nickname = newNickname;
+        return (await this.userRepository.save(user));
+    }
 }
