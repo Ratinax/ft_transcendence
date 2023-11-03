@@ -13,7 +13,7 @@
 						<div class="col user-profile-pic-and-name">
 							<div :class="{'profile-pic-container': true, 'transform-to-button': !showButtons}" @click="chooseImage">
 								<img :src="profilePic" alt="User profile picture"> 
-								<input type="file" accept="image/*" ref="imageInput"  @change="onImageSelect" />
+								<input type="file" accept="image/*" ref="imageInput" style="display: none" @change="onImageSelect" />
 							</div>
 							<div class="row user-name-and-status">
 								<div v-if="isFriend === 'accepted'" :class="{'connect': isConnected, 'not-connect': !isConnected}"></div>
@@ -88,7 +88,7 @@ export default defineComponent({
 	{
 		return {
 			showQrcode: false,
-			changePseudo: false,
+			// changePseudo: false,
 		}
 	},
 	methods:
@@ -115,6 +115,7 @@ export default defineComponent({
 		let socket;
 
 		const nickname = ref('');
+		const changePseudo = ref(false)
 		const nicknameTmp = ref('');
 		const isBlockedBy = ref(false);
 		const is2faState = ref(false);
@@ -139,6 +140,7 @@ export default defineComponent({
 			}
 		})
 		async function	fecthData(player: string | null) {
+			changePseudo.value = false;
 			if (player)
 			{
 				userName.value = player;
@@ -335,7 +337,8 @@ export default defineComponent({
 			fecthData,
 			chooseImage,
 			onImageSelect,
-			imageInput
+			imageInput,
+			changePseudo
 		};
 	},
 });
