@@ -2,10 +2,8 @@
 	<div class="page-background"></div>
 	<div class="double-fa-page">
 		<div>
-			<img :src="qrlink" id="qrcode-doublefa"/>
-			<div id="numbers-input-container">
-				<form  @submit.prevent="check2Fa">
-					<div class="input-numbers">
+			<form  @submit.prevent="check2Fa">
+				<div class="input-numbers">
 					<input class="code" ref="digit1" v-model="digits[0]" placeholder="0" type="text"/>
 					<input class="code" ref="digit2" v-model="digits[1]" placeholder="0" type="text"/>
 					<input class="code" ref="digit3" v-model="digits[2]" placeholder="0" type="text"/>
@@ -20,15 +18,13 @@
 					</Transition>
 				</div>
 			</form>
-			</div>
 			<div id="loader"></div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { useRoute, useRouter } from 'vue-router';
-import qrcode from 'qrcode';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 
@@ -38,9 +34,7 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			route: useRoute(),
 			router: useRouter(),
-			qrlink: '',
 			timeLeft: 30,
 			interValId: null as any,
 			digits: ['', '', '', '', '', ''],
@@ -54,6 +48,7 @@ export default defineComponent({
 		if (!timeLeftString)
 			timeLeftString = '';
 		let timeLeft;
+		console.log(timeLeftString)
 		if (timeLeftString === '')
 			timeLeft = -1;
 		else
@@ -62,16 +57,6 @@ export default defineComponent({
 			this.timeLeft = timeLeft;
 		else if (!timeLeft || timeLeft === -1)
 			localStorage.setItem('timeLeft', JSON.stringify(30));
-
-		const route = this.route as any;
-		qrcode.toDataURL(route.params.link, (err, data) =>
-			{
-				if (err)
-				console.error(err)
-				else
-				this.qrlink = data;
-		})
-
 
 		this.interValId = setInterval(() => {
 			this.pingTimeLeft();
@@ -83,6 +68,7 @@ export default defineComponent({
 
 		const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
+		console.log(codes);
 		codes.forEach((code, index) => {
 			code.addEventListener('keydown', (e: KeyboardEvent) => {
 				if (digits.includes(e.key)) {
@@ -149,6 +135,7 @@ export default defineComponent({
 					try
 					{
 						const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/timeLeft2Fa/`, {withCredentials: true})).data;
+						console.log(res);
 						this.timeLeft--;
 						const loader = document.getElementById('loader');
 						if (loader)
@@ -192,10 +179,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#numbers-input-container
-{
-	height: 3em;
-}
 .code
 {
 	caret-color: transparent;

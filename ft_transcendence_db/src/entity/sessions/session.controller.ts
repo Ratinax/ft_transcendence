@@ -13,7 +13,6 @@ export class SessionController {
         if (!req.cookies['SESSION_KEY'])
         {
             return (null);
-			throw new UnauthorizedException('You are not able to access this data')
         }
         const sessionCookie = await this.sessionService.refreshSessionKey(req.cookies['SESSION_KEY']);
         if (!sessionCookie)
