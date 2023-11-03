@@ -64,9 +64,7 @@ export class UserService {
         let userFromPseudo = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
         let userFrom42 = await this.userRepository.findOne({where: {pseudo : user.pseudo, is42User: true}});
         if (userFromPseudo && !userFrom42)
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         else if (!userFromPseudo && !userFrom42)
         {
             const userToCreate = {pseudo: user.pseudo, profilPic: user.profilPic, is42User: true};
@@ -106,9 +104,7 @@ export class UserService {
             return token;
         }
         catch (e)
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
     }
 
     generateRandomString(length: number): string

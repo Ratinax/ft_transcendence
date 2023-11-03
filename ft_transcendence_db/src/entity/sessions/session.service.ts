@@ -33,9 +33,7 @@ export class SessionService{
     async getUser(sessionKey: string)
     {
         if (await this.getIsSessionExpired(sessionKey))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const relations = await this.sessionRepository
         .createQueryBuilder('sessions')
         .innerJoinAndSelect('sessions.user', 'user')

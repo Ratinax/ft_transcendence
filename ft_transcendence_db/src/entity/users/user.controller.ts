@@ -100,9 +100,7 @@ export class UserController {
     async getImageNamePseudo(@Param('pseudo') pseudo, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = (await this.userService.getUser(pseudo))[0];
         if (!user)
             return ('');
@@ -116,9 +114,7 @@ export class UserController {
     async getPSeudo(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
         if (!user)
             return ('');
@@ -137,10 +133,8 @@ export class UserController {
     async getIs2fa(@Param('pseudo') pseudo: string, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
-        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
+        	throw new UnauthorizedException('You are not able to access this data')
+        const user = (await this.userService.getUser(pseudo))[0];
         if (!user)
             return (false);
         return (user.doubleFa);
@@ -149,9 +143,7 @@ export class UserController {
     async change2fa(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
         if (!user)
             throw new BadRequestException('Couldn\'t get user');
@@ -164,9 +156,7 @@ export class UserController {
     async getImage(@Param('imageName') imageName: string, @Req() req: Request, @Res() res: Response) 
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const users = await this.userService.getUsers('');
         for (let i = 0; i < users.length; i++)
         {
@@ -217,9 +207,7 @@ export class UserController {
     async getLink2Fa(@Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
         if (!user)
             return (null);
@@ -229,9 +217,7 @@ export class UserController {
     async getDoUserExists(@Req() req: Request, @Param('username') username: string)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.userService.getUser(username);
         if (!user || !user[0])
             return (false);

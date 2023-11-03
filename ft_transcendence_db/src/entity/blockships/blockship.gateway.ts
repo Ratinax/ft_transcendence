@@ -3,6 +3,7 @@ import { BlockshipService } from './blockship.service';
 import { Server, Socket } from 'socket.io';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
+import { BadGatewayException, UnauthorizedException } from '@nestjs/common';
 
 @WebSocketGateway({
   cors: {
@@ -24,11 +25,11 @@ export class BlockshipGateway {
     {
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
-        return ('not connected');
+        throw new UnauthorizedException('You are not connected');
       }
       const user = await this.sessionService.getUser(body.sessionCookie);
       if (!user)
-        return (null);
+        throw new BadGatewayException('User not found');
 
       await this.blockshipService.deleteBlockship(user.id, body.userblocked_id);
       this.server.to(client.id).emit('deleteBlockship');

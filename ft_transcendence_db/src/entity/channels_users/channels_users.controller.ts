@@ -1,4 +1,4 @@
-import { Get, Controller, Req, Body, Query, Param, Post } from '@nestjs/common';
+import { Get, Controller, Req, Body, Query, Param, Post, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { ChannelsUsersService } from './channels_users.service';
 import { SessionService } from '../sessions/session.service';
 import { Request } from 'express';
@@ -11,15 +11,13 @@ export class ChannelsUsersController {
     async getUserWithPermissions(@Req() req: Request, @Query('channelId') channelId: number)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         if (!user)
-            return (null);
+            throw new BadRequestException('Ressource not found');
         const res = await this.channelsUsersService.findRelation(user.id, channelId);
         if (!res || !res[0])
-            return (null);
+            throw new BadRequestException('Ressource not found');
         const userPerms = {
             id: user.id,
             isAdmin: res[0].isAdmin,
@@ -33,12 +31,10 @@ export class ChannelsUsersController {
     async getBAnnedUsers(@Param('channelId') channelId: number, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         if (!user)
-            return (null);
+            throw new BadRequestException('Ressource not found');
         const res = (await this.channelsUsersService.findRelation(user.id, channelId))[0];
         if (!res.isAdmin)
             return (false);
@@ -50,12 +46,10 @@ export class ChannelsUsersController {
     async unBan(@Req() req: Request, @Body() body: {channel: {channel_id: number}, user: {id: number}})
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
-        {
-            return (null);
-        }
+        	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         if (!user)
-            return (null);
+            throw new BadRequestException('Ressource not found');
         const res = (await this.channelsUsersService.findRelation(user.id, body.channel.channel_id))[0];
         if (!res.isOwner)
             return (false);

@@ -4,6 +4,7 @@ import { Server, Socket } from 'socket.io';
 import { SessionService } from '../sessions/session.service';
 import { ConfigIp } from 'src/config-ip';
 import { MessageService } from '../messages/message.service';
+import { UnauthorizedException } from '@nestjs/common';
 
 @WebSocketGateway({
   cors: {
@@ -24,7 +25,7 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      return ('not connected');
+      throw new UnauthorizedException('You are not connected');
     }
     try 
     {
@@ -41,7 +42,7 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      return ('not connected');
+      throw new UnauthorizedException('You are not connected');
     }
     if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
       && (!(await this.checkOwnerPerms(body.userBanned.id, body.channel.channel_id))))
@@ -68,7 +69,7 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      return ('not connected');
+      throw new UnauthorizedException('You are not connected');
     }
     if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
       && (!(await this.checkOwnerPerms(body.userKicked.id, body.channel.channel_id))))
@@ -95,7 +96,7 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      return ('not connected');
+      throw new UnauthorizedException('You are not connected');
     }
     if (!await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id))
       return (false)
@@ -112,7 +113,7 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      return ('not connected');
+      throw new UnauthorizedException('You are not connected');
     }
     if (!await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id))
       return (false);
@@ -131,7 +132,7 @@ export class ChannelsUsersGateway {
   {
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
-      return ('not connected');
+      throw new UnauthorizedException('You are not connected');
     }
     
     if (await this.checkUserOwnerPerms(body.sessionCookie, body.channel.channel_id)
