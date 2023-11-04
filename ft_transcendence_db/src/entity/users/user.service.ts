@@ -244,7 +244,6 @@ export class UserService {
         const user = await this.userRepository.findOne({where: {id : user_id}});
         let imageName;
 
-        imageName = await this.uploadImage(image);
         if (!user.is42User || user.hasPersoPP)
         {
             const relativePathDirectory = path.join(__dirname, '../../../', 'images');
@@ -252,12 +251,15 @@ export class UserService {
             fs.unlink(absolutePath, (err) => {
                 if (err) {
                     console.error('not deleted', err);
+                    throw new UnauthorizedException('Error when deleting previous image');
                 } else {
                     console.log('well deleted');
                 }
             });
         }
+        imageName = await this.uploadImage(image);
         user.profilPic = imageName;
+        user.hasPersoPP = true;
         await this.userRepository.save(user);
         return (imageName);
     }
