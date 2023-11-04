@@ -16,12 +16,20 @@ export default defineComponent({
 	{
 		return {
 			socket: io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true }),
+			sessionCookie: '',
 		}
 	},
-	mounted()
+	async mounted()
 	{
 		this.socket.on('pingAlive', async () => {
-			await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/pingBack`, {}, { withCredentials: true });
+			if (this.$route.fullPath !== '/' && this.$route.fullPath !== 'pagenotfound')
+			if (!this.sessionCookie)
+				this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
+			if (this.sessionCookie)
+				this.socket.emit('pingBack', {sessionCookie: this.sessionCookie})
+		});
+		this.socket.on('notGoodCookie', () => {
+			this.sessionCookie = '';
 		})
 	},
 })

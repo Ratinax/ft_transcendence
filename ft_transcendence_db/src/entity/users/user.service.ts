@@ -124,7 +124,7 @@ export class UserService {
     {
         let extension;
         if (!image)
-            return 'default.jpg';
+            return 'default.png';
         else
             extension = image.substring(11, 15);
         if (extension === 'jpg;' || extension === 'jpeg')

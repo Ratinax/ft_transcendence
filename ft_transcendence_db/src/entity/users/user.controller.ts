@@ -94,6 +94,7 @@ export class UserController {
         {
             return (false);
         }
+        await this.sessionService.removeSessionCookie(req.cookies['SESSION_KEY'])
         res.clearCookie('SESSION_KEY');
         return (true);
     }

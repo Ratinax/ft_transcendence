@@ -8,6 +8,7 @@ export class SessionService{
         @Inject('SESSION_REPOSITORY')
         private sessionRepository: Repository<Sessions>,
     ) {}
+    sessions: Array<{id: string, pseudo: string, sessionCookie: string, time: Date}> = [];
     async createSession(user_id: number)
     {
         const preSession = await this.sessionRepository.findOne({where: {user: {
@@ -15,7 +16,7 @@ export class SessionService{
         }}});
         if (preSession)
         {
-            preSession.expirationDate = new Date(Date.now() + 10000);
+            preSession.expirationDate = new Date(Date.now() + 2592000000);
             return (await this.sessionRepository.save(preSession));
         }
         const sessionKey = this.generateRandomString(42);
@@ -24,7 +25,7 @@ export class SessionService{
                 id: user_id,
             },
             sessionKey: sessionKey,
-            expirationDate: new Date(Date.now() + 11000),
+            expirationDate: new Date(Date.now() + 2592000000),
         }
         const newSession = this.sessionRepository.create(session);
         return (await this.sessionRepository.save(newSession));
@@ -58,6 +59,15 @@ export class SessionService{
         return (relation.sessionKey);
     }
 
+    getIsConnected(pseudo: string)
+    {
+        for (let i = 0; i < this.sessions.length; i++)
+        {
+            if (this.sessions[i].pseudo === pseudo)
+                return (true);
+        }
+        return (false);
+    }
 
     async getIsSessionExpired(sessionKey: string)
     {
@@ -94,11 +104,21 @@ export class SessionService{
           });
         if (!relation)
             return (null);
-        relation.expirationDate = new Date(Date.now() + 11000);
+        relation.expirationDate = new Date(Date.now() + 2592000000);
         const res = this.sessionRepository.save(relation);
         return (res);
     }
-
+    async removeSessionCookie(sessionCookie: string)
+    {
+        for (let i = 0; i < this.sessions.length; i++)
+        {
+            if (this.sessions[i].sessionCookie === sessionCookie)
+                this.sessions.splice(i, 1);
+        }
+        const session = await this.sessionRepository.findOne({where: {sessionKey: sessionCookie}})
+        session.expirationDate = new Date(Date.now());
+        this.sessionRepository.save(session);
+    }
     async removeNoMoreConnected()
     {
         let connected = [];
@@ -107,16 +127,39 @@ export class SessionService{
         .createQueryBuilder('sessions')
         .innerJoinAndSelect('sessions.user', 'user')
         .getMany();
+        const sessionsLength = this.sessions.length; 
+        for (let i = sessionsLength - 1 ; i > -1; i--)
+        {
+            if (this.sessions[i].time < new Date(Date.now()))
+                this.sessions.splice(i, 1);    
+        } 
         for (let i = 0; i < relations.length; i++)
         {
+            let isSocketConnected = false;
+            for (let j = 0; j < this.sessions.length; j++)
+            {
+                if (this.sessions[j].pseudo === relations[i].user.pseudo)
+                {
+                    isSocketConnected = true;
+                    break ;
+                }
+            }
+            if (!isSocketConnected)
+                noMoreConnected.push(relations[i].user.pseudo);
             if (relations[i].expirationDate < new Date(Date.now()))
             {
+                for (let j = 0 ; j < this.sessions.length; j++)
+                {
+                    if (this.sessions[j].pseudo === relations[i].user.pseudo)
+                        this.sessions.splice(j, 1);    
+                } 
                 noMoreConnected.push(relations[i].user.pseudo);
                 await this.sessionRepository.delete(relations[i].id);
             }
-            else
+            else if (isSocketConnected)
                 connected.push(relations[i].user.pseudo);
         }
+        
         return ({noMoreConnected: noMoreConnected, connected: connected});
     }
 
@@ -129,5 +172,30 @@ export class SessionService{
           result += characters[randomIndex];
         }
         return result;
+    }
+    updateSession(session: {id: string, pseudo: string, sessionCookie: string})
+    {
+        let allreadyExists = false;
+        for (let i = 0; i < this.sessions.length; i++)
+        {
+            if (this.sessions[i].pseudo === session.pseudo && this.sessions[i].id === session.id)
+            {
+                this.sessions[i].sessionCookie = session.sessionCookie;  
+                this.sessions[i].id = session.id;
+                this.sessions[i].time = new Date(Date.now() + 12000);
+                allreadyExists = true;
+                break;
+            }
+            else if (this.sessions[i].pseudo === session.pseudo && this.sessions[i].id !== session.id)
+            {
+                this.sessions.splice(i, 1);
+                break ;
+            }
+        }
+        if (!allreadyExists)
+        {
+            const newSession = {...session, time: new Date(Date.now() + 12000)}
+            this.sessions.push(newSession);
+        }
     }
 }

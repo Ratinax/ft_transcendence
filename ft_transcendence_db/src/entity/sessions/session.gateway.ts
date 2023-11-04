@@ -1,9 +1,11 @@
-import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { SessionService } from './session.service';
 import { Server } from 'socket.io';
-import { OnModuleInit } from '@nestjs/common';
+import { OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { ConfigIp } from 'src/config-ip';
 import { MessageService } from '../messages/message.service';
+import { Socket } from 'socket.io';
+import { UserService } from '../users/user.service';
 
 @WebSocketGateway({
   cors: {
@@ -17,7 +19,7 @@ export class SessionGateway implements OnModuleInit {
     @WebSocketServer()
     server: Server;
 
-    constructor(private readonly sessionService: SessionService, private readonly messageService: MessageService) {
+    constructor(private readonly sessionService: SessionService, private readonly userService: UserService) {
     }
     onModuleInit() {
         this.pingUsersThread();
@@ -34,10 +36,10 @@ export class SessionGateway implements OnModuleInit {
         {
             this.server.emit('pingAlive');
         }, 2500)
-	setTimeout(async () =>
-	{
-		this.server.emit('pingAlive');
-	}, 5000)
+        setTimeout(async () =>
+        {
+            this.server.emit('pingAlive');
+        }, 5000)
         setTimeout(async () =>
         {
             const res = await this.sessionService.removeNoMoreConnected();
@@ -46,10 +48,6 @@ export class SessionGateway implements OnModuleInit {
             const connected = res.connected;
             for (let i = 0; i < noMoreConnected.length; i++)
             {
-                // const message = await this.messageService.removeGameInvite(noMoreConnected[i]);
-                console.log
-                // if (message)
-                //     this.messageGateway.removeGameInviteOfDisconnected({message_id: message.id, channelName: message.channel.name});
                 this.server.emit('noMoreConnected', {pseudo: noMoreConnected[i]});
             }
             for (let i = 0; i < connected.length; i++)
@@ -57,5 +55,17 @@ export class SessionGateway implements OnModuleInit {
                 this.server.emit('isConnected', {pseudo: connected[i]});
             }
         }, 7500)
+    }
+    @SubscribeMessage('pingBack')
+    async pingBack(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string})
+    {
+        if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    	{
+            this.server.to(client.id).emit('notGoodCookie');
+            return (null);
+    	}
+        const user = await this.sessionService.getUser(body.sessionCookie);
+        this.sessionService.updateSession({id: client.id, sessionCookie: body.sessionCookie, pseudo: user.pseudo});
+        this.server.emit('isConnected', {pseudo: user.pseudo});
     }
 }
