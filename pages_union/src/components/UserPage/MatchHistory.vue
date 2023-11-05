@@ -39,7 +39,6 @@ export default defineComponent({
 	props: {
 		pseudo: String,
 	},
-	emits: ["fetch-datas"],
 	setup(props) {
 
 		const matchHistory = ref<MatchHistory[]>();

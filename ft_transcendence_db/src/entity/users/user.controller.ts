@@ -137,9 +137,10 @@ export class UserController {
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
-        const user = (await this.userService.getUser(pseudo));
+        const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         if (!user)
             return (false);
+
         return (user.doubleFa);
     }
     @Post('change2fa')
@@ -153,6 +154,27 @@ export class UserController {
         const res = await this.userService.change2fa(user.id);
         if (!res)
             throw new UnauthorizedException('Couldn\'t get user');
+        return (res.doubleFaURL);
+    }
+    @Get('validate2fa/:code')
+    async validate2fa(@Param('code') code: string, @Req() req: Request, @Res({passthrough: true}) res: Response)
+    {
+        if (!req.cookies['SESSION_KEY'])
+            throw new UnauthorizedException('You are not able to access this data');
+
+        const user = (await this.sessionService.getUser(req.cookies['SESSION_KEY']));
+        if (!user)
+            throw new UnauthorizedException('You are not able to access this data');
+        const ascii = await this.userService.getUserAscii2fa(user.pseudo);
+
+        const result = speakeasy.totp.verify({
+            secret: ascii,
+            encoding: 'ascii',
+            token: code,
+        })
+        const res2fa = await this.userService.validate2Fa(result, user.id);
+        if (!res2fa)
+            return (false);
         return (true);
     }
     @Get('/image/:imageName')

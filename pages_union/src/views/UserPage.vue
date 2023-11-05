@@ -3,6 +3,7 @@
 		<Menu :page="'Profile'"/>
 		<Qrcode ref="QrcodeRef" :show="showQrcode" @close="showQrcode = false"/>
 		<div class="page-background"></div>
+		<DoubleFaCheck ref="DoubleFaCheckRef" :show="show2facheck" :qrUrl="doubleFaCode" @close="close2FaCheck"></DoubleFaCheck>
 		<div class="row user-page view">
 			<div class="col user-page-content">
 				<div v-if="isBlockedBy" id="blocked-from-message">
@@ -32,7 +33,7 @@
 							<p class="text">2Fa</p>
 								<div class="switch-choice-container">
 									<label class="switch-choice">
-										<input id="fa2-input" class="input-switch" type="checkbox" @click="switch2fa">
+										<input id="fa2-input" class="input-switch" type="checkbox" @click="async () => {await switch2fa(); getQRCode()}">
 										<span class="slider round-slider"></span>
 									</label>
 								</div>
@@ -77,13 +78,14 @@ import { defineComponent, ref, computed, onBeforeMount, } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Menu from "../components/Menu.vue"
 import MatchHistory from '../components/UserPage/MatchHistory.vue';
+import DoubleFaCheck from '../components/UserPage/DoubleFaCheck.vue';
 import Qrcode from '../components/UserPage/Qrcode.vue';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 
 export default defineComponent({
 	name: 'UserPage',
-	components: { Menu, MatchHistory, Qrcode },
+	components: { Menu, MatchHistory, Qrcode, DoubleFaCheck },
 	data()
 	{
 		return {
@@ -109,6 +111,10 @@ export default defineComponent({
 				this.nickname = this.nicknameTmp;
 			}
 			this.changePseudo = false;
+		},
+		getQRCode()
+		{
+			(this.$refs.DoubleFaCheckRef as typeof DoubleFaCheck).getQRCode();
 		}
 	},
 	beforeRouteUpdate(to, from, next) {
@@ -119,6 +125,8 @@ export default defineComponent({
 	setup() {
 		let socket;
 
+		const show2facheck = ref(false);
+		const doubleFaCode = ref('');
 		const nickname = ref('');
 		const changePseudo = ref(false)
 		const nicknameTmp = ref('');
@@ -253,10 +261,15 @@ export default defineComponent({
 		}
 		async function switch2fa()
 		{
-			is2faState.value = !is2faState.value;
 			try
 			{
-				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/change2fa/`, {}, {withCredentials: true});
+				const res = await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/change2fa/`, {}, {withCredentials: true});
+				is2faState.value = !is2faState.value;
+				if (is2faState.value === true)
+				{
+					doubleFaCode.value = res.data;
+					show2facheck.value = true;
+				}
 			}
 			catch (e)
 			{
@@ -267,6 +280,14 @@ export default defineComponent({
 		function	chooseImage() {
 			if (!showButtons.value)
 				imageInput.value?.click();
+		}
+		function	close2FaCheck(result: boolean)
+		{
+			const checkbox = document.getElementById("fa2-input") as HTMLInputElement;
+			if (checkbox)
+				checkbox.checked = result;
+			is2faState.value = result;
+			show2facheck.value = false;
 		}
 
 		async function	onImageSelect(event: any) {
@@ -344,6 +365,8 @@ export default defineComponent({
 			isConnected,
 			is2faState,
 			isBlockedBy,
+			show2facheck,
+			doubleFaCode,
 			blockUser, 
 			unblockUser,
 			removeFriend,
@@ -353,6 +376,7 @@ export default defineComponent({
 			fecthData,
 			chooseImage,
 			onImageSelect,
+			close2FaCheck,
 			imageInput,
 			changePseudo
 		};

@@ -206,13 +206,33 @@ export class UserService {
         let user = await this.userRepository.findOne({where: {id : user_id}});
         if (user)
         {
-            user.doubleFa = !user.doubleFa;
+            // user.doubleFa = !user.doubleFa;
             if (user.doubleFa)
+            {
+                user.doubleFa = false;
+                user.doubleFaAscii = '';
+                user.doubleFaURL = ''; 
+            }
+            else
             {
                 const secret = this.getUri();
                 user.doubleFaAscii = secret.ascii;
                 user.doubleFaURL = secret.otpauth_url;
-                await this.userRepository.save(user);
+            }
+            return (await this.userRepository.save(user));
+        }
+        return (null);
+    }
+    async validate2Fa(is_validate: boolean, user_id: number)
+    {
+        let user = await this.userRepository.findOne({where: {id : user_id}});
+        if (user)
+        {
+            user.doubleFa = is_validate;
+            if (!is_validate)
+            {
+                user.doubleFaAscii = '';
+                user.doubleFaURL = '';
             }
             return (await this.userRepository.save(user));
         }
