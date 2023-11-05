@@ -8,9 +8,10 @@ import { UserService } from '../users/user.service';
 export class SessionController {
     constructor (private readonly sessionService: SessionService, private readonly friendshipService: FriendshipService, private readonly userService: UserService) {}
     @Get('cookies')
-    getCookies(@Req() req: Request)
+    async getCookies(@Req() req: Request)
     {
-        if (!req.cookies['SESSION_KEY'])
+        // console.log(req.cookies['SESSION_KEY'])
+        if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
             return ('');
         return (req.cookies['SESSION_KEY']);
     }
