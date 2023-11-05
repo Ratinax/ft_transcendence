@@ -106,7 +106,7 @@ export class ChannelController {
 		if (!body.pseudo)
 			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const user2 = (await this.userService.getUser(body.pseudo))[0];
+        const user2 = (await this.userService.getUser(body.pseudo));
         let result;
         let channel;
         try

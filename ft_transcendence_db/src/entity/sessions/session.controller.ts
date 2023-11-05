@@ -20,7 +20,9 @@ export class SessionController {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const friend = (await this.userService.getUser(pseudo))[0];
+        const friend = (await this.userService.getUser(pseudo));
+        if (!friend)
+        	throw new UnauthorizedException('You are not able to access this data');
         const resFriend = await this.friendshipService.getFriendRelation(friend.id, user.id);
         if (!resFriend || resFriend !== 'accepted')
         	throw new UnauthorizedException('You are not able to access this data');

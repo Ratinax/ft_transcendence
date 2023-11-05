@@ -197,7 +197,9 @@ export class UserService {
             nickname: user.nickname,
             hasPersoPP: user.hasPersoPP,
             }));
-        return (usersMapped);
+        if (!usersMapped)
+            return (null)
+        return (usersMapped[0]);
     }
     async change2fa(user_id: number)
     {

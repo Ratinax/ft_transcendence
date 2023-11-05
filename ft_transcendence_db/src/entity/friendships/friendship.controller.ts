@@ -38,7 +38,7 @@ export class FriendshipController {
 		if (!body.pseudo)
 			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const friend = (await this.userService.getUser(body.pseudo))[0];
+        const friend = (await this.userService.getUser(body.pseudo));
         
         try
         {
@@ -62,7 +62,7 @@ export class FriendshipController {
 		if (!body.pseudo)
 			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const friend = (await this.userService.getUser(body.pseudo))[0];
+        const friend = (await this.userService.getUser(body.pseudo));
         try
         {
             const res = await this.friendshipService.deleteFriendship(friend.id, user.id);
@@ -79,7 +79,7 @@ export class FriendshipController {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const friend = (await this.userService.getUser(pseudoFriend))[0];
+        const friend = (await this.userService.getUser(pseudoFriend));
         try
         {
             const res = await this.friendshipService.getFriendRelation(friend.id, user.id);

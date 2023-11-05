@@ -104,7 +104,7 @@ export class UserController {
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
-        const user = (await this.userService.getUser(pseudo))[0];
+        const user = (await this.userService.getUser(pseudo));
         if (!user)
             return ('');
         if (user.is42User && !user.hasPersoPP)
@@ -137,7 +137,7 @@ export class UserController {
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
-        const user = (await this.userService.getUser(pseudo))[0];
+        const user = (await this.userService.getUser(pseudo));
         if (!user)
             return (false);
         return (user.doubleFa);
@@ -181,9 +181,9 @@ export class UserController {
         if (!req.cookies['2FAKEY'])
             return ('false cause no more cookie');
         const ascii = await this.userService.getUserAscii2fa(req.cookies['2FAKEY']);
-        const user = (await this.userService.getUser(req.cookies['2FAKEY']))[0];
+        const user = (await this.userService.getUser(req.cookies['2FAKEY']));
         if (!user)
-            return ('false cause no more cookie');
+            return ('false because no more cookie');
         const result = speakeasy.totp.verify({
             secret: ascii,
             encoding: 'ascii',
@@ -222,7 +222,7 @@ export class UserController {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.userService.getUser(username);
-        if (!user || !user[0])
+        if (!user)
             return (false);
         return (true);
     }
@@ -233,9 +233,9 @@ export class UserController {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.userService.getUser(username);
-        if (!user || !user[0])
+        if (!user)
             return (false);
-        return (user[0].nickname);
+        return (user.nickname);
     }
     @Get('nickname')
     async getNickname(@Req() req: Request)

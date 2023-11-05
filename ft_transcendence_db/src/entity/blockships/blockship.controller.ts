@@ -34,7 +34,7 @@ export class BlockshipController {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const userBlocked = (await this.userService.getUser(pseudoBlocked))[0];
+        const userBlocked = (await this.userService.getUser(pseudoBlocked));
         if (!user || !userBlocked)
             return (false);
         try 
@@ -57,7 +57,7 @@ export class BlockshipController {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const userBlocked = (await this.userService.getUser(pseudoBlocked))[0];
+        const userBlocked = (await this.userService.getUser(pseudoBlocked));
         if (!user || !userBlocked)
             return (false);
         try 
@@ -85,7 +85,7 @@ export class BlockshipController {
 		if (!body.pseudo)
 			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const userBlocked = (await this.userService.getUser(body.pseudo))[0];
+        const userBlocked = (await this.userService.getUser(body.pseudo));
         if (!user || !userBlocked)
             throw new BadRequestException('User not found');
         try 
@@ -108,7 +108,7 @@ export class BlockshipController {
 		if (!body.pseudo)
 			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
-        const userBlocked = (await this.userService.getUser(body.pseudo))[0];
+        const userBlocked = (await this.userService.getUser(body.pseudo));
         if (!user || !userBlocked)
             throw new BadRequestException('User not found');
         try 

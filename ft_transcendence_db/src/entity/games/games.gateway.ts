@@ -25,8 +25,8 @@ export class GamesGateway {
 				if (this.gameService.games[i].isFull && !this.gameService.games[i].leftPlayer.isConnected && !this.gameService.games[i].rightPlayer.isConnected) {
 					try
 					{
-						const user2 = (await this.userService.getUser(this.gameService.games[i].rightPlayer.name))[0];
-						const user1 = (await this.userService.getUser(this.gameService.games[i].leftPlayer.name))[0];
+						const user2 = (await this.userService.getUser(this.gameService.games[i].rightPlayer.name));
+						const user1 = (await this.userService.getUser(this.gameService.games[i].leftPlayer.name));
 						this.gameService.createGame({playerOne: {id: user1.id},
 							playerTwo: {id: user2.id},
 							scorePTwo: this.gameService.games[i].rightPlayer.score,
@@ -217,8 +217,8 @@ export class GamesGateway {
 		this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('gameOver');
 		try
 		{
-			const user2 = (await this.userService.getUser(this.gameService.games[gameIndex].rightPlayer.name))[0];
-			const user1 = (await this.userService.getUser(this.gameService.games[gameIndex].leftPlayer.name))[0];
+			const user2 = (await this.userService.getUser(this.gameService.games[gameIndex].rightPlayer.name));
+			const user1 = (await this.userService.getUser(this.gameService.games[gameIndex].leftPlayer.name));
 			this.gameService.createGame({playerOne: {id: user1.id},
 				playerTwo: {id: user2.id},
 				scorePTwo: this.gameService.games[gameIndex].rightPlayer.score,

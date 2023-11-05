@@ -13,7 +13,7 @@ export class GameController {
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
-        const user = (await this.userService.getUser(pseudo))[0];
+        const user = (await this.userService.getUser(pseudo));
         if (!user)
 			throw new BadRequestException('Ressource not found');
         return (await this.gameService.getGamesAndWins(user.id))
@@ -24,7 +24,7 @@ export class GameController {
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
-        const user = (await this.userService.getUser(pseudo))[0];
+        const user = (await this.userService.getUser(pseudo));
         if (user)
             return (await this.gameService.getGames(user.id));
         return (false);
