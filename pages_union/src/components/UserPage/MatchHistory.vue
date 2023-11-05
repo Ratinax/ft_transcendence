@@ -5,7 +5,7 @@
 		:playerTwoData="match.playerTwo"
 		:playerOneScore="match.scorePlayerOne"
 		:playerTwoScore="match.scorePlayerTwo"
-		:mode="match.mode" @fetch-datas="fetchDatas"></MatchScore>
+		:mode="match.mode"></MatchScore>
 	<div v-if="matchHistory?.length === 0">
 		<p class="user-no-match-text">No recent matches.</p>
 	</div>
@@ -40,7 +40,7 @@ export default defineComponent({
 		pseudo: String,
 	},
 	emits: ["fetch-datas"],
-	setup(props, context) {
+	setup(props) {
 
 		const matchHistory = ref<MatchHistory[]>();
 
@@ -50,12 +50,7 @@ export default defineComponent({
 			matchHistory.value = response.data;
 			matchHistory.value?.reverse();
 		})
-
-		function fetchDatas(player: string)
-		{
-			context.emit('fetch-datas', player);
-		}
-		return { matchHistory, fetchDatas };
+		return { matchHistory };
 	}
 });
 </script>

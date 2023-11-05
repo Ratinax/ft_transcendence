@@ -40,7 +40,7 @@
 							</div>
 						</div>
 						<div class="col user-match-history">
-							<MatchHistory :pseudo="userName" @fetch-datas="fecthData"></MatchHistory>
+							<MatchHistory :pseudo="userName"></MatchHistory>
 						</div> 
 					</div>
 				</div>
@@ -111,6 +111,11 @@ export default defineComponent({
 			this.changePseudo = false;
 		}
 	},
+	beforeRouteUpdate(to, from, next) {
+	if  (typeof to.params.pseudo === "string")
+		this.fecthData(to.params.pseudo)
+    next();
+		},
 	setup() {
 		let socket;
 

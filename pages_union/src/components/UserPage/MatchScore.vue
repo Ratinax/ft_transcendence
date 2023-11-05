@@ -54,7 +54,7 @@ export default defineComponent({
 		playerTwoScore: Number,
 		mode: Number,
 	},
-	setup(props, context) {
+	setup(props) {
 		const router = useRouter();
 		const playerOne = ref(props.playerOneData);
 		const playerTwo = ref(props.playerTwoData);
@@ -73,7 +73,6 @@ export default defineComponent({
 
 		function	goToUserPage(player: string | undefined) {
 			router.push({ name: "UserPage", params: { pseudo: player } } )
-			context.emit('fetch-datas', player);
 		}
 
 		return {
