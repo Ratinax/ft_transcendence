@@ -59,7 +59,7 @@ export class SessionGateway implements OnModuleInit {
     @SubscribeMessage('pingBack')
     async pingBack(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string})
     {
-        if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+        if (!body || await this.sessionService.getIsSessionExpired(body.sessionCookie))
     	{
             this.server.to(client.id).emit('notGoodCookie');
             return (null);

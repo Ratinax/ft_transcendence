@@ -47,7 +47,7 @@ export class ChannelsUsersController {
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data');
-		if (!body.channel || !body.channel.channel_id || !body.user || !body.user.id)
+		if (!body || !body.channel || !body.channel.channel_id || !body.user || !body.user.id)
 			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         if (!user)

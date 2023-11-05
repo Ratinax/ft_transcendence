@@ -33,7 +33,7 @@ export class ChannelController {
     {
 		if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
 			throw new UnauthorizedException('You are not able to access this data')
-		if (!body.channel || !body.channel.channel_id || !body.password)
+		if (!body || !body.channel || !body.channel.channel_id || !body.password)
 			throw new BadRequestException('Uncomplete request');
         if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
@@ -41,11 +41,11 @@ export class ChannelController {
     }
 
     @Post('toPublic')
-    async toPublic(@Body() body: {channel: {channel_id}}, @Req() req: Request)
+    async toPublic(@Body() body: {channel: {channel_id: number}}, @Req() req: Request)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
-		if (!body.channel || !body.channel.channel_id)
+		if (!body || !body.channel || !body.channel.channel_id)
 			throw new BadRequestException('Uncomplete request');
         if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
@@ -57,7 +57,7 @@ export class ChannelController {
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data');
-		if (!body.channel || !body.channel.channel_id || !body.password)
+		if (!body || !body.channel || !body.channel.channel_id || !body.password)
 			throw new BadRequestException('Uncomplete request');
         if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
@@ -69,7 +69,7 @@ export class ChannelController {
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data');
-		if (!body.channel || !body.channel.channel_id)
+		if (!body || !body.channel || !body.channel.channel_id)
 			throw new BadRequestException('Uncomplete request');
         if (!await this.checkIfUserOwner(req.cookies['SESSION_KEY'], body.channel.channel_id))
             return (false);
@@ -103,7 +103,7 @@ export class ChannelController {
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data');
-		if (!body.pseudo)
+		if (!body || !body.pseudo)
 			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);
         const user2 = (await this.userService.getUser(body.pseudo))[0];

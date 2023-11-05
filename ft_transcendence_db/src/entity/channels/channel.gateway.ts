@@ -163,7 +163,7 @@ export class ChannelGateway {
   @SubscribeMessage('leaveChannel')
   async leaveChannel(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, channel: {channel_id: number, name: string}}) 
   {
-	if (!body || !body.sessionCookie || !body.channel.channel_id || !body.channel.name)
+	if (!body || !body.sessionCookie || !body.channel || !body.channel.channel_id || !body.channel.name)
 		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {

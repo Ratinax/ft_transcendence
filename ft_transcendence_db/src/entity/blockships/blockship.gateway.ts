@@ -23,7 +23,7 @@ export class BlockshipGateway {
     @SubscribeMessage('removeBlockship')
     async refuseBlockship(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, userblocked_id: number}) 
     {
-		if (!body.sessionCookie || !body.userblocked_id)
+		if (!body || !body.sessionCookie || !body.userblocked_id)
 			return ;
     	if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     	{

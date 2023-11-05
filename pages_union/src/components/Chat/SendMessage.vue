@@ -65,7 +65,7 @@ export default defineComponent({
 			playerSpeed: number,
 			winScore: number}}) => {
 			this.sendGameInviteGoodRequest(response.userName, response.options);
-		}); // sendGameInviteAllready
+		});
 		this.socket?.on('sendGameInviteAllready', async () => {
 			this.sendGameInviteAllready();
 		});
