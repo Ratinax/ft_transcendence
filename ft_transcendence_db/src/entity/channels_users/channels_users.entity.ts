@@ -1,6 +1,6 @@
 import { Channels } from "../channels/channel.entity";
 import { Users } from "../users/user.entity";
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Index, Unique } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Unique } from "typeorm";
 
 
 /**

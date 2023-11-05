@@ -1,6 +1,6 @@
-import { BadRequestException, Controller, Get, Param, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Param, Req, UnauthorizedException } from '@nestjs/common';
 import { SessionService } from './session.service';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { FriendshipService } from '../friendships/friendship.service';
 import { UserService } from '../users/user.service';
 

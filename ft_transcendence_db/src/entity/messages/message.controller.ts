@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Req, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Param, Req, UnauthorizedException } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { BlockshipService } from '../blockships/blockship.service';
 import { SessionService } from '../sessions/session.service';

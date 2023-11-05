@@ -1,9 +1,8 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { SessionService } from './session.service';
 import { Server } from 'socket.io';
-import { OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { OnModuleInit } from '@nestjs/common';
 import { ConfigIp } from 'src/config-ip';
-import { MessageService } from '../messages/message.service';
 import { Socket } from 'socket.io';
 import { UserService } from '../users/user.service';
 
@@ -19,7 +18,7 @@ export class SessionGateway implements OnModuleInit {
     @WebSocketServer()
     server: Server;
 
-    constructor(private readonly sessionService: SessionService, private readonly userService: UserService) {
+    constructor(private readonly sessionService: SessionService) {
     }
     onModuleInit() {
         this.pingUsersThread();

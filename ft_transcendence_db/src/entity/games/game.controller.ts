@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, Req, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param, Req, UnauthorizedException } from '@nestjs/common';
 import { GameService } from './game.service';
 import { SessionService } from '../sessions/session.service';
 import { UserService } from '../users/user.service';

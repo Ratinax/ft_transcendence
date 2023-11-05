@@ -8,8 +8,6 @@ import { GameModule } from './entity/games/game.module';
 import { ChannelsUsersModule } from './entity/channels_users/channels_users.module';
 import { BlockshipModule } from './entity/blockships/blockship.module';
 import { FriendshipModule } from './entity/friendships/friendship.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { SessionModule } from './entity/sessions/session.module';
 
 
@@ -25,7 +23,7 @@ import { SessionModule } from './entity/sessions/session.module';
     FriendshipModule,
     SessionModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

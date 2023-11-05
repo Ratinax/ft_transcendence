@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Param, Post, Query, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Param, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Request, Response } from 'express';
 import * as path from 'path';
