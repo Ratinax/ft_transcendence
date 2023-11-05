@@ -58,7 +58,6 @@ const routes = [
 		//props: true, // TODO surement a tej, ca fait de la merde dans les logs je crois quand on va sur userpage (quand on est deja dessus)
         beforeEnter: async (to: any, from: any, next: any) => {
             const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
-            console.log('les cookies en question :', sessionCookie)
             if (sessionCookie !== '') {
                 next();
             } else {

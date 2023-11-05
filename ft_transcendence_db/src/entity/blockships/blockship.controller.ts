@@ -82,7 +82,6 @@ export class BlockshipController {
         {
 			throw new UnauthorizedException('You are not able to access this data');
         }
-        console.log(body)
 		if (!body.pseudo)
 			throw new BadRequestException('Uncomplete request');
         const user = await this.sessionService.getUser(req.cookies['SESSION_KEY']);

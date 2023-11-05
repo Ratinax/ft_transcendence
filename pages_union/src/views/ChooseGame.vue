@@ -62,7 +62,6 @@ export default defineComponent({
 			});
 	},
 	beforeUnmount() {
-		console.log('test')
 		this.socket.close();
 	},
 	async mounted() {

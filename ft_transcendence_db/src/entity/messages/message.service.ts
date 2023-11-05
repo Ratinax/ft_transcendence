@@ -56,7 +56,7 @@ export class MessageService {
         }
         catch (e)
         {
-            console.log('error :', e)
+            console.error('error :', e)
         }
     }
     async removeMessage(message_id: number)

@@ -252,8 +252,6 @@ export class UserService {
                 if (err) {
                     console.error('not deleted', err);
                     throw new UnauthorizedException('Error when deleting previous image');
-                } else {
-                    console.log('well deleted');
                 }
             });
         }

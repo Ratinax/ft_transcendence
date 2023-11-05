@@ -10,7 +10,6 @@ export class SessionController {
     @Get('cookies')
     async getCookies(@Req() req: Request)
     {
-        // console.log(req.cookies['SESSION_KEY'])
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
             return ('');
         return (req.cookies['SESSION_KEY']);

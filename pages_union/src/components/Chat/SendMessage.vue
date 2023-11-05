@@ -88,7 +88,6 @@ export default defineComponent({
 		},
 		async sendMessage()
 		{
-			console.log('send Message')
 			if (this.messageText === '')
 			return ;
 			this.socket?.emit('createMessage', {
@@ -125,7 +124,6 @@ export default defineComponent({
 			playerSpeed: number,
 			winScore: number})
 		{
-			console.log('invite in game')
 			const userName = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, {withCredentials: true})).data;
 			this.socket?.emit('createMessage', { 
 				channelName: this.channelName,
@@ -134,11 +132,7 @@ export default defineComponent({
 				dateSent: this.getCurrentDate(),
 				isAGameInvite: true,
 				sessionCookie: this.sessionCookie,
-				game: gameSettings });
-			
-			console.log(userName);
-			
-			// this.showGameOptions = false;
+				game: gameSettings });			
 		},
 		sendGameInviteGoodRequest(userName: string, options: {ballAccel: number,
 			ballSize: number, ballSpeed: number,

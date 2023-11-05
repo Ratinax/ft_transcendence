@@ -86,10 +86,6 @@ export default defineComponent({
 			this.winScore = 5;
 			this.errorMessage = '';
 		},
-		letsSee()
-		{
-			console.log(this.ballAccel);
-		},
 		inviteInGame()
 		{
 			this.$emit('invite-in-game', {

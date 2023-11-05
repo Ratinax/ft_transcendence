@@ -27,15 +27,12 @@ export class MessagesGateway {
   async create(@ConnectedSocket() client: Socket,
     @MessageBody() body: {sessionCookie: string, channel_id: number, channelName: string, dateSent: Date, message: string, isAGameInvite: boolean, game: gameOptions | undefined}) 
     {
-      console.log('here')
       if (!body || !body.sessionCookie || !body.channel_id || !body.channelName || !body.dateSent || body.message === undefined || body.isAGameInvite === undefined)
         return ;
-      console.log('not here')
       if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
       {
         return ('not connected');
       }
-      console.log('not here 2')
       const user = await this.sessionService.getUser(body.sessionCookie);
       if (!user)
         return ('not connected');
@@ -76,7 +73,6 @@ export class MessagesGateway {
       {
         if (await this.allreadyAGameInvite(user.id))
         {
-          console.log('allready a game invite')
           this.server.to(client.id).emit('sendGameInviteAllready');
           return ;
         }
@@ -90,7 +86,6 @@ export class MessagesGateway {
           },
           isAGameInvite: body.isAGameInvite,
         });
-        console.log('good request')
         this.server.to(client.id).emit('sendGameInviteGoodRequest', {userName: user.pseudo, options: body.game});
 
       }

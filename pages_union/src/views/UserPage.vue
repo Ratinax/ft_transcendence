@@ -297,7 +297,6 @@ export default defineComponent({
 			{
 				const res = (await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/changePP`, {image: imageDataURL},{ withCredentials: true})).data
 				profilePic.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`,{ withCredentials: true})).data
-				console.log(profilePic.value);
 			}
 			catch (e)
 			{

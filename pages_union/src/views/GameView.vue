@@ -177,7 +177,6 @@ async function getOptions() {
 	playerName.value = pseudo.data;
 	nickname.value = nicknameTmp.data;
 	const res = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/gameOptions/${playerName.value}`, { withCredentials: true });
-	console.log(res.data);
 
 	if (!res.data.inGame)
 	{
@@ -209,9 +208,6 @@ function launch() {
 	const	ctx = canvas?.getContext("2d");
 	if (!canvas || !ctx)
 	return;
-
-	console.log(game.options);
-
 	const	ratio = 4/3;
 	canvas.width = 2000;
 	canvas.height = canvas.width / ratio;
@@ -317,7 +313,6 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-	console.log('test2')
 	socket.close();
 })
 
