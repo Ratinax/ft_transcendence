@@ -111,7 +111,7 @@ export default defineComponent({
 
 .match-gamemode-name {
 	text-align: center;
-	color: orange;
+	color: magenta;
 	font-size: 1.1em;
 }
 
