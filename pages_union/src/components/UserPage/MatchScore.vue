@@ -11,8 +11,9 @@
 					</div>
 					<span class="text user-pseudo" @click="goToUserPage(playerOne?.pseudo)">{{ playerOne?.nickname }}</span>
 				</div>
-				<font-awesome-icon v-if=" playerOneScore && playerTwoScore && playerOneScore > playerTwoScore" class="win right" icon="fa-solid fa-w" size="xl" />
-				<font-awesome-icon v-else class="loss right" icon="fa-solid fa-l" size="xl"/>
+				<font-awesome-icon v-if="playerOneScore && playerTwoScore && playerOneScore > playerTwoScore" class="win right" icon="fa-solid fa-w" size="xl" />
+				<font-awesome-icon v-else-if="playerOneScore && playerTwoScore && playerOneScore < playerTwoScore" class="loss right" icon="fa-solid fa-l" size="xl"/>
+				<font-awesome-icon v-else class="draw right" icon="fa-regular fa-flag" size="xl" />
 			</div>
 			<div class="row scores">
 				<span class="text score" style="text-align: right;">{{ pOneScore }}</span>
@@ -20,8 +21,9 @@
 				<span class="text score">{{ pTwoScore }}</span>
 			</div>
 			<div class="row user-score">
-				<font-awesome-icon v-if="!(playerOneScore && playerTwoScore && playerOneScore > playerTwoScore)" class="win left" icon="fa-solid fa-w" size="xl" />
-				<font-awesome-icon v-else class="loss left" icon="fa-solid fa-l" size="xl" />
+				<font-awesome-icon v-if="playerOneScore && playerTwoScore && playerOneScore < playerTwoScore" class="win left" icon="fa-solid fa-w" size="xl" />
+				<font-awesome-icon v-else-if="playerOneScore && playerTwoScore && playerOneScore > playerTwoScore" class="loss left" icon="fa-solid fa-l" size="xl" />
+				<font-awesome-icon v-else class="draw left" icon="fa-regular fa-flag" size="xl" />
 				<div class="col">
 					<div class="profile-pic-container" @click="goToUserPage(playerTwo?.pseudo)">
 						<img :src="playerTwo?.profilPic" :alt="playerTwo?.pseudo">
@@ -152,6 +154,10 @@ export default defineComponent({
 
 .loss {
 	color: red;
+}
+
+.draw {
+	color: orange;
 }
 
 .win, .loss {
