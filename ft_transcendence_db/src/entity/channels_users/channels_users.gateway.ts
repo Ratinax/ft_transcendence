@@ -60,6 +60,7 @@ export class ChannelsUsersGateway {
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.to(body.channel.name).emit('updateAfterPart', {
       users: users,
+      channel: body.channel,
       sessionCookie: await this.sessionService.getSessionKey(body.userBanned.id)});
     const messageRemoved = await this.messageService.removeGameInviteById(body.userBanned.id);
     if (messageRemoved)
@@ -90,6 +91,7 @@ export class ChannelsUsersGateway {
     const users = await this.channelsUsersService.findUsersOfChannel(body.channel.name);
     this.server.to(body.channel.name).emit('updateAfterPart', {
       users: users,
+      channel: body.channel,
       sessionCookie: await this.sessionService.getSessionKey(body.userKicked.id)});
     const messageRemoved = await this.messageService.removeGameInviteById(body.userKicked.id);
     if (messageRemoved)

@@ -109,13 +109,13 @@ export default defineComponent({
 		this.socket.on('updateListUsers', (response: {users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			this.updateListUsers(response.users);
 		});
-		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
+		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (this.sessionCookie === response.sessionCookie) {
 				console.log('here')
 				if (this.selectedChannel)
 					this.removeChannel(this.selectedChannel);
 				else
-					this.removeChannel();
+					this.removeChannel(response.channel);
 				this.updateListUsers(null);
 			}
 			else {
@@ -154,7 +154,7 @@ export default defineComponent({
 				this.setSelectedChannel(channel);
 			}
 		},
-		removeChannel(channel: {channel_id: number, name: string, isUserOwner: boolean} | undefined)
+		removeChannel(channel: {channel_id: number, name: string} | undefined)
 		{
 			if (this.$refs.listChannels) {
 				(this.$refs.listChannels as typeof ListChannels).removeChannel(channel?.channel_id);

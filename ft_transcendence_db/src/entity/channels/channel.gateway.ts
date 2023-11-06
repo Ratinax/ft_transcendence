@@ -187,7 +187,8 @@ export class ChannelGateway {
       sessionCookie: body.sessionCookie});
     this.server.to(client.id).emit('updateAfterPart', {
       users: users,
-      sessionCookie: body.sessionCookie});
+      sessionCookie: body.sessionCookie,
+      channel: body.channel});
     const messageRemoved = await this.messageService.removeGameInvite(user.pseudo);
     if (messageRemoved)
       this.server.to(body.channel.name).emit('removeMessage', {message_id: messageRemoved.id});
