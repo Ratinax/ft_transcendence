@@ -29,7 +29,6 @@ export class ChannelGateway {
   {
 	if (!data || !data.sessionCookie || !data.channel || !data.channel.category || !data.channel.name || data.channel.password === undefined)
   {
-    console.log('y a pas')
 		return ;
   }
     if (await this.sessionService.getIsSessionExpired(data.sessionCookie))
@@ -91,7 +90,7 @@ export class ChannelGateway {
   @SubscribeMessage('joinChannel')
   async join(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, password: string, channelName: string})
   {
-	if (!body || !body.sessionCookie || !body.password || !body.channelName)
+	if (!body || !body.sessionCookie || body.password === undefined || !body.channelName)
 		return ;
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
 		throw new UnauthorizedException('You are not connected');

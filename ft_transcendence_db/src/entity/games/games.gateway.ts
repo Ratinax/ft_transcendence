@@ -114,7 +114,7 @@ export class GamesGateway {
 			this.gameService.games[gameIndex].leftPlayer.updateInGame = true;
 			this.server.to(client.id).emit('inGame');
 		}
-		else if (this.gameService.games[gameIndex].rightPlayer.name === body.name && !this.gameService.games[gameIndex].rightPlayer.updateInGame) {
+		else if (this.gameService.games[gameIndex].rightPlayer && this.gameService.games[gameIndex].rightPlayer.name === body.name && !this.gameService.games[gameIndex].rightPlayer.updateInGame) {
 			this.gameService.games[gameIndex].rightPlayer.id = client.id;
 			this.gameService.games[gameIndex].rightPlayer.updateInGame = true;
 			this.server.to(client.id).emit('inGame');

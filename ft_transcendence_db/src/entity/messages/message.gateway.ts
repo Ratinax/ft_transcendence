@@ -128,7 +128,7 @@ export class MessagesGateway {
     const res = await this.messagesService.removeMessage(gameInvite.id);
     if (res)
     {
-      this.server.to(body.channelName).emit('removeMessage', {message_id: gameInvite.id});
+		this.server.to(body.channelName).emit('removeMessage', {message_id: gameInvite.id});
     }
   }
 

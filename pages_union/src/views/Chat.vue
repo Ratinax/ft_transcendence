@@ -14,7 +14,7 @@
 					@leave-channel="onLeaveChannel"
 					:display="displayListChannels"/>
 				<div class= "messageszone">
-					<Messages v-if="socket && sessionCookie" ref="messages" :socket="socket" :sessionCookie="sessionCookie" :channelName="selectedChannel?.name" @join-custom="onJoinCustom"/>
+					<Messages v-if="socket && sessionCookie" ref="messages" :gameSocket="gameSocket" :socket="socket" :sessionCookie="sessionCookie" :channelName="selectedChannel?.name" @join-custom="onJoinCustom"/>
 					<SendMessage
 						v-if="socket && sessionCookie"
 						ref="sendMessage"
@@ -86,12 +86,12 @@ export default defineComponent({
 			router: useRouter(),
 		}
 	},
-	beforeMount() {
-		axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
-				const	playerName = res.data;
-				this.gameSocket.emit('updateSocket', {name: playerName });
-			});
-	},
+	// beforeMount() {
+	// 	axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
+	// 			const	playerName = res.data;
+	// 			this.gameSocket.emit('updateSocket', {name: playerName });
+	// 		});
+	// },
 	beforeUnmount() {
 		this.gameSocket.close();
 	},
