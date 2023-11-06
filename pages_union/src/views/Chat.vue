@@ -99,6 +99,7 @@ export default defineComponent({
 		window.addEventListener('resize', this.handleResize);
 		this.sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
 		this.socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/chat`);
+		this.socket.emit('giveMySocket', {sessionCookie: this.sessionCookie});
 		this.socket.on('addMessage', (response: {message: messageData}) => {
 			this.addMessage(response.message);
 		});
@@ -173,8 +174,6 @@ export default defineComponent({
 			this.setSelectedChannel(channel);
 		},
 		setSelectedChannel(channel: {channel_id: number, name: string, isUserOwner: boolean} | undefined) {
-			if (this.selectedChannel)
-				this.socket.emit('leaveRoom', {channelName: this.selectedChannel.name, sessionCookie: this.sessionCookie});
 			if (channel)
 				this.socket.emit('joinRoom', {channelName: channel.name, sessionCookie: this.sessionCookie});
 			let fetchMessages = true;

@@ -40,7 +40,7 @@ export class ChannelsUsersGateway {
   }
 
   @SubscribeMessage('banUser')
-  async ban(@MessageBody() body: {sessionCookie: string, userBanned: {id: number}, channel: {channel_id: number, name: string}}) 
+  async ban(@MessageBody() body: {sessionCookie: string, userBanned: {id: number, pseudo: string}, channel: {channel_id: number, name: string}}) 
   {
 	if (!body || !body.sessionCookie || !body.userBanned || !body.userBanned.id || !body.channel || !body.channel.channel_id || !body.channel.name)
 		return ;
@@ -64,12 +64,13 @@ export class ChannelsUsersGateway {
     const messageRemoved = await this.messageService.removeGameInviteById(body.userBanned.id);
     if (messageRemoved)
       this.server.to(body.channel.name).emit('removeMessage', {message_id: messageRemoved.id});
-
+    this.channelsUsersService.getSocket(body.userBanned.pseudo).leave(body.channel.name);
+  
     return (res);
   }
 
   @SubscribeMessage('kickUser')
-  async kick(@MessageBody() body: {sessionCookie: string, userKicked: {id: number}, channel: {channel_id: number, name: string}}) 
+  async kick(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, userKicked: {id: number, pseudo: string}, channel: {channel_id: number, name: string}}) 
   {
 	if (!body || !body.sessionCookie || !body.userKicked || !body.userKicked.id || !body.channel || !body.channel.channel_id || !body.channel.name)
 	 return ;
@@ -93,8 +94,24 @@ export class ChannelsUsersGateway {
     const messageRemoved = await this.messageService.removeGameInviteById(body.userKicked.id);
     if (messageRemoved)
       this.server.to(body.channel.name).emit('removeMessage', {message_id: messageRemoved.id});
-      
+    this.channelsUsersService.getSocket(body.userKicked.pseudo).leave(body.channel.name);
     return (res);
+  }
+
+  @SubscribeMessage('giveMySocket')
+  async giveMySocket(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string})
+  {
+	if (!body || !body.sessionCookie)
+		return ;
+    if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    {
+		  throw new UnauthorizedException('You are not connected')
+    }
+    const user = await this.sessionService.getUser(body.sessionCookie);
+    if (!user)
+      return (null);
+    
+    this.channelsUsersService.updateUserSocketList(client, user.pseudo);
   }
 
   @SubscribeMessage('setAdmin')

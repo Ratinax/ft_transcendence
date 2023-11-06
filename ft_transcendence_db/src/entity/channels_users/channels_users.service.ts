@@ -1,6 +1,8 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ChannelsUsers } from './channels_users.entity';
+import { Socket } from 'socket.io';
+// import { Socket } from 'express';
 
 @Injectable()
 export class ChannelsUsersService {
@@ -8,7 +10,8 @@ export class ChannelsUsersService {
         @Inject('CHANNELSUSERS_REPOSITORY')
         private channelsUsersRepository: Repository<ChannelsUsers>,
     ) {}
-
+    
+    userSocketList: Array<{socket: Socket, pseudo: string}> = [];
     async createNew(channels_users: Partial<ChannelsUsers>)
     {
         const relation = (await this.findRelation(channels_users.user.id, channels_users.channel.channel_id))[0];
@@ -17,7 +20,29 @@ export class ChannelsUsersService {
         const newRelation = this.channelsUsersRepository.create(channels_users);
         return (this.channelsUsersRepository.save(newRelation));
     }
-
+    updateUserSocketList(socket: Socket, pseudo: string)
+    {
+        for (let i = 0; i < this.userSocketList.length; i++)
+        {
+            if (this.userSocketList[i].pseudo === pseudo)
+            {
+                this.userSocketList[i].socket = socket;
+                return ;
+            }
+        }
+        this.userSocketList.push({socket: socket, pseudo: pseudo})
+    }
+    getSocket(pseudo: string)
+    {
+        for (let i = 0; i < this.userSocketList.length; i++)
+        {
+            if (this.userSocketList[i].pseudo === pseudo)
+            {
+                return (this.userSocketList[i].socket);
+            }
+        }
+        return (null);
+    }
     async findUsersOfChannel(channelName: string)
     {
         const usersAndChannels = await this.channelsUsersRepository
