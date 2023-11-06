@@ -26,7 +26,6 @@
 				</div>
 			</form>
         </div>
-        <div id="loader"></div>
     </div>
 </div>
 </div>
@@ -35,7 +34,6 @@
 </template>
 
 <script lang="ts">
-import { useRoute, useRouter } from 'vue-router';
 import qrcode from 'qrcode';
 import axios from 'axios';
 import { defineComponent } from 'vue';
@@ -48,8 +46,6 @@ export default defineComponent({
     },
 	data() {
 		return {
-			route: useRoute(),
-			router: useRouter(),
 			qrlink: '',
 			digits: ['', '', '', '', '', ''],
 			showErrorMessage: false,
@@ -66,13 +62,9 @@ export default defineComponent({
 
 				const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/validate2fa/${code}`, {withCredentials: true})).data;
 				if (res === true)
-				{
                     this.close(true);
-				}
 				else
-				{
 					this.showErrorMessage = true;
-				}
 			}
 			catch (e)
 			{
@@ -105,44 +97,44 @@ export default defineComponent({
                 })
             }
             // eslint-disable-next-line no-undef
-		const codes = document.querySelectorAll(".code") as NodeListOf<HTMLInputElement>;
-        if (codes && codes[0])
-            codes[0].focus();
+			const codes = document.querySelectorAll(".code") as NodeListOf<HTMLInputElement>;
+			if (codes && codes[0])
+				codes[0].focus();
 
-		const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+			const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-		codes.forEach((code, index) => {
-			code.addEventListener('keydown', (e: KeyboardEvent) => {
-				if (digits.includes(e.key)) {
-					code.value = '';
-					if (index < 5)
+			codes.forEach((code, index) => {
+				code.addEventListener('keydown', (e: KeyboardEvent) => {
+					if (digits.includes(e.key)) {
+						code.value = '';
+						if (index < 5)
+							setTimeout(() => {
+								codes[index + 1].disabled = false;
+								codes[index + 1].focus()
+							}, 10);
+					}
+					else if (e.key === 'Backspace') {
+						code.value = '';
 						setTimeout(() => {
-							codes[index + 1].disabled = false;
-							codes[index + 1].focus()
-						}, 10);
-				}
-				else if (e.key === 'Backspace') {
-					code.value = '';
-					setTimeout(() => {
-						if (this.digits[index] === '' && index > 0)
-							codes[index - 1].focus();
-						this.digits[index] = '';
-					}, 10)
-				}
-				else if (e.key === 'ArrowLeft' && index > 0)
-				{
-					setTimeout(() => {
-							codes[index - 1].focus();
-					}, 10)
-				}
-				else if (e.key === 'ArrowRight' && index < 5)
-				{
-					setTimeout(() => {
-							codes[index + 1].focus();
-					}, 10)
-				}
+							if (this.digits[index] === '' && index > 0)
+								codes[index - 1].focus();
+							this.digits[index] = '';
+						}, 10)
+					}
+					else if (e.key === 'ArrowLeft' && index > 0)
+					{
+						setTimeout(() => {
+								codes[index - 1].focus();
+						}, 10)
+					}
+					else if (e.key === 'ArrowRight' && index < 5)
+					{
+						setTimeout(() => {
+								codes[index + 1].focus();
+						}, 10)
+					}
+				})
 			})
-		})
         },
         quit()
         {
@@ -214,19 +206,6 @@ export default defineComponent({
 	z-index: -1;
 }
 
-#time-left-2fa
-{
-	color: var(--plight);
-}
-
-#loader {
-	width: 5em;
-	height: 5em;
-	border-radius: 50%;
-	margin-left: 9.5em;
-	margin-top: 4em;
-}
-
 input:disabled {
 	background: white;
 	opacity: 0.7;
@@ -242,17 +221,6 @@ input:disabled {
 	position: absolute;
 	margin-top: 2em;
 	color: red;
-}
-
-.fa-error-enter-active,
-.fa-error-leave-active {
-	transition: all .42s ease;
-}
-
-.fa-error-enter-from,
-.fa-error-leave-to {
-	transform: translateY(10px);
-	opacity: 0;
 }
 
 </style>

@@ -90,7 +90,6 @@ export default defineComponent({
 	{
 		return {
 			showQrcode: false,
-			// changePseudo: false,
 		}
 	},
 	methods:
@@ -118,10 +117,10 @@ export default defineComponent({
 		}
 	},
 	beforeRouteUpdate(to, from, next) {
-	if  (typeof to.params.pseudo === "string")
-		this.fecthData(to.params.pseudo)
-    next();
-		},
+		if  (typeof to.params.pseudo === "string")
+			this.fecthData(to.params.pseudo)
+		next();
+	},
 	setup() {
 		let socket;
 
@@ -388,7 +387,6 @@ export default defineComponent({
 #blocked-from-message
 {
 	text-align: center;
-	/* color: var(--plight); */
 	color: red;
 	margin-bottom: 1em;
 }
@@ -409,10 +407,6 @@ export default defineComponent({
 {
 	display: flex;
 	align-items: center;
-}
-
-.winrate {
-	transform: scale(75%);
 }
 
 .text {
