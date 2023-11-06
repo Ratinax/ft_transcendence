@@ -205,9 +205,6 @@ export class ChannelGateway {
     const user = await this.sessionService.getUser(body.sessionCookie);
     if (!user)
       return (null);
-    const relation = await this.channelsUsersService.findRelationByCName(user.id, body.channelName);
-    if (!relation || !relation[0])
-      throw new UnauthorizedException('You are not authorized to do this')
     client.leave(body.channelName)
   }
   @SubscribeMessage('joinRoom')

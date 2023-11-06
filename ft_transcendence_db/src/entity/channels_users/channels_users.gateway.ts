@@ -138,8 +138,12 @@ export class ChannelsUsersGateway {
   @SubscribeMessage('timeoutUser')
   async timeoutUser(@ConnectedSocket() client: Socket, @MessageBody() body: {sessionCookie: string, userTimeouted: {id: number}, channel: {channel_id: number, name: string}, duration_timeout: number})
   {
-	if (!body || !body.sessionCookie || !body.userTimeouted || !body.userTimeouted.id || !body.duration_timeout || body.channel || !body.channel.channel_id || !body.channel.name)
+	if (!body || !body.sessionCookie || !body.userTimeouted || !body.userTimeouted.id || !body.duration_timeout || !body.channel || !body.channel.channel_id || !body.channel.name)
+	{
+		console.log('lol')
 		return ;
+	}
+		
     if (await this.sessionService.getIsSessionExpired(body.sessionCookie))
     {
       throw new UnauthorizedException('You are not connected');
