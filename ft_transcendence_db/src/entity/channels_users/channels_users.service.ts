@@ -2,7 +2,6 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ChannelsUsers } from './channels_users.entity';
 import { Socket } from 'socket.io';
-// import { Socket } from 'express';
 
 @Injectable()
 export class ChannelsUsersService {
