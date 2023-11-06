@@ -29,6 +29,7 @@ export class MessageService {
         .leftJoinAndSelect('message.user', 'user')
         .leftJoinAndSelect('message.game', 'game')
         .where(`channel.name = :name ${removeBlockString}`, { name: channelName })
+        .orderBy('date_sent')
         .getMany();
         const messagesMapped = messages.map((message) => ({
                 id: message.id,
