@@ -41,7 +41,7 @@
 							</div>
 						</div>
 						<div class="col user-match-history">
-							<MatchHistory :pseudo="userName"></MatchHistory>
+							<MatchHistory ref="MatchHistory" :pseudo="userName"></MatchHistory>
 						</div> 
 					</div>
 				</div>
@@ -119,7 +119,12 @@ export default defineComponent({
 	beforeRouteUpdate(to, from, next) {
 		console.log('going to fetch', to.params.pseudo);
 		if  (typeof to.params.pseudo === "string")
-			this.fecthData(to.params.pseudo)
+		{
+			this.fecthData(to.params.pseudo);
+			(this.$refs.MatchHistory as typeof MatchHistory).fetchData(to.params.pseudo);
+		}
+
+		
 		next();
 	},
 	setup() {

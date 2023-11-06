@@ -42,14 +42,24 @@ export default defineComponent({
 	setup(props) {
 
 		const matchHistory = ref<MatchHistory[]>();
-
-		onBeforeMount(async () => {
-			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/match-history/${props.pseudo}`, {withCredentials: true});
-
+		async function fetchData(pseudo: string | undefined)
+		{
+			let response;
+			console.log('pseudo :', pseudo)
+			if (pseudo)
+			{
+				response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/match-history/${pseudo}`, {withCredentials: true});
+			}
+			else
+				response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/match-history/${props.pseudo}`, {withCredentials: true});
+				
 			matchHistory.value = response.data;
 			matchHistory.value?.reverse();
+		}
+		onBeforeMount(async () => {
+			fetchData(undefined);
 		})
-		return { matchHistory };
+		return { matchHistory, fetchData };
 	}
 });
 </script>
