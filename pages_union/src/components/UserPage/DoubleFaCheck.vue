@@ -223,4 +223,14 @@ input:disabled {
 	color: red;
 }
 
+.fa-error-enter-active,
+.fa-error-leave-active {
+	transition: all .42s ease;
+}
+.fa-error-enter-from,
+.fa-error-leave-to {
+	transform: translateY(10px);
+	opacity: 0;
+}
+
 </style>

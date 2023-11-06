@@ -496,12 +496,6 @@ export default defineComponent({
 	cursor: pointer;
 }
 
-.user-match-history {
-	margin: 2%;
-	width: 60%;
-	overflow: auto;
-}
-
 /* Buttons */
 .button-zone {
 	font-size: .8em;
@@ -617,10 +611,6 @@ export default defineComponent({
 	.user-page-content {
 		justify-content: unset;
 		width: 90%;
-	}
-
-	.user-match-history {
-		width: 95%;
 	}
 
 	.middle {
