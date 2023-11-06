@@ -112,10 +112,10 @@ export default defineComponent({
 		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, channel: {channel_id: number, name: string}, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (this.sessionCookie === response.sessionCookie) {
 				console.log('here')
-				if (this.selectedChannel)
-					this.removeChannel(this.selectedChannel);
-				else
+				if (response.channel)
 					this.removeChannel(response.channel);
+				else
+					this.removeChannel(this.selectedChannel);
 				this.updateListUsers(null);
 			}
 			else {
