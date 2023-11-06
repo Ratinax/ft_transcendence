@@ -269,13 +269,16 @@ export class UserService {
         if (!user.is42User || user.hasPersoPP)
         {
             const relativePathDirectory = path.join(__dirname, '../../../', 'images');
-            const absolutePath = path.resolve(relativePathDirectory + '/' + user.profilPic);
-            fs.unlink(absolutePath, (err) => {
-                if (err) {
-                    console.error('not deleted', err);
-                    throw new UnauthorizedException('Error when deleting previous image');
-                }
-            });
+            if (user.hasPersoPP)
+            {
+                const absolutePath = path.resolve(relativePathDirectory + '/' + user.profilPic);
+                fs.unlink(absolutePath, (err) => {
+                    if (err) {
+                        console.error('not deleted', err);
+                        throw new UnauthorizedException('Error when deleting previous image');
+                    }
+                });
+            }
         }
         imageName = await this.uploadImage(image);
         user.profilPic = imageName;
