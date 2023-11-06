@@ -64,6 +64,7 @@ export class GameService {
 		newGame.leftPlayer = new Player(playerName, playerId);
 		newGame.leftPlayer.isConnected = true;
 		newGame.options = options;
+		newGame.options.ballSize = 30;
 		this.games.push(newGame);
 		return {side: true, options: newGame.options};
 	}
