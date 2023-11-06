@@ -260,12 +260,9 @@ export class GamesGateway {
 		}
 		else
 			game.ballAccel = +game.ballAccel
-		if (Number.isNaN(game.ballSize - 0) || game.ballSize > 50 || game.ballSize < 30)
-		{
-			game.ballSize = 30;
-		}
-		else
-			game.ballSize = +game.ballSize;
+		console.log(game.ballSize)
+		game.ballSize = 30;
+		console.log(game.ballSize)
 		if (Number.isNaN(game.ballSpeed - 0) || game.ballSpeed > 1500 || game.ballSpeed < 600)
 		{
 			game.ballSpeed = 1200;

@@ -59,7 +59,7 @@ export default defineComponent({
 			this.messageTooLong();
 		});
 		this.socket?.on('sendGameInviteGoodRequest', async (response: {userName: string, options: {ballAccel: number,
-			ballSize: number, ballSpeed: number,
+			ballSpeed: number,
 			maxAngle: number,
 			playerSize: number,
 			playerSpeed: number,
@@ -118,7 +118,7 @@ export default defineComponent({
 			this.isMessageTooLong = false;
 		},
 		async inviteInGame(gameSettings: {ballAccel: number,
-			ballSize: number, ballSpeed: number,
+			ballSpeed: number,
 			maxAngle: number,
 			playerSize: number,
 			playerSpeed: number,
@@ -135,7 +135,7 @@ export default defineComponent({
 				game: gameSettings });			
 		},
 		sendGameInviteGoodRequest(userName: string, options: {ballAccel: number,
-			ballSize: number, ballSpeed: number,
+			ballSpeed: number,
 			maxAngle: number,
 			playerSize: number,
 			playerSpeed: number,

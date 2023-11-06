@@ -8,11 +8,6 @@
 				<input type="text" v-model="ballAccel">
 			</div>
 			<div class="range-slider-div">
-				<label>Ball size</label>
-				<input type="range" min="30" max="50" class="range-slider" v-model="ballSize">
-				<input type="text" v-model="ballSize">
-			</div>
-			<div class="range-slider-div">
 				<label>Ball speed</label>
 				<input type="range" min="600" max="1500" class="range-slider" v-model="ballSpeed">
 				<input type="text" v-model="ballSpeed">
@@ -58,7 +53,6 @@ export default defineComponent({
 	{
 		return {
 			ballAccel: 50,
-			ballSize: 30,
 			ballSpeed: 1200,
 			maxAngle: 45,
 			playerSize: 300,
@@ -78,7 +72,6 @@ export default defineComponent({
 		resetData()
 		{
 			this.ballAccel = 50;
-			this.ballSize = 30;
 			this.ballSpeed = 1200;
 			this.maxAngle = 45;
 			this.playerSize = 300;
@@ -90,7 +83,6 @@ export default defineComponent({
 		{
 			this.$emit('invite-in-game', {
 				ballAccel: this.ballAccel,
-				ballSize: this.ballSize,
 				ballSpeed: this.ballSpeed,
 				maxAngle: this.maxAngle,
 				playerSize: this.playerSize,

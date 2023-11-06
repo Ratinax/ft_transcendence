@@ -209,7 +209,7 @@ export default defineComponent({
 		toggleChannels() {
 			this.displayListChannels = !this.displayListChannels;
 		},
-		onCreateCustom(body: {name: string, options: {ballAccel: number, ballSize: number, ballSpeed: number, maxAngle: number, playerSize: number, playerSpeed: number, winScore: number}})
+		onCreateCustom(body: {name: string, options: {ballAccel: number, ballSpeed: number, maxAngle: number, playerSize: number, playerSpeed: number, winScore: number}})
 		{
 			this.gameSocket?.emit('createCustom', {
 				name: body.name,
