@@ -54,20 +54,28 @@ export default defineComponent({
 		playerTwoScore: Number,
 		mode: Number,
 	},
+	updated()
+	{
+		this.playerOne = this.playerOneData;
+		this.playerTwo = this.playerTwoData;
+		const gameModes = ["SLOW", "CLASSIC", "FAST", "CUSTOM"];
+		if (this.mode) {
+			this.modeName = gameModes[this.mode - 1];
+		}
+
+		this.pOneScore = this.playerOneScore;
+		this.pTwoScore = this.playerTwoScore;
+	},
 	setup(props) {
 		const router = useRouter();
 		const playerOne = ref(props.playerOneData);
 		const playerTwo = ref(props.playerTwoData);
-		const userOneWin = ref<boolean>();
 		const gameModes = ["SLOW", "CLASSIC", "FAST", "CUSTOM"];
 		let modeName = "unknown gamemode";
 		if (props.mode) {
 			modeName = gameModes[props.mode - 1];
 		}
 
-		if (props.playerOneScore && props.playerTwoScore) {
-			userOneWin.value = props.playerOneScore > props.playerTwoScore;
-		}
 		const pOneScore = ref(props.playerOneScore);
 		const pTwoScore = ref(props.playerTwoScore);
 
@@ -78,7 +86,6 @@ export default defineComponent({
 		return {
 			playerOne, 
 			playerTwo, 
-			userOneWin,
 			pOneScore,
 			pTwoScore,
 			goToUserPage,
