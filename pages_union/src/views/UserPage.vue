@@ -425,6 +425,11 @@ export default defineComponent({
 	width: 100%;
 }
 
+.user-match-history {
+	margin: 2%;
+	width: 60%;
+	overflow: auto;
+}
 /* User profile */
 .user-box {
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
