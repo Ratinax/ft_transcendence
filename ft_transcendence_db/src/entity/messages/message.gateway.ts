@@ -102,8 +102,7 @@ export class MessagesGateway {
           isAGameInvite: false,
         });
       }
-        
-      this.server.to(body.channelName).except(client.id).emit('addMessage', {message: message});
+      this.server.to(body.channelName).except(client.id).emit('addMessage', {message: {content: body.message, dateSent: body.dateSent, channel: message.channel, user: {pseudo: user.pseudo, nickname: user.nickname}, isAGameInvite: message.isAGameInvite}});
       this.server.to(client.id).emit('addMessage', {message: {...message, isSender: true}});
       this.server.to(client.id).emit('sendMessageGoodRequest');
   }

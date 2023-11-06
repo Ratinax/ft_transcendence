@@ -5,6 +5,7 @@ import { ConfigIp } from 'src/config-ip';
 import { UserService } from '../users/user.service';
 import { gameOptions } from './entities/game.entity';
 import { MessageService } from '../messages/message.service';
+import { SessionService } from '../sessions/session.service';
 
 @WebSocketGateway({
 	cors: {
@@ -17,7 +18,7 @@ export class GamesGateway {
 	@WebSocketServer()
 	server: Server;
 
-	constructor(private readonly gameService: GameService, private readonly userService: UserService, private readonly messageService: MessageService) {
+	constructor(private readonly gameService: GameService, private readonly userService: UserService, private readonly messageService: MessageService, private readonly sessionService: SessionService) {
 		setInterval(async () => {
 			this.gameService.checkConnection(this.server);
 			// console.log(this.gameService.games);
@@ -100,21 +101,26 @@ export class GamesGateway {
 	}
 
 	@SubscribeMessage('updateSocket')
-	updateSocket(@ConnectedSocket() client: Socket, @MessageBody() body) {
-		if (!body || !body.name)
+	async updateSocket(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.sessionKey)
 			return ;
 
-		const	gameIndex = this.gameService.getGameIndex(body.name);
+		if (await this.sessionService.getIsSessionExpired(body.sessionKey))
+			return ('not connected');
+		const user = await this.sessionService.getUser(body.sessionKey);
+		if (!user)
+			return ('not connected');
+		const	gameIndex = this.gameService.getGameIndex(user.pseudo);
 
 		if (gameIndex === -1)
 			return ;
 
-		if (this.gameService.games[gameIndex].leftPlayer.name === body.name && !this.gameService.games[gameIndex].leftPlayer.updateInGame) {
+		if (this.gameService.games[gameIndex].leftPlayer.name === user.pseudo && !this.gameService.games[gameIndex].leftPlayer.updateInGame) {
 			this.gameService.games[gameIndex].leftPlayer.id = client.id;
 			this.gameService.games[gameIndex].leftPlayer.updateInGame = true;
 			this.server.to(client.id).emit('inGame');
 		}
-		else if (this.gameService.games[gameIndex].rightPlayer && this.gameService.games[gameIndex].rightPlayer.name === body.name && !this.gameService.games[gameIndex].rightPlayer.updateInGame) {
+		else if (this.gameService.games[gameIndex].rightPlayer && this.gameService.games[gameIndex].rightPlayer.name === user.pseudo && !this.gameService.games[gameIndex].rightPlayer.updateInGame) {
 			this.gameService.games[gameIndex].rightPlayer.id = client.id;
 			this.gameService.games[gameIndex].rightPlayer.updateInGame = true;
 			this.server.to(client.id).emit('inGame');

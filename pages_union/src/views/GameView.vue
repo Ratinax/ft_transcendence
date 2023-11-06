@@ -244,13 +244,14 @@ function loop() {
 	requestAnimationFrame(loop);
 }
 
-onBeforeMount(() => {
+onBeforeMount(async() => {
 
+	const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies`, { withCredentials: true })).data;
 	axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo`, { withCredentials: true }).then(res => {
 		playerName.value = res.data;
-		socket.emit('updateSocket', {name: playerName.value});
 	});
 
+	socket.emit('updateSocket', {sessionKey: sessionCookie});
 	socket.on('updateOpponent', (infos: any) => {
 		game.opponent.racket.y = infos.pos;
 		game.opponentDirection = infos.direction;
