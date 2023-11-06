@@ -117,6 +117,7 @@ export default defineComponent({
 		}
 	},
 	beforeRouteUpdate(to, from, next) {
+		console.log('going to fetch', to.params.pseudo);
 		if  (typeof to.params.pseudo === "string")
 			this.fecthData(to.params.pseudo)
 		next();
