@@ -111,7 +111,11 @@ export default defineComponent({
 		});
 		this.socket.on('updateAfterPart', async (response: {sessionCookie: string, users: Array<{id: number, isOwner: boolean, isAdmin: boolean, isConnected: boolean, pseudo: string}>}) => {
 			if (this.sessionCookie === response.sessionCookie) {
-				this.removeChannel(this.selectedChannel);
+				console.log('here')
+				if (this.selectedChannel)
+					this.removeChannel(this.selectedChannel);
+				else
+					this.removeChannel();
 				this.updateListUsers(null);
 			}
 			else {
@@ -195,6 +199,7 @@ export default defineComponent({
 			(this.$refs.listUsersChat as typeof ListUsersChat).updateListUsers(users);
 		},
 		async onLeaveChannel(channel: {channel_id: number, name: string}) {
+			console.log('chq=annel :', channel)
 			this.socket?.emit('leaveChannel', { channel: channel, sessionCookie: this.sessionCookie })
 		},
 		refreshSendMessageBar() {

@@ -141,6 +141,7 @@ export default defineComponent({
 		},
 		removeChannel(channel_id: number)
 		{
+			console.log('here', channel_id)
 			for (let i = 0; i < this.channels.length; i++)
 			{
 				if (this.channels[i].channel_id === channel_id)
