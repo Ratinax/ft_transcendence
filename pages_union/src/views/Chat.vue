@@ -216,14 +216,14 @@ export default defineComponent({
 		onCreateCustom(body: {name: string, options: {ballAccel: number, ballSpeed: number, maxAngle: number, playerSize: number, playerSpeed: number, winScore: number}})
 		{
 			this.gameSocket?.emit('createCustom', {
-				name: body.name,
+				sessionKey: this.sessionCookie,
 				options: body.options,
 			});
 		},
 		onJoinCustom(body: any)
 		{
 			this.gameSocket?.emit('joinCustom', {
-				name: body.name,
+				sessionKey: this.sessionCookie,
 				creatorName: body.creatorName,
 			})
 		},

@@ -97,7 +97,7 @@ function loop() {
 
 function quickPlay(mode: number) {
 	console.log(mode);
-	socket.emit('quickPlay', {name: name.value, mode: mode});
+	socket.emit('quickPlay', {sessionKey: name.value, mode: mode});
 }
 
 function joinGame() {

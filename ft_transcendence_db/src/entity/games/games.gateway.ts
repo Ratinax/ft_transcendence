@@ -46,13 +46,20 @@ export class GamesGateway {
 	}
 
 	@SubscribeMessage('quickPlay')
-	quickPlay(@ConnectedSocket() client: Socket, @MessageBody() body) {
-		if (!body || !body.name || !body.mode)
+	async quickPlay(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.sessionKey || !body.mode)
 			return ;
-		if (this.gameService.getGameIndex(body.name) === -1) {
-			const infos = this.gameService.addToGame(body.name, body.mode, client.id);
+
+		if (await this.sessionService.getIsSessionExpired(body.sessionKey))
+			return ('not connected');
+		const user = await this.sessionService.getUser(body.sessionKey);
+		if (!user)
+			return ('not connected');
+
+		if (this.gameService.getGameIndex(user.pseudo) === -1) {
+			const infos = this.gameService.addToGame(user.pseudo, body.mode, client.id);
 			this.server.to(client.id).emit('successJoin', infos);
-			const	gameIndex = this.gameService.getGameIndex(body.name);
+			const	gameIndex = this.gameService.getGameIndex(user.pseudo);
 			if (this.gameService.games[gameIndex].isFull) {
 				this.server.to(this.gameService.games[gameIndex].leftPlayer.id).emit('gameFull', {opponentName: this.gameService.games[gameIndex].rightPlayer.name});
 				this.server.to(this.gameService.games[gameIndex].rightPlayer.id).emit('gameFull', {opponentName: this.gameService.games[gameIndex].leftPlayer.name});
@@ -72,25 +79,39 @@ export class GamesGateway {
 	}
 
 	@SubscribeMessage('createCustom')
-	createCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
-		if (!body || !body.options || !body.name)
+	async createCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.options || !body.sessionKey)
 			return ;
+
+		if (await this.sessionService.getIsSessionExpired(body.sessionKey))
+			return ('not connected');
+		const user = await this.sessionService.getUser(body.sessionKey);
+		if (!user)
+			return ('not connected');
+
         body.options = this.toGoodInputGame(body.options);
-		const	gameIndex = this.gameService.getGameIndex(body.name);
+		const	gameIndex = this.gameService.getGameIndex(user.pseudo);
 		if (gameIndex === -1) {
-			const	infos = this.gameService.createCustomGame(body.name, client.id, body.options);
+			const	infos = this.gameService.createCustomGame(user.pseudo, client.id, body.options);
 			this.server.to(client.id).emit('successJoin', infos);
 		}
 	}
 
 	@SubscribeMessage('joinCustom')
-	joinCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
-		if (!body || !body.name || !body.creatorName)
+	async joinCustom(@ConnectedSocket() client: Socket, @MessageBody() body) {
+		if (!body || !body.sessionKey || !body.creatorName)
 			return ;
-		const	gameIndex = this.gameService.getGameIndex(body.name);
+
+		if (await this.sessionService.getIsSessionExpired(body.sessionKey))
+			return ('not connected');
+		const user = await this.sessionService.getUser(body.sessionKey);
+		if (!user)
+			return ('not connected');
+
+		const	gameIndex = this.gameService.getGameIndex(user.pseudo);
 		const	joinIndex = this.gameService.getGameIndex(body.creatorName);
 		if (gameIndex === -1 && joinIndex !== -1) {
-			const	infos = this.gameService.joinCustomGame(body.name, client.id, joinIndex);
+			const	infos = this.gameService.joinCustomGame(user.pseudo, client.id, joinIndex);
 			this.server.to(client.id).emit('successJoin', infos);
 			if (this.gameService.games[joinIndex].isFull) {
 				this.server.to(this.gameService.games[joinIndex].leftPlayer.id).emit('gameFull', {opponentName: this.gameService.games[joinIndex].rightPlayer.name});

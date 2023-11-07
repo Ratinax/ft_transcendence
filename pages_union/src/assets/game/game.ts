@@ -92,7 +92,7 @@ export class Game {
 			let	timer = Math.round((performance.now() - this.waiting_timer - this.spawnTime) / -1000);
 			if (timer < 0)
 				timer = 0;
-			this.ctx.fillText(`${timer}`, this.width / 2 - 70, this.height / 2 + 80);
+			this.ctx.fillText(`${timer}`, (this.width - this.ctx.measureText(`${timer}`).width) / 2, this.height / 2 + 80);
 		}
 	}
 

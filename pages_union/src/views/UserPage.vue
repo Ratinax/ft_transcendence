@@ -432,8 +432,8 @@ export default defineComponent({
 }
 
 .user-match-history {
-	margin: 2%;
-	width: 60%;
+	margin: 1em;
+	width: 100%;
 	overflow: auto;
 }
 /* User profile */
@@ -605,7 +605,7 @@ export default defineComponent({
 
 /* Media queries */
 
-@media (max-width: 1120px) {
+@media only screen and (max-width: 1120px) {
 	.row {
 		flex-direction: column;
 	}
@@ -643,6 +643,7 @@ export default defineComponent({
 	.user-name-and-status {
 		flex-direction: row;
 	}
+
 }
 
 @media (max-width: 960px) {
@@ -656,6 +657,10 @@ export default defineComponent({
 		padding: 0;
 		border: none;
 		border-bottom: 1px solid var(--plight);
+	}
+
+	.user-match-history {
+		width: unset;
 	}
 }
 

@@ -166,7 +166,7 @@ export default defineComponent({
 	color: orange;
 }
 
-.win, .loss {
+.win, .loss, .draw {
 	width: 2.5em;
 }
 

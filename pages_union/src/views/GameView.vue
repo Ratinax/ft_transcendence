@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="page-background"></div>
-		<div class="view gameview-container col">
+		<div class="gameview-container col">
 			<div class="row users-infos">
 				<div class="row left user-info">
 					<div v-if="game.player.side" class="profile-pic-container">
@@ -33,6 +33,14 @@
 				</div>
 			</div>
 			<canvas></canvas>
+			<div class="gameview-button-zone">
+				<button @mousedown="goDown" @mouseup="stopDown" @touchend="stopDown" @touchstart="goDown" class="ft-button blue-button downButton">
+					<font-awesome-icon icon="fa-solid fa-down-long" size="xl"/>
+				</button>
+				<button @mousedown="goUp" @mouseup="stopUp" @touchend="stopUp" @touchstart="goUp" class="ft-button blue-button upButton">
+					<font-awesome-icon icon="fa-solid fa-up-long" size="xl"/>
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -56,7 +64,6 @@ let		playerProfilePic = ref('');
 let		opponentName = ref('');
 let		opponentProfilePic = ref('');
 let		exit = false;
-
 const	game = new Game();
 
 const	latency = ref(0);
@@ -69,7 +76,7 @@ game.opponent = new Player();
 game.ball = new Ball();
 
 window.addEventListener('keydown', e => {
-	if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "Z")
+	if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "W")
 	{
 		game.up = true;
 		if (!game.down)
@@ -88,7 +95,7 @@ window.addEventListener('keydown', e => {
 })
 
 window.addEventListener('keyup', e => {
-	if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "Z")
+	if (e.key === "w" || e.key === "Z" || e.key === "z" || e.key === "W")
 	{
 		game.up = false;
 		if (game.down)
@@ -240,7 +247,19 @@ function loop() {
 		socket.emit('endGame')
 	}
 	if (game.isOver)
-	return ;
+	{
+		game.ctx.clearRect(0, 0, game.canvas.width, game.canvas.height);
+		let	winnerName = "";
+		if (game.player.score > game.opponent.score)
+			winnerName = nickname.value;
+		else
+			winnerName = opponentName.value;
+		const	scoreStr = `${nickname.value} ${game.player.score} - ${game.opponent.score} ${opponentName.value}`
+		const	winnerStr = `winner: ${winnerName}`;
+		game.ctx.fillText(scoreStr, (game.canvas.width - game.ctx.measureText(scoreStr).width) / 2, game.canvas.height / 2 - 100);
+		game.ctx.fillText(winnerStr, (game.canvas.width - game.ctx.measureText(winnerStr).width) / 2, game.canvas.height / 2 + 100);
+		return ;
+	}
 	requestAnimationFrame(loop);
 }
 
@@ -317,6 +336,37 @@ onBeforeUnmount(() => {
 	socket.close();
 })
 
+function goUp () {
+	game.up = true;
+	if (!game.down)
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 1});
+	else
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
+}
+
+function goDown () {
+	game.down = true;
+	if (!game.up)
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: -1});
+	else
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
+}
+
+function stopUp () {
+	game.up = false;
+	if (game.down)
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: -1});
+	else
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
+}
+
+function stopDown () {
+	game.down = false;
+	if (game.up)
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 1});
+	else
+		socket.emit('updatePlayerPos', {pos: game.player.racket?.y, direction: 0});
+}
 
 </script>
 
@@ -333,6 +383,7 @@ onBeforeUnmount(() => {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	padding-top: 5em;
 }
 
 .users-infos {
@@ -390,12 +441,33 @@ canvas {
 	color: var(--plight);
 }
 
+.gameview-button-zone  {
+	margin-top: 3em;
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+}
+
+button {
+	color: var(--pdark);
+}
+
 @media only screen and (max-width: 600px) {
 	.profile-pic-container {
 		width: 2.5em;
 		height: 2.5em;
 	}
 
+}
+
+@media only screen and (min-width: 500px) {
+	.gameview-button-zone {
+		display: none;
+	}
+
+	.gameview-container {
+		padding-top: 0;
+	}
 }
 
 </style>
