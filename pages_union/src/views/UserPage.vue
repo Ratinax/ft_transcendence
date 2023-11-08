@@ -27,7 +27,7 @@
 									</form>
 								</div>
 							</div>
-							<p class="text">@{{ userName }}</p>
+							<p class="text real-user-name">@{{ userName }}</p>
 
 							<div id="fa2" v-if="!showButtons">
 							<p class="text">2Fa</p>
@@ -40,9 +40,11 @@
 								<font-awesome-icon v-if="is2faState" id="see-qrcode" :icon="['fas', 'eye']" @click="seeQrcode"/>
 							</div>
 						</div>
-						<div class="col user-match-history">
-							<MatchHistory ref="MatchHistory" :pseudo="userName"></MatchHistory>
-						</div> 
+						<div class="user-match-history-container">
+							<div class="user-match-history">
+								<MatchHistory ref="MatchHistory" :pseudo="userName"></MatchHistory>
+							</div> 
+						</div>
 					</div>
 				</div>
 				<div class="row button-zone">
@@ -427,15 +429,23 @@ export default defineComponent({
 .user-page-content {
 	justify-content: center;
 	margin: 2em auto;
-	max-width: 960px;
-	width: 100%;
+	width: 50%;
+	transition: width 200ms ease;
+}
+
+.user-match-history-container {
+	display: flex;
+	justify-content: center;
+	overflow: auto;
+	max-width: 800px;
+	width: 70%;
 }
 
 .user-match-history {
-	margin: 1em;
 	width: 100%;
-	overflow: auto;
+	margin: 1em;
 }
+
 /* User profile */
 .user-box {
 	box-shadow: rgba(102, 252, 251, 0.4) 0px 2px 4px, rgba(102, 252, 251, 0.3) 0px 7px 13px -3px, rgba(102, 252, 251, 0.2) 0px -3px 0px inset;
@@ -445,13 +455,13 @@ export default defineComponent({
 }
 
 .user-profile {
-	height: 27em;
+	height: 30em;
 }
 
 .user-profile-pic-and-name {
 	align-items: center;
 	justify-content: center;
-	width: 40%;
+	width: 50%;
 	padding: 0 1em;
 	border-right: 1px solid var(--plight);
 }
@@ -490,12 +500,18 @@ export default defineComponent({
 }
 
 .user-name {
-	font-size: 2em;
+	font-size: 3em;
 	background-color: rgba(0, 0, 0, 0);
 }
 
+.real-user-name {
+	font-size: 1.5em;
+	color: lightgrey;
+	margin-bottom: 1em;
+}
+
 .user-name-input {
-	font-size: 2em;
+	font-size: 3em;
 	display: flex;
 	justify-content: center;
 	font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -605,9 +621,23 @@ export default defineComponent({
 
 /* Media queries */
 
+@media only screen and (max-width: 1920px) {
+	.user-page-content {
+		width: 80%;
+	}
+}
+
 @media only screen and (max-width: 1120px) {
 	.row {
 		flex-direction: column;
+	}
+
+	.user-name, .user-name-input {
+		font-size: 2em;
+	}
+
+	.real-user-name {
+		font-size: 1em;
 	}
 
 	.user-stats {
@@ -659,8 +689,8 @@ export default defineComponent({
 		border-bottom: 1px solid var(--plight);
 	}
 
-	.user-match-history {
-		width: unset;
+	.user-match-history-container {
+		width: 100%;
 	}
 }
 

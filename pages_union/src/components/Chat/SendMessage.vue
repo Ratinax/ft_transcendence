@@ -163,14 +163,15 @@ export default defineComponent({
 .send-message-container {
 	display: flex;
 	align-items: center;
-	height: 8%;
+	height: 10%;
 	border-top: 1px solid var(--plight);
 }
 
 .send-message-content {
 	display: flex;
-	justify-content: space-evenly;
+	height: 50%;
 	width: 100%;
+	justify-content: space-around;
 }
 
 .message-input {
@@ -179,7 +180,8 @@ export default defineComponent({
 	border-radius: .5em;
 	padding-left: .42em;
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-	width: 27em;
+	width: 20vw;
+	font-size: 1.2em;
 }
 
 .message-input-error::placeholder
@@ -197,7 +199,10 @@ button {
 	font-size: 1.1em;
 	background: var(--pcyan);
 	box-shadow: 0 4px 0 var(--pblue);
-	margin-bottom: 2px;
+}
+
+form {
+	display: inline;
 }
 
 @media screen and (max-width: 1260px) {
@@ -208,15 +213,11 @@ button {
 	.gameInviteText {
 		display: none;
 	}
-
-	.message-input {
-		width: 24em;
-	}
 }
 
-@media screen and (max-width: 1000px) {
+@media only screen and (max-width: 700px) {
 	.message-input {
-		width: 18em;
+		width: 70vw;
 	}
 }
 
@@ -225,5 +226,7 @@ button {
 		height: 13%;
 	}
 }
+
+
 
 </style>

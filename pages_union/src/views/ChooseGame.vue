@@ -112,8 +112,8 @@ export default defineComponent({
 
 .content {
 	align-items: center;
-	max-width: 960px;
 	width: 70%;
+	max-width: 960px;
 	transition: width 200ms ease;
 	margin: auto;
 }

@@ -206,13 +206,20 @@ export default defineComponent({
 
 .list-users {
 	display: flex;
-	width: 100%;
-	max-width: 1600px;
+	width: 80%;
+	transition: width 200ms ease;
 	margin: 2em auto;
 }
 
 .page-background {
 	background: linear-gradient(45deg, var(--pblack), var(--pdark));
+}
+
+@media screen and (max-width: 1600px) {
+	.list-users {
+		width: 95%;
+	}
+	
 }
 
 @media screen and (max-width: 1360px) {

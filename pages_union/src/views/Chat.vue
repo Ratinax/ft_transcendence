@@ -254,9 +254,8 @@ export default defineComponent({
 }
 
 .messageszone {
-	width: 50%;
+	width: 40%;
 	transition: width 200ms ease;
-	max-width: 42em;
 	min-width: 340px;
 	padding: .1em;
 	background: white;
