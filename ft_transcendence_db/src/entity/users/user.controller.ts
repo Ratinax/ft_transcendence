@@ -279,7 +279,7 @@ export class UserController {
 			throw new BadRequestException('Uncomplete request');
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data');
-        const regex = /^[A-Za-z0-9_\- ]+$/;
+        const regex = /^[A-Za-z0-9_\-]+$/;
         if (!regex.test(body.nickname) || body.nickname.length < 3 || body.nickname.length > 8)
         {
             throw new BadRequestException('not good input');
