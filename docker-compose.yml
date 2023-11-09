@@ -1,0 +1,55 @@
+version: '3'
+
+volumes:
+  db_data:
+  img_data:
+    driver_opts:
+      type: none
+      device: $PWD/nest-api/ft_transcendence_db/images
+      o: bind
+
+services:
+  # Service Vue.js
+  vue-app:
+    env_file:
+      - ./.frontenv
+    build:
+      context: ./vue-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - nest-api
+    networks:
+      - mynetwork
+
+  # Service Nest.js
+  nest-api:
+    env_file:
+      - ./.backenv
+    build:
+      context: ./nest-api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - mynetwork
+    volumes:
+      - img_data:/ft_transcendence_db/images
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:latest
+    env_file:
+      - ./.dbenv
+    ports:
+      - "5432:5432"
+    networks:
+      - mynetwork
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+
+
+networks:
+  mynetwork:
