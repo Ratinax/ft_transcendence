@@ -1,7 +1,8 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Param, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Param, Post, Req, Res, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Request, Response } from 'express';
 import * as path from 'path';
+import * as fs from 'fs';
 import { SessionService } from '../sessions/session.service';
 import * as speakeasy from 'speakeasy';
 
@@ -83,7 +84,7 @@ export class UserController {
             }
             res.cookie('2FAKEY', user.pseudo, {httpOnly: true, expires: new Date(Date.now() + 30000)});
             return (uri);
-            
+
 		}
         throw new BadRequestException('Authentication failed, try again later');
     }
@@ -178,7 +179,7 @@ export class UserController {
         return (true);
     }
     @Get('/image/:imageName')
-    async getImage(@Param('imageName') imageName: string, @Req() req: Request, @Res() res: Response) 
+    async getImage(@Param('imageName') imageName: string, @Req() req: Request, @Res() res: Response)
     {
         if (!req.cookies['SESSION_KEY'] || await this.sessionService.getIsSessionExpired(req.cookies['SESSION_KEY']))
         	throw new UnauthorizedException('You are not able to access this data')
@@ -195,7 +196,9 @@ export class UserController {
             }
         }
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
-        return (res.sendFile(imagePath));
+        if (fs.existsSync(imagePath))
+            return (res.sendFile(imagePath));
+        throw new NotFoundException('Ressource not found');
     }
     @Get('verify2Fa/:code')
     async verify2Fa(@Param('code') code: string, @Req() req: Request, @Res({passthrough: true}) res: Response)
@@ -236,7 +239,7 @@ export class UserController {
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
         if (!user)
             return (null);
-        return (user.doubleFaURL); 
+        return (user.doubleFaURL);
     }
     @Get('doUserExists/:username')
     async getDoUserExists(@Req() req: Request, @Param('username') username: string)
