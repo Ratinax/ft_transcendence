@@ -61,10 +61,7 @@ export default defineComponent({
 			{
 
 				const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/validate2fa/${code}`, {withCredentials: true})).data;
-				if (res === true)
-                    this.close(true);
-				else
-					this.showErrorMessage = true;
+				this.showErrorMessage = true;
 			}
 			catch (e)
 			{
@@ -173,7 +170,7 @@ export default defineComponent({
 {
 	display: flex;
 	justify-content: center;
-	padding-top: 10em;
+	padding-top: 5em;
 }
 
 #qrcode-doublefa
