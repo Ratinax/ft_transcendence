@@ -387,8 +387,7 @@ function stopDown () {
 }
 
 .users-infos {
-	width: 90%;
-	max-width: 1260px;
+	width: 60%;
 }
 
 .user-info {
@@ -399,8 +398,7 @@ function stopDown () {
 canvas {
 	background-color: black;
 	border-radius: 1em;
-	width: 50%;
-	max-width: 1260px;
+	width: 60%;
 }
 
 .profile-pic-container {
@@ -441,7 +439,7 @@ canvas {
 	color: var(--plight);
 }
 
-.gameview-button-zone  {
+.gameview-button-zone {
 	margin-top: 3em;
 	width: 100%;
 	display: flex;
@@ -452,16 +450,21 @@ button {
 	color: var(--pdark);
 }
 
+@media only screen and (max-width: 1200px) {
+	canvas, .users-infos {
+		width: 50%;
+	}
+}
+
 @media only screen and (max-width: 600px) {
 	.profile-pic-container {
 		width: 2.5em;
 		height: 2.5em;
 	}
 
-	canvas {
+	canvas, .users-infos {
 		width: 90%;
 	}
-
 }
 
 @media only screen and (min-width: 500px) {
