@@ -200,7 +200,8 @@ export class ChannelsUsersService {
             .getMany();
         const users = usersAndChannels.map((channelsUsers) => ({
             id: channelsUsers.user.id, 
-            pseudo: channelsUsers.user.pseudo, 
+            pseudo: channelsUsers.user.pseudo,
+            nickname: channelsUsers.user.nickname,
             profilPic: (channelsUsers.user.is42User && !channelsUsers.user.hasPersoPP) ? channelsUsers.user.profilPic : `http://${process.env.IP_ADDRESS}:3000/users/image/${channelsUsers.user.profilPic}`,
             isBanned: channelsUsers.isBanned,
             }));

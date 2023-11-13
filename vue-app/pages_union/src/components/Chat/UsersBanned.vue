@@ -6,7 +6,7 @@
 					<div class="circle">
 						<img :src="user.profilPic">
 					</div>
-					<p class="user-banned-pseudo">{{ user.pseudo }}</p>
+					<p class="user-banned-pseudo">{{ user.nickname }} @{{ user.pseudo }}</p>
 					<font-awesome-icon class="cross-icon" :icon="['fas', 'xmark']" @click.prevent="removeFromBan(user)"/>
 				</div>
 			</div>
@@ -31,7 +31,7 @@ export default defineComponent({
 {
 		return {
 			router: useRouter(),
-			listUsersBanned: [] as Array<{id: number, pseudo: string, profilPic: string, is42User: boolean}>,
+			listUsersBanned: [] as Array<{id: number, pseudo: string, nickname: string, profilPic: string, is42User: boolean}>,
 			isClickREmoveFromBan: false,
 			showErrorMessage: false,
 		}
