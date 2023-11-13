@@ -155,7 +155,7 @@ export class UserService {
         const pngSignature = '89504E470D0A1A0A';
         const jpgSignature = 'FFD8FF';
       
-        const fileSignature = fileContent.substring(0, 12); 
+        const fileSignature = fileContent.substring(0, 16); 
         if (fileSignature === pngSignature) {
           return 'png';
         } else if (fileSignature.substring(0, 6) === jpgSignature) {

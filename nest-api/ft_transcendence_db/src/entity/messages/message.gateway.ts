@@ -40,6 +40,8 @@ export class MessagesGateway {
       const relation = (await this.channelsUsersService.findRelation(user.id, body.channel_id))[0];
       if (!relation)
         return ('no such relation');
+      if (relation.isBanned)
+        return ('cannot because banned');
       if (body.message.length > 1024)
       {
         this.server.to(client.id).emit('messageTooLong');
