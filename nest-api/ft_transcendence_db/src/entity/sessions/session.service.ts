@@ -31,6 +31,14 @@ export class SessionService{
         return (await this.sessionRepository.save(newSession));
 
     }
+    getSocketOfUser(pseudo: string)
+    {
+        for (let i = 0; i < this.sessions.length; i++)
+        {
+            if (this.sessions[i].pseudo === pseudo)
+                return (this.sessions[i].id);
+        }
+    }
     async getUser(sessionKey: string)
     {
         if (await this.getIsSessionExpired(sessionKey))

@@ -5,6 +5,7 @@ import { OnModuleInit } from '@nestjs/common';
 import { ConfigIp } from 'src/config-ip';
 import { Socket } from 'socket.io';
 import { UserService } from '../users/user.service';
+import { FriendshipService } from '../friendships/friendship.service';
 
 @WebSocketGateway({
   cors: {
@@ -18,7 +19,7 @@ export class SessionGateway implements OnModuleInit {
     @WebSocketServer()
     server: Server;
 
-    constructor(private readonly sessionService: SessionService) {
+    constructor(private readonly sessionService: SessionService, private readonly friendshipService: FriendshipService, private readonly userService: UserService) {
     }
     onModuleInit() {
         this.pingUsersThread();
@@ -46,12 +47,12 @@ export class SessionGateway implements OnModuleInit {
             const noMoreConnected = res.noMoreConnected;
             const connected = res.connected;
             for (let i = 0; i < noMoreConnected.length; i++)
-            {
-                this.server.emit('noMoreConnected', {pseudo: noMoreConnected[i]});
+            {       
+                this.server.to('statuOfUser:' + noMoreConnected[i]).emit('noMoreConnected', {pseudo: noMoreConnected[i]});
             }
             for (let i = 0; i < connected.length; i++)
             {
-                this.server.emit('isConnected', {pseudo: connected[i]});
+                this.server.to('statuOfUser:' + noMoreConnected[i]).emit('isConnected', {pseudo: connected[i]});
             }
         }, 7500)
     }
@@ -66,5 +67,21 @@ export class SessionGateway implements OnModuleInit {
         const user = await this.sessionService.getUser(body.sessionCookie);
         this.sessionService.updateSession({id: client.id, sessionCookie: body.sessionCookie, pseudo: user.pseudo});
         this.server.emit('isConnected', {pseudo: user.pseudo});
+    }
+    @SubscribeMessage('joinRoomFriendStatu')
+    async joinRoomFriendStatu(@ConnectedSocket() client: Socket, @MessageBody() body: {pseudo: string, sessionCookie: string})
+    {
+        if (!body || !body.pseudo || !body.sessionCookie || await this.sessionService.getIsSessionExpired(body.sessionCookie))
+    	{
+            return (null);
+    	}
+        const user = await this.sessionService.getUser(body.sessionCookie);
+        const friend = (await this.userService.getUser(body.pseudo));
+        if (!friend)
+        	return (null);
+        const resFriend = await this.friendshipService.getFriendRelation(friend.id, user.id);
+        if (!resFriend || resFriend !== 'accepted')
+            return ('cannot do that because not friend');
+        client.join('statuOfUser:' + body.pseudo);
     }
 }

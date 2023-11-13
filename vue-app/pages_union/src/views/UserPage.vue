@@ -127,7 +127,8 @@ export default defineComponent({
 		next();
 	},
 	setup() {
-		let socket;
+		let socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true });
+
 
 		const show2facheck = ref(false);
 		const doubleFaCode = ref('');
@@ -178,6 +179,8 @@ export default defineComponent({
 			nicknameTmp.value = nickname.value;
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
+			const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
+			socket.emit('joinRoomFriendStatu', {sessionCookie: sessionCookie});
 			try
 			{
 				const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/games-wins/${userName.value}`, {withCredentials: true});
@@ -352,7 +355,6 @@ export default defineComponent({
 }
 		onBeforeMount(() =>
 			{
-			socket = io(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/session`, { withCredentials: true });
 				socket.on('isConnected', (response) => {
 					if (response.pseudo === userName.value)
 					isConnected.value = true;
