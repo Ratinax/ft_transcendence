@@ -127,6 +127,8 @@ export class UserService {
             return 'default.png';
         else
             extension = image.substring(11, 15);
+        if (!this.getImgType(image))
+            throw new BadRequestException('Bad file format, (required .png .jpg)');
         if (extension === 'jpg;' || extension === 'jpeg')
             extension = '.jpg';
         else if (extension === 'png;')
@@ -149,7 +151,19 @@ export class UserService {
             throw new UnauthorizedException('Failed to save image');
         }
     }
-
+    getImgType(fileContent) {
+        const pngSignature = '89504E470D0A1A0A';
+        const jpgSignature = 'FFD8FF';
+      
+        const fileSignature = fileContent.substring(0, 12); 
+        if (fileSignature === pngSignature) {
+          return 'png';
+        } else if (fileSignature.substring(0, 6) === jpgSignature) {
+          return 'jpg';
+        } else {
+          return '';
+        }
+      }
     async comparePasswords(user: {password: string}, password: string)
     {
         return (await bcrypt.compare(password + process.env.PEPPER, user.password));
@@ -262,6 +276,8 @@ export class UserService {
     }
     async changePP(user_id: number, image: string)
     {
+        if (!this.getImgType(image))
+            throw new BadRequestException('Bad file format, (required .png .jpg)');
         const user = await this.userRepository.findOne({where: {id : user_id}});
         let imageName;
 
@@ -272,7 +288,6 @@ export class UserService {
             {
                 try
                 {
-
                     if (fs.existsSync(relativePathDirectory + user.profilPic))
                     {
                         const absolutePath = path.resolve(relativePathDirectory + '/' + user.profilPic);
