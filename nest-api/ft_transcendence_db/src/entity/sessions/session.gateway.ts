@@ -66,7 +66,7 @@ export class SessionGateway implements OnModuleInit {
     	}
         const user = await this.sessionService.getUser(body.sessionCookie);
         this.sessionService.updateSession({id: client.id, sessionCookie: body.sessionCookie, pseudo: user.pseudo});
-        this.server.emit('isConnected', {pseudo: user.pseudo});
+        this.server.to('statuOfUser:' + user.pseudo).emit('isConnected', {pseudo: user.pseudo});
     }
     @SubscribeMessage('joinRoomFriendStatu')
     async joinRoomFriendStatu(@ConnectedSocket() client: Socket, @MessageBody() body: {pseudo: string, sessionCookie: string})
@@ -79,9 +79,16 @@ export class SessionGateway implements OnModuleInit {
         const friend = (await this.userService.getUser(body.pseudo));
         if (!friend)
         	return (null);
-        const resFriend = await this.friendshipService.getFriendRelation(friend.id, user.id);
-        if (!resFriend || resFriend !== 'accepted')
+        try
+        {
+            const resFriend = await this.friendshipService.getFriendRelation(friend.id, user.id);
+            if (!resFriend || resFriend !== 'accepted')
+                return ('cannot do that because not friend');
+        }
+        catch
+        {
             return ('cannot do that because not friend');
+        }
         client.join('statuOfUser:' + body.pseudo);
     }
 }

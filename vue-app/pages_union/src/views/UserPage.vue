@@ -179,8 +179,8 @@ export default defineComponent({
 			nicknameTmp.value = nickname.value;
 			const response = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
 			profilePic.value = response.data;
-			const sessionCookie = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/imageNameByPseudo/${userName.value}`, {withCredentials: true});
-			socket.emit('joinRoomFriendStatu', {sessionCookie: sessionCookie});
+			const sessionCookie = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/sessions/cookies/`, {withCredentials: true})).data;
+			socket.emit('joinRoomFriendStatu', {sessionCookie: sessionCookie, pseudo: nickname.value});
 			try
 			{
 				const response2 = await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/games/games-wins/${userName.value}`, {withCredentials: true});
