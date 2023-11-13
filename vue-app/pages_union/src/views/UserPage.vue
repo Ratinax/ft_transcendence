@@ -104,6 +104,7 @@ export default defineComponent({
 			try
 			{
 				await axios.post(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/changeNickname`, {nickname: this.nickname}, {withCredentials: true});
+				this.nicknameTmp = nickname;
 			}
 			catch (e)
 			{
