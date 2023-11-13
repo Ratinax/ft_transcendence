@@ -290,7 +290,14 @@ export class UserController {
         const user = await (this.sessionService.getUser(req.cookies['SESSION_KEY']));
         if (!user || !user.id)
         	throw new UnauthorizedException('You are not able to access this data')
-        await this.userService.changeNickname(user.id, body.nickname);
+        try
+        {
+            await this.userService.changeNickname(user.id, body.nickname);
+        }
+        catch (e)
+        {
+            throw new UnauthorizedException('Allready used nickname')
+        }
     }
     @Post('changePP')
     async changePP(@Req() req: Request, @Body() body: {image: string})

@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 /**
  * User entity
- * 
+ *
  * attributs :
  * - id: number
  * - pseudo: string
@@ -17,13 +17,13 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 export class Users {
     @PrimaryGeneratedColumn()
     id: number;
-  
+
     @Column({ type: 'varchar', length: 20, unique: true })
     pseudo: string;
 
-    @Column({ type: 'varchar', length: 20})
+    @Column({ type: 'varchar', length: 20, unique: true})
     nickname: string;
-    
+
     @Column({ type: 'varchar', length: 100, default: ''})
     password: string;
 
