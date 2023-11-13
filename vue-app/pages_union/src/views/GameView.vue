@@ -387,7 +387,8 @@ function stopDown () {
 }
 
 .users-infos {
-	width: 65%;
+	width: 90%;
+	max-width: 1260px;
 }
 
 .user-info {
@@ -398,7 +399,8 @@ function stopDown () {
 canvas {
 	background-color: black;
 	border-radius: 1em;
-	width: 65%;
+	width: 50%;
+	max-width: 1260px;
 }
 
 .profile-pic-container {
@@ -454,6 +456,10 @@ button {
 	.profile-pic-container {
 		width: 2.5em;
 		height: 2.5em;
+	}
+
+	canvas {
+		width: 90%;
 	}
 
 }
