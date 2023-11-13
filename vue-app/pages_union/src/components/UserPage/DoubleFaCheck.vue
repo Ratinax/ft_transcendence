@@ -61,10 +61,14 @@ export default defineComponent({
 			{
 
 				const res = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/validate2fa/${code}`, {withCredentials: true})).data;
-				this.showErrorMessage = true;
+				if (res)
+					this.close(true);
+				else
+					this.showErrorMessage = true;
 			}
 			catch (e)
 			{
+				this.showErrorMessage = true;
 				console.error('Error :', e);
 			}
 		},
