@@ -66,7 +66,8 @@ export class ChannelsUsersGateway {
     const messageRemoved = await this.messageService.removeGameInviteById(body.userBanned.id);
     if (messageRemoved)
       this.server.to(body.channel.name).emit('removeMessage', {message_id: messageRemoved.id});
-    this.channelsUsersService.getSocket(body.userBanned.pseudo).leave(body.channel.name);
+    console.log(this.channelsUsersService.getSocket(body.userBanned.pseudo));
+    this.channelsUsersService.getSocket(body.userBanned.pseudo)?.leave(body.channel.name);
   
     return (res);
   }
@@ -97,7 +98,8 @@ export class ChannelsUsersGateway {
     const messageRemoved = await this.messageService.removeGameInviteById(body.userKicked.id);
     if (messageRemoved)
       this.server.to(body.channel.name).emit('removeMessage', {message_id: messageRemoved.id});
-    this.channelsUsersService.getSocket(body.userKicked.pseudo).leave(body.channel.name);
+    console.log(this.channelsUsersService.getSocket(body.userKicked.pseudo));
+    this.channelsUsersService.getSocket(body.userKicked.pseudo)?.leave(body.channel.name);
     return (res);
   }
 
