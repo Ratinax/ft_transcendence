@@ -151,17 +151,20 @@ export class UserService {
             throw new UnauthorizedException('Failed to save image');
         }
     }
-    getImgType(fileContent) {
-        const pngSignature = '89504E470D0A1A0A';
-        const jpgSignature = 'FFD8FF';
-      
-        const fileSignature = fileContent.substring(0, 16);
+    getImgType(fileContent) {      
+        const fileSignature = fileContent.substring(11, 13);
+        const fileSignature2 = fileContent.substring(11, 14);
         console.log(fileSignature);
-        if (fileSignature === pngSignature) {
+        if (fileSignature === 'jpg') {
           return 'png';
-        } else if (fileSignature.substring(0, 6) === jpgSignature) {
+        }
+        else if (fileSignature === 'png') {
           return 'jpg';
-        } else {
+        }
+        else if (fileSignature2 === 'jpeg') {
+            return 'jpeg';
+          }
+        else {
           return '';
         }
       }
