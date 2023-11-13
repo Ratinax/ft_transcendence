@@ -152,8 +152,8 @@ export class UserService {
         }
     }
     getImgType(fileContent) {      
-        const fileSignature = fileContent.substring(11, 13);
-        const fileSignature2 = fileContent.substring(11, 14);
+        const fileSignature = fileContent.substring(11, 14);
+        const fileSignature2 = fileContent.substring(11, 15);
         console.log(fileSignature);
         if (fileSignature === 'jpg') {
           return 'png';
