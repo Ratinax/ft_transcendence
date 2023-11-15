@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { SessionService } from '../sessions/session.service';
 import * as speakeasy from 'speakeasy';
+import * as gm from 'gm';
 
 @Controller('users')
 export class UserController {
@@ -197,7 +198,24 @@ export class UserController {
         }
         let imagePath = path.join(__dirname, '../../../', 'images', imageName);
         if (fs.existsSync(imagePath))
-            return (res.sendFile(imagePath));
+        {
+            try
+            {
+                await new Promise<any>((resolve, reject) => {
+                    gm(imagePath).identify((err, data) => {
+                    if (err)
+                        reject(err);
+                    else
+                        resolve(data);
+                    });
+                });
+                return (res.sendFile(imagePath));
+            }
+            catch (e)
+            {
+                return (res.sendFile(path.join(__dirname, '../../../', 'images', 'default.png')));
+            }
+        }
         throw new NotFoundException('Ressource not found');
     }
     @Get('verify2Fa/:code')

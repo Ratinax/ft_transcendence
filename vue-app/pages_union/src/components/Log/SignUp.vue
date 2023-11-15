@@ -81,7 +81,8 @@ export default defineComponent({
 				|| error.value === 'File too large, must be 50mb max, will be replaced by a default one')
 				error.value = '';
 			const file = event.target.files[0];
-			if (!(file.type === 'image/png' 
+			if (!file || !file.type ||
+				!(file.type === 'image/png' 
 				|| file.type === 'image/jpeg'
 				|| file.type === 'image/jpg'))
 			{
