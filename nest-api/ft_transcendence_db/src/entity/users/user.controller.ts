@@ -20,9 +20,9 @@ export class UserController {
             throw new BadRequestException('Password should be between 8 and 20 caracteres');
         if (body.pseudo.length < 3 || body.pseudo.length > 8)
             throw new BadRequestException('Login should be between 3 and 8 caracteres');
-        const regex = /^[A-Za-z0-9_-]+$/;
+        const regex = /^[A-Za-z0-9\-]+$/;
         if (!regex.test(body.pseudo))
-            throw new BadRequestException('Login should only contains A-Z, a-z, 0-9, and \'_\'');
+            throw new BadRequestException('Login should only contains A-Z, a-z, 0-9, and -');
         const user = await this.userService.signUp(body);
         if (!user)
             throw new BadRequestException('Couldn\'t register you');

@@ -78,7 +78,7 @@ export class ChannelGateway {
       this.server.to(client.id).emit('createWrongCategory');
       return (false);
     }
-    const regex = /^[A-Za-z0-9_\-]+$/;
+    const regex = /^[A-Za-z0-9\-]+$/;
     if (!regex.test(channel.name))
     {
       this.server.to(client.id).emit('createNotAllowedChars');
@@ -96,7 +96,7 @@ export class ChannelGateway {
 		throw new UnauthorizedException('You are not connected');
 
     const user = await this.sessionService.getUser(body.sessionCookie);
-    const regex = /^[A-Za-z0-9_\- ]+$/;
+    const regex = /^[A-Za-z0-9\-]+$/;
     if (!user)
     {
       this.server.to(client.id).emit('joinNotConnected');

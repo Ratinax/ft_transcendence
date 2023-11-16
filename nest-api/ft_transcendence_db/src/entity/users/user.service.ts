@@ -50,6 +50,7 @@ export class UserService {
     async signIn(user: {password: string, pseudo: string})
     {
         let userFound = await this.userRepository.findOne({where: {pseudo : user.pseudo}});
+        console.log('user :', userFound)
         if (!userFound)
             return (false);
         if (!await this.comparePasswords(userFound, user.password))
