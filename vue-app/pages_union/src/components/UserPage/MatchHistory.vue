@@ -55,7 +55,7 @@ export default defineComponent({
 				}
 				catch (e)
 				{
-					console.error(e);
+					void e;
 				} 
 			}
 			else
@@ -66,7 +66,7 @@ export default defineComponent({
 				}
 				catch (e)
 				{
-					console.error(e);
+					void e;
 				}
 			}
 		

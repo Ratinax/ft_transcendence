@@ -185,7 +185,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 		},
 		async goPrivate()
@@ -207,7 +207,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e
 			}
 		},
 		setShowPasswordPopUp()

@@ -62,7 +62,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 			await this.getBannedUsers();
 		},

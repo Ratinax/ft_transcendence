@@ -64,7 +64,7 @@ export default defineComponent({
         );
         this.messages = response.data;
       } catch (error) {
-        console.error("Failed to get channel liste", error);
+        void e;
       }
     },
     async updateMessages(channel: { name: string } | null) {

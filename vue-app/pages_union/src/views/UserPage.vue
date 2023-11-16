@@ -190,7 +190,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 			showButtons.value = !(userName.value === (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/pseudo/`, {withCredentials: true})).data);
 			isBlocked.value = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/blockships/isBlocked/${userName.value}`, {withCredentials: true})).data;
@@ -221,7 +221,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 		}
 		async function	unblockUser()
@@ -234,7 +234,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 		}
 		async function	addFriend()
@@ -246,7 +246,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 		}
 		async function	removeFriend()
@@ -258,7 +258,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 		}
 		async function sendMessage()
@@ -271,7 +271,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 		}
 		async function switch2fa()
@@ -288,7 +288,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 		}
 
@@ -331,7 +331,7 @@ export default defineComponent({
 				} 
 				catch (e)
 				{
-					console.error(e);
+					void e;
 				}
 			}
 			try
@@ -341,7 +341,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 		}
 		function readAsDataURLAsync(file: any) {

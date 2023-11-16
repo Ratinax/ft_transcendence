@@ -63,7 +63,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error('Error on fetchUsers:', e);
+				void e;
 			}
 		},
 		onAcceptFriendship(asking_user_id: number)

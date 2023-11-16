@@ -87,7 +87,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error(e);
+				void e;
 			}
 		},
 		goChooseAGame()

@@ -69,7 +69,7 @@ export default defineComponent({
 			catch (e)
 			{
 				this.showErrorMessage = true;
-				console.error('Error :', e);
+				void e;
 			}
 		},
 		getCode()

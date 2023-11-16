@@ -37,7 +37,6 @@ export default defineComponent({
 		{
 			try
 			{
-
 				this.listUsersSearched = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/users/${this.pseudo}`, {withCredentials: true})).data;
 				if (this.listUsersSearched) {
 					if (this.listUsersSearched.length > 0) {

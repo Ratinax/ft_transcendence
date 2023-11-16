@@ -123,7 +123,7 @@ export default defineComponent({
 			}
 			catch (e)
 			{
-				console.error('Error :', e);
+				void e;
 			}
 		},
 		async pingTimeLeft()
@@ -155,7 +155,7 @@ export default defineComponent({
 					}
 					catch (e)
 					{
-						console.error(e);
+						void e;
 					}
 			}, 1000)
 		},

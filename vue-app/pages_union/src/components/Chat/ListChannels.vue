@@ -93,7 +93,7 @@ export default defineComponent({
 			} 
 			catch (error) 
 			{
-				console.error('Failed to get channel list', error);
+				void e;
 				return ;
 			}
 			this.$nextTick(() => {
