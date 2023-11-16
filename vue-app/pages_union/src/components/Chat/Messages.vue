@@ -64,7 +64,7 @@ export default defineComponent({
         );
         this.messages = response.data;
       } catch (error) {
-        void e;
+        void error;
       }
     },
     async updateMessages(channel: { name: string } | null) {

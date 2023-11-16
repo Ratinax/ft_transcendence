@@ -93,7 +93,7 @@ export default defineComponent({
 			} 
 			catch (error) 
 			{
-				void e;
+				void error;
 				return ;
 			}
 			this.$nextTick(() => {
