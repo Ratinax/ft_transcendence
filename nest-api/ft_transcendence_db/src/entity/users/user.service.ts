@@ -246,10 +246,7 @@ export class UserService {
         {
             user.doubleFa = is_validate;
             if (!is_validate)
-            {
-                user.doubleFaAscii = '';
-                user.doubleFaURL = '';
-            }
+                return (null)
             return (await this.userRepository.save(user));
         }
         return (null);

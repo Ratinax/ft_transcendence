@@ -175,7 +175,7 @@ export class UserController {
             token: code,
         })
         const res2fa = await this.userService.validate2Fa(result, user.id);
-        if (!res2fa)
+        if (!res2fa || res2fa.doubleFa === false)
             return (false);
         return (true);
     }
