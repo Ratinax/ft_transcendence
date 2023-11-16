@@ -131,6 +131,9 @@ export class UserController {
     {
         if (pseudoPart.length < 3)
             return ([]);
+        const regex = /^[A-Za-z0-9\-]+$/;
+        if (!regex.test(pseudoPart))
+            throw new BadRequestException('Login should only contains A-Z, a-z, 0-9, and -');
         const res = await this.userService.getUsers(pseudoPart);
         return (res);
     }

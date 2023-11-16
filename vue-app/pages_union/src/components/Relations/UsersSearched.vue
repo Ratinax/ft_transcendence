@@ -41,14 +41,22 @@ export default defineComponent({
 				this.$emit('displayError', 'Should only contains A-Z, a-z, 0-9, and -');
 				return ;
 			}
-			this.listUsersSearched = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/users/${this.pseudo}`, {withCredentials: true})).data;
-			if (this.listUsersSearched) {
-				if (this.listUsersSearched.length > 0) {
-					this.$emit('displaySearch');
+			try
+			{
+
+				this.listUsersSearched = (await axios.get(`http://${process.env.VUE_APP_IP}:${process.env.VUE_APP_PORT}/users/users/${this.pseudo}`, {withCredentials: true})).data;
+				if (this.listUsersSearched) {
+					if (this.listUsersSearched.length > 0) {
+						this.$emit('displaySearch');
+					}
+					else {
+						this.$emit('displayError', 'No user(s) found.');
+					}
 				}
-				else {
-					this.$emit('displayError', 'No user(s) found.');
-				}
+			}
+			catch (e)
+			{
+				this.$emit('displayError', 'Should only contains A-Z, a-z, 0-9, and -');
 			}
 		},
 		goToProfil(user: {id: number, pseudo: string, profilPic: string})
