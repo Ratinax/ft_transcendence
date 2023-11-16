@@ -35,12 +35,6 @@ export default defineComponent({
 	{
 		async searchUsers()
 		{
-			const regex = /^[A-Za-z0-9-]+$/;
-			if (!regex.test(this.pseudo ? this.pseudo : ''))
-			{
-				this.$emit('displayError', 'Should only contains A-Z, a-z, 0-9, and -');
-				return ;
-			}
 			try
 			{
 
