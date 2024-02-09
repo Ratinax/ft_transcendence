@@ -48,10 +48,7 @@ This is a 42 project, the aim is to create a website, with authentification, cha
 ### Prerequisites
 
 * docker
-  ```sh
-  sudo apt-get install python3
-  ```
-* _having no service running on port 3000, 5432, 8000_
+* having no service running on port 3000, 5432, 8000,
 	to verify:
   ```sh
   netstat -an | grep port_number
