@@ -65,7 +65,7 @@ This is a 42 project, the aim is to create a website, with authentification, cha
 
 ## Some screenshots
 
-* First we got the login page
+* First we have the login page
 ![Login](screenshots/login.png)
 * Our user page
 ![User](screenshots/user_page.png)
