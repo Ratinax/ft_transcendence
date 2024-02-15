@@ -19,7 +19,7 @@
       </ul>
     </li>
     <li><a href="#Some screenshots">Some Screenshots</a></li>
-    <li><a href="#Annex">Usage</a></li>
+    <li><a href="#Annex">Annex</a></li>
   </ol>
 </details>
 
